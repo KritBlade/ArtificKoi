@@ -57,7 +57,7 @@ Say she has very high Elegance. Walk her home and hold the door with good manner
 - **Morals.** How strict she is about intimacy. The higher it is, the harder every intimate step gets, and the slower she warms up the first time.
 - **Elegance.** How refined she is. A very elegant girl wants manners and class. A very low one wants you to loosen up.
 - **Sociability.** How outgoing she is. An outgoing girl makes every check a bit easier, and comes to you on her own more often. A reserved one makes every check harder, and you'll mostly have to go to her.
-- **Kindness.** How kind she is. A kind girl forgives. In a fight, she gives you the chance to apologize.
+- **Kindness.** How kind she is. A kind girl forgives. In a fight, she may come to you and apologize first.
 - **Hagaruro.** How scheming she is, the sweet face with a dark side. A schemer you're dating doesn't forgive being ignored. Leave her alone for more than 14 days, and she spreads rumors about you, and 5 other girls like you less.
 
 ## The relationship ladder
