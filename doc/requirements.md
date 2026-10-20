@@ -18,6 +18,20 @@ Small MoE like Gemma4 26B A4B models don't work. Besides writing the story, the 
 
 My recommended setup is an API model for the story: Gemini Flash 3.8, Gemini 4 Argon, GLM 5.3, Sonnet 4.6 or above, or Opus. GLM 5.3 Flash works OK, but sometimes it forgets to draw the picture, and it tend to write very short reply. 
 
+## The PRE and POST calls
+
+ArtificKoi runs 2 extra calls every reply, besides the main one that writes the story. PRE runs before the reply, and POST runs after it.
+
+They take work off the main call, which is the expensive one. PRE rolls the checks and gets the instructions ready before the story is written. POST reads the finished reply and reports back what happened in it.
+
+You have to pick a connection profile for each of them. MVU Helper > **Extra LLM Calls** > set the **Connection** on both PRE and POST.
+
+Pick a model that is smart enough, but cheap and fast, like GPT 5.6 Luna. They run every single reply, so a pricey model here adds up fast.
+
+![MVU Helper's Extra LLM Calls, with a connection picked for PRE and for POST](../Image/Readme/pre_post_calls.png)
+
+How these calls work is on [Extra LLM Calls](https://github.com/KritBlade/mvu-helper/blob/main/doc/extra_llm_calls/README.md).
+
 ## Preset and SillyTavern settings
 
 Any preset works, including Freaky Frankenstein 5.4 and Megumin v10 or later. Even SillyTavern's plain "Default" works.

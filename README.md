@@ -13,26 +13,26 @@ ArtificKoi needs a model that can handle it, a few SillyTavern settings, and Com
 ![ArtificKoi in play: Mitsuki hugs Mainchar at her door, with the location, date and weather at the top](Image/Readme/gameplay.png)
 
 ArtificKoi is a love simulation game set in a Japanese school. It tries to copy some of the game mechanics of the well known eroge Koikatsu, by Illusion.  **It runs right inside Sillytavern!**  The game can be displayed in both a galgame GUI, or display in the traditional Sillytavern format.  
-UI believe it won't play like any Sillytavern character card you have played before because there are game mechanics, game contents as well as events inside the character card.  It is different kind of animial.
+I believe it won't play like any Sillytavern character card you have played before because there are game mechanics, game contents as well as events inside the character card.  Because the game logic engine is coded, it can do a LOT more than what a preset or feeding instruction to LLM can do.
   
-It is implemented based on [MVU Game Engine v2.0](https://github.com/KritBlade/mvu-helper/blob/main/doc/gamelogic_engine/README.md), and that engine never sends a formula, a table or a whole engine to the LLM. The AI writes the story the same way it would with no game engine at all. At the end of each reply, it just reports what happened in the scene, and that's all it has to do. Moreover, it comes with a Status Menu GUI which track stats for each characters.  The status menu works in both image generation mode and plain text mode.
+It is implemented based on [MVU Game Engine v2.0](https://github.com/KritBlade/mvu-helper/blob/main/doc/gamelogic_engine/README.md), and that engine never sends a formula, a table or a whole engine to the LLM. The AI writes the story the same way it would with no game engine at all. At the end of each reply, it just reports what happened in the scene, and that's all it has to do.  Anyone can use the same framework to [vibecode your own game engine](https://github.com/KritBlade/mvu-helper/blob/main/doc/gamelogic_engine/README.md).  Moreover, it comes with a Status Menu GUI which track stats for each characters.   The status menu works in both [image generation](https://github.com/KritBlade/mvu-helper/blob/main/doc/image_gen/README.md) mode and plain text mode.
 
 All the real work behind the game mechanics happens in the JavaScript game engine: the dice, the Affection, the clock, the events and the sex scenes. That keeps the prompt simple and dynamic, and the numbers right every single time.  This is the trick to enable local model can also run on it.
 
-You play Mainchar, and you live 3 years of school life at 人光学園 (Jinko Academy), in 人光市 (Jinko City), a Japan-like world. Students start the academy at  the age of 18 and graduate at 21.
+You play Mainchar, and you live 3 years of school life at 人光学園 (Jinko Academy), in 人光市 (Jinko City), a Japan-like world. Students start the academy at  the age of 18 and graduate at 21.  You are the only male student in the academy who just moved back to Jinko City from Osaka after 6 years.
 
 There are 21 heroines, each with her own personality archetype, plus 1 secret character from the [Artific Realm](https://github.com/KritBlade/ArtificRealm).
 
 The card starts you with one heroine already at your side, your lifelong friend **Mitsuki Tachibana**. She's the bright, warm classmate who appointed herself your guide, and she eases you into the opening. Past her, there's no fixed plot. Every other girl joins the game the moment you meet her, and the engine tracks her from then on.
 
 - **The world runs on a real calendar.** The school year follows the Japanese April to March cycle, on the real 2026 to 2029 calendar. Weekdays are school days: homeroom, classes, lunch and after school. Weekends are free days for dates around town. The big set pieces happen on their real dates: the Entrance Ceremony, the Sports Festival, the Cultural Festival, the School Trip and Graduation. At graduation, the world time-leaps back to year 1, but every bond and every memory carries over. (Game+)
-- **Heroines are real characters who remember.** Every heroine you meet goes into the record as a Classmate. She has her own 9 personality traits, an Affection and a relationship stage that shift as you play, a live Mood and Arousal, a secret, hobbies, and her own timeline of what happened between you. Each one is tracked on her own, so a harem works too.
+- **Heroines are real characters who remember.** Every heroine you meet goes into the record as a Classmate in MVU variables. She has her own 9 personality traits, an Affection and a relationship stage that shift as you play, a live Mood and Arousal, a secret, hobbies, and her own timeline of what happened between you. Each one is tracked on her own, so a harem works too.
 - **Outcomes are earned, not narrated.** Flirting, confessing and getting physical are all D20 social checks against a DC the engine sets, and the AI can't change it. A failed approach stays failed. The AI can't soften a rejection into a secret yes. How the dice work is on [True deterministic D20](https://github.com/KritBlade/mvu-helper#true-deterministic-d20).
 - **Everything stays on the map.** Every scene happens in a real location, on campus, in town, in the outskirts or at home, so [the world](https://raw.githubusercontent.com/KritBlade/ArtificKoi/refs/heads/main/Image/school_map.jpg) stays consistent.
 
 ## Your school day, block by block
 
-A school day is cut into 4 blocks of time:
+Unlike a regular Sillytavern chat, a school day is cut into 4 blocks of time to mimic how Koikatsu works.
 
 | Block | Time |
 |---|---|
@@ -41,17 +41,17 @@ A school day is cut into 4 blocks of time:
 | After class | 16:00 to 18:59 |
 | Evening | 19:00 to 23:59 |
 
-Every reply is one move. Mainchar's STA decides how many moves you get in each block: STA divided by 10, and never fewer than 3. STA 30 gives you 3 moves per block, STA 50 gives you 5, and STA 80 gives you 8.  You can adjust how many STA points on character creation, but you only have 200 points to allocate for 4 stats, STR, STA, INT and CHA.  STR and INT will help you on different event day, STA will give you more moves while CHA will give a bit bonus on DC roll.
+Every reply is one move. Mainchar's STA decides how many moves you get in each block: STA divided by 10, and never fewer than 3. STA 30 gives you 3 moves per block, STA 50 gives you 5, and STA 80 gives you 8.  You can adjust how many STA points on character creation, but you only have 200 points to allocate for 4 stats, STR, STA, INT and CHA.  STR and INT will help you on different event day, STA will give you more moves while CHA will give bonus on DC roll.
 
-When your moves run out, the clock jumps to the next block. After the evening block, the day ends and the next morning starts.  There is no number of move restriction on weekend, holiday and some event day.  So, make sure you make use of the free move on those days.  On a regular school day, you might want to plan how you should use your move in each block ahead because you can't do much within a block of time, you will want to strategically plan what you should do within a limited number of moves. 
+When your moves run out, the clock jumps to the next block. After the evening block, the day ends and the next morning starts.   On a regular school day, you might want to plan how you should use your move in each block because you can't do much within a block of time, you will want to strategically plan what you should do within a limited number of moves. 
 
 Say your STA is 30. You chat with Mitsuki before homeroom, pass a note in class, and help a classmate carry books to the library. That's 3 replies, and the bell rings for lunch.
 
-Training raises Mainchar's own stats. Physical training raises STR or STA, studying raises INT, and taking care of yourself, a haircut, skincare, a clean uniform, raises CHA. A session gives 1 to 3 points, depending on how hard you went at it. The more STA you build, the more move you fit into one school day.  
+Weekends, holidays and event days have no such limit. You play them as long as you want, and the day ends when you sleep.   So, make sure you make use of the free move on those days.   You can also check the "Next-Block" checkbox, then your next reply will jump to the next block of time.
+
+Training raises Mainchar's own stats. Physical training raises STR or STA, studying raises INT, and taking care of yourself, a haircut, skincare, a clean uniform, raises CHA. A session gives 1 to 3 points, depending on how hard you went at it. The more STA you build, the more move you fit into one school day.   (You just need to prose you are training with whoever heroine, the system will pick up the hint)
 
 Each kind of training counts once a week. Study 3 times in one week, and only the first session raises your INT. A run and a study session in the same week both count.
-
-Weekends, holidays and event days have no such limit. You play them as long as you want, and the day ends when your story moves on.
 
 The first day of school serves as a tutorial so there is no limit on the move.  The real game start on the 2nd day.  However, it does have a sequence of triggered event that you have to complete.  That's a test if the AI model you are using is up for the task.
 
@@ -87,6 +87,22 @@ She can fall back too. Betray her, and she drops one step, her Affection goes to
 
 There are special routes off the ladder too, like Friends with Benefits. How to get there is for you to find out.  There are numerous game mechanics in the game.
 
+## The initiative system
+
+The heroines don't just wait for you. They reach out to you on their own, without you cueing them.
+
+This is not the simple countdown a preset uses, where a timer runs out and somebody comes to talk to you. Every reply, the game engine checks every heroine: her relationship stage, how much she likes you, her personality traits, whether you're fighting, and how long it's been since she last reached out.
+
+What she does depends on how close you are. A girl who barely knows you says hi, or saves you a seat. As she warms up, she invites you to something she's into, then flirts with you, then confides in you. Only once you're dating does she reach for your hand or hug you. A girl who likes you enough can reach into your day even when she's not in the scene.
+
+How often she does it depends on her personality. An outgoing girl reaches out often, and comes back to you sooner. A reserved one rarely does, and won't at all until she likes you.
+
+A fight changes everything. A girl you're fighting with doesn't greet you like nothing happened. A proud, outgoing or scheming girl may come at you to have it out. A kind girl, or one who still likes you a lot, may come to apologize. A girl who is none of those just goes quiet, and her silence is her answer.
+
+The engine works out who may reach out this reply, and the PRE call picks from that list. PRE is told to pick 1 girl most replies, often nobody, and 2 at the most. Her mood counts too: an excited girl is more forward, and a sad or angry one holds back. Then the narrator writes it in her own voice.
+
+Who is allowed to reach out, and what she's allowed to do, is coded in the JavaScript engine, so those rules hold 100% of the time. The AI only picks from the girls the engine allows.
+
 ## Sex scenes, the battleground
 
 A sex scene is a game of its own, with **a lot of game mechanics** behind it. The moment one starts, meters show up on the screen: your Energy, and her Energy, Arousal and Climax.  
@@ -121,9 +137,11 @@ There are more than 250 events in the game. That's every heroine's quest, plus t
 
 Every year follows the real Japanese school calendar, and the big days happen on their real dates. Each one is a set piece with its own story steps.
 
-On a set piece day, the step you're on shows up as your objective. This is event trigger.  You can still go wherever you want. The narrator keeps steering you back toward the next step, but it never skips ahead for you.
+On a set piece day, the step you're on shows up as your objective. This is event trigger.  You can still go wherever you want. The narrator will prompt you toward the next step until you are ready.  Technically, you don't need to complete an event, but most event give big bonus to selected heroine.
 
 Many of these days end with a bonus. The girl you spent the day with likes you more. On the exam, the Sports Festival and the Cultural Festival, a die and your stats decide how well you did.
+
+Long breaks don't make you play every single day. The game picks a few days from each break and skips the rest.  
 
 What each year holds:
 
@@ -140,7 +158,6 @@ What each year holds:
 - **White Day.** A month later, it's your turn to give back. Who you give to, and what, tells them how you feel.
 - **Graduation.** The last day. A girl who asks for the second button of your uniform is confessing. Then the world leaps back to year 1, and everyone remembers.
 
-Long breaks don't make you play every single day. The game picks a few days from each break and skips the rest.  
 
 ## Make your own events
 
