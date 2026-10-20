@@ -57,6 +57,8 @@ The first day of school serves as a tutorial so there is no limit on the move.  
 
 ## The 9 traits of every heroine
 
+Every heroine profiles are [here](doc/heroines.md).
+
 Every heroine has 9 traits, each from 0 to 100. They're part of who she is, so they never change. Together they decide how she treats Mainchar, and how hard she is to win.
 
 When a trait is very high or very low, it shapes what she likes. Every trait but Morals works this way. Approach her the way she likes, and that check gets easier. Go against it, and that check gets harder.
