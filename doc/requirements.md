@@ -14,7 +14,7 @@ The smallest local model that works is Gemma 31B. It does forget to trigger an e
 
 For a local model, I recommend Qwen 3.8 27B, it's an agentic model so it smart enough to work with a game engine, however, it doesn't prose as good as Gemma4.
 
-Small MoE like Gemma4 26B A4B models don't work. Besides writing the story, the AI has to write a proper command to draw a picture in ComfyUI, trigger events at the right time, changing outfit at the right place and a MoE model doesn't even know how to do that.
+Small MoE like Gemma4 26B A4B models don't work. Besides writing the story, the AI has to write a proper command to draw a picture in ComfyUI, trigger events at the right time, changing outfit at the right place and a MoE model doesn't even know how to do that.  For local model, always change the thinking effort to high in the preset.  This is the only thing that can keep local model writing correct command to draw the picture and trigger event correctly.
 
 My recommended setup is an API model for the story: Gemini Flash 3.8, Gemini 4 Argon, GLM 5.3, Sonnet 4.6 or above, or Opus. GLM 5.3 Flash works OK, but sometimes it forgets to draw the picture, and it tend to write very short reply. 
 
@@ -50,7 +50,7 @@ The accurate way is the Prompt Viewer, in the magic wand menu. The upper left sh
 
 ## A memory extension
 
-I highly recommend a memory extension that ghosts ALL the history except the very last reply. Use my other project [VectFox](https://github.com/KritBlade/VectFox), or [Summaryception](https://github.com/Lodactio/Extension-Summaryception).
+I **highly recommend** a memory extension that ghosts ALL the history except the very last reply. Use my other project [VectFox](https://github.com/KritBlade/VectFox), or [Summaryception](https://github.com/Lodactio/Extension-Summaryception).
 
 In VectFox, turn on Enable Auto-Sync and Summarizer Injection, and inject the last 20 turns. Turn on Include full event detail. Then turn on Ghost vectorized messages, and keep the last 1 message verbatim.
 
