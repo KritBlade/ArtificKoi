@@ -166,3 +166,9 @@ What each year holds:
 Want more story? As a content creator, you can make your own events in MVU Status Menu Builder > **Event Pack** tab.
 
 No coding is needed. You upload the ArtificKoi card, then pick each event's conditions and effects from drop-down menus. The builder only offers what ArtificKoi allows, with the real places and the real heroines. How it works is on [Build events in MVU Status Menu Builder](https://github.com/KritBlade/mvu-helper/blob/main/doc/eventpack_engine/builder.md).
+
+## Credits
+
+The galgame GUI frontend in ArtificKoi is [galgame](https://github.com/bigmalove/galgame), by bigmalove. It's a visual novel plugin for SillyTavern, and it draws the whole screen: the backdrop, the text box, one line at a time. I didn't build that part.
+
+My [galgame-companion](https://github.com/KritBlade/galgame-companion) only makes it work with MVU Helper and translates it into English. So, big thanks to bigmalove.
