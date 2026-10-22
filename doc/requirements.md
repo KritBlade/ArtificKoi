@@ -1,19 +1,21 @@
 # ArtificKoi requirements
 
+Artifickoi is built on top of MVU Game Engine v2.0.  Unlike regular Sillytavern card that rely on prosing, the game engine make use of agentic AI model for instruction execution.  The smarter the model, the better the gameplay is.
+
 ## Preset
 
-Any preset works for an API model. That includes the popular ones like Megumin v10 or later and Freaky Frankenstein 5.4. Even something as simple as SillyTavern's plain "Default" preset works.
+Any preset works for an API model. That includes the popular ones like Megumin v10 or later and Freaky Frankenstein 5.4 and micro. Even something as simple as SillyTavern's plain "Default" preset works.
 
 For a local model, I recommend Megumin. It tends to work better, and the model misses fewer instructions with it. Also, always set the thinking effort to high on a local model. That makes up for some of the [IQ gap between a local model and an API model](../Image/Readme/intelligence_index.png).
 
 No matter which preset you use, turn off everything in it that's about game logic:
 
-- **Freaky Frankenstein:** NPC Instincts+vad_emotion, DnD Simulator, Inventory, Feats, Titles and Relationships RPG.
+- **Freaky Frankenstein:** NPC Instincts+vad_emotion, DnD Simulator, Inventory, Feats, Titles and Relationships RPG, Internal Agenda, World Sim, Chekhov's Gun, Internal Thoughts.
 - **Megumin:** Dice, Death system and Combat system.
 
-Basically, anything that changes how the system behaves in the chat goes off. The game engine already has all of that coded in the backend. You don't need a second layer on top of it, and you don't need to send those instructions to the AI.
+Basically, anything that changes how the system behaves in the chat goes off.  Tracking feature can be turned on if you like , but our status menu should have every single stats you want to look at anyway.  So, turning those off can save a bit of token as well.  The game engine already has all of the features from preset coded in the backend. You don't need a second layer on top of it, and you don't need to send those instructions to the AI.
 
-Those toggles don't do anything here anyway. Say a preset rule tells the AI to raise Mitsuki's Affection because you were nice to her. The engine checks who has the authority to change Affection, a preset rule doesn't, so the change is never made. With those toggles on, you just pay tokens for instructions that never land.
+Those toggles don't do anything here anyway. Say a preset rule tells the AI to raise Mitsuki's Affection because you were nice to her. The engine checks who has the authority to change Affection, a preset rule doesn't, so the change is never made. With those toggles on, you just pay tokens for instructions that never land.  That means any DC dice roll done by preset, it will not be registered at all because back end coding will cross check the result.
 
 Personally, I only turn on the features that change the prose style.
 
