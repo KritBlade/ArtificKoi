@@ -35,7 +35,7 @@ Narrate is the default. Narrate is the main call, the one that writes the story,
 
 A local model is a different story. Narrate already has to write the story, trigger the events and change the outfits, all in 1 single call. Some local models can't keep that many instructions in mind, and they just forget to print the picture.
 
-A separate POST call is the fix. It runs after the reply, reads the finished story, and its ONLY job is the pictures. The price is speed: no picture can start until the reply is done and the POST call answers.
+A separate POST call is the fix. It runs after the reply, reads the finished story, and its ONLY job is the pictures. The price is speed: no picture can start until the reply is done and the POST call answers.  It does have 1 advantage using a separate POST for handling image generation and roster harvesting, it save quite a bit of token from main narrate call.  PRE and POST usually use smaller and cheaper model so cost saving can be big in a long run.
 
 First, add the call. MVU Helper > **Extra LLM Calls** > **Add call**. Name it something like IMAGEGEN, set **Phase** to POST (after reply), and pick a **Connection**. A small, cheap model is fine here, it only does 1 thing. Then set the **Input filter** to this, so it reads only the story:
 
@@ -55,11 +55,11 @@ So, in short: a large API model, leave it on narrate for fast pictures. A local 
 
 The smallest local model that works is Gemma 31B. It does forget to trigger an event from time to time.  Gemma4 31B prose great, but it is [dumb](../Image/Readme/intelligence_index.png).
 
-For a local model, I recommend **Qwen 3.8 27B**, it's an agentic model so it smart enough to work with a game engine, however, it doesn't prose as good as Gemma4.  Since most video card can't host more than 1 local model without switching, you might as well just assign PRE and POST on the same model.
+For a local model, I recommend **Qwen 3.8 27B**, it's an agentic model so it smart enough to work with a game engine, however, it doesn't prose as good as Gemma4.  Since most video card can't host more than 1 local model without switching, you might as well just assign PRE and POST on the same model.   For local model, always change the thinking effort to high in the preset.  This is the only thing that can keep local model writing correct command to draw the picture and trigger event correctly.
 
-Small MoE like Gemma4 26B A4B models don't work. Besides writing the story, the AI has to write a proper command to draw a picture in ComfyUI, trigger events at the right time, changing outfit at the right place and a MoE model doesn't even know how to do that.  For local model, always change the thinking effort to high in the preset.  This is the only thing that can keep local model writing correct command to draw the picture and trigger event correctly.
+Small MoE like Gemma4 26B A4B models don't work consistently enough to be useable. Besides writing the story, the AI has to write a proper command to draw a picture in ComfyUI, trigger events at the right time, changing outfit at the right place and a MoE model just isn't smart enough to do all these together.  Sorry for all the Gemma4 26B A4B lovers out there,  I have tried but it's just too dumb.  As soon as trying to throw the model with some instructions other than prosing, it will forget stuff like a goldfish.
 
-My recommended setup is an API model for the story: **Gemini Flash 3.8, Gemini 4 Argon, GLM 5.3, Sonnet 4.6 or above, or Opus** for main narrate model.  GLM 5.3 Flash works OK, but sometimes it forgets to draw the picture, and it tend to write very short reply.   For PRE and POST, I highly recommend **GPT 5.6 Luna**, because its fast and very cheap.
+My recommended setup is an API model for the story: **Gemini Flash 3.8, Gemini 4 Argon, GLM 5.3, Sonnet 4.6 or above, or Opus** for main narrate model.  GLM 5.3 Flash works OK, but sometimes it forgets to draw the picture, and it tend to write very short reply. Deepseek 4 and Deepseek 4 flash might forget to trigger event or draw picture.  Almost all preset maker would tell you this, Deepseek 4 is not good at following instruction, and MVU Game Engine v2.0 rely model to execute instruction, not prosing.   For PRE and POST, I highly recommend **GPT 5.6 Luna**, because its fast and very cheap.
 
 ## The PRE and POST calls
 
