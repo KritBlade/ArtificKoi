@@ -8,16 +8,18 @@ Any preset works for an API model. That includes the popular ones like Megumin v
 
 For a local model, I recommend Megumin. It tends to work better, and the model misses fewer instructions with it. Also, always set the thinking effort to high on a local model. That makes up for some of the [IQ gap between a local model and an API model](../Image/Readme/intelligence_index.png).
 
-No matter which preset you use, turn off everything in it that's about game logic:
+No matter which preset you use, turn off everything in it that's about game logic and stat tracking:
 
 - **Freaky Frankenstein:** NPC Instincts+vad_emotion, DnD Simulator, Inventory, Feats, Titles and Relationships RPG, Internal Agenda, World Sim, Chekhov's Gun, Internal Thoughts.
-- **Megumin:** Dice, Bonds,  Death system and Combat system.
+- **Megumin:** Dice, Bonds, World State,  Death system and Combat system.
 
-Basically, anything that changes how the system behaves in the chat goes off.  Tracking feature can be turned on if you like , but our status menu should have every single stats you want to look at anyway.  So, turning those off can save a bit of token as well.  The game engine already has all of the features from preset coded in the backend. You don't need a second layer on top of it, and you don't need to send those instructions to the AI.
+Basically, anything that changes how the system behaves in the chat goes off.  Tracking feature can be turned on if you like at the cost of a lot more tokens ,  our status menu should have every single stats you want to look at anyway.  So, turning those off can save a lot of token as well.  The game engine already has all of the features from preset coded in the backend. You don't need a second layer on top of it, and you don't need to send those instructions to the AI.  MVU do NOT send stats and state of characters in the chat.
 
-Moreover, any tracking feature from preset that  show the name of the classmate will trigger Sillytavern to send the lorebook character entry of that classmate to AI model.  Therefore, if a tracking feature in the preset that record all 21 classmates and display her unofficial stats, it will trigger Sillytavern to send the complete profile in lorebook for all 21 classmates ( 30000 token total) every single reply.
+Moreover, **any tracking feature from preset or extension** that  show the name of the classmate will trigger Sillytavern to send the lorebook character entry of that classmate to AI model.  Therefore, if a tracking feature in the preset that record all 21 classmates and display her unofficial stats, it will trigger Sillytavern to send the complete profile in lorebook for all 21 classmates ( 30000 token total) every single reply.  The MVU use a completely different approach that we do tracking without appending all these information inside the chat to save token.  I have muted that information send to AI model by default, but you can turn it off if you want those information from preset at the cost of token.  I didn't make regex to muted those output to AI on every single tracking preset/extension out there, so if you use any tracking preset/extension, you will have to make your own regex to mute those information send to AI.   The whole reason of using MVU is to eliminate these information need to send to AI every single reply that cost a lot of tokens.  Under normal circumstances, you don't need tracking extension when you are using MVU.
 
-Those toggles don't do anything here anyway. Say a preset rule tells the AI to raise Mitsuki's Affection because you were nice to her. The engine checks who has the authority to change Affection, a preset rule doesn't, so the change is never made. With those toggles on, you just pay tokens for instructions that never land.  That means any DC dice roll done by preset, it will not be registered at all because back end coding will cross check the result.
+![PromptDeTagInternalStates and PromptDeTagBlocks, both switched on](../Image/Readme/prompt_detag.png)
+
+The tracking and game logic change in preset/extension don't do anything here anyway. Say a preset rule tells the AI to raise Mitsuki's Affection because you were nice to her. The engine checks who has the authority to change Affection, a preset rule doesn't, so the change is never made. With those features on, you just pay tokens for instructions that never land.  That means any DC dice roll done by preset, it will not be registered at all because back end coding will cross check the result.  Same goes for stat tracking feature that display stats, it would not show the correct information as it doesn't access to the MVU variables at all.   
 
 Personally, I only turn on the features that change the prose style.
 
