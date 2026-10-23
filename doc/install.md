@@ -10,7 +10,15 @@ My docs use the English name for every menu and every setting. With SillyTavern 
 
 ![User Settings in SillyTavern, with Language set to English at the top right](../Image/Install/language.png)
 
-## 2. Install Tavern Helper
+## 2. Set a big context size
+
+SillyTavern > AI Response Configuration > in your [preset](requirements.md#preset), set **Context Size** to something big, and **Max Response Length** to 12,000.
+
+The game doesn't use that much context. But there's code inside the lorebook entries, and SillyTavern thinks that code gets sent to the AI model too. It doesn't. The code is never sent to the AI model at all.
+
+![A Chat Completion preset, with Context Size set to 500000 and Max Response Length set to 12000](../Image/Install/context_size.png)
+
+## 3. Install Tavern Helper
 
 SillyTavern > Extensions > Install extension. Paste this link, and click Install:
 
@@ -18,7 +26,7 @@ SillyTavern > Extensions > Install extension. Paste this link, and click Install
 https://github.com/N0VI028/JS-Slash-Runner
 ```
 
-## 3. Install ST-Prompt-Template
+## 4. Install ST-Prompt-Template
 
 Same place. SillyTavern > Extensions > Install extension. Paste this link, and click Install:
 
@@ -26,7 +34,7 @@ Same place. SillyTavern > Extensions > Install extension. Paste this link, and c
 https://github.com/zonde306/ST-Prompt-Template
 ```
 
-## 4. Turn on Environmental isolation
+## 5. Turn on Environmental isolation
 
 This one is VERY important. Don't skip it.
 
@@ -36,7 +44,7 @@ A lorebook entry with EJS is JavaScript running on your SillyTavern page. With i
 
 ![Prompt template settings, with Environmental isolation ticked near the bottom](../Image/Install/environmental_isolation.png)
 
-## 5. Install MVU Helper
+## 6. Install MVU Helper
 
 Same place again. SillyTavern > Extensions > Install extension. Paste this link, and click Install:
 
@@ -44,13 +52,13 @@ Same place again. SillyTavern > Extensions > Install extension. Paste this link,
 https://github.com/KritBlade/mvu-helper
 ```
 
-## 6. Let MVU Helper install MVU
+## 7. Let MVU Helper install MVU
 
 The first time MVU Helper loads, it asks "Install MVU now?". Click **Install**. It adds MVU as a global Tavern Helper script, so every MVU card can use it.
 
 If you said no, that's fine. MVU Helper > Main tab > **Install MVU** does the same thing later. Until MVU is installed, every game feature stays off.
 
-## 7. Download and import ArtificKoi
+## 8. Download and import ArtificKoi
 
 Download the card, [ArtificKoi.png](../dist/ArtificKoi.png). On its GitHub page, click the download button at the top right.
 

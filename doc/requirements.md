@@ -11,9 +11,11 @@ For a local model, I recommend Megumin. It tends to work better, and the model m
 No matter which preset you use, turn off everything in it that's about game logic:
 
 - **Freaky Frankenstein:** NPC Instincts+vad_emotion, DnD Simulator, Inventory, Feats, Titles and Relationships RPG, Internal Agenda, World Sim, Chekhov's Gun, Internal Thoughts.
-- **Megumin:** Dice, Death system and Combat system.
+- **Megumin:** Dice, Bonds,  Death system and Combat system.
 
 Basically, anything that changes how the system behaves in the chat goes off.  Tracking feature can be turned on if you like , but our status menu should have every single stats you want to look at anyway.  So, turning those off can save a bit of token as well.  The game engine already has all of the features from preset coded in the backend. You don't need a second layer on top of it, and you don't need to send those instructions to the AI.
+
+Moreover, any tracking feature from preset that  show the name of the classmate will trigger Sillytavern to send the lorebook character entry of that classmate to AI model.  Therefore, if a tracking feature in the preset that record all 21 classmates and display her unofficial stats, it will trigger Sillytavern to send the complete profile in lorebook for all 21 classmates ( 30000 token total) every single reply.
 
 Those toggles don't do anything here anyway. Say a preset rule tells the AI to raise Mitsuki's Affection because you were nice to her. The engine checks who has the authority to change Affection, a preset rule doesn't, so the change is never made. With those toggles on, you just pay tokens for instructions that never land.  That means any DC dice roll done by preset, it will not be registered at all because back end coding will cross check the result.
 
@@ -59,7 +61,7 @@ For a local model, I recommend **Qwen 3.8 27B**, it's an agentic model so it sma
 
 Small MoE like Gemma4 26B A4B models don't work consistently enough to be useable. Besides writing the story, the AI has to write a proper command to draw a picture in ComfyUI, trigger events at the right time, changing outfit at the right place and a MoE model just isn't smart enough to do all these together.  Sorry for all the Gemma4 26B A4B lovers out there,  I have tried but it's just too dumb.  As soon as trying to throw the model with some instructions other than prosing, it will forget stuff like a goldfish.
 
-My recommended setup is an API model for the story: **Gemini Flash 3.8, Gemini 4 Argon, GLM 5.3, Sonnet 4.6 or above, or Opus** for main narrate model.  GLM 5.3 Flash works OK, but sometimes it forgets to draw the picture, and it tend to write very short reply. Deepseek 4 and Deepseek 4 flash might forget to trigger event or draw picture.  Almost all preset maker would tell you this, Deepseek 4 is not good at following instruction, and MVU Game Engine v2.0 rely model to execute instruction, not prosing.   For PRE and POST, I highly recommend **GPT 5.6 Luna**, because its fast and very cheap.
+My recommended setup is an API model for the story: **Gemini Flash 3.8, Gemini 4 Argon, GLM 5.3, Sonnet 4.6 or above, or Opus** for main narrate model.  GLM 5.3 Flash works OK, but sometimes it forgets to draw the picture, and it tend to write very short reply.  GLM 5.3 flash works better with preset Freaky Frankenstein 5.4.   Deepseek 4 and Deepseek 4 flash might forget to trigger event or draw picture.  Almost all preset maker would tell you this, Deepseek 4 is not good at following instruction, and MVU Game Engine v2.0 rely model to execute instruction, not prosing.   For PRE and POST, I highly recommend **GPT 5.6 Luna**, because its fast and very cheap.
 
 ## The PRE and POST calls
 
@@ -91,12 +93,12 @@ The accurate way is the Prompt Viewer, in the magic wand menu. The upper left sh
 
 ## A memory extension
 
-I **highly recommend** a memory extension that ghosts ALL the history except the very last reply. Use my other project [VectFox](https://github.com/KritBlade/VectFox), or [Summaryception](https://github.com/Lodactio/Extension-Summaryception).
+I **highly recommend** a memory extension that hide (ghosts) ALL the history except the very last reply. Use my other project [VectFox](https://github.com/KritBlade/VectFox), or [Summaryception](https://github.com/Lodactio/Extension-Summaryception).
 
-In VectFox, turn on Enable Auto-Sync and Summarizer Injection, and inject the last 20 turns. Turn on Include full event detail. Then turn on Ghost vectorized messages, and keep the last 1 message verbatim.
+In VectFox, turn on Enable Auto-Sync and Summarizer Injection, and inject the last 20 turns of summary. Turn on Include full event detail. Then turn on Ghost vectorized messages, and keep the last 1 message verbatim.
 
 ![VectFox's Chat Auto-Sync settings for ArtificKoi](../Image/Readme/vectfox_settings.png)
 
-For reference, my own story at floor 440 sends about 50,800 tokens a reply on Gemini 4 Argon. That already includes image generation, every event trigger and the full summary of the last 20 replies.
+For reference, my own story at floor 440 sends about 46,800 tokens a reply on Gemini 4 Argon. That already includes image generation on POST, every event trigger and the full summary of the last 20 replies.
 
 [Back to index](../README.md)
