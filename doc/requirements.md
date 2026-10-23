@@ -55,11 +55,11 @@ So, in short: a large API model, leave it on narrate for fast pictures. A local 
 
 The smallest local model that works is Gemma 31B. It does forget to trigger an event from time to time.  Gemma4 31B prose great, but it is [dumb](../Image/Readme/intelligence_index.png).
 
-For a local model, I recommend Qwen 3.8 27B, it's an agentic model so it smart enough to work with a game engine, however, it doesn't prose as good as Gemma4.
+For a local model, I recommend **Qwen 3.8 27B**, it's an agentic model so it smart enough to work with a game engine, however, it doesn't prose as good as Gemma4.  Since most video card can't host more than 1 local model without switching, you might as well just assign PRE and POST on the same model.
 
 Small MoE like Gemma4 26B A4B models don't work. Besides writing the story, the AI has to write a proper command to draw a picture in ComfyUI, trigger events at the right time, changing outfit at the right place and a MoE model doesn't even know how to do that.  For local model, always change the thinking effort to high in the preset.  This is the only thing that can keep local model writing correct command to draw the picture and trigger event correctly.
 
-My recommended setup is an API model for the story: Gemini Flash 3.8, Gemini 4 Argon, GLM 5.3, Sonnet 4.6 or above, or Opus. GLM 5.3 Flash works OK, but sometimes it forgets to draw the picture, and it tend to write very short reply. 
+My recommended setup is an API model for the story: **Gemini Flash 3.8, Gemini 4 Argon, GLM 5.3, Sonnet 4.6 or above, or Opus** for main narrate model.  GLM 5.3 Flash works OK, but sometimes it forgets to draw the picture, and it tend to write very short reply.   For PRE and POST, I highly recommend **GPT 5.6 Luna**, because its fast and very cheap.
 
 ## The PRE and POST calls
 
