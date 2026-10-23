@@ -66,6 +66,16 @@ Then SillyTavern > Character Management > **Import Character from File**, and pi
 
 SillyTavern then asks whether to import the card's embedded World/Lorebook. Click **Yes**. That lorebook is the game itself, and ArtificKoi can't run without it. If it asks to allow the card's scripts or regex too, say yes to those as well.
 
+## 9. Turn on image generation
+
+[Image generation](requirements.md#image-generation) is off by default. If you already set it up, you have to turn it on in MVU Helper.
+
+Open ArtificKoi's chat first. Then MVU Helper > **Image Generation** > set **Image insert type** to **Inline replace mode**. The setting belongs to the card, so every card keeps its own.
+
+Didn't set up image generation? Skip this step. The game plays just fine without pictures.
+
+![MVU Helper's Image Generation, with Image insert type set to Inline replace mode](../Image/Install/image_insert_type.png)
+
 That's it. Open ArtificKoi's chat and start playing. What each of these extensions does is on [What is Tavern Helper, ST-Prompt-Template and MVU](https://github.com/KritBlade/mvu-helper/blob/main/doc/st_extensions/README.md).
 
 [Back to index](../README.md)
