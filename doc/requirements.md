@@ -4,7 +4,7 @@ Artifickoi is built on top of MVU Game Engine v2.0.  Unlike regular Sillytavern 
 
 ## Preset
 
-Any preset works for an API model. That includes the popular ones like [Megumin](https://github.com/Arif-salah/Megumin-Suite) or later and [Freaky Frankenstein](https://www.reddit.com/r/SillyTavernAI/comments/1w49lyx/preset_update_freaky_frankenstein_54_the_second/) and [FF micro](https://www.reddit.com/r/SillyTavernAI/comments/1u2wrvq/preset_introducing_freaky_frankenstein_micro_my/) . Even something as simple as SillyTavern's plain "Default" preset works.
+Any preset works for an API model. That includes the popular ones like [Megumin](https://github.com/Arif-salah/Megumin-Suite) , [Freaky Frankenstein](https://www.reddit.com/r/SillyTavernAI/comments/1w49lyx/preset_update_freaky_frankenstein_54_the_second/) and [FF micro](https://www.reddit.com/r/SillyTavernAI/comments/1u2wrvq/preset_introducing_freaky_frankenstein_micro_my/) . Even something as simple as SillyTavern's plain "Default" preset works.
 
 For a local model, I recommend Megumin. It tends to work better, and the model misses fewer instructions with it. Also, always set the thinking effort to high on a local model. That makes up for some of the [IQ gap between a local model and an API model](../Image/Readme/intelligence_index.png).
 
