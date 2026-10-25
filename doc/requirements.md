@@ -4,7 +4,7 @@ Artifickoi is built on top of MVU Game Engine v2.0.  Unlike regular Sillytavern 
 
 ## Preset
 
-Any preset works for an API model. That includes the popular ones like [Megumin](https://github.com/Arif-salah/Megumin-Suite) , [Freaky Frankenstein](https://www.reddit.com/r/SillyTavernAI/comments/1w49lyx/preset_update_freaky_frankenstein_54_the_second/) and [FF micro](https://www.reddit.com/r/SillyTavernAI/comments/1u2wrvq/preset_introducing_freaky_frankenstein_micro_my/) . Even something as simple as SillyTavern's plain "Default" preset works.
+Any preset works for an API model. That includes the popular ones like [Megumin](https://github.com/Arif-salah/Megumin-Suite) , [Izumi](https://discord.gg/C6HabNwzn7), [Freaky Frankenstein](https://www.reddit.com/r/SillyTavernAI/comments/1w49lyx/preset_update_freaky_frankenstein_54_the_second/) and [FF micro](https://www.reddit.com/r/SillyTavernAI/comments/1u2wrvq/preset_introducing_freaky_frankenstein_micro_my/) . Even something as simple as SillyTavern's plain "Default" preset works.
 
 For a local model, I recommend Megumin. It tends to work better, and the model misses fewer instructions with it. Also, always set the thinking effort to high on a local model. That makes up for some of the [IQ gap between a local model and an API model](../Image/Readme/intelligence_index.png).
 
@@ -12,6 +12,7 @@ No matter which preset you use, turn off everything in it that's about game logi
 
 - **Freaky Frankenstein:** NPC Instincts+vad_emotion, DnD Simulator, Inventory, Feats, Titles and Relationships RPG, Internal Agenda, World Sim, Chekhov's Gun, Internal Thoughts.
 - **Megumin:** Dice, Bonds, World State,  Death system and Combat system.
+- **Izumi:** Since Izumi have no game logic change, it works as is.
 
 Basically, anything that changes how the system behaves in the chat goes off.  Tracking feature can be turned on if you like but at the cost of a lot more tokens ,  our status menu should have every single stats you want to look at anyway.  So, turning those off can save a lot of token as well.  The game engine already has all of the features from preset coded in the backend. You don't need a second layer on top of it, and you don't need to send those instructions to the AI like what the preset does.  
 
