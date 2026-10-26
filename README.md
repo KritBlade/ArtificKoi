@@ -10,6 +10,10 @@ ArtificKoi rides on numerous extension to pull off the trick.  It needs MVU Help
 
 ArtificKoi needs a model that can handle it, a few SillyTavern settings, and ComfyUI with a good video card if you want the pictures. It's all on [Requirements](doc/requirements.md).
 
+## Start the game
+
+After you import the card, you just need to setup your initial stats.  You have 200 points to allocate into 4 different stats. STR and INT will help you in school events and STA will grant you extra move per time block, while CHA will make you dating girl easier.  You can increase stats in the game later on, just like a RPG game. Then you can start the game by clicking into the Galgame GUI or just chat on Sillytavern.  The Quest section of the status menu will guide you how to survive the first day of school.
+
 ## What is ArtificKoi
 
 ![ArtificKoi in play: Mitsuki hugs Mainchar at her door, with the location, date and weather at the top](Image/Readme/gameplay.png)
@@ -168,6 +172,14 @@ What each year holds:
 Want more story? As a content creator, you can make your own events in MVU Status Menu Builder > **Event Pack** tab.
 
 No coding is needed. You upload the ArtificKoi card, then pick each event's conditions and effects from drop-down menus. The builder only offers what ArtificKoi allows, with the real places and the real heroines. How it works is on [Build events in MVU Status Menu Builder](https://github.com/KritBlade/mvu-helper/blob/main/doc/eventpack_engine/builder.md).
+
+## Make your own plugin for the game!
+
+The game engine also allow 3rd party dev to vibecode addon for the game.  There is a dedicated plugin page in MVU-Helper to allow user to install plugins. For example, you can create a weather plugin for the game.  The weather in the story will changed based on the weather plugin.  Moreover, the plugin system is generic enough that a lot of plugin can be installed into any game card that built on the MVU Game Engine v2.0 and it works without coding change.  Then, you can distribute it to other users without asking the author of the card to change 1 line of code.
+
+## Multiple LLM calls
+
+Since ArtificKoi built on MVU Game Engine v2.0, it inherits the multi LLM call feature.  It uses more than 1 LLM call so that it will offload some easy but tedious tasks to cheaper AI models.  For example, you can offload image generation to a secondary LLM call instead of using your main expensive model.
 
 ## Credits
 
