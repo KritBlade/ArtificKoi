@@ -66,7 +66,19 @@ Then SillyTavern > Character Management > **Import Character from File**, and pi
 
 SillyTavern then asks whether to import the card's embedded World/Lorebook. Click **Yes**. That lorebook is the game itself, and ArtificKoi can't run without it. If it asks to allow the card's scripts or regex too, say yes to those as well.
 
-## 9. Turn on image generation
+## 9. Pick a connection for PRE and POST
+
+ArtificKoi runs 2 extra LLM calls every reply, [PRE and POST](requirements.md#the-pre-and-post-calls). Both need a connection.
+
+First, make a new connection profile in SillyTavern's Connection Manager. For an API model, I recommend GPT 6 Luna. It's fast and cheap, and these 2 calls run every single reply.
+
+Then MVU Helper > **Extra LLM Calls** > set the **Connection** on both PRE and POST to that profile.
+
+On a local model? Pick the same model you play with. Switching models takes time, so you might be better off just use the same model.
+
+![MVU Helper's Extra LLM Calls, with a connection picked for POST and for PRE](../Image/Install/pre_post_connection.png)
+
+## 10. Turn on image generation
 
 [Image generation](requirements.md#image-generation) is off by default. If you already set it up, you have to turn it on in MVU Helper.
 
