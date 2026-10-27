@@ -74,7 +74,7 @@ They take work off the main call, which is the expensive one. PRE rolls the chec
 
 You have to pick a connection profile for each of them. MVU Helper > **Extra LLM Calls** > set the **Connection** on both PRE and POST.
 
-Pick a model that is smart enough, but cheap and fast, like GPT 5.6 Luna. They run every single reply, so a pricey model here adds up fast.
+Pick a model that is smart enough, but cheap and fast, like GPT 6 Luna. They run every single reply, so a pricey model here adds up fast.
 
 ![MVU Helper's Extra LLM Calls, with a connection picked for PRE and for POST](../Image/Readme/pre_post_calls.png)
 
