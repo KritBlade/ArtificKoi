@@ -166,6 +166,17 @@ What each year holds:
 - **White Day.** A month later, it's your turn to give back. Who you give to, and what, tells them how you feel.
 - **Graduation.** The last day. A girl who asks for the second button of your uniform is confessing. Then the world leaps back to year 1, and everyone remembers.
 
+## Outfits change with the scene
+
+With [image generation](doc/requirements.md#image-generation) on, every heroine dresses for where she is and what she's doing.
+
+Every classmate comes with 3 outfits on file: `school-uniform`, `school-gym` and `school-swimsuit`. In class she's in her uniform, a PE class puts her in her gym clothes, and at the school pool she's in her swimsuit. Each one is the exact same clothes in every picture.
+
+On a date, the story puts her in something casual, like a blouse and a denim skirt. MVU Helper saves it in the game state, so she keeps the same outfit all afternoon, picture after picture. On Monday she's back in her uniform, and next Saturday she wears something new again.
+
+It's just like a real school. Everybody wears the same uniform on a school day, and nobody shows up to a weekend date in it.
+
+Nobody has to tell the AI what she wears. It only picks from a list: her outfits on file, what she wore in her last picture, or new clothes the story just put her in. Don't like what she's wearing? Edit it on MVU Helper's Roster tab, and the next picture follows. How it works is on [A week with Mitsuki](https://github.com/KritBlade/mvu-helper/blob/main/doc/roster/registry.md#a-week-with-mitsuki).
 
 ## Make your own events
 
