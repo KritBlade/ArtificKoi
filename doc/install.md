@@ -64,7 +64,9 @@ Download the card, [ArtificKoi.png](../dist/ArtificKoi.png). On its GitHub page,
 
 Then SillyTavern > Character Management > **Import Character from File**, and pick `ArtificKoi.png`.
 
-SillyTavern then asks whether to import the card's embedded World/Lorebook. Click **Yes**. That lorebook is the game itself, and ArtificKoi can't run without it. If it asks to allow the card's scripts or regex too, say yes to those as well.
+SillyTavern then asks whether to import the card's embedded World/Lorebook. Click **Yes**. That lorebook is the game itself, and ArtificKoi can't run without it. If it asks to allow the card's scripts or regex too, say yes to those as well.  
+  
+**RELOAD chrome once by pressing F5 after you go into the chat, sometimes galgame GUI won't launch and it's a bug in galgame that I can't fix.**
 
 ## 9. Pick a connection for PRE and POST
 
