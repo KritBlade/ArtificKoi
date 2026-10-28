@@ -96,9 +96,9 @@ The accurate way is the Prompt Viewer, in the magic wand menu. The upper left sh
 
 ## A memory extension
 
-I **highly recommend** a memory extension that hide (ghosts) ALL the history except the very last reply. Use my other project [VectFox](https://github.com/KritBlade/VectFox), or [Summaryception](https://github.com/Lodactio/Extension-Summaryception).  It makes a HUGE difference in the thinking process if AI model only need to digest 60000 tokens or less for local model.  API models would also benefit for better instruction following.
+I **highly recommend** a memory extension that hide (ghosts) ALL the history except the very last reply. Use my other project [VectFox](https://github.com/KritBlade/VectFox), or [Summaryception](https://github.com/Lodactio/Extension-Summaryception).  Local model could start forgeting to execute instruction if not using memory extension that hide previous replies.  API models would also benefit for better instruction following.
 
-In VectFox, turn on Enable Auto-Sync and Summarizer Injection, and inject the last 20 turns of summary. Turn on Include full event detail. Then turn on Ghost vectorized messages, and keep the last 1 message verbatim.
+In VectFox, turn on Enable Auto-Sync and Summarizer Injection, and inject the last 20 turns of summary. Turn on Include full event detail. Then turn on Ghost vectorized messages, and keep the last 1 message verbatim.  This will make the token use ALWAYS stay flat no matter how many replies.
 
 Then VectFox > **Action** tab > **Text Cleaning**. Set **Active Preset** to **MVU**, and click **Save Changes**. It strips the game's own tags, like state updates and picture prompts, before VectFox reads the story.
 
