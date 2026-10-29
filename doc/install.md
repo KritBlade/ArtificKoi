@@ -72,7 +72,7 @@ SillyTavern then asks whether to import the card's embedded World/Lorebook. Clic
 
 ArtificKoi runs 2 extra LLM calls every reply, [PRE and POST](requirements.md#the-pre-and-post-calls). Both need a connection.
 
-First, make a new connection profile in SillyTavern's Connection Manager. For an API model, I recommend GPT 6 Luna. It's fast and cheap, and these 2 calls run every single reply.
+First, make a new connection profile in SillyTavern's Connection Manager. For an API model, I recommend GPT 6 Luna. It's fast and cheap, and these 2 calls run every single reply.  Make sure when you create new connection, use a preset that is known to JB correctly or the picture drawn will not be explict.  You can use  [Megumin](https://github.com/Arif-salah/Megumin-Suite) , [Freaky Frankenstein](https://www.reddit.com/r/SillyTavernAI/comments/1w49lyx/preset_update_freaky_frankenstein_54_the_second/)  and both should work, just turn off all logic and prose related stuff in preset as you don't need all that in PRE and POST.
 
 Then MVU Helper > **Extra LLM Calls** > set the **Connection** on both PRE and POST to that profile.
 
@@ -89,6 +89,16 @@ Open ArtificKoi's chat first. Then MVU Helper > **Image Generation** > set **Ima
 Didn't set up image generation? Skip this step. The game plays just fine without pictures.
 
 ![MVU Helper's Image Generation, with Image insert type set to Inline replace mode](../Image/Install/image_insert_type.png)
+
+## 11. Turn thinking on in your preset
+
+ArtificKoi needs the AI model to think before it writes. Besides the story, it has to trigger events, change outfits and write the command for a picture, all in the same reply. Without thinking, the model starts forgetting some of them.
+
+In [Megumin](requirements.md#preset), turn **Custom thinking** on.
+
+![Megumin's Custom thinking, switched on](../Image/Install/custom_thinking.png)
+
+Using another preset? If it has a switch that turns thinking off, make sure it's on.
 
 That's it. Open ArtificKoi's chat and start playing. What each of these extensions does is on [What is Tavern Helper, ST-Prompt-Template and MVU](https://github.com/KritBlade/mvu-helper/blob/main/doc/st_extensions/README.md).
 

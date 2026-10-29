@@ -4,7 +4,7 @@
 
 ## Installation guide
 
-ArtificKoi rides on numerous extension to pull off the trick.  It needs MVU Helper, plus the 2 SillyTavern extensions MVU Helper rides on, Tavern Helper and ST-Prompt-Template. There's also one setting you must not skip, Environmental isolation. Then you import the card. It's 10 short steps, all on [Install ArtificKoi](doc/install.md).
+ArtificKoi rides on numerous extension to pull off the trick.  It needs MVU Helper, plus the 2 SillyTavern extensions MVU Helper rides on, Tavern Helper and ST-Prompt-Template. There's also one setting you must not skip, Environmental isolation. Then you import the card. It's a couple short steps, all on [Install ArtificKoi](doc/install.md).
 
 ## Requirements
 
