@@ -84,7 +84,7 @@ On a local model? Pick the same model you play with. Switching models takes time
 
 [Image generation](requirements.md#image-generation) is off by default. If you already set it up, you have to turn it on in MVU Helper.
 
-Open ArtificKoi's chat first. Then MVU Helper > **Image Generation** > set **Image insert type** to **Inline replace mode**. The setting belongs to the card, so every card keeps its own.
+Open ArtificKoi's chat first. Then MVU Helper > **Image Generation** > set **Image insert type** to **Inline replace mode**. The setting belongs to the card, so every card keeps its own.  If you are using local model, you might consider to change "Picture written by" to POST if you see image from time to time not drawing.
 
 Didn't set up image generation? Skip this step. The game plays just fine without pictures.
 
