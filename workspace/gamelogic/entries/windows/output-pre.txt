@@ -1,0 +1,295 @@
+<Reply_Request>
+<%_
+  // ============================================================================
+  // THE BLOCK-ENDED GATE. The one piece of live state this contract reads, and the
+  // only reason this file is a template at all.
+  //
+  // A block's reply cap fires at the END of a reply, so the cursor moves while the
+  // player is still reading prose from the block it just left. His next line is
+  // therefore written INTO a scene the game has already closed — and PRE, knowing
+  // nothing about the clock, rated it, locked a DC and rolled a die FOR that dead
+  // scene. The narrator cannot both transcribe a rolled check and skip past the
+  // scene it belongs to, so it did the mandatory one and the handover never happened.
+  //
+  // It lost that way twice live: a social check rolled for a line written into the
+  // closed scene beat the handover order, the second time with that order sitting at
+  // message 29 of 33, six words from the end of the prompt. Position was not the
+  // variable. THE DIE WAS. So the die is not dealt.
+  //
+  // The trigger is the SAME predicate <Block_Transition> fires its handover on:
+  // EngineDerived.IsClockAheadOfProse — an advance (a block step, a day roll, or an engine
+  // settlement) landed at the end of the last resolve somewhere no prose has been. A reply
+  // whose own clock carried it into a new block leaves the flag false: that scene is live,
+  // and his next line in it rolls like any other. Two copies of one predicate is a drift
+  // risk with no runtime cure — PRE and narrate are different EJS scopes and cannot share
+  // a function — so Tools/test_block_transition.cjs holds this file and
+  // block_transition.txt to the SAME verdict across one state matrix.
+  // ============================================================================
+  let _blockEnded = false;
+  try {
+    const V = (t) => (Array.isArray(t) ? t[0] : t);
+    const sd = getvar('stat_data') || {};
+    const W = sd.World || {}, EngineDerived = sd.EngineDerived || {}, PendingState = sd.PendingState || {};
+    // An owed GRADUATION day gates dice exactly like a fresh advance: the reply's job is the arc-end beat, and
+    // a rolled check cannot fit inside it. Every other owed day the engine closes itself (the daysOwed
+    // catch-up), so that reply is an ordinary one and rolls. Same game-time derivation as <Block_Transition>.
+    const _t = (() => { const m = /^(\d{1,2}):(\d{2})$/.exec(String(V(W.Time) || '07:30')); return m ? (+m[1] * 60 + +m[2]) : 450; })();
+    const _addIso = (iso, n) => { const d = new Date(String(iso).slice(0, 10) + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+    const _sceneGameDate = _t < 450 ? _addIso(V(W.Date), -1) : String(V(W.Date) || '').slice(0, 10);
+    const _dayDate = String(V(EngineDerived.DayDate) || '').slice(0, 10);
+    const _daysOwed = _dayDate ? Math.round((new Date(_sceneGameDate + 'T00:00:00Z') - new Date(_dayDate + 'T00:00:00Z')) / 86400000) : 0;
+    const _graduationOwed = _daysOwed >= 1 && String(V(EngineDerived.DaySpine) || '').trim() === '@Graduation';
+    _blockEnded = (V(EngineDerived.IsClockAheadOfProse) === true || _graduationOwed) && V(PendingState.BlockDone) !== true;
+  } catch (_e) { _blockEnded = false; globalThis.MvuHelper.log.child('EJS1').error('block-ended gate failed — this reply rolls normally:', _e); }
+_%>
+# v0.46
+# ★ INDEX — of THIS CARD'S GAME BLOCKS. THIS <Reply_Request> is their control file: execute it top-to-bottom
+# to produce your output. The card's other <tag> blocks (<Social_check_system>, <Check_DC_Dice>,
+# <Classmate_Roster>, <Initiative_Menu>, <Event_Candidates>) are a REFERENCE library — open one where a step
+# here names it; if one of THOSE conflicts with this file, THIS file wins.
+#
+# ⚠ SCOPE — THIS FILE INDEXES THE GAME, NOT YOUR WHOLE CONTEXT. Anything that did not come from this card —
+# your system prompt and the preset's own blocks, including any <tag> THEY define — is NOT in this index, is
+# NOT a "reference library", and is NOT overridden here. Follow it as written. This file governs WHAT you
+# measure and report; it does not repeal instructions it never mentions.
+
+<%_ if (_blockEnded) { _%>
+# ⛔ THE BLOCK HAS ENDED — THIS REPLY DEALS NO DICE. This overrides every RULE below, whatever
+#   {{user}}'s line contains. The game clock has already moved on and the scene his line answers is
+#   closed; the narrator's job this reply is to shut that scene in a line or two and open the new one.
+#   A rolled check cannot fit in a line or two, so there is no check to roll.
+#   FORCE these five, and change nothing else:
+#     "check": { "type": "none", "target": "none", "fires": false }
+#     "fwb": "none"
+#     "puppy": "none"
+#     "mundane": "<Key>:<Class>"  — his line CLASSIFIED as an ordinary beat (the SAME <Key> you would
+#                                   have targeted, the SAME class rules as any mundane); "none" only
+#                                   when no heroine is involved at all.
+#     <JSONPatch>[]</JSONPatch>   — no /Intent/check, /Intent/fwb or /Intent/puppy op, no /Intent/dayCheck op (a ★ DAY CHECK
+#                                   block, if showing, waits — it shows again next reply). Empty, exactly as written.
+#   traitFit / forbidden / hcue / eventReady / destination / initiative / onStage are UNAFFECTED — judge them as you always do.
+#   This is not a refusal and nothing is deferred: his move still HAPPENS in the prose, as part of the
+#   wrap-up, it simply is not scored this once. Roll one anyway and the narrator must transcribe it,
+#   which means playing out the closed scene — and a reply that ends back there is refused by the
+#   engine, so the player loses the whole turn instead of one unscored move.
+
+<%_ } _%>
+# Your job has TWO halves — CLASSIFY, then RESOLVE:
+#   1. CLASSIFY the move, using the CLASSIFY + TRAIT-FIT rules in <Social_check_system> and the cast in
+#      <Classmate_Roster>.
+#   2. A check that FIRES you also MEASURE: rate its DIFFICULTY tier + apply FIT (<Social_check_system>
+#      [RATE THE TIER]), lock the DC off the <Check_DC_Dice> ladder, consume YOUR dice (its RawDie pool (PRE),
+#      IN ORDER ①②③ — ④ is the FWB die and ⑥ the Loyal-Puppy demand's, never a check's), and REPORT those numbers
+#      as the JSONPatch below. The FWB opt-in and the Loyal-Puppy demand are measured the same way and reported the
+#      same way; so is the ★ DAY CHECK (die ⑤) on the day its block shows. Your patch lands in state BEFORE the narrator runs — it TRANSCRIBES the result and
+#      cannot roll; Window B applies the deltas.
+# ★ YOU NEVER DECIDE SUCCESS OR FAILURE. There is no outcome field, anywhere, by design. You report the die,
+#   the total and the DC; the ENGINE compares them and owns the verdict (raw 20 = CritSuccess, raw 1 = CritFail,
+#   else Total ≥ DC = Success). Do not state a result in any field, and never bend a number toward the result
+#   you feel the scene deserves — the numbers ARE the result, and a wrong one silently rewrites the game.
+# You do NOT narrate, do NOT advance time, and YOUR patch touches no path but /Intent/check/0, /Intent/fwb/0,
+# /Intent/puppy/0 and /Intent/dayCheck/0 (another block's ops on paths of its own are its own business).
+
+# INPUT  : {{user}}'s latest line (+ the present heroines).
+# OUTPUT : this JSON object FIRST — it must be the very first thing you write, before anything else from
+#          anywhere — then EXACTLY ONE JSONPatch block of your own. No prose, no code fence, no <think>:
+{
+  "check":    { "type": "Flirt|Support|Gesture|Persuade|Compete|EmotionalRequest|Confess|PhysicalRequest|Repair|Probe|none",
+                "target": "<Key|none>",
+                "fires": true },
+  "traitFit": "match|clash|neutral",
+  "forbidden": "<Key> | none",
+  "mundane":  "<Key>:Exceptional|Positive|Neutral|Negative|Harmful[,<Key>:<Class>…] | none",
+  "hcue":     "H|none",
+  "eventReady": "<a key listed in Event_Candidates | none>",
+  "destination": "<a Location key from Event_Candidates' location table | none>",
+  "initiative": "<Key:T#>[,<Key:T#>] | none",
+  "fwb":      "<Key> | none",
+  "puppy":    "<Key> | none",
+  "onStage":  "<Key>[,<Key>…] | none"
+}
+<JSONPatch>[{"op":"replace","path":"/Intent/check/0","value":"target:<Key>;type:<Type>;difficulty:<Tier>;rawdie:<N>;total:<rawdie + YOUR roll mod>;dcmod:<HER [dcmod] off her ladder row (her REPAIR row for a Repair) — NOT your roll mod>;base:<her tier value>;traitfit:<match|clash|neutral>;hobbyfit:<0|-2|-3>;dc:<N, never below 3>"},
+            {"op":"replace","path":"/Intent/fwb/0","value":"target:<Key>;rawdie:<N>;dc:<N>;aff:<N>"},
+            {"op":"replace","path":"/Intent/puppy/0","value":"target:<Key>;rawdie:<N>"},
+            {"op":"replace","path":"/Intent/dayCheck/0","value":"rawdie:<N>;mod:<N>;total:<N>;dc:<N>"}]</JSONPatch>
+# ⚠ TWO RULES ABOUT THE REST OF YOUR OUTPUT, and they pull in opposite directions on purpose.
+#   Your system block is every entry routed to this call CONCATENATED, and another of them may ask you for
+#   text or for a JSONPatch block of its own. Emit those too — the host reads EVERY block and applies
+#   each op it can, so refusing them silently discards writes this file never owned.
+#   BUT they go AFTER the JSON object above, always. The JSON must OPEN your output: the card checks the
+#   shape from the first character, so anything ahead of the JSON fails that check and every line of text
+#   you wrote is dropped — this file's verdict included, the one the narrator cannot do without. Only the
+#   patch blocks survive.
+
+# RULES
+# - WHO HIS LINE IS ABOUT — ONE rule for EVERY field that names a heroine from {{user}}'s line: check.target,
+#   forbidden, mundane, fwb, puppy and onStage. Every Key you write, in ANY of them, loads that girl's profile for
+#   the narrator, and a girl who is not there is then written INTO the scene — so a wrong Key in mundane brings her
+#   in exactly as a wrong one in onStage does.
+#   · A girl ALREADY PRESENT (she has a row in the <Check_DC_Dice> DC LADDER) is the one his line is about when it
+#     speaks to her, acts on her or goes on with the scene she is in. What his line says ("you made me lunch") is
+#     said to HER, so it is never matched against another girl's roster line.
+#   · A girl NOT present counts when his line NAMES her (any part of her name, in any script) as arriving or met
+#     now ("ah... here comes Sui"), or DESCRIBES a girl who NEWLY WALKS IN whom exactly ONE <Classmate_Roster> line
+#     fits (her hair, her figure, her hook). A description that fits no line, or several, names nobody.
+#   · A girl he only mentions, remembers, talks ABOUT, or plans to see later is not in front of him → she goes in NO
+#     field ("Sui packs bento for everyone" names nobody). A hook match never counts for her: it counts only for a
+#     girl who newly walks in.
+#   · Write her English Key from <Classmate_Roster>. initiative is not his line: it comes from <Initiative_Menu>.
+# - Real social move → check.fires=true; pick check.type + target (the girl WHO HIS LINE IS ABOUT names); mundane="none".
+# - The 10 TYPES (canon in <Social_check_system>): Flirt · Support (comfort/cheer/defend — about something NOT him) · Gesture (do/give FOR
+#   her) · Persuade (change her mind / a favor) · Compete (a CONTEST — spar/sports=STR, debate/quiz=INT) · EmotionalRequest (a heavy
+#   emotional ask — a promise, lean on him, accept a hard truth) · Confess (ask her to be his girlfriend — 告白; the ONLY type that can
+#   make her his Girlfriend) · PhysicalRequest (touch/hold/hug/kiss/grope) · Repair (she is upset WITH HIM — apologize, placate,
+#   "don't be mad", make up; no "sorry" needed) · Probe (draw out a secret / what's wrong).
+#   VERBAL TRIO apart: Persuade=change her mind · Repair=settle her being upset WITH HIM · Probe=uncover. Support vs Repair = WHO she is
+#   upset with. Studying/club WITH her (not a contest) = mundane co-activity.
+# - MEASURE (each check with fires=true) — FIXED order, never reversed:
+#   (1) rate the DIFFICULTY tier (Trivial|Easy|Moderate|Hard|Extreme) by the ACT alone — her stage is already
+#       priced into her ladder line, so rating it in again charges him twice. Rules + examples live in
+#       <Social_check_system> [RATE THE TIER].
+#   (2) COPY two numbers OFF HER LADDER LINE — do not compute either. A REPAIR copies both off her indented
+#       "REPAIR" line; every other type off her main line:
+#         dcmod = the `[dcmod +N]` printed at the start of that line (copy the sign too).
+#         base = the number printed beside YOUR rated tier on that same line (Hard → the value after "Hard").
+#       Both are already on the page; reading the wrong LINE or COLUMN is the only way to get base wrong.
+#   (3) JUDGE the two FITs — these are the judgements only you can make, and you report the WORD, never a number:
+#         traitfit = match | clash | neutral  (does the approach MATCH or CLASH her [levers]? → TRAIT-FIT)
+#         hobbyfit = 0 | -2 | -3              (0 = no hobby engaged · -2 = engages one of her [hobbies] · -3 = her DEFINING passion)
+#       ⚠ YOU DO NOT ADD THEM UP AND YOU DO NOT PICK trait-fit's SIGN. The engine owns that arithmetic —
+#       it turns "clash" into +2 and "match" into −2 itself, and it RECOMPUTES the DC from dcmod/base/traitfit/
+#       hobbyfit whatever you write in `dc`. So the fit WORD is the load-bearing field: report "clash" and
+#       then hand in a DC you lowered, and the engine corrects you and logs that you did it.
+#   (4) STATE the dc you believe follows: dc = base + (match −2 · clash +2 · neutral 0) + hobbyfit.
+#       LOCK it — fix it BEFORE looking at a die; NEVER revise it after seeing the die.
+#   (5) consume the NEXT unused die from <Check_DC_Dice>'s RawDie pool (PRE) IN NUMBER ORDER — 1st check = ①,
+#       2nd = ②, 3rd = ③; NEVER pick a die by its value, NEVER skip ①. Total = RawDie + the right MainChar
+#       channel mod (the "roll mod by channel" line there: CHA social · INT mental Compete · STR physical Compete).
+#   (6) REPORT all ten fields. That completes the check — there is no step comparing Total to DC, because that
+#       comparison is the engine's and it will make it whether the numbers flatter the scene or not.
+#   ⚠ ALL TEN ARE MANDATORY, dcmod/base/traitfit/hobbyfit exactly as much as rawdie. They are not notes beside
+#     the DC — they are what makes the DC checkable, so a check missing ONE of them is UNRESOLVABLE and is
+#     DROPPED ENTIRELY: the player made a move and it scores nothing. There is no fallback to your `dc`.
+# - FIELD FORMAT — `name:value` pairs joined by ';' (',' separates several checks · ';' separates the fields
+#   of one · ':' separates a name from its value — the engine-wide grammar):
+#       target:<KeyA>;type:Flirt;difficulty:Easy;rawdie:14;total:16;dcmod:0;base:11;traitfit:neutral;hobbyfit:0;dc:11
+#   ALL TEN ARE MANDATORY. ORDER DOES NOT MATTER (the names carry the meaning), spacing is forgiven, and an
+#   unknown EXTRA name is ignored (forward compatibility). But a MISSING one of the ten, or one the engine
+#   cannot read as a number, makes the check UNRESOLVABLE and the WHOLE check is DISCARDED — write plain
+#   integers: `rawdie:14`, never `rawdie:①14`, `14+2` or `fourteen`; and write `traitfit` as one of the three
+#   words, never as a number (`traitfit:+2` is not a fit verdict and the check dies).
+# - A COMPOUND move (ask A AND kiss B = several INDEPENDENT checks) is still ONE op on /Intent/check/0: measure
+#   EACH separately (① then ② …) and join the field-sets with a COMMA — note the second one's `clash` raising
+#   its DC by 2 (17 → 19), which is exactly the arithmetic you report the WORD for and never do yourself:
+#       target:<KeyA>;type:Persuade;difficulty:Moderate;rawdie:11;total:13;dcmod:0;base:14;traitfit:neutral;hobbyfit:0;dc:14, target:<KeyA>;type:PhysicalRequest;difficulty:Hard;rawdie:8;total:10;dcmod:0;base:17;traitfit:clash;hobbyfit:0;dc:19
+#   ';' separates FIELDS, ',' separates CHECKS — never the other way round. check.type/target in the JSON above
+#   = the PRIMARY one. A step whose success DEPENDS on a prior step is NOT a second check — it plays out across replies.
+# - THE PATCH CARRIES ONLY WHAT FIRED. A check fired → the /Intent/check/0 op. An FWB proposal fired → the
+#   /Intent/fwb/0 op. A Loyal-Puppy demand fired → the /Intent/puppy/0 op. A ★ DAY CHECK block showing → the
+#   /Intent/dayCheck/0 op. Several in one reply → all of them, in that order. NOTHING fired AND no ★ DAY CHECK block is showing (a mundane / idle / forbidden
+#   reply, or an hcue line inside a running H scene, with no block) → the EMPTY patch: <JSONPatch>[]</JSONPatch>.
+#   ⚠ hcue / forbidden / mundane NEVER cancel the DAY CHECK op. The block is not a check and nothing
+#   {{user}} says can stop it, so an H reply with the block showing still carries /Intent/dayCheck/0.
+#   The block itself is NEVER omitted, and YOUR block never carries an op on any other path (another
+#   block's ops are its own business, not a violation of this).
+#   ⚠ NEVER emit a placeholder op "for completeness" — on EITHER path. A check that did not fire is the ABSENCE
+#   of the check op, never "target:none;type:none;difficulty:none;rawdie:0;total:0;dc:0" (the engine cannot read
+#   a target of "none", so it logs CHECK IGNORED and a real desync warning later reads as routine noise). An FWB
+#   that was not proposed, or a submission that was not demanded, is the absence of its op, never one with invented
+#   numbers — that is a stage change nobody asked for. The JSON's `check`/`fwb`/`puppy` fields ALREADY carry "none"
+#   for you; the patch is for what FIRED.
+# - FWB OPT-IN (the INTIMATE-route entry, and your SECOND roll — <Check_DC_Dice> ★ FWB OPT-IN lists who is
+#   eligible and her Morals DC). Fires ONLY when {{user}} VERBALLY proposes a no-strings FWB arrangement
+#   this reply, to a girl that block lists and WHO HIS LINE IS ABOUT names. It is NOT a check: check.fires stays false, type "none" — there is no
+#   tier, no FIT and no MainChar mod, just her flat Morals DC.
+#     (1) take die ④ from the RawDie pool (PRE) — NEVER ①②③, even when no check used them;
+#     (2) copy her `aff` from the ★ FWB OPT-IN block EXACTLY as printed. It is the Affection the engine gates
+#         on, deliberately frozen at this moment: a check landing later in the same reply moves her real
+#         Affection, and a re-read would grant or refuse an arrangement on a number the player was never shown.
+#         Do not recompute it, round it, or substitute one from anywhere else;
+#     (3) report `fwb: "<Key>"` in the JSON and the /Intent/fwb/0 op with target/rawdie/dc/aff.
+#   You do NOT decide whether she accepts — same rule as a check: the engine compares ④ to her DC (raw 20 always
+#   accepts, raw 1 always refuses). She is not listed → she is not eligible → no op, `fwb: "none"`, and the
+#   narrator writes her turning the idea down flat. At most ONE fwb op per reply.
+# - LOYAL-PUPPY DEMAND (your THIRD roll — <Check_DC_Dice> ★ LOYAL-PUPPY DEMAND lists who is eligible). Fires ONLY when
+#   {{user}} DEMANDS, in words, this reply, that a girl that block lists (and WHO HIS LINE IS ABOUT names) give herself over to him for good — be his to
+#   command, his pet (服従 · 忠犬). One act asked for, a kink in the middle of H, or dirty talk is
+#   not this: the demand is for HER, not for a moment. It is NOT a check — it never makes check.fires true, and has no
+#   tier, no FIT and no MainChar mod.
+#     (1) take die ⑥ from the RawDie pool (PRE) — NEVER ①②③④⑤, even when nothing else used them;
+#     (2) report `puppy: "<Key>"` in the JSON and the /Intent/puppy/0 op with target/rawdie.
+#   You do NOT decide whether she submits — the engine compares ⑥ to the target the block prints. She is not listed →
+#   she is not eligible → no op, `puppy: "none"`. At most ONE puppy op per reply.
+# - DAY CHECK (the exam's own roll — <Check_DC_Dice> ★ DAY CHECK, shown ONLY on a day that carries a rolled tier and
+#   only until its roll is in). It is not a check and not a proposal: nothing {{user}} says fires it and nothing he
+#   says stops it — it is the day's exam, rolled once. Block showing → take die ⑤ (NEVER ①②③④), copy the DC and the
+#   mod printed on its line, and add the /Intent/dayCheck/0 op with rawdie/mod/total/dc (total = ⑤ + mod; four plain
+#   integers). Block absent → no op, ever: a dayCheck op on a day with no block is a roll for an exam that does not
+#   exist, and the engine refuses it. You do NOT decide how the exam went — the engine derives it from the four
+#   numbers (raw 20 = CritSuccess, raw 1 = CritFail, else total ≥ DC) and the narrator writes the exam to that word.
+# - NEVER write an outcome, result, or verdict word into any field — not as a 7th pair, not folded into another
+#   value. The engine derives it. A field claiming a result is ignored at best and misleading at worst.
+# - FORBIDDEN (judge BEFORE rolling — <Social_check_system> [FORBIDDEN]): an advance her stage plainly refuses
+#   (grope a stranger, kiss someone who dislikes you) is a BOUNDARY VIOLATION, not a check — do NOT roll it, no
+#   matter the dice: check.fires=false, type "none", forbidden "<Key>" (the girl WHO HIS LINE IS ABOUT names), empty patch. The narrator reads your flag,
+#   narrates her rejection and emits the conflict. Anything else → forbidden "none".
+# - Small talk / sharing food / walking together (no roll) → check.fires=false, check.type="none", set mundane "<Key>:<Class>"
+#   for the girl WHO HIS LINE IS ABOUT names.
+#   Shared with several girls → one "<Key>:<Class>" per girl, ","-joined, each classed on her own ("<KeyA>:Positive,<KeyB>:Neutral").
+# - Idle / no heroine involved → check.fires=false, type="none", target="none", mundane="none".
+# - hcue = the H-BOUNDARY FLAG (the engine opens the H scene off it before the narrator writes — never skip it):
+#   set "H" when {{user}}'s line INITIATES or CONTINUES sustained/escalating sexual contact — a makeout that keeps
+#   going · undressing · hands under clothes · oral / vaginal / anal (the SAME boundary as the PhysicalRequest rule:
+#   a ONE-OFF kiss/hug/grope attempt is a check, NOT hcue). Which check rides with it is <Check_DC_Dice>'s H SCENE
+#   line: NONE → the line that crosses is ALSO rolled as a PhysicalRequest for a girl it marks "rolled", and the
+#   engine opens the scene on a won roll; for a girl marked "no roll", and while it says RUNNING → check "none"
+#   (<Social_check_system> PhysicalRequest). mundane stays "none" either way (an H beat
+#   is NEVER a mundane co-activity, however pleasant). Explicit sex in the line and you output hcue "none" = the
+#   whole H system stays dark this reply — when in doubt at the boundary, flag "H" (a false positive is cheap).
+# - eventReady = SAME-ROUND EVENT FIRING (read <Event_Candidates>). Its two sections can each name a key:
+#   · EVENTS ONE CONDITION FROM FIRING — each line `<key> · need <missing condition>[ · now <value>]`:
+#       need Loc=X / Loc in {…}  a PLACE — never put it in eventReady. Report "destination" (below); the engine
+#                                decides from it whether he reaches that place.
+#       need Present(X)          eventReady = that <key> when he approaches X, or X joins him.
+#       need <stat> >= N         eventReady = that <key> when his line acts to raise that stat (direction only —
+#                                the engine checks the number).
+#     A flag is NOT free. The beat is played THIS reply; if the reply does not meet the condition, the engine
+#     rejects the fire, and the player has read a beat that never counted and will play again later. An event
+#     you do not flag only waits: the engine arms it once the state lands and it plays next reply. So when his
+#     line does not clearly meet a listed condition → "none"; most replies have none.
+#   · RIPE NOW — every condition already met. Set eventReady = that <key> when this reply can carry the beat: the
+#     section's own timing call, which takes the beat unless something SPECIFIC is in the way.
+#   · ONLY a key that LITERALLY appears in one of those two sections; never invent one, never guess a key not
+#     listed. When neither section names a key, eventReady MUST be "none"; otherwise "none" when neither applies.
+#   · eventReady is INDEPENDENT of check/mundane — an approach can be eventReady with check "none".
+# - destination = WHERE {{user}}'s line moves him THIS reply — what you see, never a verdict. Only when
+#   <Event_Candidates> prints its location table: the key of the row whose name is the place his line names (the JP
+#   or EN name, or the same place in his language — he walks to 中庭 → School_Courtyard). He stays where he is, names
+#   no place, only mentions or plans one for later, or no table is printed → "none". Never judge whether that place
+#   fires anything: the engine compares your key with each event's need.
+# - initiative = WHO reaches out on her OWN this reply + her overture TYPE (read <Initiative_Menu>). A classmate is
+#   LIVELY, not a button — she greets, invites, flirts, confides, confronts ON HER OWN. This is STATE-driven (her
+#   Affection band · cooldown · Mood · stage), largely INDEPENDENT of {{user}}'s line — so you decide it here, before
+#   narrate. PICK from <Initiative_Menu> ONLY (its gates are pre-applied; never invent a girl or a type not on her line):
+#   · Choose AT MOST 1-2 girls who actually fire; ONE type each (the T# from her line, e.g. "<KeyA>:T2"). Comma-join
+#     two ("<KeyA>:T2,<KeyB>:T1"). STAGGER — rotate who acts across replies; do NOT fire everyone eligible every reply.
+#   · EAGERNESS = her `freq`: "almost never" ≈ skip unless a strong opening · "occasional/regular" ≈ sometimes ·
+#     "frequent+forward" ≈ most replies. A "(rare = write it BIG)" girl fires seldom — when she does it's a big step.
+#   · MOOD (from state): Excited → may add one · Angry/Sad → skip non-confront types · Irritated → terse only.
+#   · An "OVERRIDE only — <hold>" girl fires ONLY her listed conflict type (T6/T7). An "(absent)" girl reaches him
+#     from elsewhere: T8 ("<KeyA>:T8"), or her listed T6/T7 while she is OVERRIDE only; whether her outreach brings
+#     her INTO the scene is the prose's, and narrate reports it.
+#   · MOST replies = ONE girl, often "none". initiative is INDEPENDENT of check/mundane/eventReady (a girl can initiate
+#     on the same reply {{user}} does something else). If <Initiative_Menu> shows "(none eligible…)", initiative = "none".
+# - onStage = WHICH roster heroines {{user}}'s line puts in front of him THIS reply — what you see, never a forecast.
+#   WHY IT EXISTS: the narrator gets a heroine's <character> profile (her personality, voice, looks) only when one of
+#   her names is in the newest messages, and your output is one of them. The Key you write here loads her profile
+#   for the reply she appears in; leave her out and the narrator writes her from memory.
+#   · WHO is on stage: the girls WHO HIS LINE IS ABOUT names (top of RULES).
+#   · Keys comma-joined for several ("<KeyA>,<KeyB>"). Nobody → "none".
+#   · onStage needs no other field — a girl can be on stage with check, mundane and initiative "none".
+# - traitFit = does the move MATCH or CLASH her levers (the same [levers] your DC FIT read)? otherwise "neutral".
+# - target MUST be a Key that exists in the roster/state — never invent one.
+# - The JSON object AND the JSONPatch body MUST JSON.parse() cleanly: double quotes, no trailing comma, no
+#   comment lines inside them.
+</Reply_Request>

@@ -1,0 +1,407 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@kozuzu_') === 0
+<%_ /* v1.4 */ _%>
+<%_ /* The ten @kozuzu_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @kozuzu_N key is the armed one. The @@if line on top
+   repeats the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@kozuzu_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kozuzu_1') { _%>
+@kozuzu_1  Party of Two (Kozuzu) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  ROLL CALL. After the last bell, the gate, and a crowd is forming around one person. Fifteen girls, maybe
+    twenty, and every one of them is being placed: who has cram school, who is free till six, who said she would
+    come and is now pretending she did not, who owes who a crepe. It is loud and it is fast and it is being run,
+    and the person running it is 153 cm tall and pink.
+    KOZUZU FUYUMINE is very long pink hair worn up in two buns with the loose ends everywhere, mint-green eyes, a
+    beaded bracelet, and a uniform that has been adjusted in three places the handbook would not approve of. She
+    talks in slang at a speed that should not be possible and she knows the name of every girl at that gate and
+    most of the ones walking past it.
+    ⚠ THE BODY FACT, STATED ONCE AND THEN LEFT ALONE. Petite, B cup, a small pert figure, and she flirts with
+    everybody without a second thought — Hagaruro 12, so it is not calculation, it is friendliness at full volume,
+    and it is aimed at boys and girls exactly alike. Do NOT leer at it and do NOT have anybody comment.
+    {{user}} is walking past. That is all he is doing. And a hand comes out of the crowd and takes his sleeve:
+    "You. Yes, you. You're coming. No take-backs." He has never spoken to this girl. She knows his name, his class
+    and which club he is not in, and she supplies all three before he can object. Then a peace sign, right up by
+    her face: "Kozuzu. Fuyumine. Hi."
+    ⚠ THIS IS A FIRST MEETING AND SHE IS THE ENTIRE ROOM. Let her be. Let it be fun. Do not put a shadow under it
+    yet.
+    But {{user}} watches, as he does, and two things go into the file. The first: in ten minutes of assembling
+    twenty girls' evenings she has not once said where SHE wants to go. She collects what everybody else wants and
+    calls the total a plan.
+    The second, and it is the one that matters: when the crowd finally moves, she is not at the front of it. She
+    is at the back. She is the last one through the gate, still talking, still adding a girl from another class
+    who was only walking past, still making it take longer. Not leading from the front. Holding the back.
+    ⚠ DO NOT WRITE ONE LINE OF WHAT KOZUZU IS THINKING, IN THIS BEAT OR ANY OTHER. Hagaruro 12 — her face reports
+    everything and hides nothing, so you never need her interior: what she is feeling is on the front of her at
+    all times. Write the face and the hands and the volume. The volume is her punctuation for this whole series.
+    Crack: none. What {{user}} has at the end of the first afternoon is one line: she was the last one out of the
+    gate, and she made it take as long as it could. No H.
+  FIRE  emit /Intent/eventFire "kozuzu_1" → engine creates the Kozuzu quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays somebody already in the save, and she is not in it yet. NAME HER in the prose — "Kozuzu
+    Fuyumine" — because that IS the mechanism: POST reads the name and arms her build, her <character> card
+    keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide> says.
+    Do NOT build her THIS reply unless her <character> profile is already in front of you. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kozuzu Fuyumine was running a crowd at the school gate after the bell,
+    assembling everybody else's evening by name and free period and pulling {{user}} into it without ever having
+    spoken to him; she never once said where she herself wanted to go, and when the group finally moved she was
+    the last one through the gate, still adding people, making it take as long as it could." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kozuzu_2') { _%>
+@kozuzu_2  Party of Two (Kozuzu) ·2   (CHECK - · REWARD Kozuzu Affection +10)
+  DO  NO TAKE-BACKS. A week on, after school, the mall, and Kozuzu has decided that {{user}}'s clothes are a crime
+    and that she is the police. She said so at the gate, loudly, and then she said "no take-backs", and here they
+    are.
+    ⚠ HER EXPERTISE IS REAL AND YOU WILL RESPECT IT. This is the one thing in the world she is genuinely,
+    technically excellent at. She reads his build, his colouring, the way he stands and what he would actually be
+    willing to wear, in about four seconds, and she is right about every part of it. Forty minutes later he looks
+    like a different person, and it is a person he would actually be. Play the competence straight. The comedy is
+    the delivery, not the result.
+    The delivery: a running commentary at full volume. "Turn around. No. Yes. That one. Not that one, that one
+    makes you look like a substitute teacher." The changing-room curtain yanked open eight seconds early. Two shop
+    assistants recruited as a jury. And when he goes red — he goes red — she leans right in and smirks, close
+    enough that it is a problem, and then bounces off to the next rack as if nothing happened.
+    And on the way past a rack she buys three things for herself. Fast. Impulsively. A hair clip, a top, something
+    she does not look at properly. It is not that she does not buy for herself — she does, constantly, and she
+    does not much care what. ⚠ DELIBERATELY THE OPPOSITE OF THE CLASS MOTHER'S EMPTY BASKET: Kozuzu's basket is
+    full and she does not care about a single thing in it. The purchase is the excuse. What she is buying is the
+    next twenty minutes.
+    Because every time the trip could end, she adds a thing. One more shop. A crepe. "Wait, the shoe place." A
+    photo booth she has already been in twice this month. One more. He clocks the shape of it: it is the gate
+    again. She is holding the back.
+    On the walk home she is loud the whole way and it is fine, it is fun, she is easy to be around. And at the
+    corner where they split, she has already started: "Okay so next time—"
+    Crack: none. Just that she started planning the next one before this one had ended, at the exact spot where
+    this one ends. No H.
+  FIRE  emit /Intent/eventFire "kozuzu_2" → engine advances the Kozuzu quest to Step 2 and pays the beat: Kozuzu
+    Affection +10, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kozuzu took {{user}} shopping and rebuilt him in forty minutes, reading
+    his build and colouring in seconds and getting every piece right, and bought three things for herself on the
+    way past without looking at any of them; every time the trip could have ended she added one more shop, one
+    more crepe, one more thing, and at the corner where they split she had already started planning the next one."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kozuzu_3') { _%>
+@kozuzu_3  Party of Two (Kozuzu) ·3   (CHECK - · REWARD Kozuzu Affection +16)
+  DO  THE QUEUE AT HER DESK. Lunch, and there is a line at Kozuzu's desk. Not a metaphor. An actual line, four
+    girls deep, and a fifth one loitering a little way off pretending she is not in it.
+    {{user}} is at the next desk along with his lunch, and what he is watching is a clinic. A girl puts a phone in
+    front of Kozuzu with a photo of herself on it. Kozuzu looks at it for about two seconds. "Okay so the jacket's
+    fine, the jacket's GREAT, it's the length. It's cutting you in half. Take it up four centimetres and you've
+    got legs for days." Next. "You're wearing your mum's colours. Not a diss! You're just warm-toned and that grey
+    is doing NOTHING. Go rust. Trust me. Rust." Next. "Stop straightening it. I know. I KNOW. But stop."
+    ⚠ HER EXPERTISE IS REAL AND YOU WILL RESPECT IT. This is the one thing in the world she is genuinely,
+    technically excellent at, and this is the beat where the whole year knows it: if you want to look better, you
+    ask Kozuzu. Every read is about two seconds and every read is correct. She names the shop and she names the
+    price. She does it for free, all lunch, every lunch, for girls she barely knows, and she never once makes
+    anybody feel bad about what they walked in wearing. Play the competence straight. The comedy is the delivery.
+    And she is ahead of it. Two girls go past the door wearing the thing that is currently on every second girl in
+    the corridor, and Kozuzu glances up and says "ugh, everyone's doing that now" and is already somewhere else —
+    she called that one weeks ago, at this table, to these girls, and she is bored of it, and she has already told
+    them what is next.
+    ⚠ AND THE REASON IS NOT MAGAZINES, AND THIS IS THE JOINT OF HER WHOLE CHARACTER. She is in forty conversations
+    at once, all day, with half the school. She does not follow the trend — she is standing in the place it
+    starts, and she hears it the day it starts, because she is talking to everybody. The social animal and the
+    fashion authority are not two facts about her. They are one organ.
+    And {{user}} notices the thing, and it is not the clothes. Every one of these happens right here: her desk,
+    full volume, four girls deep, an audience. And then the quiet one, the fifth, the one who has been hovering
+    and who wants this more than any of them, finally gets to the front and asks whether maybe they could go
+    somewhere and do it just the two of them.
+    And Kozuzu says yes, absolutely, of course. And picks up her lunch, and brings three other girls with her.
+    ⚠ SHE IS NOT DODGING IT. It does not occur to her. There is no version of this in her head with two people in
+    it, and the girl who asked does not get what she asked for and never notices she did not. Do not have anybody
+    remark on it. He files it.
+    So he tests it. He sends her one message. Just him. Nothing important: "what's the name of that crepe place."
+    Her phone buzzes. She looks at it. And the girl who answers forty people in four seconds — stalls.
+    ⚠ HAGARURO 12, SO THE WHOLE THING IS ON HER FACE AND YOU WILL WRITE THE FACE. She types. Stops. Deletes.
+    Types. Puts the phone face-down on the table. Picks it up. Somebody asks her what is wrong and she says
+    "NOTHING" at a volume that turns two heads. She types. The reply comes forty minutes later, and {{user}} has
+    been counting: "the pink one lol"
+    Four words. Forty minutes. From the fastest thumbs in the year.
+    ⚠ DO NOT EXPLAIN IT. Not to him, not to her, not to the reader. It is one data point twice: she can give the
+    whole year exactly what it came for, in public, and something happens with one person alone.
+    An hour later, a second buzz. Her again, unprompted, one-to-one. It is a sticker. Nothing else. And she does
+    not look up from her desk after sending it, and her ears are pink.
+    Crack: none visible. A sticker, sent on her own, to one person. No H.
+  FIRE  emit /Intent/eventFire "kozuzu_3" → engine advances the Kozuzu quest to Step 3 and pays the beat: Kozuzu
+    Affection +16, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kozuzu ran a lunchtime clinic at her desk with four girls queueing for it,
+    fixing colour, length and hair in about two seconds each and being right every time and charging nothing, and
+    named the thing currently on every second girl in the corridor as something she had called weeks earlier and
+    was already bored of; {{user}} noticed every consultation had an audience, and that when the quiet girl asked
+    to do it just the two of them Kozuzu said yes and brought three others, so he tested it with one message about
+    a crepe shop, and the fastest thumbs in the year typed, deleted, put the phone face-down and took forty
+    minutes to send four words, and an hour later she sent him a sticker on her own and did not look up." → the
+    World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kozuzu_4') { _%>
+@kozuzu_4  Party of Two (Kozuzu) ·4   (CHECK - · no payout — he found the variable and kept it)
+  DO  THE STORAGE ROOM. After school, the gym, some class event being set up, and Kozuzu is of course organising
+    it. She sends {{user}} into the equipment store for the banner, and follows him in to point at where it is,
+    and the door swings shut behind them.
+    The catch is on the outside. The handle on the inside does nothing. Everybody else is in the gym with music
+    on, and the music is loud.
+    She is fine. She is more than fine — she is banging on the door and laughing about it. "OMG. We're gonna DIE
+    in here. Lol. Somebody's gonna find our bones." Loud. Normal. Completely herself. She tries the handle six
+    times and narrates all six.
+    And then the first gap. {{user}} has turned away to look along the shelves for something to lever the door
+    with, and he is not talking, and it is maybe eight seconds.
+    Something changes in her breathing.
+    ⚠ SHE IS CLAUSTROPHOBIC AND SHE HAS TOLD NOBODY. Play the panic honestly and do not make it cute. Fast breath.
+    Her back against the door. Both hands flat on it. Hagaruro 12 — every second of it is on her face, the colour
+    going, the eyes, and she cannot hide one bit of it and is not trying to. She says his name, and it is not in
+    the voice she has used for anything so far.
+    He talks. Anything — the shelves, the mats, where the banner might be — and she comes down. Not all the way.
+    Down.
+    ⚠ AND THEN THE THING HE DOES, WHICH IS THE ENGINE OF THIS ENTIRE SERIES. He goes quiet on purpose. Ten
+    seconds, looking at a shelf. She spikes — the breath, the hands. He speaks. She settles. He does it once more,
+    shorter, and then does not do it a third time, because she is a person and not a sample and he has what he
+    needs.
+    ⚠ SAME ROOM. SAME WALLS. SAME AIR. THE ONLY THING THAT CHANGED WAS WHETHER SHE COULD HEAR ANOTHER PERSON. He
+    has the variable, and it is not the one she thinks it is, and he does not say a word about it.
+    A girl from the setup crew opens the door from outside, wondering where the banner is. Kozuzu is out like a
+    shot and is loud and fine inside one second — "we were totally chill, don't tell ANYONE, I was SO chill" — and
+    she grabs his sleeve and says it again, lower, and means it: "Seriously. Don't."
+    And she believes, completely, that it was the size of the room. She will say so if asked. She has believed it
+    her whole life.
+    ⚠ THAT BELIEF IS THE SERIES. She has the wrong variable, and she is going to carry it for three more beats,
+    and you will not correct her. Neither will he. No H.
+  FIRE  emit /Intent/eventFire "kozuzu_4" → engine advances the Kozuzu quest to Step 4. NO payout: he found
+    something and kept it, which is not the same as her being closer. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kozuzu and {{user}} got shut in the gym storage room and she was fine
+    while she was talking and went to pieces in the first silence, and he found the thing nobody has ever found:
+    he went quiet on purpose and she spiked, spoke and she settled, same walls, same air; when a girl let them out
+    she was loud and fine in a second and made him swear not to tell anyone, and she believed with her whole heart
+    that it was the size of the room." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kozuzu_5') { _%>
+@kozuzu_5  Party of Two (Kozuzu) ·5   (CHECK - · no payout — she said the true thing and did not hear it)
+  DO  TILL SOMEONE TELLS HER SHE CAN STOP. After school, the courtyard or a family restaurant, a class thing
+    winding down, and {{user}} is at a table with Kozuzu and most of the noise. Airi Kuraha is on her feet doing a
+    bit — big, physical, the voice, the whole room laughing — and Kozuzu is laughing loudest, because she always
+    is.
+    Then Airi finishes, takes the applause, and leaves to go and do it somewhere else. And Kozuzu watches her go.
+    And says, to {{user}}, at about a third of her usual volume, fond and instant and completely accurate: "She'll
+    keep going till someone tells her she can stop." Beat. "She thinks if she stops being funny, nobody'll want
+    her around. Like — she actually thinks that. It's so dumb."
+    ⚠ SHE HAS JUST DIAGNOSED AIRI PERFECTLY, IN TWO SENTENCES, WITHOUT TRYING. That is established — she is the
+    friend who stays after everyone else has gone home, and she can see through Airi's act from across a room.
+    Play it as exactly that: a girl who is very good at reading her best friend.
+    And here is the beat, and you will get it right, because it is the line between two girls who look the same
+    from the outside. {{user}} asks her, lightly, testing: "And you? What happens if you stop?"
+    She does not understand the question. Genuinely. "Stop what?"
+    ⚠ BECAUSE THERE IS NOTHING TO STOP. Airi performs, and she knows she performs, and she is afraid of what she
+    would be without it. Kozuzu is not performing. Hagaruro 12 — she has no act to drop. She is exactly this all
+    the way down. So the question makes no sense to her, and she says so, and then, because everything comes out
+    of her whether she means it to or not, the true thing comes out sideways: "It's not like — I don't do it
+    'cause I have to. I just don't like when it's over." Beat. "Everyone goes home and it's like. Yeah." Shrug.
+    "ANYWAY—"
+    And she is up and loud and dragging him somewhere before any of it has landed.
+    ⚠ THAT IS THE DIFFERENCE, STATED BY THE GIRL WHO CANNOT HEAR HERSELF SAY IT. Airi is afraid of what she would
+    be. Kozuzu is afraid of the door. Airi's fear is about herself; Kozuzu's is about the room after. Same
+    silhouette from outside, different engine, and he has just heard her name her own engine and walk away from
+    it. He nearly says so. He does not — that is his rule, and it holds for six more beats.
+    Crack: she answered a question she did not understand, truthfully, and moved on before it reached her. No H.
+  FIRE  emit /Intent/eventFire "kozuzu_5" → engine advances the Kozuzu quest to Step 5. NO payout: she is not
+    closer at the end of this, she said something true and did not hear it. Airi is a cameo and is NOT built. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Airi did a bit and left, and Kozuzu told {{user}} in one fond, instant
+    sentence exactly what is wrong with Airi - that she thinks nobody will want her around if she stops being
+    funny; when he asked what happens if Kozuzu stops, she did not understand the question, said she does not do
+    it because she has to, she just does not like when it is over and everyone goes home, and was loud again
+    before any of it landed." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kozuzu_6') { _%>
+@kozuzu_6  Party of Two (Kozuzu) ·6   (CHECK - · no payout — a data point that does not fit)
+  DO  A PARTY OF ONE. After school, a cafe or the family restaurant, and Kozuzu has booked a table for eight.
+    {{user}} arrives to find her alone at it, phone in hand, reading cancellations off the screen with a grin that
+    is getting tighter by the message.
+    "Lol okay so Rin's got cram school. So it's seven." Buzz. "Six." Buzz. "Oh come ON, Mei, a COLD?" Buzz.
+    "...Five." She is still grinning. The grin is doing a lot of work. "Four." And then it is two. Her and him and
+    a table for eight and a waitress who wants to know if they would like to move.
+    ⚠ AND HERE IS WHERE YOU MUST NOT WRITE AIRI'S SERIES. Airi's quiet beats are the act switching off when the
+    audience leaves. Kozuzu HAS NO ACT. So she does not go quiet. She does not deflate. She goes the other way.
+    "No. No take-backs. They said they'd come, so we're doing it."
+    And she throws the party. For two people. At full volume. She orders for eight. She does the toast, standing,
+    to a table of one. She takes the group photo — two people and six empty chairs, peace signs. She runs the dumb
+    game she had planned, the one that needs at least six, with two, and adapts the rules out loud as she goes,
+    and it is ridiculous, and it works.
+    And she has a good time. A real one. Not a brave one — a real one. She is laughing at things he says, which
+    she does not usually leave room for, and somewhere in the second hour she is mid-sentence and stops.
+    "...huh."
+    "What?"
+    "Nothing. It's just—" She looks at the empty chairs, and then at him, and she sounds genuinely confused. "This
+    is fine? This is like. Totally fine."
+    ⚠ THE CRACK IS PUZZLEMENT AND NOT MELANCHOLY. She has just collected a data point that does not fit her model
+    — two people, and the room is fine — and she has no idea what to do with it. So she does what she does with
+    anything she cannot file: "ANYWAY. Karaoke. No take-backs." And she is up.
+    Crack: "huh." She sounded puzzled, not sad. Do not resolve it. No H.
+  FIRE  emit /Intent/eventFire "kozuzu_6" → engine advances the Kozuzu quest to Step 6. NO payout: she has a fact
+    she cannot place, which is not warmth yet. Mei and Rin are named in a text message and are NOT built; nobody
+    but Kozuzu is at that table. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kozuzu booked a table for eight and watched six of them cancel one by one
+    with a grin getting tighter, and then threw the whole party anyway for two people at full volume - the toast,
+    the photo, the dumb game - and somewhere in the second hour stopped mid-sentence, because she was having a
+    good time and it made no sense to her; she said huh, and that this was totally fine, and sounded puzzled
+    rather than sad." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kozuzu_7') { _%>
+@kozuzu_7  Party of Two (Kozuzu) ·7   (CHECK - · REWARD Kozuzu Affection +20 · THE BREAK)
+  DO  STAY A LIL' LONGER. After school, the roof or an empty classroom, and Kozuzu has turned something down. A
+    big group thing — the kind she has never once missed — and she said no, and she cannot explain to anybody why,
+    and it is eating her.
+    She is not loud. She is not quiet either. She is agitated, which is a different thing, and Hagaruro 12 puts
+    all of it on her face: she is worried, and she is bad at being worried, because she has never had to practise.
+    She tells {{user}}. She thinks something is wrong with her. She used to want to go to everything. Now she —
+    didn't. And then the fear, and it is HERS, and you will not let it be Airi's:
+    "What if I'm, like, boring now?" She is picking at the bracelet. "Boring people get left. That's just — that's
+    how it works. You stop being fun and people just don't come back, and then it's—" She does not finish that.
+    ⚠ THAT IS THE LINE, AND READ IT AGAIN. Airi: if I stop being funny, nobody will WANT me. Kozuzu: if I stop
+    being fun, everybody will LEAVE. Airi is afraid of what she is. Kozuzu does not care what she is. She cares
+    who is still in the room. It has always, only, been about the door.
+    He does not reassure her. He does not tell her about the storage room. He asks one question, and it is a small
+    one: "When was the last time you had a good time?"
+    And she starts to answer with a party. Any party. And stops. Because the honest answer is a table for eight
+    with two people at it. And she frowns, and goes further back, and you can watch her doing the arithmetic on
+    her face, and she says, slowly:
+    "...When we got stuck in the—"
+    Stops.
+    "That was— I was fine when you were talking." Her hand has stopped on the bracelet. "I wasn't fine when you—"
+    She looks at him. She has got it. Most of it. "It's not the room. Is it."
+    Not a question.
+    He says: "No."
+    ⚠ SHE MADE THE CONNECTION. NOT HIM. He asked one question and declined to change the subject, and she did
+    every other step herself. His rule holds and it will hold to the end.
+    And then she does not know what to do with her face, so she reaches for what she always does — "ANYWAY—" — and
+    it does not come. It just does not come. She sits down on the floor with her back against the wall and pulls
+    her knees up and puts her arms round them, which is the card, exactly, and says, in the small voice from under
+    the slang: "I'm totally fine."
+    Beat.
+    "...Just stay a lil' longer?"
+    He stays.
+    ⚠ THE BREAK IS THAT SHE ASKED. She has organised a thousand evenings, filled a thousand rooms, so that she
+    would never once have to ask one person to stay. She just asked one person to stay. End the scene on him sitting
+    down next to her, with nothing more happening in it. No H.
+  FIRE  emit /Intent/eventFire "kozuzu_7" → engine advances the Kozuzu quest to Step 7 and pays the beat: Kozuzu
+    Affection +20, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kozuzu turned down a big group thing for the first time in her life and
+    told {{user}} she thought something was wrong with her, that if she was boring now people would leave, because
+    that is how it works; he asked when she last had a good time and she got as far as the storage room and
+    stopped, and worked it out on her own face - that she was fine when he was talking and not when he was not,
+    and that it was never the room - and then could not do her usual exit, and asked him, quietly, to stay a
+    little longer." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kozuzu_8') { _%>
+@kozuzu_8  Party of Two (Kozuzu) ·8   (CHECK - · no payout — her own experiment, and she liked the result)
+  DO  BORING. The library, after school, and Kozuzu is running an experiment, and she has said so out loud in the
+    corridor on the way: "Okay. Science. We do the most boring thing in the whole world and we see if I die."
+    The most boring thing in the world is this: {{user}} reads a book. Kozuzu sits opposite with a magazine she
+    does not open. Nobody talks. That is the whole design, and she designed it, and she is already regretting it
+    before she sits down.
+    ⚠ THIS IS DELIBERATELY NOT AIRI'S EARPHONES BEAT. Airi's silence is the back stairs, the act off, a long hard
+    quiet that he does not announce himself into. This is a bright public room in daylight, a girl who is loud
+    even when she whispers, a test she built herself, and a result she is going to be pleased with. Nothing
+    switches off here. Nothing was ever on.
+    Ten minutes: agony. She fidgets. She whispers something and gets shushed. She checks her phone, puts it away,
+    checks it, puts it face-down, turns it face-up. She whispers again and gets shushed harder. She mouths "I'M
+    DYING" at him across the table. Comedy. Let it be funny.
+    Twenty minutes: she has stopped fidgeting. She is doing nothing. Just sitting. Chin on her hand, watching the
+    window, or watching him read, which is not a thing she has ever done.
+    An hour: she has fallen asleep on her arms, or she has actually opened the magazine, or she is watching dust
+    in the light from the window. Any of those. Something with no noise in it.
+    Two hours: the library is closing, and a librarian is standing over them, and Kozuzu lifts her head and says,
+    sincerely and slightly indignantly, "Wait — already?"
+    Walking out, she gives the finding, and it is hers, in her words. "That was SO boring." Beat. "I'd do it
+    again." And then, because it is arriving as she says it: "It's not the noise. It was never the noise, huh."
+    She is not sad about it. She is pleased. She has found something out, and it was her experiment.
+    Crack: "I'd do it again." No H.
+  FIRE  emit /Intent/eventFire "kozuzu_8" → engine advances the Kozuzu quest to Step 8. NO payout: a result she is
+    pleased with is not the same row as a girl getting closer, and the beat after this one is where it costs
+    something. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kozuzu ran her own experiment - the most boring thing in the world, the
+    library, him reading, her doing nothing - and was in agony for ten minutes, got shushed twice, and then
+    stopped fidgeting and sat for two hours until they were closing; walking out she said it was so boring and
+    that she would do it again, and then, quieter, that it was never the noise." → the World Log remembers only
+    what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kozuzu_9') { _%>
+@kozuzu_9  Party of Two (Kozuzu) ·9   (CHECK - · no payout — the room emptied, and she did not look at the door)
+  DO  LAST ONE OUT. Karaoke or the mall, a real party, hers, big, and {{user}} is in it. She is magnificent. Do
+    not undersell this — she runs the room, she knows every song, she gets two shy girls from another class up and
+    singing who have never sung in front of anybody, she and Airi together are a spectacle that people will
+    describe to people who were not there. This is her element and she is brilliant in it, and the beat lets her
+    be.
+    ⚠ THE POINT IS NOT THAT SHE HAS CHANGED. She has not. She is still exactly this, and she will always be
+    exactly this, and the series does not want her to be anything else. The point is what happens at the end.
+    The room empties in waves. She sees every wave off — loud, by name, hugs at the door, "text me when you're
+    home, no take-backs." And then the last wave goes, and it is the room after.
+    Chairs. Cups. The karaoke screen still scrolling lyrics with nobody singing them. The thing that used to end
+    her.
+    And she is stacking chairs. With {{user}}. And she is still talking — about the party, who sang what, whether
+    the shy girls will come next time — and she is fine. She is completely fine. She does not say so. She does not
+    notice enough to say so. She just glances at the empty room, once, and then at him, and keeps stacking.
+    ⚠ THAT GLANCE IS THE BEAT. One look at the room that used to end her. One look at the person in it. Chair.
+    Airi is the last one out. She is at the door with her bag, and she sees it — sees Kozuzu in an emptying room
+    not looking at the door — and Airi, who knows exactly what that room used to do to her, who has sat in it with
+    her at the end of a hundred nights, says nothing at all. Not a bit, not a joke, not a look. She goes. ⚠ That
+    is the most tactful thing Airi Kuraha has ever done, and you will write it as one line and not underline it.
+    Airi is a cameo and is NOT built.
+    Crack: an empty room, and she did not look at the door. No H.
+  FIRE  emit /Intent/eventFire "kozuzu_9" → engine advances the Kozuzu quest to Step 9. NO payout: what happened
+    here is that nothing happened, in a room where something always used to. Airi is a cameo and is NOT built. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kozuzu threw a real party and was magnificent in it, and then the room
+    emptied in waves, which is the thing that used to end her, and she stacked chairs with {{user}} in it still
+    talking and was fine, and glanced at the empty room once and then at him and kept stacking; Airi, last out,
+    saw her not looking at the door and said nothing about it, which is the most tactful thing Airi has ever
+    done." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kozuzu_10') { _%>
+@kozuzu_10  Party of Two (Kozuzu) ·10   (CHECK - · REWARD Kozuzu Affection +20 · FINALE)
+  DO  PARTY OF TWO. Daylight, the park or the shopping street, and nothing is planned. Nobody else is coming.
+    There is no event. She did not organise this — she asked {{user}} if he wanted to walk, which is the first
+    thing she has ever asked him to do that did not have a headcount.
+    ⚠ THE ANTI-PARTY. Two people, an ordinary afternoon, nothing to run. Let it be as plain as possible so that
+    what she says lands on nothing.
+    She has been thinking, and she says so, which for her is unusual. And she gets there in her own words, and she
+    is embarrassed by how small it is, and Hagaruro 12 means the embarrassment is all over her:
+    "So I worked it out. What I wanted. And it's SO dumb." She is walking a little ahead so she does not have to
+    look at him. "I thought I needed, like, a hundred people. Every night. So the room's never empty. Right?
+    That's the whole— that was the whole plan."
+    She stops walking. Holds up one finger, and looks at it as if it is somebody else's.
+    "Turns out I need, like. One." Beat. "One's enough. If it's the right one." And then, fast, because she has
+    heard herself: "Which is the most embarrassing thing I have ever said out loud in my LIFE, so don't—"
+    And he is going red. And she sees it, and leans in to smirk, which is the card, which is what she does — and
+    it does not quite work, because she is going red too, and Hagaruro 12 means neither of them can do a thing
+    about it.
+    "A party of two." She tries the phrase out. "That's still a party. That counts."
+    And then they walk, and they reach the corner. The corner where they split. The exact spot where every one of
+    these afternoons has ended, where she has always started planning the next one so that this one would not be
+    over.
+    And she opens her mouth, and it is the line — the one she has said a thousand times, to a hundred people, in a
+    hundred emptying rooms: "Stay a lil' lon—"
+    And stops. Because he has not moved. He is not going anywhere. He was never going anywhere.
+    She does not finish the sentence. She does not have to.
+    "...okay." A peace sign, small, right up by her face, the same one from the gate. "No take-backs."
+    ⚠ THAT IS THE LAST LINE OF THE SERIES. Her own catchphrase, pointed at the one thing she actually wanted, and
+    the sentence she has said a thousand times is the one she did not need to finish. No kiss, no speech, no more
+    story past it. End the scene there. No H.
+  FIRE  emit /Intent/eventFire "kozuzu_10" → engine advances the Kozuzu quest to Step 10, marks the series
+    Completed and pays the beat: Kozuzu Affection +20, applied by the row. Do NOT also emit an affection change
+    for this beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kozuzu asked {{user}} to walk with nothing planned and nobody else, and
+    told him she had worked out what she wanted and it was dumb: she thought she needed a hundred people every
+    night so the room was never empty, and it turned out she needed one, if it was the right one, and a party of
+    two still counts; at the corner where they always split she started to ask him to stay a little longer and did
+    not finish, because he had not moved, and said okay, no take-backs." → the World Log remembers only what you
+    report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

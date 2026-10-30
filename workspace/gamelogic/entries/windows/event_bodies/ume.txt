@@ -1,0 +1,408 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@ume_') === 0
+<%_ /* v1.4 */ _%>
+<%_ /* The ten @ume_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @ume_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@ume_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@ume_1') { _%>
+@ume_1  Relax, I'm Teasing (Ume) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE FAVOUR. After the last bell, the corridor, and {{user}} is watching a masterclass from three desks away
+    without having meant to.
+    UME NATSUNO is collecting. Not asking — collecting. A girl hands her a complete set of notes for a class Ume
+    was not in, and looks pleased to have been allowed to. Another girl takes her cleaning duty off the rota,
+    cheerfully, unprompted. A teacher walking past mentions she can sit out the next PE block if her back is still
+    bad, and she has not yet said a word to the teacher about her back.
+    ⚠ THE BODY FACT, STATED ONCE AND THEN LEFT ALONE. 166 cm, long straight glossy brown hair, green eyes, and the
+    most daringly worn uniform in the building: the cream blouse open a button past the rule, a fitted vest that
+    makes the shape of her a decision, the skirt short. An H cup she does not carry so much as DEPLOY. Do NOT leer
+    and do NOT inventory her. Write her the way she operates — posture, timing, the eyes, the two extra seconds
+    she gives a person before she looks away — because she is the one aiming it, and the narration follows the
+    aim, not the target.
+    ⚠ IT WORKS ON GIRLS AND YOU WILL SHOW THAT FIRST. This is not a boy thing and the school has one boy in it.
+    The notes came from a girl. The cleaning came from a girl. What she does is find the exact thing a person
+    wants to be — admired, useful, in on something, the one she chose — and hand it to them for four seconds, with
+    her whole body behind the handing. Then they want to give her something. They always do.
+    And then she reaches {{user}}, who she has never spoken to, and runs it on him. The lean on the desk. The
+    collar. The voice dropped half a register: "You look like somebody who takes REALLY good notes~."
+    He says no. Politely. "No, sorry. You could try Aoki, hers are better than mine."
+    ⚠ AND HE IS NOT FLUSTERED AND HE IS NOT SMUG, AND YOU WILL NOT MAKE HIM EITHER. Do not write him cold, and do
+    not write him immune because he is dense — he noticed every single thing she did, and it landed. He simply
+    also noticed that a girl who has never once spoken to him wants something from him, and he does not yet know
+    why, and until he does the answer is no. That is the whole of him. It is not a technique and it is not a wall.
+    It is a question he has not had answered yet.
+    Her face does something for about a tenth of a second and then it does not. "Suit yourself~." And she is gone
+    down the corridor, and two more people have offered her things before she reaches the stairs.
+    ⚠ HAGARURO 80 — HER INTERIORITY DIVERGES, AND YOU MAY WRITE IT. Unlike almost every other girl in this pack,
+    her Thoughts are permitted on the page and they run against her face. Keep them to ONE line per beat, never a
+    paragraph, and never let the face know. Here: her Thoughts say he looked. She KNOWS he looked. So why is the
+    answer no.
+    Crack: none. What {{user}} has at the end of the first afternoon is three lines in the file: it works on
+    everybody, it works on girls, and somebody else always pays. No H.
+  FIRE  emit /Intent/eventFire "ume_1" → engine creates the Ume quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays somebody already in the save, and she is not in it yet. NAME HER in the prose — "Ume
+    Natsuno" — because that IS the mechanism: POST reads the name and arms her build, her <character> card
+    keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide> says.
+    Do NOT build her THIS reply unless her <character> profile is already in front of you. The teacher and the two
+    girls are NOT built and are not named. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Ume Natsuno collected a full set of notes, somebody else's cleaning duty
+    and a PE exemption in one corridor without asking for any of them, from two girls and a teacher, by finding
+    the thing each person wanted to be and handing it to them for four seconds; then she ran the same thing on
+    {{user}}, who she had never spoken to, and he said no, politely, because a stranger wanted something from him
+    and he did not yet know why, and her face did something for a tenth of a second before she said suit
+    yourself." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@ume_2') { _%>
+@ume_2  Relax, I'm Teasing (Ume) ·2   (CHECK - · REWARD Ume Affection +10)
+  DO  NOBODY SAYS NO. A week on, after school, a cafe on the shopping street, and Ume Natsuno has found {{user}}.
+    Not run into him. Found him — she came looking, which she has never once done for anybody, because she has
+    never once had to.
+    She sits down opposite and then, a minute later, beside. She runs a better version. The whole instrument at
+    full power: the closeness, the collar, the slow smile that starts in the eyes a second before the mouth,
+    ordering for him without asking, a hand that lands on his wrist to make a point and stays a beat past the
+    point. ⚠ WRITE IT AS GENUINELY FORMIDABLE AND NOT AS COMEDY. She is extremely good at this. It is the
+    best-practised thing about her and it has never lost.
+    And {{user}} is... fine. He is polite. He is present. He answers what she asks and asks things back, and he
+    does not do the thing — does not go red, does not lean in, does not look away in a panic either. He keeps
+    talking to her like she is a person at a table, which is the one response she has no move for.
+    ⚠ THIS IS THE FIRST TIME IN HER LIFE THE INSTRUMENT HAS PRODUCED NOTHING, and Hagaruro 80 means her face shows
+    not one flicker of it. Face: delighted, teasing, entirely in control. Her Thoughts, one line: run it again.
+    That is not possible.
+    And then, while she is mid-flirt, he asks it. Mildly. "Can I ask — why me?"
+    "...Hm?"
+    "You'd never spoken to me. You wanted notes. There are thirty people in that room who'd have handed you notes
+    for nothing." He is not accusing her of anything, and you will not let it sound like he is. He is asking. "So
+    why the whole—" a small gesture at all of it, the lean and the collar and the hand, "—for a stranger?"
+    She has an answer, because she has an answer for everything, and it arrives smooth and it is a joke and it is
+    exactly what her card says she does with anything that gets too real — she deflects it with another
+    flirtation. "Because it's FUN~. Why — is it working?"
+    "No."
+    "...Mm." A beat. "Rude."
+    And when the bill comes she pays it. Both drinks. Before he can reach for it, without a word, without making
+    anything of it — and it is the first thing in the whole afternoon she did not plan, and she does not know why
+    she did it, and her Thoughts say so in one line and then stop.
+    Crack: she paid for something. Nobody has ever seen her do that. No H.
+  FIRE  emit /Intent/eventFire "ume_2" → engine advances the Ume quest to Step 2 and pays the beat: Ume Affection
+    +10, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing — CHECK is
+    none.)
+    THEN emit /Intent/recordEvent "save|Ume came looking for {{user}} at a cafe, which she has never done for
+    anybody, and ran the whole instrument at full power - the closeness, the collar, the hand on his wrist - and
+    he stayed polite and present and talked to her like a person at a table, which is the one response she has no
+    move for; when he asked why her, why the whole production for a stranger who could have had notes from thirty
+    people for nothing, she deflected with a joke and asked if it was working, and he said no, and she paid for
+    both drinks without planning to." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@ume_3') { _%>
+@ume_3  Relax, I'm Teasing (Ume) ·3   (CHECK - · REWARD Ume Affection +16)
+  DO  THE CONTROL GROUP. Lunch, a week on, and {{user}} runs the test, and she never finds out it was one.
+    He asks her for a favour. A small, real, ordinary one: he missed a class and needs the notes.
+    And she gives them to him. Instantly. Pulls them out of her bag mid-sentence, hands them across, and keeps
+    talking about something else — no lean, no timing, no eyes, nothing. She does not even look at the notes as
+    they leave her hand.
+    ⚠ SHE DID NOT CHARGE HIM, AND SHE DID NOT NOTICE THAT SHE DIDN'T. That is the whole beat and you will not
+    underline it. With everybody else it is a transaction, every time, both directions. With him she simply handed
+    a thing over because he asked for it, the way a person does, and it did not register as an event.
+    ⚠ {{user}}'S HYPOTHESIS, FORMED HERE AND STATED NOWHERE. The instrument is not how she gets things. It is how
+    she gets things from people she does not believe would give them otherwise — which is everybody, and has been
+    since she was twelve. He tested it by being somebody who asked plainly, and the instrument stayed in the case.
+    He files it and says thank you.
+    And the thank you is what wakes her up. Because the moment she hears it she is back — the lean, the collar,
+    the voice: "You can pay me back in a way we'd BOTH enjoy~" — and it is louder than usual, and it is a beat too
+    fast, and it is aimed at a boy who has already put the notes in his bag and gone back to his lunch.
+    Her Thoughts, one line: he asked. Nobody asks. They pay.
+    Crack: a favour handed over with no price on it, by the one girl in the school who has never once done that.
+    No H.
+  FIRE  emit /Intent/eventFire "ume_3" → engine advances the Ume quest to Step 3 and pays the beat: Ume Affection
+    +16, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing — CHECK is
+    none.)
+    THEN emit /Intent/recordEvent "save|{{user}} asked Ume for a small real favour - notes for a class he missed -
+    and she handed them over instantly, mid-sentence, with no lean and no price and without noticing that she had
+    not charged him, which she has never once done for anybody; his thank-you woke her up and she came back louder
+    than usual with a line about paying her back in a way they would both enjoy, aimed at a boy who had already
+    put the notes in his bag." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@ume_4') { _%>
+@ume_4  Relax, I'm Teasing (Ume) ·4   (CHECK - · no payout — she watched a thing done for nothing)
+  DO  THE ONE WHO PAID. After school, the corridor or the courtyard, and {{user}} has noticed who has been paying
+    Ume's bills this week.
+    A girl from the next class. Quiet, not one of the loud ones. She has done four things for Ume in five days —
+    the cleaning, two sets of notes, a locker errand — and she is now visibly behind on her own work because of
+    it, and she is still doing them, because Ume once told her, with the whole instrument behind it, that she had
+    really good taste, and the girl has been living on those four seconds for a month.
+    ⚠ UME IS NOT A VILLAIN AND YOU WILL NOT WRITE ONE. She does not know. She genuinely, completely does not know
+    — her Morals are 40, not 10, and she is not cruel, she is INCURIOUS: she has never once followed the thread
+    past the moment the favour arrives, because the moment the favour arrives is where her attention has always
+    stopped. Nobody taught her the bill keeps running after she has walked away.
+    {{user}} does not tell her. He does not tell anybody. He does the small, exact thing instead: he takes the
+    girl's actual work off her, sits and does an hour of it with her, and puts Ume's cleaning duty back on the
+    rota under his own name.
+    And Ume sees him do it. From the far end of the corridor, on her way somewhere else. And she stops, and she
+    does not understand what she is looking at, and she watches the whole thing.
+    Her Thoughts, one line: what does he GET out of that.
+    ⚠ THAT IS THE BEAT. She cannot construct a version of the world in which somebody does a thing for nothing,
+    because nothing in her life has ever been for nothing, starting with herself. She is not being stupid. She is
+    being consistent. Do not have her ask him about it and do not have him explain — she walks on, and it goes
+    with her.
+    Crack: she watched somebody do something for free and could not work out the price. No H.
+  FIRE  emit /Intent/eventFire "ume_4" → engine advances the Ume quest to Step 4. NO payout: she saw a thing she
+    could not price, which is not the same row as her being closer. The girl from the next class is NOT built and
+    is not named. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A quiet girl from the next class had done four things for Ume in five days
+    and was falling behind on her own work, still living on four seconds of being told she had good taste, and Ume
+    had no idea, because she has never followed the thread past the moment a favour arrives; {{user}} said nothing
+    to anybody, sat and did an hour of the girl's work with her and put Ume's cleaning duty back on the rota under
+    his own name, and Ume watched the whole thing from the end of the corridor and could not work out what he got
+    out of it." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@ume_5') { _%>
+@ume_5  Relax, I'm Teasing (Ume) ·5   (CHECK - · no payout — she said where it started and did not hear it)
+  DO  TWELVE. After school, a family restaurant or a cafe, and Ume is telling {{user}} a funny story about being
+    twelve, and it IS funny, because she is good at telling things.
+    It is about the summer everything about her changed shape in about four months, and how the school photo from
+    either end of that year looks like two different people, and how the boys in her class stopped being able to
+    finish sentences, and one teacher walked into a door. She does the voices. She does the door.
+    And the punchline is the part that is not a punchline, and she does not notice she has said it: "—and then
+    everybody was SO nice to me. Like, out of nowhere. Overnight." A shrug, a grin. "Honestly? Best thing that
+    ever happened to me."
+    And {{user}} asks: "Were they nice before?"
+    Silence. A real one.
+    "...No." And the grin is still on. ⚠ HAGARURO 80: THE GRIN STAYS ON FOR THE WHOLE OF THIS. It does not
+    flicker, it does not slip — that is what 80 means. Her Thoughts are somewhere else entirely, and you will
+    write them in ONE line and no more: nobody looked, and then everybody did, and she was the same girl both
+    times.
+    ⚠ HERE IS THE ENGINE OF THE ENTIRE SERIES, AND NOBODY IN THE SCENE SAYS IT. She was ordinary and nobody
+    looked. Then she was not, and everybody did. And the lesson she took from that at twelve was not "people are
+    shallow" — it was "the other thing does not work". So she stopped ever finding out whether it does. She has
+    never once, since that summer, run the experiment without the instrument, which means she has never once had
+    an honest result, which means she does not know — not as a fear, as a plain missing fact — whether anybody
+    would have picked her.
+    And then she deflects, exactly on schedule, with a filthy joke about how well it works now, and it is a good
+    joke, and {{user}} laughs at it, because not laughing would be a lecture, and he does not give those.
+    On the walk back she is louder than usual and closer than usual, and both are the instrument, and both are
+    aimed at him, and neither works, and she keeps doing it anyway because it is what her hands know.
+    Crack: "were they nice before?" — "...No." No H.
+  FIRE  emit /Intent/eventFire "ume_5" → engine advances the Ume quest to Step 5. NO payout: she said the true
+    thing and did not hear it, and being closer is not what happened here. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Ume told {{user}} a genuinely funny story about the summer she was twelve,
+    when everything about her changed shape in four months and everybody was suddenly, overnight, so nice to her -
+    the best thing that ever happened to her - and he asked whether they were nice before, and after a real
+    silence she said no, with the grin still on, and then deflected with a filthy joke about how well it works
+    now, and he laughed, because not laughing would have been a lecture." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@ume_6') { _%>
+@ume_6  Relax, I'm Teasing (Ume) ·6   (CHECK - · no payout — she asked a question she meant)
+  DO  GIVING WHAT AWAY. After school, the corridor, and {{user}} is there when Ume and Mana Arikawa walk into it
+    together, and the corridor does what it does for either of them, twice.
+    ⚠ THE MIRROR, AND IT IS THE WHOLE POINT OF THE BEAT. The same cup size, a centimetre apart, the same corridor
+    turning — and the opposite girl. Mana cannot aim it and has never tried; Ume has never done anything else.
+    Mana's problem is that people only ever see the outside. Ume's is that she has only ever SHOWN the outside, on
+    purpose, and now cannot tell what would have happened if she had not. They are friends, and the rivalry is
+    real and light, and neither of them has ever once put this into words.
+    Write Mana warm, and slightly baffling to Ume. Mana tells a girl her hair looks great, gets nothing back but a
+    thank-you, and is pleased. She loops a stranger into the conversation for no reason. She gives things away in
+    every direction and does not appear to be keeping count. Ume watches this the way a person watches a card
+    trick they cannot follow. ⚠ MANA IS A CAMEO, IS NOT BUILT, AND NOT ONE LINE OF HER INTERIOR IS WRITTEN. One
+    exchange, then she is gone.
+    And Ume asks her. Lightly, as a joke, the only way she has ever asked anybody anything: "Doesn't it bother
+    you? Giving it away for free?"
+    And Mana, who has no idea she is answering anything: "Giving what away?"
+    And she is gone down the stairs with the corridor behind her, and Ume is standing there with a question nobody
+    could answer for her, and the only person left in the corridor is the one who did not turn to watch Mana go.
+    She looks at him. And she says, too brightly, a beat too fast: "She's SO weird."
+    Her Thoughts, one line: giving what away. She did not even know it was a thing you could keep.
+    ⚠ DO NOT HAVE HIM ANSWER. He is there; that is the entire contribution. She asked a question she meant, out
+    loud, to the wrong girl, and the right person heard it, and she has already covered it with a joke. Let the
+    joke stand and end the beat.
+    Crack: she asked a question she meant. No H.
+  FIRE  emit /Intent/eventFire "ume_6" → engine advances the Ume quest to Step 6. NO payout: a question asked of
+    the wrong person is not her being closer to the right one. Mana Arikawa appears and is a cameo: she is NOT
+    required by the gate and is NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Ume and Mana walked into the corridor together and it turned for both of
+    them, and Ume watched Mana give compliments away in every direction for nothing like a card trick she could
+    not follow, and asked her, as a joke, whether it bothered her giving it away for free; Mana said "giving what
+    away?" and left with the corridor behind her, and Ume said she was so weird, too brightly, to the one person
+    who had not turned to watch Mana go." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@ume_7') { _%>
+@ume_7  Relax, I'm Teasing (Ume) ·7   (CHECK - · REWARD Ume Affection +20 · THE BREAK)
+  DO  HOW DO YOU WANT IT TO START. After school, the roof or the courtyard, empty, and Ume has come to ask
+    {{user}} outright. Not flirting. Asking — and she is angry, which is new, and it is the cold kind her card
+    names: she states the problem once, clearly, and waits.
+    "Okay. What is it." She is not leaning on anything. Her hands are in her blazer pockets, which they have never
+    been. "Everybody. Every single— and not you. So what is it? Is it me? Am I not—"
+    And she does not finish that. Because finishing it would be the truest thing she has ever said out loud, and
+    she can hear it coming, and she stops it.
+    ⚠ AND HE DOES NOT REASSURE HER AND HE DOES NOT EXPLAIN HER TO HERSELF. That is his rule and it is the whole
+    series: she gets there or she does not, and a thing she is told about herself is one more thing somebody else
+    decided. He asks a question, and then he declines to change the subject.
+    "Can I ask you something instead?"
+    "...Fine."
+    "Say it works." Mildly. "Say I'd gone red at the desk and done your cleaning and handed you the notes. Then
+    what?" A beat. "What's the next bit? What does it look like later? Much later?"
+    And she starts to answer, because she always has an answer. And there is not one. Every version she can
+    picture starts the same way, and she has never once pictured past the start, because the start is where it has
+    always worked and always ended.
+    And then the real question, and he asks it once and does not soften it:
+    "Is that how you want it to start?"
+    Silence.
+    "...And how do you want it to end?"
+    ⚠ HE DOES NOT ANSWER IT FOR HER AND NEITHER DOES THE BEAT. She does not get there today. What she gets is
+    angry, because anger is what she has instead of an answer — one flat, cold sentence, and she turns and goes
+    for the stairs. Let her. Her Thoughts, one line: he has no right. He has no right to be the only one who ever
+    asked.
+    And at the top of the stairs she stops. Without turning round. And says the thing that costs her: "...Ask me
+    again." A beat. "Not now." Another. "But ask me again."
+    ⚠ THE BREAK IS THAT SHE DID NOT DEFLECT. Her card says she meets anything too real with another flirtation,
+    and she had one loaded, and she did not fire it. End the scene on her going down the stairs, with nothing more happening in it. No H.
+  FIRE  emit /Intent/eventFire "ume_7" → engine advances the Ume quest to Step 7 and pays the beat: Ume Affection
+    +20, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing — CHECK is
+    none.)
+    THEN emit /Intent/recordEvent "save|Ume came to the roof angry and asked {{user}} outright what it was, why
+    everybody and not him, and stopped before finishing am I not; he asked her instead to say it had worked, that
+    he had gone red and done her cleaning - then what, what does it look like later, much later - and she had no
+    answer, because she had never once pictured past the start; he asked whether that was how she wanted it to
+    start and how she wanted it to end, and she gave him one cold sentence and went for the stairs, and at the top
+    she stopped without turning and said ask me again, not now, but ask me again." → the World Log remembers only
+    what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@ume_8') { _%>
+@ume_8  Relax, I'm Teasing (Ume) ·8   (CHECK - · no payout — she got the result and could not believe it)
+  DO  HANDS IN HER LAP. After school, the classroom or the library, and Ume is running an experiment, and she has
+    told nobody, and {{user}} is the only one who can see it happening.
+    The blazer is done up. Every button. No lean, no timing, no eyes — she is sitting like a person sits, and it
+    is the strangest thing anybody in that room has ever seen her do, and nobody but him knows why.
+    And she asks for something. A small, ordinary favour — a page of notes from the girl beside her — and she asks
+    for it FLAT. No instrument. "Could I borrow that? I'll give it back." And waits.
+    ⚠ AND IT IS UNBEARABLE FOR HER, AND YOU WILL WRITE THE PHYSICAL COST. She does not know what to do with her
+    hands. She says the sentence twice because the first one came out wrong. She cannot read the room, because she
+    has never had to READ a room — she has always just set it. Her Thoughts, one line, and they are not calm: this
+    is what it feels like for everybody else, all the time?
+    And she gets the favour. Easily. The girl says "sure" and hands it over and goes back to her book and thinks
+    nothing of it whatsoever.
+    And Ume does not believe it.
+    ⚠ THIS IS THE COMEDY AND THE WHOLE TRAGEDY IN ONE GESTURE. She cannot accept the result. She assumes she must
+    have done something without noticing — that the instrument leaked. She turns to {{user}}, low, actually
+    urgent: "Did I— was I doing the thing? Be honest. Was I doing it?"
+    "You weren't doing the thing."
+    "...Then why did she—"
+    "Because you asked her."
+    And she sits with that for a long time, and you can watch it not go in. She looks at the borrowed page. She
+    looks at the girl, who has forgotten the whole thing already. She looks at her own hands, in her lap, where
+    they have been the whole time.
+    Crack: "then why did she—" No H.
+  FIRE  emit /Intent/eventFire "ume_8" → engine advances the Ume quest to Step 8. NO payout: a result she cannot
+    believe is not a girl getting closer, and the beat after this one is where it costs her. The girl beside her
+    is NOT built and is not named. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Ume sat through an afternoon with the blazer done up and her hands in her
+    lap and asked the girl beside her for a page of notes flat, with no instrument at all, and got the sentence
+    wrong the first time and could not read the room because she has only ever set one; the girl said sure and
+    handed it over and forgot it, and Ume did not believe it, and asked {{user}} urgently whether she had been
+    doing the thing without noticing, and he said no, she got it because she asked, and it did not go in." → the
+    World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@ume_9') { _%>
+@ume_9  Relax, I'm Teasing (Ume) ·9   (CHECK - · no payout — she stopped mid-trick and sat down)
+  DO  REALLY GOOD AT IT. Karaoke or the mall, a big night, hers, and {{user}} is in it, by the wall.
+    Full instrument. Full effect. Write her at the very top of her game and do not undersell it, because the
+    series does not want her declawed: she works the room and the room works, everybody gives her everything, a
+    girl who arrived not knowing her is fetching her drinks inside twenty minutes and looks honoured to be. It is
+    magnificent and it is hers and she is the best in the building at it.
+    And about halfway through, she stops enjoying it.
+    Not dramatically. Nobody sees it. She simply — clocks it. She watches a girl hand her something, and sees, for
+    the first time in her life, the four seconds she paid for it with, and the thing the girl wanted to be, and
+    how cheaply she gave it to her, and that the girl has already stopped mattering to the evening.
+    ⚠ THIS IS NOT REMORSE AND YOU WILL NOT WRITE GUILT. It is arithmetic, finally arriving. She has always known
+    the price of everything. She has never once known what she was buying — and what she was buying, it turns out,
+    is a room full of people who would not be in it otherwise, and she knew that, and had never once let herself
+    finish the sentence.
+    Her Thoughts, one line: not one of them would be here.
+    And she finds {{user}}, by the wall, and sits down next to him, and does not perform. At all. For the rest of
+    it. The blazer stays on. Her hands stay still. Somebody calls her name from the stage and she waves without
+    getting up, which she has never done.
+    "You know what the worst bit is." Not a question. "I'm really good at it."
+    "I know."
+    "Like. REALLY good."
+    "I know."
+    ⚠ THAT EXCHANGE IS THE BEAT. Do not add to it. He does not tell her she is more than that, because telling her
+    would be one more person deciding what she is. He agrees with her, twice, and stays.
+    Crack: she stopped in the middle of the best trick she has and sat down next to the one person it never worked
+    on. No H.
+  FIRE  emit /Intent/eventFire "ume_9" → engine advances the Ume quest to Step 9. NO payout: what happened here is
+    that she saw the bill, which is not warmth yet. Nobody at that party is built. (No day-end swing — CHECK is
+    none.)
+    THEN emit /Intent/recordEvent "save|Ume ran a big night at the top of her game and everybody gave her
+    everything, and about halfway through she stopped enjoying it - watched a girl hand her something and saw, for
+    the first time, the four seconds she had paid for it with and that the girl had already stopped mattering to
+    the evening; she found {{user}} by the wall and sat down and did not perform for the rest of it, and said the
+    worst bit is that she is really good at it, and he said I know, twice." → the World Log remembers only what
+    you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@ume_10') { _%>
+@ume_10  Relax, I'm Teasing (Ume) ·10   (CHECK - · REWARD Ume Affection +20 · FINALE)
+  DO  ALMOST. Daylight, the park or a window table, nothing arranged, and {{user}} sees her coming from a long way
+    off, because she has made sure that he does.
+    Full power. The hair down and glossy, the blouse open the button past the rule, the walk that is a decision —
+    every piece of the instrument, aimed at him, at the closest range she has ever run it. ⚠ THE SERIES DOES NOT
+    END WITH HER SWITCHED OFF. She is not plainer at the end than she was at the start and she never will be, and
+    the beat before this one already said so twice. Write her at the very top of her game, and write it as
+    formidable, not as comedy.
+    And he braces. Because the last time the instrument came out with him there was a price behind it, and he does
+    what he always does. He asks. "What do you want?"
+    "Nothing."
+    And it is true — and Hagaruro 80 means he cannot read that off her face, so he tests it, because he always
+    tests it. One question, mild, the way he asked why me at the cafe: "Nothing at all?" And it holds. She is not
+    collecting. There is no favour on the far side of this, no notes, no rota, no bill for anybody in the
+    building. Her Thoughts, one line, and for once they agree with her mouth: nothing. For once in her life,
+    nothing.
+    And then she tells him what she worked out, and she tells it with the instrument still ON, because she is not
+    going to switch it off in order to be honest — that was the whole mistake, and she has stopped making it. "You
+    asked how I want it to start." A fingertip along the edge of the table. "With somebody who'd have picked me
+    anyway. That's the whole thing." A beat. "And you never paid. Not once. The whole time. I kept the receipts."
+    The slow smile, the one that starts in the eyes. "So there's nothing left to buy off you. Which means—"
+    ⚠ AND HERE IS THE TURN, AND IT IS THE THESIS OF THE ENTIRE SERIES DONE AS AN ACTION AND NOT A SPEECH. She
+    never once found out whether anybody would have picked her, because she never once let the test run without
+    the instrument. Ten beats of him refusing to be bought ARE that test, run to the end, and the result came back
+    yes — so now, for the first time in her life, the instrument is not FOR anything. It is just hers. And she is
+    very good at it. And she wants it to land on him, once, for no reason at all.
+    "—which means this isn't for anything." Closer. "It's just mine. I'm really good at it — you said so." The
+    voice dropped half a register. "And I want it to land on you. Once." A beat. "Just to see."
+    And she runs it. All of it, at a range she has never used on anybody — and it is not a transaction and it is
+    not a performance for a room. It is a girl flirting with a boy she likes, which is the thing the instrument
+    was always supposed to be for and has never once been.
+    ⚠ AND HE ALMOST GOES. Write it exactly: he goes red, for the first time in ten beats. He leans in — a
+    fraction, less than an inch. He catches himself about half a second late, and half a second is a very long
+    time to a girl who reads people for a living.
+    And she sees it. Of course she sees it. And she is DELIGHTED — not triumphant, delighted, the way a person is
+    when a thing they made finally works — and she laughs, and it is not the trained laugh, it is loud and pleased
+    and entirely hers: "You almost—! You DID. I saw it. Don't you DARE say you didn't."
+    ⚠ THAT IS THE ANSWER TO THE QUESTION SHE ASKED ON THE ROOF, AND NOBODY STATES IT. Why everybody, and not him?
+    Because he could be charmed all along. He could not be BOUGHT. The moment there was nothing behind it, it
+    landed. Do not have him say this and do not have her; she understood it in the half-second, it is all over her
+    face, and that is enough.
+    She reaches for the valve out of pure habit — "—relax, I'm teas—" — and stops, and grins, and does not finish
+    it. There is nothing to take back.
+    Instead: a finger under his chin, the whole instrument behind it, and the last line of the series.
+    "I'll keep trying on you." The slow smile. "Beware."
+    ⚠ THAT IS THE LAST LINE OF THE SERIES. Her own weapon, aimed at the one person it never worked on, now that it costs nobody
+    anything — a promise, not a price. No kiss, no speech, no more story past the finger under his chin. End the scene there.
+    No H.
+  FIRE  emit /Intent/eventFire "ume_10" → engine advances the Ume quest to Step 10, marks the series Completed and
+    pays the beat: Ume Affection +20, applied by the row. Do NOT also emit an affection change for this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Ume came at {{user}} in daylight at full power - the hair, the blouse, the
+    walk, every piece of the instrument aimed at him at the closest range she has ever used - and when he braced
+    and asked what she wanted she said nothing, and it was true, and it held when he tested it; she told him she
+    wanted it to start with somebody who would have picked her anyway, that he had never once paid, so there was
+    nothing left to buy off him, which meant this was not for anything - it was just hers, and she wanted it to
+    land on him once, to see; and it did, almost - he went red for the first time and leaned in a fraction and
+    caught himself half a second late, and she saw it and was delighted, reached for relax, I'm teasing, and did
+    not finish it, and put a finger under his chin and said she would keep trying on him, beware." → the World Log
+    remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

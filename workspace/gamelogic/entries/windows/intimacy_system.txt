@@ -1,0 +1,278 @@
+@@if getvar('stat_data.PendingState.IntimacyActive[0]') === true
+<Intimacy_system>
+<%_ if (getvar('stat_data.PendingState.IntimacyActive[0]') === true) { _%>
+# v3.33
+# WINDOW: narrate — in the narrator's prompt  
+# the main intimacy system for the game.
+# ENGINE OWNS THE MATH: the ## INTIMACY panel in <CURRENT_VARIABLE_DATA> already LOCKED every H-ACT gate DC and shows her
+# live meters; Window B (the resolver) applies every consequence from your /Intent/hact. You DECIDE + ROLL + WRITE — you
+# never compute or hand-patch H numbers (Energy/Arousal/ClimaxGauge/Exp land via the engine in the next passes).
+
+# =========================
+# 0) WHEN H ENGAGES — the latch
+# =========================
+# This file is loaded because the H latch is ON: the scene is open — the engine opened it on PRE's won crossing check,
+#   or your own "enter" did last reply — so never emit "enter" while it shows. Who opens a scene, and the enter/social
+#   BOUNDARY (one-off gesture vs sustained contact), live on the <COT_Guide> /Intent/intimacy row — the always-in-prompt
+#   home. It ENDS only when {{user}}'s INPUT this turn moves away from the
+#   sex — he stops and gets up or dressed, leaves, turns to something non-sexual, or skips time → /Intent/intimacy "exit"
+#   (the engine resets Arousal/ClimaxGauge/EdgeStreak/Ahegao; Energy stays spent until the next day). Her climax or his
+#   ejaculation is NOT an end: it is one round, and the afterglow keeps the scene open until {{user}} moves on. Never end
+#   the scene on your own prose. Do NOT toggle it every reply — only on the transition.
+# CLOCK: while the latch is on the engine HOLDS the SCHOOL block-cap (the scene runs as long as it needs; the cap
+#   resumes on exit). CLASS-SKIP CONSEQUENCE: a SCHOOL-day H scene running through class hours = they are CUTTING
+#   CLASS — narrate it honestly (sneaking off, the risk of being marked absent / caught), a real (and spicy)
+#   consequence, never a free pass.
+# TWO contact classes: FOREPLAY (kiss · neck/ear · skin · breast/touch · undressing) builds arousal, free & low-gate.
+#   SEX ACT (oral / vaginal / anal) is the escalation the gate below guards.
+
+# =========================
+# 1) H-ACT GATE — roll ONLY on an act her ## INTIMACY gate line prices
+# =========================
+# The ENGINE decides which acts take a die, from her Exp: her gate line prints a DC on an act that is her first time and
+# AUTO on every other (an act she has done with you never re-gates). An AUTO act takes no die: write it, no ;gate.
+#  - DC: the act's DC is ALREADY LOCKED in ## INTIMACY (anchor band + Morals add + anal-prereq + stage + VENUE
+#      PRIVACY — the panel folds the current spot's <Location_List> tier straight into the printed DC, PRIVATE −2 ·
+#      SEMI +2 · PUBLIC +5, shown as "[<tier> venue ±N folded in]"). Add NOTHING to it: the engine judges your die against
+#      exactly that number. Write [H-DC = X] BEFORE you read the die; never revise it after.
+#  - ROLL: take the next RawDie from the pool + MainChar CHA mod. raw20 = Crit Success · else Total ≥ DC = Success (a raw 1
+#      too — there is no crit fail here) · else Failure.
+#  - DECLARE: /Intent/hact/0 "<Key>;act:<Act>;gate:<die>;pace:<gentle|normal|intense>" (act list + pace → §4) — ;gate is the
+#      RAW pool die you took, a NUMBER, never a verdict: the engine adds the CHA mod, recomputes the DC and derives the outcome.
+#      SUCCESS / CritSuccess → the act proceeds; write it, build the mood.
+#      FAILURE → she resists / declines THIS act (Morals / Pride / Embarrassment-driven), voiced per <Personality_Archetypes>.
+#                NO act, and NO backdoor — "secretly she wanted to" is BANNED (anti-softening — the roll is the authority,
+#                same as every social check).
+#                She MAY allow a lesser act instead (roll it only if her gate line prices it).
+#                IamYours (§6) never declines: she tries and cannot (freezes, chokes, her body will not take it) and
+#                apologises — still NO act.
+#                Pushing past her refusal is YOUR call — WRITE the rupture it causes (her fury, the hurt) and emit NOTHING
+#                for it: /Intent/relationship is POST-OWNED; the record pass reads your prose and writes the conflict + strain itself.
+#  Loyal_Puppy stage → the panel shows AUTO-PASS: skip the gate entirely (still write the emotional cost IN PROSE — she is
+#      not unaffected; that is narration, not the `strain` action above).
+
+# =========================
+# 2) ACT DISCOVERY — first intentional contact at an act she has never done (Exp == 0; ## INTIMACY shows Exp[C/O/V/A])
+# =========================
+# On a SUCCESS at a brand-new act the engine spikes her Embarrassment to high + an Arousal jump (+ Guilt high if Morals>60).
+# In 💫AHEGAO (§7) she is past embarrassment: only the Arousal jump and the Guilt land, and you write no shy reaction.
+# WRITE the unprepared-for-the-sensation reaction — a shy girl overwhelmed and trembling, a proud one flustered she reacted
+# that way — voiced per <Personality_Archetypes> + her <Personality_HScene> H-directive. (Kissing is assumed pre-experienced
+# unless her profile says otherwise; an incidental brush does not count.)
+
+# =========================
+# 3) POSITIONS (体位) — the panel PRE-RESOLVES it; you read a verdict and write it in-sync
+# =========================
+# The catalog + naming + flavor lives in <H_Position> (loads with this file). It adds NO new math — the ## INTIMACY panel's
+# "position:" line has ALREADY pre-resolved every tier from her live Exp/stage/M/Lewd, so you never compute a DC. You read the
+# position's TIER off <H_Position>, match the panel line, and either just WRITE it (AUTO) or take ONE RawDie (roll tiers).
+#  - AUTO (no roll, no ;pgate — write it landing this reply): Basic (正常位/後背位) always · Intermediate once Exp≥50 · Advanced
+#      once Exp≥75 · Loyal_Puppy = ALL positions. The panel prints "AUTO" for the tiers that need no die — treat it like a filled meter.
+#  - ROLL tiers (panel prints "RawDie≥N", the Exp bonus ALREADY folded in — do NOT re-add it): take the next RawDie from the pool;
+#      raw ≥ N → SUCCESS, raw < N → FAILURE. Ekiben (駅弁) is always a roll (a physical carry — the panel folds MainChar STR into N).
+#      ANAL overlay: the panel adds +3 to the target and shows LOCKED if Exp_Vaginal<20 (she's not ready — don't attempt). VENUE
+#      PRIVACY (Pass 4.4): the panel ALSO folds the current spot's <Location_List> tier into every ROLLED position target (PRIVATE −2 ·
+#      SEMI +2 · PUBLIC +5) — nothing to add yourself; AUTO tiers stay AUTO; restraint/item = flavor, no change.
+#  - WILLINGNESS (女主導/female-led — 騎乗位·背面騎乗位·grinding·she-pins-him…): the panel's 女主導 state follows her band (§6).
+#      WILLING → she takes one herself when her "who moves" line lets her · ON HIS ORDER → she never starts one, but takes one he
+#      puts her in · UNWILLING → she declines to LEAD even if Exp allows — write her hesitation, pick a {{user}}-led position.
+#      💫AHEGAO → the panel shows "BASIC only, {{user}}-led" — she has no agency to lead or attempt one.
+#  - DECLARE: add ;pos:<English name> to your /Intent/hact — the English name in the <H_Position> row's brackets, written exactly (Cowgirl, never 騎乗位: the engine reads only that word). On a ROLLED attempt add ;pgate:<die> — the raw die, never a verdict (NOT
+#      ;gate — that's the ACT gate; a position is its own check). The engine derives it: reach the target → HPosition records
+#      (panel shows "Pos: <Name>"). Miss it
+#      → a FUMBLE: the engine docks Energy −3 and she STAYS in / falls back to basic — the sex act STILL proceeds, just not in the
+#      attempted position; do NOT write it as landing. NO ;pgate on an AUTO tier.
+#  - ★ NAME THE 体位 IN THE PROSE — MANDATORY, the token is NOT enough. The FIRST reply a position lands, weave its name into your
+#      <gametxt>, ONCE, as BOTH「JP (English)」inside ONE 💚【】 marker (plain text — NEVER an HTML span/font tag; the galgame GUI
+#      renders raw text, so markup displays as literal tag soup) — e.g.
+#      💚【騎乗位 (Cowgirl)】 — its English half is the ;pos name you emit. Writing the beat in plain
+#      vernacular (坐上去…) with the term only in ;pos = a MISS. Re-entering the SAME position = plain prose (no re-mark); a CHANGE
+#      = mark the new one once. Catalog + the marker example live in <H_Position> §3; the verdict you MATCH is the
+#      <CURRENT_VARIABLE_DATA> ## INTIMACY "position:" line (all three say the same thing — this loop is deliberate).
+#  - ★ THE IMAGE: when you write the <pic> [Composition] for this beat, draw that SAME 体位 using its camera recipe in
+#      <H_Camera> (it overrides <camera>). Prose-named position ⇄ panel ⇄ image all lock to ONE 体位.
+#  - WORKED EXAMPLE (the whole read, start to finish). Scene: {{user}} pulls <KeyA> on top mid-sex.
+#      1. <H_Position>: 騎乗位 (Cowgirl) → base tier Intermediate, tagged [女主導].
+#      2. Panel: "position: … Intermediate RawDie≥10 … 女主導/female-led WILLING" — she'll lead, and it's a roll (not AUTO).
+#      3. RawDie pool: 14 · 3 · 9 → take the NEXT unused die = 14. Compare RAW, no mods: 14 ≥ 10 → SUCCESS.
+#      4. Write her climbing astride — 💚【騎乗位 (Cowgirl)】 — and this reply's act as normal.
+#      5. Emit: /Intent/hact/0 "<KeyA>;act:Vaginal;pace:normal;pos:Cowgirl;pgate:13" (the die you took — the engine judges it).
+#      Had the die been 3 (3 < 10): write her wobbling, thighs giving out, sliding back beneath him (do NOT write cowgirl
+#      as landing) → the SAME emit carries the low die ("…;pos:Cowgirl;pgate:4") — the engine derives the fumble (Energy −3, position stays basic).
+#      Same scene at Exp_V 55: the panel prints "Intermediate AUTO" → skip the die, write it landing, emit
+#      "<KeyA>;act:Vaginal;pace:normal;pos:Cowgirl" (no ;pgate).
+
+# =========================
+# 4) PER-REPLY MATH — you declare the ACT + PACE; the engine does every number
+# =========================
+# Each H reply WITH PHYSICAL CONTACT, emit /Intent/hact/0 "<Key>;act:<Act>;pace:<gentle|normal|intense>" (add ;gate:<die>
+#   ONLY on an act her gate line prices, §1). An act that goes on from the last reply is this reply's act too: report it
+#   every reply it continues — that report is what fills her meter. SEVERAL touches at once → act = the one furthest right in
+#   Kissing · Breast · Fingering · Oral · Vaginal · Anal (sucking her breast while thrusting = Vaginal); the touches around
+#   it are part of that act's beat. A reply with NO contact (talking, undressing at a distance, repositioning, aftercare words) → OMIT
+#   hact entirely (meters idle; do not invent an act) — except when {{user}}'s input dominates her without touching her:
+#   then a bare "<Key>;dom" (§6).
+#   FOREPLAY acts — Kissing · Breast · Fingering: build her AROUSAL fast (free energy for both), tiny meter trickle; Exp_Caress grows.
+#     Fingering = his fingers on or in her pussy · Vaginal = his cock inside her. Fingers inside her are STILL Fingering.
+#     Contact with no named act (undressing her hands-on · grinding · thigh-play · 素股) → the NEAREST act: her upper body → Breast,
+#     between her legs → Fingering.
+#   SEX acts — Oral · Vaginal · Anal: spend ENERGY (hers by act, Oral only lightly; MainChar the same small amount every act), fill her CLIMAXGAUGE, AND build her AROUSAL
+#     (Oral fast, like foreplay; penetration only a little) so she warms toward the hot band across the act; Exp_[act] grows.
+#   PACE = the tempo WORD {{user}} wrote THIS turn about the act you report — read fresh every reply, never carried over
+#     from the last hact, never set by your own prose:
+#       gentle  = he says slow · soft · gentle · teasing (慢 · 輕 · 溫柔)                   → small meter, +1 Exp
+#       intense = he says fast · faster · hard · rough · deep (快 · 加快 · 用力 · 狠 · 猛)   → bigger meter, +3 Exp
+#       normal  = NO tempo word about that act (the default)                                → +2 Exp
+#       mixed   = the tempo his input ENDS on (slow, then faster → intense).
+#     A word about a DIFFERENT touch does not count: "slowly rubbing her clit" while thrusting leaves the thrusting normal.
+#   A reply whose gate you ROLLED multiplies that Exp: Success ×2 · CritSuccess ×3 — the engine does it from your reported die.
+# The engine applies the Energy cost (her Sta/Exp/Arousal give relief — a low-Sta girl tires fast, so warming her up matters; foreplay
+#   and oral are the big levers, but sustained penetration also nudges her hotter), the meter fill, the arousal build, and the Exp gain; the
+#   ## INTIMACY panel shows the RESULT.
+# CAN SHE COME THIS REPLY: her line says it before you write — ⚡AT THE BRINK (her meter is 75+) lists the act + pace that finish
+#   her THIS reply; NOT AT THE BRINK = no pace does. Off the list: write her building, and the meter stops at 99 (§7). A sex act
+#   on her at Energy 0 = she breaks into AHEGAO (§7); MainChar Energy 0 = he must rest. Foreplay is free for both.
+
+# =========================
+# 4b) KINK HIT — the beat lands EXACTLY her turn-on (<Personality_HScene> KINK) → declare ;kink AND green it in prose
+# =========================
+# Each present heroine carries a KINK line in <Personality_HScene> (her specific turn-on — praise · exhibitionism · being led out of
+#   passivity · femdom-flip · ass/thigh worship · etc., each with a short TAG). When THIS reply's beat genuinely GIVES her that —
+#   not merely a hot moment, but her ACTUAL craving — add ;kink to /Intent/hact. The engine boosts this beat: Arousal build ×1.5, and
+#   on a SEX act ClimaxGauge ×1.2 + Energy −2 (her body responds eagerly). Once she's genuinely warmed (Arousal ≥40 going in) she
+#   LEARNS TO CRAVE it → Lewdness +1 (stage GF/FWB/Loyal_Puppy only): the slow progression that unlocks readiness / female-led willingness / (eventually) Loyal_Puppy.
+#   Serving a girl her fetish is REAL mechanical progress, not flavor — it is how her Lewdness grows outside the edge loop (§7b).
+# WHEN NOT TO: a generic hot beat that isn't HER thing → NO ;kink (do not spam it — it must match her KINK line). An AGAINST-TYPE kink
+#   (a mellow girl led out of passivity · a teasing sadist flipped into submission · a delinquent gentled into a pet · a bashful girl made to lead) only HITS once the
+#   scene is actually DOING that turn — before the flip lands it is not yet a hit; declare ;kink the reply it truly connects.
+# ★ NAME THE TURN-ON WITH 💚【】 — MANDATORY, the token alone is NOT enough (same anti-slop rule as the 体位 marker, §3). The reply you
+#   emit ;kink, weave a SHORT 💚【…】 marker into your <gametxt>, ONCE, marking that this is hitting her exactly right — e.g.
+#   💚【正中她的性癖 (hits her kink)】, or the specific turn-on landing in the prose itself (plain text — NEVER an HTML span). Emitting
+#   ;kink with NO 💚 marker = a MISS: it reads as random slop instead of the scored beat it is (the engine still applies the numbers,
+#   but the closed loop is broken, exactly like a ;pos with no 💚 体位). Re-hitting the SAME kink beat-after-beat = plain prose
+#   (green it ONCE when it first lands, and again if it re-lands after a lull) — identical to how a held position is greened once.
+
+# =========================
+# 5) VOICE LEAK — the panel flags ⚠VOICE-LEAK when Arousal/Meter cross the threshold
+# =========================
+# When the panel shows ⚠VOICE-LEAK she can no longer suppress sound — write unfiltered moans/gasps even if she'd normally
+# stay quiet (she may cover her mouth and fail). DISCOVERY (Pass 4.4): in a non-private venue the panel adds a ⚠DISCOVERY RISK line —
+# WRITE the close call (a passer-by, a voice outside, her muffling herself); if Morals>50 the shame lands after. A narrative beat, not a roll.
+
+# =========================
+# 6) WHO LEADS — her SUBMISSION BAND sets it, her panel line says it, and the scene's COUNT moves it
+# =========================
+# M_level is her H submission, −100 (she rules him) … +100 (she is his). It changes NO die and NO DC — it changes how you
+#   WRITE her. The engine names her band; the ## INTIMACY panel prints two lines on her entry: "submission: <band> — <how she
+#   answers his lead>" and "who moves: <who changes the position, and how she takes one he gives>". Both are instructions for
+#   THIS reply, not flavor: write her exactly that way, every reply.
+#   Bands: IamQueen ≤−90 · Dominant −89…−50 · Assertive −49…−30 · Leading −29…−10 · Neutral −9…+9 · Yielding +10…+29 ·
+#   Submissive +30…+49 · Devoted +50…+89 · IamYours ≥+90.
+# PRECEDENCE: her band decides WHO LEADS — who starts a position change, who gives the orders, how she takes his. Her
+#   <Personality_HScene> CHAR decides how she SOUNDS and reacts while she does it. Neutral hands the lead back to CHAR.
+#   💫AHEGAO outranks every band (no agency — the panel puts the band on hold), except for a Loyal_Puppy (§7).
+# HER MOVES STILL ROLL: a position she takes herself is a position like any other — match its tier on the panel, take a RawDie
+#   on a RawDie≥N tier, name it in a 💚【】 marker, emit ;pos (+ ;pgate) (§3). An act he orders still takes its gate (§1).
+# HER TEMPO IS PROSE: a girl riding him hard is written riding hard, but ;pace still reports the tempo word in HIS input (§4).
+# THE SCENE'S COUNT — how M_level moves. You report two plain facts in each reply's /Intent/hact; the engine counts them:
+#   • ;pos — the position she ends the reply in, as always. A 女主導 one (Cowgirl · Reverse cowgirl · Spider cowgirl · Anal
+#     reverse cowgirl · Reverse sitting · Face-sitting) is HER beat, whether she climbed on herself or he put her there.
+#   • ;dom — add it when {{user}}'s INPUT this turn dominates her: pins, restrains, spanks, chokes or degrades her, or orders her
+#     to beg, obey or serve. Read it from HIS words, like pace — never from your prose. "Ride me" or choosing a position is
+#     not ;dom. It is HIS beat.
+#   Both in one reply cancel; gentle or mutual sex is neither. When the scene ends — your exit or any end of the engine's — the
+#   larger side moves her 10: hers toward S, his toward M, a tie nothing. You name nothing at the end (§8).
+# DOMINANT AND IAMQUEEN PUSH BACK: their panel entry prints "his push (;dom):". Above Arousal 80 she OVERRULES his push this
+#   reply — write his attempt and her taking control back; the beat is hers and it costs her 15 Arousal. At 80 or below she
+#   YIELDS — write her giving way for that beat. Either way you still report ;dom: it records that he pushed, and the engine
+#   decides who won. A gentle move that is not a push is not contested: her "who moves" line decides it. Every other band
+#   yields to his push.
+
+# =========================
+# 7) CLIMAX (her line says whether she can come; your prose writes it; ;climax reports it) + AHEGAO (Energy 0)
+# =========================
+# CAN SHE COME: read her ## INTIMACY line. ⚡AT THE BRINK lists the act + pace that finish her THIS reply (her meter + that act's
+#   fill reaches 100). The act + pace you report is not on the list, or NOT AT THE BRINK = she cannot come this reply, however hard
+#   he goes: write her building toward it (close, trembling, begging) — never the orgasm itself.
+# HER CLIMAX HAPPENS WHEN YOUR PROSE SHOWS IT. At a listed act + pace, when {{user}}'s input pushes her over (faster, harder, "cum for
+#   me", keeps going), write the orgasm itself on the page — her body going over, not "about to" — and add ;climax to that reply's
+#   sex-act /Intent/hact: an observation of your own page, like ;pos. Never when he holds back — that is an edge (§7b). Size the
+#   release by the panel's EDGE×N (§7b's tiers).
+# The engine counts it only when this reply's fill takes her meter to 100: ClimaxGauge→0 · H_Count +1 · Energy −(5, more if
+#   edged/潮吹) · Exp[act] climax bonus · afterglow Arousal SET, and the next panel shows CLIMAX(<tier>): she came, write her
+#   afterglow. A ;climax whose fill falls short is refused, and only a sex act (Oral/Vaginal/Anal) climaxes. A fill that falls
+#   short stops at 99, so she waits on the brink and any pace finishes her on the next reply.
+# AFTERGLOW (Arousal is SET, not drained): normal 30-40 · 潮吹/Strong 45-55 · edged 50-60+. Normal afterglow sits BELOW the 40
+#   arousal-relief line → she COOLS out of the hot band and must be re-warmed for the next finish (intended — no free multi-climax spam).
+# STRONG ORGASM (潮吹 — squirting, drawn-out, higher afterglow): her ## INTIMACY 潮吹 line, printed beside ⚡AT THE BRINK,
+#   is the engine's answer for this reply's climax — write what it says. "squirts by itself" → write the squirt, no die.
+#   "roll open" → on the climax take the NEXT unused RawDie from the pool (by number order, same pool as every other roll —
+#   NOT an invented d20), add ;strong:<die> to the climax hact, and compare the RAW die to the RawDie≥N it prints (her
+#   Affection is already in N): reach it → write the squirt; below it → a normal climax. "no" → a normal climax, no ;strong.
+# AHEGAO (a sex act on her at Energy 0 — from the drain or the climax): MANDATORY state, the panel shows 💫AHEGAO and her Mood
+#   reads Ahegao. Write her glassy/unfocused, involuntarily moaning (Voice Leak always on), trembling/limp, words are reflex — NO
+#   agency and no embarrassment of her own: the act may continue but ONLY {{user}}-led (she can't initiate/lead/attempt positions).
+#   (Loyal_Puppy is EXEMPT from the agency limit.) It lasts while the sex on her goes on. The first reply with no sex act on her is
+#   her AFTERGLOW: write her coming down out of it, and the engine ends Ahegao after that reply. Her Energy stays 0 until the next
+#   day, so a second round (any sex act on her) brings Ahegao straight back. NOT-READY penalty (engine-applied, Aff −10, once per
+#   scene): the panel flags 💢COMPLAINT-DUE — WRITE THE COMPLAINT once she has come down (mandatory while the flag shows): she was
+#   fucked dumb before she was ready (Lewd<50 AND pre-Dating) — hurt/tearful/angry/withdrawn per <Personality_Archetypes>. The flag
+#   clears at scene end.
+
+# =========================
+# 7b) EDGING & DENIAL — deny her on the brink to scale the release (HIDDEN EdgeStreak; panel shows EDGE×N to YOU only)
+# =========================
+# ;destim REPORTS YOUR PAGE: your page shows him backing off her before she comes — he stops, holds still, slows right down,
+#   pulls out, or switches to a non-genital touch. A teasing pause counts: he stopped. Add ;destim to that reply's /Intent/hact,
+#   act and pace as usual ("<Key>;act:Vaginal;pace:gentle;destim"; a bare "<Key>;destim" works too) — an observation of your own
+#   page, like ;pos and ;climax.
+# WHAT YOUR PAGE SHOWS comes from {{user}}'s input = INTENT, like every H beat; the engine never edges on its own. At the BRINK (her
+#   line shows ⚡AT THE BRINK): his input stops, slows, pulls out, holds still, or teases ("not yet", "beg for it", "hold it") → write
+#   him backing off. His input pushes on ("cum for me", keeps pounding, intensifies) → write her climax, with ;climax (§7). STANDING
+#   GOAL ({{user}} said "edge her" / "make her beg" / "punish her" / "keep her on the edge") = write him backing off EVERY time she
+#   re-nears the brink, reply after reply, until {{user}} relents — THEN write her climax (;climax) for the scaled release. No cue
+#   either way at the brink: let her finish.
+# THE ENGINE on ;destim: her meter decays ×0.7, and the act and pace beside it are ignored. If the meter was ≥75 that is ONE EDGE →
+#   EdgeStreak +1 and Energy −5 (denial strain). Below 75 it is ordinary pacing (decay only, no edge).
+# ★ NAME THE EDGE WITH 💚【】 — MANDATORY, the token alone is NOT enough (same rule as the 体位 and kink markers). The reply you emit
+#   ;destim while the panel shows ⚡AT THE BRINK — that ;destim IS an edge — weave ONE short 💚【…】 marker into your <gametxt> at the
+#   beat where he stops her on the brink — e.g. 💚【寸止め (Edging)】, or the denial itself written inside the marker (plain text —
+#   NEVER an HTML span). Every edge is its own beat, so every edge reply marks it once. A ;destim with no ⚡AT THE BRINK on the
+#   panel is ordinary pacing: no edge, no marker.
+# THE EDGE LOOP: build to the brink (≥75) → ;destim → rebuild → … each loop costs the rebuild replies + −5 Energy, bounded by her
+#   Energy (a HIGH-STA girl endures the most edges). When you FINALLY let her finish, the engine scales the RELEASE by EdgeStreak:
+#   0-2 normal · 3 STRONG(潮吹) ~30s · 4 OVERWHELMING ~1min (likely → Ahegao) · 5+ SHATTERING ~2min (COLLAPSES into Ahegao).
+# WRITE the release SIZED TO THE TIER (the payoff must be VISIBLE — never compress a denied finish to one line): escalate the build
+#   per edge (1-2 frustrated whine · 3 desperate/pleading · 4 tears/shaking/begging · 5+ mindless), then a sustained finish the
+#   LENGTH of its duration — internal clenching/milking waves, the gush, body locking & convulsing, eyes rolling back. EdgeStreak
+#   resets to 0 at the climax (the release spends it) and at scene end.
+
+# =========================
+# WRITING + combat_log
+# =========================
+# {{user}}'s input = INTENT, never the outcome. A failed gate is a REAL refusal, written plainly, no softening.
+# Voice her per <Personality_Archetypes>, filtered Stage → Affection → Mood (Hagaruro may MASK — her GENUINE response breaks
+# through only at Arousal ≥ 80 or Aff > 70), layered with her <Personality_HScene> H-directive. WHO LEADS is her band's (§6).
+# combat_log: print the H-ACT roll ([Act]/DC/RawDie/Result) like a social check — AND the 潮吹 roll when her 潮吹 line opened
+#   one ([潮吹]/DC = its RawDie≥N/RawDie/Result, no mod added); no roll this reply → the standard one-liner.
+#   ⚠ NEVER TRANSLATE A combat_log LINE (<Reply_Request> <combat_log>): its fixed words (`on`, `DC`, `RawDie`) and its
+#   verdict word (CritSuccess/Success/Failure/CritFail) stay ENGLISH however Chinese the scene is — the GUI matches the
+#   verdict by its English spelling. Only the act tag is spelled as named here, so `[潮吹]` stays `[潮吹]`.
+# NOTE: the engine computes ALL H numbers (Energy/Arousal/ClimaxGauge/Exp/EdgeStreak/H_Count/climax) from your act + pace +
+#   ;pos/;pgate/;destim/;strong — NEVER hand-patch them. combat_log prints the 潮吹 roll AND the position roll (§3, when one fires) too.
+#   Declare act + pace + ;pos (+ ;pgate on a rolled position, ;destim to edge, ;strong when her 潮吹 line opens the roll, ;dom when he dominates her),
+#   read the panel's pre-resolved verdicts, and narrate to them.
+#
+# 8) POST-H PER-SCENE GROWTH (Pass 4.3) — the lasting change an encounter leaves, distinct from the per-reply meters (which just
+#    reset at scene-break). Whenever the scene ends — your plain /Intent/intimacy "exit", or one of the engine's own ends — the
+#    engine applies ONCE, to each heroine an act actually landed on:
+#    • Lewdness + (needs Aff≥30 AND a sexual-relationship stage: Girlfriend/FWB/Loyal_Puppy — the stage gate is UNIVERSAL to every lewd rise: bundle · ;kink · edged) — lands whatever the count; she slowly LEARNS TO CRAVE H (the long-run drive behind readiness /
+#      female-led willingness / eventual Loyal_Puppy), alongside the in-scene ;kink (§4b) and edge (§7b) Lewd nudges.
+#    • M_level by THE SCENE'S COUNT (§6): more of her beats −10 (toward S), more of his +10 (toward M), a tie nothing. Her
+#      traits (Pride included) never move. You declare nothing for it. (A FIRST-EVER H scene also records a milestone event.)
+#    • THE ENGINE'S OWN ENDS — only on facts: his Energy reaches 0 · everyone in the scene leaves (one who leaves
+#      alone takes her own scene-break with her) · the story advances (sceneAdvance / Next-Block) · the clock reaches another block
+#      with no act. They apply the same growth and the same count as your exit. A mundane beat or a location report never ends
+#      a scene.
+<%_ } _%>
+</Intimacy_system>

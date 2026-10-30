@@ -1,0 +1,474 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@umi_') === 0
+<%_ /* v1.2 */ _%>
+<%_ /* The ten @umi_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @umi_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@umi_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@umi_1') { _%>
+@umi_1  So Easy (Umi) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  YOU LOOKED. The shoe lockers after the last bell, and somebody has been leaning on the one that belongs to
+    {{user}} for about twenty minutes. On her own. Nobody waits with her, which is a fact this series will state
+    exactly once, here, and then never mention again.
+    UMI HANYU is spiked blonde twin-tails, an oversized aqua hoodie worn open over the uniform, sharp green eyes,
+    and a grin that arrives before she does.
+    ⚠ THE PREMISE OF THIS WHOLE SERIES IS IN THE NEXT THIRTY SECONDS AND IT IS NOT A JOKE. Umi has been running
+    tricks on this year since the entrance ceremony, and there is an entire wing of her repertoire she has never
+    once been able to fire, because it only works on a boy — and until this term there was no boy anywhere in a
+    Jinko uniform. Every other girl in this building is immune to it by construction. {{user}} is the first target
+    she has ever had for it. He is also the last; there is no second one coming.
+    So: "Hold still, you've got something on your face." Lean in. Closer than anybody needs to be to take
+    something off a face.
+    ⚠ BE EXPLICIT ABOUT WHAT SHE IS ACTUALLY DOING, BECAUSE THE ENTIRE JOKE DEPENDS ON THE READER SEEING IT. The
+    hoodie is not accidentally open. She pulled it wide before he came round the corner, and there is nothing
+    under it but the sailor collar. She is bent forward from the waist with both hands up at his face, which puts
+    her chest in his eyeline at about thirty centimetres, and she has set her shoulders so that the collar gapes.
+    There is nothing on his face. There was never anything on his face. The pretext exists solely to hold him
+    still while she puts her cleavage where he cannot avoid it, and she holds the position roughly four seconds
+    longer than any real speck of dust would require.
+    He looks. Obviously he looks.
+    "...You LOOKED." Triumphant. Straightening up, hands on hips, radiant with it. "You did. I watched you do it.
+    Straight down my top. God, you're SO easy —"
+    ⚠ AND HERE IS WHAT {{user}} DOES, AND IT IS THE MOVE THE ENTIRE SERIES IS BUILT ON. He does not deny it. He
+    does not go red and stammer, and he does not get annoyed and walk off. He agrees with her, out loud, evenly,
+    and names whose idea it was: "Yes. You bent over and put them in front of my face. That was the plan."
+    Silence at the lockers. The trick is constructed end to end out of the target denying it. There is no second
+    line. She has never needed one, because nobody has ever declined to be embarrassed.
+    ⚠ AND SHE IS NOT ANGRY. SHE IS THRILLED, AND THE PROSE MUST GET THAT RIGHT. This is the best thing that has
+    happened to her all term: somebody engaged, somebody is still standing there. Hagaruro 70 means she covers it
+    instantly with a laugh — she does not get to show anything yet — but the laugh is a beat late and slightly the
+    wrong shape.
+    Then {{user}} picks up his shoes and asks the question that actually breaks the routine. "So what's next?"
+    "...What?"
+    "The next one. What is it?"
+    She has nothing. She genuinely has nothing, because every trick she has ever run ended the second it resolved,
+    with the target laughing or the target leaving, and in eighteen years nobody has ever asked her for the
+    SEQUEL.
+    "...Tch. You'll find out." She gets her name out somewhere over her shoulder on the way past — "Umi. Hanyu
+    Umi. Remember it, you'll be hearing it a lot" — and is round the corner considerably faster than she needed to
+    be.
+    Crack: not yet, but the shape of it is visible. Her opener worked first time, which no trick of hers has ever
+    done, and then stopped working in the same breath — and the part she cannot stop turning over on the walk home
+    is not the looking. It is that he asked for another one. Score: Umi 1, {{user}} 1. No H.
+  FIRE  emit /Intent/eventFire "umi_1" → engine creates the Umi quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose — "Umi
+    Hanyu" — because that IS the mechanism: POST reads the name and arms her build, her <character> card
+    keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide> says.
+    Do NOT build her THIS reply unless her <character> profile is already in front of you. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Umi Hanyu ambushed {{user}} at the shoe lockers with a trick that only
+    works on a boy - a pretext about something on his face, so she could pull her hoodie wide and bend over and
+    put her chest in his eyeline - and it worked; then instead of denying it he agreed out loud that he had looked
+    and named whose idea it was, which left a trick built out of denial with no second line, and he asked her what
+    the next one was, which nobody has ever done." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@umi_2') { _%>
+@umi_2  So Easy (Umi) ·2   (CHECK - · REWARD Umi Affection +10)
+  DO  THE SPARE DESSERT. A week on, at lunch, and Umi Hanyu drops into the seat opposite {{user}} without being
+    asked, without being invited, and with a running announcement of precisely why she is doing it.
+    "Don't get comfortable. I'm here to ruin your lunch. It's a whole project, I've got material."
+    The material is filthy, and loud, and she watches his face through every line of it for the flinch. ⚠ SHE
+    TALKS AN ENORMOUS GAME AND HAS DONE PRECISELY NONE OF IT. Play the bravado with nothing behind it: the instant
+    he engages with any of it as a real question rather than a dare, she loses her footing and has to change the
+    subject at speed.
+    ⚠ WHAT {{user}} NOTICES IS NOT THE MATERIAL. IT IS THE TRAY. He has been in this room every lunch since the
+    entrance ceremony and he has never once seen Umi Hanyu sit down with anybody. Not a group, not a pair, not a
+    corner table with one friend. She arrives, she eats fast, she goes. Today she sat down opposite somebody for
+    the first time all term, and the somebody was him.
+    And there are two desserts on her tray.
+    ⚠ THE TELL, AND IT IS THE ONLY SOFT THING IN THIS BEAT. She bought the second one before she knew where he
+    would be sitting, or whether he would be here at all. She will say — loudly, pre-emptively, before he has
+    opened his mouth — that it is "a bribe, obviously, I'm buying a reaction off you, they're not FREE." It is not
+    a bribe. She had no idea whether there would be anybody to give it to.
+    {{user}} does not comment on the tray. He does not comment on the second dessert. He does not use the word
+    "alone" once, in any form, because she would hear it coming from three tables away and be gone before it
+    arrived. He moves his own tray over to make room for her elbow and asks whether the material gets better or
+    whether that was the good stuff.
+    She is deeply insulted by the question and answers it in enormous detail, and stays for the entire period,
+    which is about nineteen minutes longer than she has stayed anywhere all term.
+    At the bell she stands up, stacks both trays, and says "don't get ideas" to the table rather than to him.
+    Crack: hairline. Somebody moved a tray over. Score: Umi 1, {{user}} 2. No H.
+  FIRE  emit /Intent/eventFire "umi_2" → engine advances the Umi quest to Step 2 and pays the beat: Umi Affection
+    +10, applied by the row. Do NOT also emit an affection change for this beat — the row is the payout, and
+    reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Umi sat down opposite {{user}} at lunch to ruin it and stayed the whole
+    period, which she never does; there were two desserts on her tray, bought before she knew where he would be
+    sitting, and she announced loudly that it was a bribe for a reaction, and he moved his tray over and never
+    once said the word alone." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@umi_3') { _%>
+@umi_3  So Easy (Umi) ·3   (CHECK - · REWARD Umi Affection +16)
+  DO  THREE LINES EARLY. The library at lunch, a week on, and Umi Hanyu has brought {{user}} along specifically to
+    watch her work, because the entire point of craft is an audience.
+    The mark is Suzu Yukishiro, who is reading, who has been reading since the bell, and who will still be reading
+    when the building comes down.
+    ⚠ THE TRICK IS GENUINELY WELL BUILT AND THAT IS THE POINT OF THE BEAT. Umi is INT 60 — she is not stupid and
+    she is not clumsy. The setup is properly constructed: a long approach about something on Suzu's back, a paper
+    spider on a thread, a second-stage reveal she has obviously rehearsed. It is a good trick. It would land on
+    most of this year.
+    Suzu turns a page. Without looking up, in the flattest voice in the building, she says the punchline. Then she
+    says the SECOND punchline, the one Umi was saving. Then she says, still not looking up: "The thread's visible
+    from the window side. Also you're standing in my light."
+    ⚠ AND UMI DIES, IN PUBLIC, IN FRONT OF THE ONE PERSON SHE BROUGHT TO WATCH. This is the actual condition of
+    her life and it is why she is not the terror she performs as. Her tricks land beautifully on anybody reactive
+    and get dismantled on sight by anybody who reads faster than she does, which in this year is a short list, and
+    every name on that list knows it is on it.
+    Suzu goes back to her book. She was never being cruel. She simply got there first, which is worse.
+    Umi's recovery is loud, immediate and completely transparent: it was a warm-up, she was testing a variation,
+    Suzu is no fun, everybody knows that about Suzu. She is already moving for the door.
+    ⚠ AND {{user}} DOES THE SECOND IMPOSSIBLE THING. He does not laugh at her. He also does not rescue her — no
+    "that's alright", no comfort, nothing kind, because comfort would require admitting out loud that she needed
+    some and she would never forgive that. He says: "The second line's the problem. It's doing two jobs. Fix it
+    and bring it to me."
+    She stops walking.
+    "...Bring it to you."
+    "You said you had material. I want the fixed one."
+    ⚠ THAT IS THE HOOK THE WHOLE SERIES HANGS ON, AND IT IS HER OWN LINE TURNED ROUND. She is the one who says
+    "give me a better reaction". Nobody has ever said it back to her. Nobody has ever wanted MORE tricks — every
+    single person she has run one on has wanted fewer, immediately, and said so.
+    She says something rude on her way out, and the rude thing comes out at about half her usual volume.
+    Crack: she went to the library to be feared and came away with homework, and she is going to do the homework,
+    and she will not admit that to herself either. Score: Umi 1, Suzu 1, {{user}} 3. No H.
+  FIRE  emit /Intent/eventFire "umi_3" → engine advances the Umi quest to Step 3 and pays the beat: Umi Affection
+    +16, applied by the row. Do NOT also emit an affection change for this beat. Suzu Yukishiro appears here and is
+    NOT required and NOT built by this beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Umi brought {{user}} to the library to watch her run a well-built trick on
+    Suzu, and Suzu said both punchlines before she reached them and went back to her book; he did not laugh and
+    did not comfort her, he told her the second line was doing two jobs and to fix it and bring it to him, which
+    is her own line turned round." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@umi_4') { _%>
+@umi_4  So Easy (Umi) ·4   (CHECK - · no payout)
+  DO  THE RAIN BIT. A week on, the bus stop, rain hard enough that the shelter is the only dry thing for two
+    hundred metres — and Umi Hanyu is standing out in it on purpose, four metres clear of the roof, waiting for
+    {{user}} to come round the corner.
+    ⚠ THIS IS THE BODY WING AT FULL POWER AND SHE HAS ESCALATED ON PURPOSE. The locker trick worked once, so the
+    obvious move is more of it, and she has absolutely nothing to calibrate against, because there has never been
+    anybody in this school to run this half of her material on. She is inventing a whole discipline from scratch
+    on a sample size of one.
+    So: soaked through, hoodie plastered flat, the blouse underneath doing what a wet blouse does, and she waits
+    until he is exactly close enough before she starts.
+    "Oh no. Oh NO. Is it see-through? You'd better check. Properly, though — really look, I want a professional
+    opinion —"
+    ⚠ SHE IS SHAKING WITH COLD THROUGHOUT AND THE PROSE SHOULD NOT HIDE IT. She stood in the rain for eleven
+    minutes to set this up.
+    {{user}} takes his jacket off and puts it round her shoulders, and then, while she is still mid-sentence,
+    delivers a verdict she did not ask for. "Six out of ten."
+    "...Six."
+    "The spider one was better. That had a structure. This one's just weather."
+    ⚠ SHE IS FURIOUS THAT HE GRADES THEM AND ABSOLUTELY DELIGHTED THAT HE REMEMBERS THEM, AND BOTH MUST BE ON THE
+    PAGE AT ONCE. Nobody has ever kept a record of her work. She is the only person alive who does.
+    Which is when her bag, waterlogged, gives up at the seam, and the contents go across the pavement — and among
+    them is a notebook, rained on, lying open.
+    ⚠ THE TELL, AND IT IS THE BIGGEST ONE BEFORE THE TURN. Every trick she has ever run. Dated. Numbered. Scored
+    out of ten in her own handwriting, with a note on what went wrong. Page after page of it, going back to
+    primary school. And the current page — the one it has fallen open at, the one she lunges for — has a name at
+    the top, and the name is his, and underneath it there is a list, and the list is long.
+    {{user}} picks it up, closes it without reading a word, and hands it back to her.
+    She knows he saw the title. He knows she knows. Neither of them says one word about it, and they get on the
+    bus, and she wears the jacket the whole way and does not give it back.
+    Crack: the rain bit worked, technically, and it is not the thing either of them is thinking about. Score: Umi
+    2, {{user}} 3. No H.
+  FIRE  emit /Intent/eventFire "umi_4" → engine advances the Umi quest to Step 4. No payout on this beat — not
+    every beat pays, and the ones that do are 2, 3, 7 and 10. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Umi stood in the rain for eleven minutes to ambush {{user}} at the bus
+    stop in a soaked blouse, and he put his jacket round her and graded the trick six out of ten; then her bag
+    gave way and a notebook fell open - every trick she has ever run, dated and scored in her own hand, the
+    current page headed with his name - and he closed it unread and handed it back." → the World Log remembers
+    only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@umi_5') { _%>
+@umi_5  So Easy (Umi) ·5   (CHECK - · no payout)
+  DO  THE NIGHTMARE. A week on, out on the grounds after the last bell, and Umi Hanyu has decided that what
+    {{user}} needs to see is her best work on a live target.
+    The live target is Iori Sekita.
+    ⚠ THIS IS A CATASTROPHIC ERROR, SHE KNOWS IT IS, AND SHE IS DOING IT ANYWAY, WHICH IS THE WHOLE CHARACTER IN
+    ONE SENTENCE. She is showing off. She has an audience of one for the first time in her life and she has picked
+    the hardest mark in the year to impress him with, and she is going to lose.
+    The rig is a tripwire, a bucket, and a genuinely clever second stage. She talks it up beforehand. She takes
+    her position. She begins the approach.
+    Iori does not hear the setup. Iori has never heard a setup in her life — a setup is words happening in the
+    vicinity of Iori while Iori thinks about something else. She walks straight through the approach, arrives at
+    the punchline before the punchline does, and when she notices the string she does not work anything out at
+    all. She picks Umi Hanyu up by the waist, one-handed, off the ground, and shakes her.
+    "Wh— PUT ME DOWN —"
+    ⚠ AND THIS IS WHY IORI IS HER NIGHTMARE, AND IT IS FUNNIER AND SADDER THAN IT LOOKS. You cannot con somebody
+    who never enters the conversation. Umi's entire craft runs on a mark's attention, and Iori does not have any
+    spare attention to give anybody.
+    She gets put down. She is extremely dishevelled. The grounds have noticed.
+    ⚠ BUT THE BEAT IS NOT THE SHAKING, AND {{user}} IS THE ONLY PERSON WHO SAW THE REAL THING. About two seconds
+    before the rig went, Mei Hanamori came round the corner of the building on her way to the gate — small,
+    oblivious, and directly under the bucket. Umi hauled the tripwire clear, hard, wrecking her own trick, before
+    anybody else had registered that Mei was there at all.
+    Nobody saw it. Everybody was watching Iori. {{user}} was watching Umi.
+    Afterwards, while she is putting her hair back together and explaining at length that she let all of that
+    happen on purpose: "You pulled it."
+    "...I don't know what you're talking about."
+    "The wire. Mei came round the corner and you pulled it."
+    "I did NOT." Immediate. Flat. Absolute. And then, because Hagaruro 70 will not let her leave a silence
+    standing, a laugh and a shove and "why would I care, she's a walking target, she's the single best thing in
+    this school" — which is the closest to a declaration of love that Umi Hanyu has ever made about another human
+    being.
+    Crack: the one rule she has, demonstrated once, denied instantly, and witnessed by exactly one person. Score:
+    Iori 1. Everybody else nil. No H.
+  FIRE  emit /Intent/eventFire "umi_5" → engine advances the Umi quest to Step 5. No payout on this beat. Iori
+    Sekita and Mei Hanamori both appear and NEITHER is required or built by this beat. (No day-end swing — CHECK
+    is none.)
+    THEN emit /Intent/recordEvent "save|Umi showed off for {{user}} by rigging a trick for Iori and lost, because
+    Iori never hears a setup and simply picked her up by the waist and shook her; two seconds before it went, Mei
+    wandered under the drop and Umi hauled the wire clear and wrecked her own trick, which nobody saw except him,
+    and she denied it flatly." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@umi_6') { _%>
+@umi_6  So Easy (Umi) ·6   (CHECK - · no payout)
+  DO  THE SPOON. The disused club room at the end of the science corridor, a week on, after the last bell. The
+    door is not locked, which it always is. The light is off. Umi Hanyu is sitting on the floor with her back
+    against the wall and has been there some time.
+    ⚠ WHAT THIS BEAT IS ABOUT ALREADY HAPPENED, AND THIS IS THE AFTERMATH OF IT. Umi built the ghost in this room.
+    The speaker in the cavity behind that wall is hers, the torch is hers, the voice was hers. The plan was to get
+    Mei Hanamori in here on her own and frighten the most frightenable girl in the year badly enough that she ran,
+    and it was a good plan, very well made.
+    Mei sat down on the floor and asked the ghost whether it was lonely in there.
+    And then Mei told the wall that everyone is good underneath even when the outside is scary, and that Umi is
+    like that too, and that Umi is her friend — said to a wall, in the dark, by somebody with no conceivable
+    reason to be performing it, because as far as Mei was concerned there was nobody in the room to hear it.
+    On the floor beside Umi there is a pudding cup. There is also a spoon.
+    ⚠ AND THE SPOON IS THE ENTIRE BEAT, AND SHE HAS ONLY JUST WORKED IT OUT. A ghost does not need a spoon. Mei
+    carried two of everything into a room she had been told was haunted, left the second set against the wall, and
+    walked out without ever once saying who she thought was in there. She knew. She knew the whole time, and she
+    said "she's my friend" anyway, out loud, to a wall, about somebody who had spent a fortnight trying to make
+    her cry.
+    {{user}} opens the door, because the light is off and that door is never unlocked.
+    Umi Hanyu — Hagaruro 70, never caught with anything at all on her face, the girl who has an answer ready
+    before you have a question — is sitting on the floor of a dark room holding a pudding cup she has not eaten,
+    and her face is wet, and the recovery she produces is the worst of her career:
+    "It's dust. This room's disgusting. Obviously."
+    ⚠ HE DOES NOT ASK ABOUT THE CUP. Not now, not obliquely, not ever. He comes in, sits down against the same
+    wall about a metre away, says something unimportant about the state of the room, and stays there until she has
+    finished not crying. She does not thank him. He does not wait to be thanked. The cup goes into her bag when
+    she leaves and she takes it with her.
+    Crack: somebody called her a friend when there was no possible reason to, and she cannot file it anywhere,
+    because her filing system has exactly two drawers and they are marked LANDED and DIDN'T. Score: she didn't
+    keep one. No H.
+  FIRE  emit /Intent/eventFire "umi_6" → engine advances the Umi quest to Step 6. No payout on this beat. This is
+    the AFTERMATH of mei_6 and it is written to stand whether or not that beat has played: if the player has
+    already seen the ghost room from Mei's side, this is the other half of it; if not, it plays as a thing that
+    happened off-screen and is being discovered here. Mei is NOT present, NOT required and NOT built. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} found Umi sitting on the floor of the dark club room where she
+    had built the ghost, holding the pudding cup Mei had left for it and the spoon that came with it, having
+    finally worked out that Mei knew who was in the wall and called her a friend anyway; she said it was dust, and
+    he sat down against the same wall and never asked about the cup." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@umi_7') { _%>
+@umi_7  So Easy (Umi) ·7   (CHECK - · REWARD Umi Affection +20 · THE TURN)
+  DO  THE BEST ONE. The roof, a week on, after the last bell, and Umi Hanyu has spent the entire week building
+    something.
+    ⚠ THIS IS HER MASTERPIECE AND IT MUST ACTUALLY LAND. Not a near miss, not a partial. It works. Three stages
+    deep, it uses something {{user}} mentioned about himself at a lunch table weeks ago and has long since
+    forgotten saying, and it has a false ending she built specifically because he is the only person who has ever
+    looked for one — and when it resolves he is comprehensively, completely had.
+    She has also, without examining why, arranged for it to happen with nobody else on the roof. Her best work,
+    and no audience at all. She has never done that in her life.
+    He laughs. Properly — caught, and enjoying being caught, and saying so.
+    And Umi Hanyu wins, and it is the worst feeling she has had all term.
+    ⚠ THIS IS THE ENGINE OF THE ENTIRE CHARACTER AND THE BEAT EXISTS TO PUT IT ON THE PAGE. A trick that LANDS is
+    over. The bit is finished, the reaction has been collected, the transaction has closed, and the mark is now
+    free to walk off laughing — which is what every single person has done, every single time, for eighteen years
+    and several hundred tricks. She has built the best thing she has ever built and all she has bought with it is
+    an ending.
+    She is already turning away, already halfway into the loud dismissive exit, when {{user}} says: "That was a
+    good one. How'd you build it?"
+    And she stops, and she has to put a hand on the railing.
+    "...What?"
+    "Three stages. And the false ending. How long did that take you?"
+    ⚠ HERE, AND ONLY HERE, THE MASK IS PERMITTED TO COME OFF. Her Affection finally allows it and it does not come
+    off gently — a mask that has been on since she was small does not slide, it cracks, and there is something
+    underneath that has never had air on it.
+    "Why do you keep coming BACK?" No performance in it at all, much too fast, about an octave off her usual
+    register. "Everyone else gets it over with. You're supposed to laugh and go. You're supposed to — why do you
+    keep ASKING for more of them —"
+    "Because you keep coming back."
+    Silence, on a roof, with the whole town going on underneath it.
+    She does not have a recovery for this. She starts about three and abandons all three. In the end she sits down
+    on the concrete with her back to the railing, next to him, and tells him how she built it — all of it, for
+    twenty minutes, faster and faster, the thread gauge and the timing and the two versions she threw away — and
+    it is the first conversation she has had in her life in which the trick was not the point of the conversation.
+    Crack: the real one. Her whole system is engineered around the moment a person leaves, and it has never once
+    occurred to her to build anything for the moment they don't. Score: she forgot to write it down. No H.
+  FIRE  emit /Intent/eventFire "umi_7" → engine advances the Umi quest to Step 7 and pays the beat: Umi Affection
+    +20, applied by the row. Do NOT also emit an affection change for this beat. This is the first beat in the
+    series where her Hagaruro 70 mask may drop — before this one it never does, and every warmth is covered inside
+    the same breath. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Umi's masterpiece landed on {{user}} completely, three stages and a false
+    ending, and winning was the worst feeling she has had, because a trick that lands is over and the mark walks
+    away; he asked how she had built it instead, and she asked why he keeps coming back and he said because she
+    does, and she sat down and told him how it worked for twenty minutes." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@umi_8') { _%>
+@umi_8  So Easy (Umi) ·8   (CHECK - · no payout)
+  DO  SORRY, IN HER LANGUAGE. The classroom after the last bell, a week on, nearly empty, and Umi Hanyu is doing
+    something elaborate to Mei Hanamori's desk.
+    ⚠ AGAIN, THE THING THIS BEAT IS ABOUT ALREADY HAPPENED, AND {{user}} WAS IN THE ROOM FOR IT. Umi ran out of
+    tricks on Mei and said the true thing instead: that everybody is only nice to her because she is a child. It
+    is the cruellest thing Umi has ever said to anybody, and it is the only thing she has ever said to Mei that
+    got through. Mei went quiet, thought about it for a very long time, and answered "children don't decide. I
+    decided." And then she came after Umi with a pudding, because Umi had looked upset.
+    He was by the window. He saw all of it. He has not mentioned it since, and she knows he has not mentioned it
+    since, and that is load-bearing.
+    ⚠ SO THIS IS AN APOLOGY, AND IT IS BUILT AS A PRANK, BECAUSE SHE DOES NOT POSSESS ANOTHER GRAMMAR FOR ONE. The
+    rig on the desk is elaborate. It is also — and {{user}} can see this from the doorway, and the prose should
+    let him see it without saying so — not a prank at all. It is a gift wrapped in a prank, because a gift handed
+    over directly would require her to say a sentence she cannot say. There is a thing inside it that Mei has
+    wanted. It will take Mei about four minutes to get to it, every one of those minutes is a joke at Mei's
+    expense, and every one of those jokes is affectionate, and the whole apparatus is the only apology Umi Hanyu
+    has ever constructed in her life.
+    Mei arrives. Mei goes through all four minutes. Mei laughs at every single stage, loudly and genuinely, and
+    gets to the thing at the end of it.
+    And then Mei — who does not do subtext, who has never done subtext, who takes every sentence at precisely its
+    face value — turns round and says: "Thank you, Umi-chan. That was a really good one."
+    No subtext. None. Not a flicker. She has not read the apology, because she was not reading for one.
+    Umi stands there with her mouth open.
+    "...She didn't get it," she says to {{user}} afterwards, out in the corridor, and there is something wrong
+    with her voice.
+    "She didn't need it."
+    ⚠ AND THAT IS THE ONE THAT TAKES HER APART, SO GIVE IT ROOM. She has been carrying a debt for a fortnight. She
+    built a machine to discharge it, because she has no words for the job. And the person she owed it to never
+    opened an account — Mei did not forgive her, because Mei never charged her, because Mei decided about her on
+    the floor of a dark room and has not revisited the decision since.
+    "She's the only one who ever—" Umi says, and does not finish it, and does not try again, and walks the rest of
+    the corridor without saying anything else.
+    Crack: her language has a word for landing and a word for failing and no word whatsoever for somebody who was
+    never keeping score. Score: Mei doesn't keep one. No H.
+  FIRE  emit /Intent/eventFire "umi_8" → engine advances the Umi quest to Step 8. No payout on this beat. This is
+    the AFTERMATH of mei_8 and stands whether or not that beat has played. Mei Hanamori appears and is NOT
+    required and NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Umi rigged Mei's desk with an elaborate four-minute prank that was really
+    a gift wrapped in one, because an apology is a sentence she cannot say; Mei went through all four stages
+    laughing and thanked her for a really good one with no subtext at all, and {{user}} told her Mei had never
+    needed the apology, which took her apart." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@umi_9') { _%>
+@umi_9  So Easy (Umi) ·9   (CHECK - · no payout · THE BREAK)
+  DO  THE ONE THAT FAILED. Morning, before the bell, a full classroom — and a fortnight of roofs and dark rooms
+    has left Umi Hanyu feeling like something she has no word for, so the obvious cure is to prove in public that
+    she can still make {{user}} lose his composure.
+    ⚠ THE TRICK IS FIXED AND SPECIFIED. BUILD IT EXACTLY AS WRITTEN AND DO NOT INVENT A DIFFERENT PRANK. A spare,
+    unfastened bra is folded into a paper sleeve taped just inside the front neckline of her camisole. A false
+    hoodie drawstring runs through a small guide loop in her hoodie collar and is tied to that spare bra. Her own
+    bra and camisole stay on throughout and are never in play at any point.
+    ⚠ THE INTENDED SEQUENCE, WHICH IS WHAT MAKES THE FAILURE LEGIBLE. {{user}} gives what he believes is her
+    hoodie string one short pull. The spare bra comes out through her neckline. She lets one shoulder of the
+    hoodie slip and says, sharply, "Wrong string." For one second he believes he has just pulled a girl's bra off
+    her in a full classroom — and the reaction she is buying is him dropping the cord, recoiling, looking away and
+    apologising much too loudly, so that thirty people get to watch the one boy in the school panic about what he
+    appears to have done.
+    ⚠ THE BODY IS THE MISDIRECTION, NOT THE PUNCHLINE. She leans over his desk to put the cord in his hand, close,
+    deliberately making him conscious of her neckline and of where he is looking — because a boy busy managing his
+    own eyes is a boy not tracing where a cord actually goes. The whole thing runs on his attraction to her and on
+    his fear of appearing to have undressed her on purpose.
+    The class has never seen this half of her repertoire. There has never been a target for it in this building
+    before. And she is nervous, which is new, and for which she has no procedure.
+    So she added extra tape, to stop the folded bra working loose before her cue. Which means it no longer slides
+    out of the sleeve at all.
+    "Hold this. Little tug when I say."
+    He takes the cord.
+    She steps back to give herself room for the flourish. Too far. The slack runs out before she has finished
+    arranging the hoodie.
+    ⚠ THE FAILURE, IN ORDER, AND EVERY STEP OF IT IS VISIBLE FROM THE ROOM. The bra jams in the sleeve. The
+    sleeve's mounting tape peels off her camisole instead. The entire paper-wrapped bundle comes out in one piece.
+    She catches it. The sleeve splits along its taped seam, so she is standing there with a spare bra and half a
+    paper wrapper in one hand and the other half in the other, hoodie off one shoulder, the folded bra still
+    plainly attached to its homemade packaging. No removal. No exposure. No startled boy. Just a girl holding the
+    dismantled machinery of a joke that did not happen.
+    ⚠ AND THE ROOM LAUGHS AT HER, NOT WITH HER. Those are different sounds and she can tell them apart from the
+    other end of a building. Somebody near the window says "did that even DO anything?" Sui Mizushiro is in the
+    doorway with her arms folded. This is the precise event she has organised her entire life around preventing.
+    Umi looks at {{user}}. He is looking at the broken rig. Then at her. He has understood all of it, and she
+    knows that he has.
+    ⚠ ALLOW ONE EXPOSED BEAT HERE, WITH NOTHING ON HER FACE TO COVER IT.
+    ⚠ AND THEN HE SELLS THE REACTION SHE WANTED. He drops the cord. The chair goes back hard. A hand over his
+    eyes, turning away, far too loud: "SORRY—! I THOUGHT THAT WAS YOUR HOODIE STRING!" Thoroughly flustered,
+    entirely convinced he has just done something mortifying. It arrives a beat late — late enough to be a
+    decision rather than a reflex — and it is not subtle, and it is not meant to be.
+    The laughter catches, and changes direction. The room has already watched the mechanism break; now it has the
+    one boy in the school apparently panicking over a bra that came out still wrapped in paper. Even that disaster
+    was enough to get him. That is what they laugh at, and what they are laughing at is him.
+    ⚠ DO NOT LET UMI CLAIM THE WIN. She does not announce that he fell for it. She does not find a comeback. He
+    has taken the room off her, and she is left standing there holding the evidence of why he had to.
+    ⚠ SUI SAW IT TOO. Morals 80, Elegance 82, and she misses nothing: she looks at {{user}} for about one second
+    too long, and then says nothing at all, to anybody, ever. Do NOT give her a line. The glance is the whole of
+    it, and it is the most approving thing Sui Mizushiro has ever aimed at another person.
+    Afterwards, out in the corridor, Umi has hold of his sleeve and is not looking at him.
+    "You didn't have to do that."
+    "I know."
+    ⚠ AND THERE IS NO RECOVERY THIS TIME. No laugh, no shove, no "don't get ideas". Nobody has ever taken a fall
+    for her. She has spent her whole life making sure the person who ends up looking stupid is somebody else,
+    because she has always assumed that is the only alternative to it being her — and it has just been
+    demonstrated in front of thirty witnesses that a third option exists and that a person might choose it. She
+    has no face to put on for this. She puts on none, and keeps hold of the sleeve.
+    Crack: the break, and it is not being beaten at her own game. It is being covered in it. Score: he took the
+    point on purpose. No H.
+  FIRE  emit /Intent/eventFire "umi_9" → engine advances the Umi quest to Step 9. No payout on this beat — being
+    covered is what breaks her, and a payout would price it. The rig above is FIXED: it is written out step by
+    step because the beat turns on a specific mechanical failure, and a substituted prank breaks the whole thing.
+    Sui Mizushiro is in the doorway and is NOT required, NOT built and has NO dialogue. (No day-end swing — CHECK
+    is none.)
+    THEN emit /Intent/recordEvent "save|Umi ran a trick on {{user}} in front of the whole class - a false hoodie
+    drawstring tied to a spare bra hidden in her neckline, so that one pull would look to the room like he had
+    undressed her - and the extra tape she added because she was nervous made it jam, so the whole paper-wrapped
+    bundle came out in one piece and the room began laughing at her; he took a beat, understood exactly what it
+    was, and then sold the panic the trick had been built for, and the laughing turned onto him instead, and Sui
+    saw him do it and said nothing." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@umi_10') { _%>
+@umi_10  So Easy (Umi) ·10   (CHECK - · REWARD Umi Affection +20 · FINALE)
+  DO  WHAT'S NEXT. The shoe lockers at the end of the day, a week on, and somebody is leaning on the locker that
+    belongs to {{user}}, in exactly the spot she was standing in the first afternoon, with the same grin arriving
+    before she does.
+    ⚠ SHE IS RUNNING BEAT ONE AGAIN, DELIBERATELY, BEAT FOR BEAT, AND SHE HAS REHEARSED IT. Same locker. Same
+    hour. Same pretext, word for word: "Hold still, you've got something on your face." Same hoodie pulled wide
+    before he got there. Same bend from the waist, same gaping collar, same four seconds too long.
+    "...You LOOKED."
+    "Yes."
+    ⚠ AND THIS TIME SHE DOES NOT SAY "SO EASY". The colour comes up her neck and into her face and stays there,
+    and Hagaruro 70 does not save her, because there is nothing left to perform at somebody who already knows.
+    "...It's fine." Much quieter. Not looking at him. "You can look. It's — it's okay to look at my body." A pause
+    that goes on slightly too long, and then, all in one breath and about half an octave up: "Just... not other
+    girls'!"
+    ⚠ THAT IS THE LOUDEST THING THIS CHARACTER HAS EVER SAID AND SHE SAID IT WITH HER EARS RED. It arrives in the
+    only grammar she owns, which is the grammar of a tease, except that there is no tease anywhere in it.
+    Then, still refusing to look at him, she says the true thing — and she says it the way she says everything,
+    sideways, as a remark about somebody else.
+    "Two people stay after the trick." She examines the locker door with enormous attention. "One of them brings
+    pudding."
+    ⚠ DO NOT UNPACK THAT LINE. It is her entire secret and the whole series in eleven words: two, out of a school
+    full of girls and several hundred tricks. Nobody says Mei's name. Nobody explains what the pudding is. The
+    narration does not gloss it and {{user}} does not ask.
+    And then he hands her back the question from the first afternoon.
+    "So. What's next, Ms Little Devil?"
+    ⚠ AND SHE GOES ABSOLUTELY SCARLET, AND THAT IS THE LAST IMAGE OF THE SERIES. The girl who has spent eighteen
+    years making other people's faces do things has just had her own done to her, twice, inside ninety seconds, by
+    somebody using her own material on her. She swears at him. She shoves him into the lockers, not hard. She does
+    not leave, and she does not have an answer, and for the first time in her life not having an answer is not a
+    problem she needs to solve.
+    Crack: she has a name for herself now and somebody else gave it to her, which makes it the first thing she has
+    ever been called that she did not have to say about herself first. Score: nobody's counting. No H.
+  FIRE  emit /Intent/eventFire "umi_10" → engine advances the Umi quest to Step 10, marks the series COMPLETE, and
+    pays the beat: Umi Affection +20, applied by the row. Do NOT also emit an affection change for it. If the
+    payout carries her past 100 the rank-up lands at her next gate — a check on her, or the day's swing — one rung
+    a day is the game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Umi ran the shoe-locker trick from the first afternoon again word for
+    word, and when {{user}} said yes he looked she went scarlet and told him it is okay to look at her body, just
+    not other girls'; then she said that two people stay after the trick and one of them brings pudding, and he
+    handed her own question back as 'so what's next, Ms Little Devil', and she went scarlet again." → the World
+    Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

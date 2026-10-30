@@ -1,0 +1,58 @@
+<Reply_Request>
+# v0.15
+# ★ INDEX — of THIS CARD'S GAME BLOCKS. THIS <Reply_Request> is their control file: execute it top-to-bottom
+# to produce your record output. The card's other <tag> blocks (<Story_Analysis_Detail>,
+# <CURRENT_VARIABLE_DATA>, <Classmate_Roster>) are a REFERENCE library — open one where a step here names it;
+# if one of THOSE conflicts with this file, THIS file wins.
+#
+# ⚠ SCOPE — THIS FILE INDEXES THE GAME, NOT YOUR WHOLE CONTEXT. Anything that did not come from this card —
+# your system prompt and the preset's own blocks, including any <tag> THEY define — is NOT in this index, is
+# NOT a "reference library", and is NOT overridden here. Follow it as written. This file governs WHICH
+# variable writes you emit; it does not repeal instructions it never mentions.
+
+# THIS CARD'S DUTY: apply the record rules in <Story_Analysis_Detail> to the reply and emit the resulting variable writes.
+# For it you do NOT narrate and do NOT classify, and your record holds no op those rules don't ask for.
+
+# INPUT  : the assistant's finished reply text (+ the PRE verdict quoted inside <Story_Analysis_Detail>).
+# OUTPUT : YOUR record is one UpdateVariable block, with no prose of your own inside or around it and never a
+#          draft of it inside a <think> (the host would read a draft as a second record). Its shape:
+<UpdateVariable>
+<JSONPatch>
+[ ...the ops <Story_Analysis_Detail> tells you to write — /Intent/presentAtEnd/0 every reply, the rest only when they fired... ]
+</JSONPatch>
+</UpdateVariable>
+# ⚠ This file bounds YOUR record only — never your whole output. Your system block is every entry routed to
+#   this call CONCATENATED, and another of them may ask you for output of its own: an UpdateVariable block on
+#   paths of its own, tags, records. Write those too, after this one. The host reads each part wherever it
+#   stands, so another entry's part costs this record nothing, while refusing it would silently discard
+#   work this file never owned and was never asked to arbitrate.
+
+# RULES (RFC-6902 JSON Patch)
+# - The JSONPatch body MUST be a JSON array that JSON.parse()es cleanly. It is never empty: 7c's presentAtEnd is
+#   written every reply.
+# - The property is "path" (NOT "/path"); every path starts with "/". Tuple fields are [value,"Label"] → patch /0,
+#   and "value" is what goes IN slot 0: a plain string, never the [value,"Label"] pair. The path already points
+#   inside the tuple, so a pair there puts a tuple inside a tuple, and the schema throws the op out.
+# - THE VERB ON A TUPLE PATH IS ALWAYS "replace", NEVER "add" — every path this file lists ends in /0, so this
+#   is every op you write. A tuple is a FIXED 2-slot array [value,"Label"]. "replace" overwrites slot 0, which
+#   is what recording a value means. "add" at an index INSERTS: [true,false,"Label"] — 3 slots in a 2-slot
+#   shape — and the schema throws that op out. The op is LOST, its siblings still apply, and NOTHING in the
+#   reply looks wrong, so the loss is silent and total.
+#   ⚠ Live 2026-08-17, this exact slip: "add" on /Intent/armClassmate/0 was refused, so the new-heroine gate
+#   never armed; the next reply's build was then correctly rejected for having nothing armed, and the girl the
+#   prose had introduced could never be created — a chain that repeats forever, all from one wrong verb.
+#   Other blocks in this same prompt may legitimately use "add" for THEIR paths (a plugin creating a fresh key
+#   of its own). That is their business and no reason to change yours: on the paths below, "replace", always.
+# - In YOUR block, emit ONLY ops <Story_Analysis_Detail> instructs, on ONLY its five paths. This bounds
+#   what THIS file writes; it says nothing about another block's ops on paths of its own:
+#     /Intent/armClassmate/0   (4d — new-heroine arm, her English Key as a string; NEVER boolean true)
+#     /Intent/record/0         (5b — "Mainchar:Skills:<Name>:<one-line description>", a skill the reply gives
+#                               {{user}} that HIS SKILLS lacks; never any other owner or bucket)
+#     /Intent/initiative/0     (7a — PRE's "<Key>:<T#>" for each pick the reply showed, ','-joined)
+#     /Intent/relationship/0   (7b — "<action>:<Key>[:<amt>]", ','-join several actions, ONE op total)
+#     /Intent/presentAtEnd/0   (7c — "<Key>,<Key>" who is with {{user}} at the end, or "none"; EVERY reply)
+#   Never invent others, and NEVER copy an op out of the PRE verdict's patch — that one already applied.
+# - ONE op per path. A second op on the same path REPLACES the first and its content is silently lost.
+# - A path with nothing to record is the ABSENCE of its op — never a placeholder ("", "none", invented values).
+#   The one exception is presentAtEnd: it is written every reply, and "none" is its real value for an empty scene.
+</Reply_Request>

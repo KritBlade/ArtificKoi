@@ -1,0 +1,98 @@
+<Update_Analysis_Detail>
+# v0.45
+# WINDOW: narrate — in the narrator's prompt (unrouted).
+# WHAT to write into UpdateVariable. DECIDE-side policy is NOT here — social checks are PRE-resolved (transcribe
+# ## SOCIAL CHECK RESULT per <Reply_Request> <combat_log>) · H → <Intimacy_system> · initiative → <Initiative_system>.
+
+[5a — NEW CLASSMATE: build (RESOLVE) — runs ONLY on a build signal from <Story_Analysis> step 4]
+IF your prompt shows "BUILD MODE — NEW HEROINE PENDING: <Key>", OR a "NEW HEROINE NOT BUILT YET" note under her
+<character> card whose rule says build, OR {{user}} typed [ooc: add classmate <name>] this reply:
+  GATE — before you build her, print <classmate_trait_check> and say each line OUT LOUD, point by point. This gate CANNOT be
+  skipped; building before passing it is an INVALID reply.
+    1) PENDING: name the girl + her Key, COPIED from the banner or the note. For [ooc: add classmate <name>] with
+       no <character> card, the Key is set per <Classmate_Guide> [NO CARD].
+    2) PROFILE PROOF: QUOTE her <character> card's TRAITS line VERBATIM
+       (STA|INT|CHA|PRI|MOR|ELE|SOC|KIN|HAG). This is the proof her profile is actually in context.
+       • You CAN quote it  → write "Profile loaded: YES" → BUILD (step a below).
+       • {{user}} typed [ooc: add classmate <name>] and NO <character> card for her is in your prompt → write
+         "Profile: INVENTED — {{user}}'s command" → BUILD (step a), inventing her per <Classmate_Guide> [NO CARD].
+       • Otherwise you CANNOT find/quote it → write "Profile loaded: NO" → DISARM: the disarm is these two ops —
+         replace /PendingState/AddClassmate/0 = "" AND replace /PendingState/AddClassmateArmedAt/0 = -1
+         (both, always: the pair IS the closed state; clearing one leaves the gate armed). Do NOT invent or
+         reconstruct her from the scene or her appearance. STOP — nothing else this step.
+  BUILD (ONLY when "Profile loaded: YES" or "Profile: INVENTED"):
+    a. emit ONE replace op on the CONTAINER path /Intent/newClassmate (it already exists as {}) = an object KEYED by
+       her English Key; each value = a flat object copied VERBATIM from her <character> card (or, INVENTED, filled
+       per [NO CARD]), exactly per <Classmate_Guide> (key, Name, Persona, body lines, the 9 TRAITS + M_level, Hobbies…).
+       Code fills the rest (RelationshipStage Acquaintance, Affection 0, Is_present true, NSFW defaults…).
+       ⚠ Do NOT use op "add" / a sub-key path /Intent/newClassmate/<Key> — MVU REJECTS adding a new key into the
+       record (it is non-extensible); "replace" the whole container instead (same rule as <Classmate_Guide> / <COT_Guide>).
+       ⚠ MULTIPLE heroines pending this reply → put EACH as her own Key inside that ONE object
+       { "<KeyA>": {…}, "<KeyB>": {…} } — code (RES) loops over every entry.
+       (Skip any heroine already in <CURRENT_VARIABLE_DATA> — do not rebuild her.)
+    ⚠ NEVER write /PendingState/AddClassmate here. Code closes the gate itself once every pending entry is
+       handled, and it is the only writer that can: it sees which builds actually landed, so a girl still waiting
+       on her profile (you built <KeyA> this reply, <KeyB>'s <character> card has not loaded yet) keeps BUILD MODE
+       armed with no decision from you. A clear emitted here rides the SAME block as your build and lands BEFORE
+       code reads the gate — it cancels the very build it accompanies, and the record is discarded.
+NO banner, NO note saying build, NO [ooc: add classmate] → SKIP this step entirely; nothing to build.
+
+[EMIT FORMAT — these ops go in the SAME UpdateVariable block as your /Intent/* writes; see <Classmate_Guide> for the full object]
+[
+  { "op": "replace", "path": "/Intent/newClassmate", "value": { "<EnglishName>": { "key": "<EnglishName>", "Name": "<displayName>", "Persona": "<archetype>", "...": "...copy her card per <Classmate_Guide>..." } } },
+  // ↑ ONE op on the container; 2+ pending heroines = 2+ Keys inside this SAME object (never separate add ops)
+  // ↑ and that is the WHOLE build — one op. No gate op belongs in this block; code closes the gate.
+]
+
+[5b — RECORD SWEEP: scan the FINISHED prose; each hit → one /Intent op (formats → <COT_Guide>). Miss = it never happened.]
+· ★ H BOUNDARY (CHECK THIS FIRST) — sustained or escalating sexual contact in the finished prose: which op it takes
+    ("enter", this beat's /Intent/hact, or "exit") is <Reply_Request> UpdateVariable ★ H-LATCH GATE and ★ H-EXIT GATE.
+· SCENE LOCATION — EVERY reply, where did the prose END? → /Intent/location/0 "Area_Venue;label:<the venue's name as
+    your prose calls it>" — key from <Location_List>, format → <COT_Guide>. Report it even when the scene stayed put: it
+    is an observation, and the engine compares it with ## NOW's Location — a different venue writes World.Location and
+    moves every present heroine with the scene. Missed on a move, the 📍 bar, the venue's open/closed bracket, its H
+    privacy tier, and EventPack Loc= triggers all keep resolving against the room he LEFT. Prose that walks through
+    several venues → report the one it ENDED in.
+· PRESENCE — did anyone JOIN the scene? That is yours to report.
+    JOINED — a girl who was off-scene is with him when the prose ends: she came to him (a visit, a date she kept, she
+    turned up), he went to where she is, or they ran into each other → /Intent/arrive/0. MANDATORY, else she stays
+    off-scene while your prose has her here: the engine keeps moving her on her own schedule, and the scene move,
+    voice and images all leave her out. She dropped by and left within this reply → /Intent/arrive alone.
+    LEFT needs no op: who is still with him when the reply ends is read off your finished prose.
+· MONEY — did MainChar spend or earn OUTSIDE the weekly payday (a purchase / gift / part-time / found cash)?
+    → /Intent/money/0 "<signed int>". RES does Money += delta (floors at 0).
+· FRIENDS — did two NAMED characters interact DIRECTLY (talk / help / flirt / ARGUE — a hostile clash COUNTS, it's a
+    tracked relationship)? → /Intent/friends/0. RES writes the MUTUAL web + each side's Mood toward the other. MUTUAL only
+    if BOTH are roster girls (else the A-side tracks the NPC). Co-presence with NO exchange → nothing.
+· PROFILE / GEAR — did the story CHANGE a stable profile fact (nickname/title, occupation, hair, a revealed Secret),
+    or GAIN/LOSE an item/hobby? → /Intent/record/0 (val "0" REMOVES an entry). {{user}}'s own skills are
+    recorded after the reply from your page — never write "Mainchar:Skills". PROBE PAYOFF: a WON Probe check's
+    uncovered fact is ALSO recorded here (usually Secret / Biography).
+· WORLD LOG — did something genuinely MEMORY-WORTHY happen to the world (a significant event, or a fact that OVERRIDES
+    base lore)? → /Intent/recordEvent/0 "scope|summary". scope = arc (this loop; clears at graduation) | save (permanent
+    canon, survives the TIME-LEAP — lasting lore overrides). RARE — never routine beats.
+· NPC — did a NON-classmate character appear who will RECUR (rival / teacher / family / crossover)?
+    → /Intent/recordNPC/0 "Key|Name|Relationship". RARE — never one-scene extras; a heroine is built via 5a, not here.
+· QUEST (AD-HOC route) — scan the page you JUST WROTE for an observable commitment event, ANY of: a promise
+    SPOKEN aloud · an invitation or request ACCEPTED · a deadline/date NAMED for something not happening now ·
+    a goal STATED that this scene cannot finish · {{user}} AGREED to obtain/deliver/find a named thing.
+    FIRE ONLY IF the reply ENDS with that obligation still OPEN — asked and fulfilled (or refused) inside the
+    same scene leaves nothing open, so NO quest, however loud the ask. Then /Intent/quest/0
+    "add:<key>:<Title>|<Desc — fixed one-line summary>|<Objective — step 1 ONLY>|<Target>|<Difficulty>[|<RewardStat>][|<Reward prose>]".
+    Title is MANDATORY — it is the quest's headline on the status menu, and an add with a blank Title is
+    REFUSED whole (nothing is created), so never leave it blank. GRADE Difficulty by scope: C = an errand, a day or two · B = a week-ish effort · A = a term-long
+    commitment · S/SS = arc-defining (rare) — the engine stamps the step count from it (C=3 · B=4 · A=5 ·
+    S=8 · SS=10) and pays every reward number. Do NOT pre-plan the middle steps: invent each ONE at a time
+    via "progress:<key>:<next objective>" whenever the page shows a step finished (finished = your read of
+    the prose); the LAST step is always the payoff the Title names. Objective met → "complete:<key>" (the
+    ENGINE computes the reward — never you). (SEPARATE from this sweep: the spine-day DAY SIGNPOST is
+    engine-opened and ## DAY OBJECTIVE in <CURRENT_VARIABLE_DATA> orders its rewrites on its own.)
+    NOT an @Event series — those are engine-owned, never touch them.
+
+[5c — RELATIONSHIP FALLOUT: ★ POST-OWNED — YOU NEVER EMIT /Intent/relationship/0]
+WRITE the rupture/mend as fiction — the fight, the hurt, her walking off, the apology accepted — and emit
+NOTHING on /Intent/relationship/0: the POST record pass reads your finished prose and writes the fallout record
+itself — the grading bands live there with the job. An emit from you warns and is DROPPED by the engine:
+the channel has one writer and it is not you. What still IS yours here: {{user}} apologizing is a Repair CHECK
+(PRE resolves it; a WON Repair clears her conflict via code) — never route an apology as bare mundane.
+</Update_Analysis_Detail>

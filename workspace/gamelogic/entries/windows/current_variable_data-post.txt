@@ -1,0 +1,69 @@
+<%_
+  // v0.10
+  // ============================================================================
+  // EJS3 — the [POST] <CURRENT_VARIABLE_DATA> view. Rendered by mvu-helper (via
+  // globalThis.EjsTemplate) at POST-call assembly, AFTER RES1 has resolved — so it
+  // reads the POST-narrate / post-RES1 stat_data. Its jobs: feed the cheap POST
+  // (record) model the CURRENT roster so it stops arming AddClassmate for heroines
+  // who ALREADY EXIST, the per-girl stage/conflict lines the P7 record passes
+  // (7a initiative confirm · 7b relationship fallout) grade against, and {{user}}'s
+  // held skills, which 5b compares a skill the reply gives him against.
+  // WHO IS PRESENT IS DELIBERATELY NOT SHOWN. 7c reports who is with {{user}} at the end, read off the prose,
+  // and the engine compares that with Is_present; a model shown Is_present copies it, and the comparison then
+  // checks the state against itself. The present list stays in the gated trace below, for the developer.
+  // Convention mirrors EJS2 (current_variable_data.txt): getvar('stat_data') whole
+  // object, V() unwraps [value,"Label"] tuples, skip() drops meta keys.
+  // ============================================================================
+  let _ok = true, _roster = '', _present = '', _rel = '', _heldSkills = '';
+  try {
+    const V = (t) => (Array.isArray(t) ? t[0] : t);
+    const skip = (k) => (k === '$meta' || k === '$key' || k === 'template');
+    const sd = getvar('stat_data') || {};
+    const CM = sd.Classmate || {};
+    const keys = Object.keys(CM).filter((k) => !skip(k));
+    const present = keys.filter((k) => V(CM[k] && CM[k].Is_present) === true);
+    _roster = keys.map((k) => k + ' (' + (V(CM[k].Name) || '?') + ')').join(' · ') || '(none)';
+    _present = present.join(' · ') || '(none)';
+    // P7 — the 7a/7b record context: stage + live conflict per girl, POST-RES1 state. "Conflict CLEARED"
+    // matters to 7b's reconcile rule (a WON Repair already cleared it via code → POST records nothing);
+    // the stage names which structural moves are even possible for 7b's demote judgment.
+    _rel = keys.map((k) => k + ': ' + (V(CM[k].RelationshipStage) || '?') +
+                   (V(CM[k].ConflictActive) === true ? ' · IN CONFLICT' : '')).join('\n') || '(none)';
+    _heldSkills = Object.keys((sd.Mainchar || {}).Skills || {}).filter((k) => !skip(k)).join(' · ') || '(none)';
+
+    // PIPELINE TRACE (gated) — the same gate as the narrate view (current_variable_data.txt): mvu-helper's
+    // `pipeline` debug switch, read by name through MvuHelper.settings. Silent when the extension is absent or
+    // older than MvuHelper.settings, or the switch is off (guarded + try-wrapped), so a standalone card never
+    // logs and never breaks.
+    const _isTracing = !!(globalThis.MvuHelper && globalThis.MvuHelper.settings && globalThis.MvuHelper.settings.get('debug.pipeline') === true);
+    // Second gate — trace ONLY during a real POST assembly, so ST-Prompt-Template's page-load
+    // "*** PRELOADING WORLD INFO ***" re-render of this entry stays silent. The narrate view gates on
+    // mvuHelperIsGenerationInFlight, which cannot work here: the POST call is mvu-helper's own extra LLM call,
+    // run after GENERATION_ENDED, when that marker is already false. The signal is mvu-helper's extra-call
+    // render marker, a number above 0 while an extra-call render runs. An absent marker (no mvu-helper) leaves
+    // it true — the `_isTracing` gate is false in that case anyway.
+    const _depth = globalThis.mvuHelperExtraCallRenderDepth;
+    const _inFlight = typeof _depth === 'number' ? _depth > 0 : true;
+    if (_inFlight && _isTracing) {
+      const _inConflict = keys.filter((k) => V(CM[k].ConflictActive) === true).join(' · ') || '(none)';
+      globalThis.MvuHelper.log.child('EJS3').domain('pipeline', 'lifecycle', '→ POST | roster/exists=' + _roster + ' | present=' + _present + ' | inConflict=' + _inConflict + ' | heldSkills=' + _heldSkills);
+    }
+  } catch (_e) { _ok = false; globalThis.MvuHelper.log.child('EJS3').error('render failed:', _e); }
+_%>
+<CURRENT_VARIABLE_DATA>
+<%_ if (_ok) { _%>
+## ALREADY BUILT — these heroines EXIST in the save (do NOT arm AddClassmate / record newClassmate for them)
+<%- _roster %>
+
+## STAGE & CONFLICT (7a/7b context — the state AFTER this reply's checks resolved)
+<%- _rel %>
+
+## HIS SKILLS ({{user}}'s recorded skills — 5b records a skill the reply gives him that is NOT here)
+<%- _heldSkills %>
+
+Only arm a NEW classmate whose Key is NOT in the ALREADY BUILT list above. A girl the panel shows
+WITHOUT "IN CONFLICT" whose fight the reply resolved = code already cleared it — record no reconcile.
+<%_ } else { _%>
+(current state unavailable — do NOT arm any classmate this turn)
+<%_ } _%>
+</CURRENT_VARIABLE_DATA>

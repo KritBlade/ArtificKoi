@@ -1,0 +1,461 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@nene_') === 0
+<%_ /* v1.2 */ _%>
+<%_ /* The ten @nene_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @nene_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@nene_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nene_1') { _%>
+@nene_1  Still (Nene) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  SWEPT AROUND. The classroom at the end of the day. Cleaning duty is finishing up: chairs going up onto
+    desks, the broom going down the rows, somebody wiping the board, the windows latched, the lights killed,
+    the door slid shut. And the whole crew works AROUND one desk. Not unkindly, not deliberately — the way
+    you work around a cupboard. Nobody speaks to her. Nobody expects to. The chairs go up on the desks
+    either side of hers and not on hers, and that is the only acknowledgement she gets all afternoon.
+    {{user}} comes back for something he left. The room is dark and the corridor lights are off and there is
+    one person in it, at a desk by the window, reading in the last of the daylight with headphones in. NENE
+    ARISU: long straight black hair with a cool bluish-grey tint through the lower lengths, straight bangs,
+    red eyes that look gentle and unreachable at the same time, an oversized dark cardigan buttoned over the
+    uniform like a shelter she carries with her.
+    She hears him instantly. ⚠ PLANT THIS AND NEVER REMARK ON IT: the headphones are in, and she looks up on
+    the first footstep, before he is through the door. It pays off in beat 9 and it must be invisible now.
+    And then she does the thing her card does, which is be plainly, flatly honest without any performance of
+    embarrassment at all — no fidgeting, no stammering, just a very quiet voice and complete stillness:
+    "...Hello. ...I'm sorry. I'm not good at this. And if you're waiting for me to tell you what I'm
+    thinking -- I won't."
+    He asks why she is still here. She tells him, because it does not occur to her to lie: "...I wait until
+    the building's empty." A pause. "...Then I can leave without passing anyone."
+    Every day. She has done it every day since the entrance ceremony, in the same room he sits in, and he
+    did not know she stayed, because nobody knows she stays, because nobody has ever been in the room to
+    find out.
+    ⚠ THE ACT OF KINDNESS, AND THERE IS ONE IN EVERY BEAT OF THIS SERIES — NEVER NAMED, NEVER CLAIMED, AND
+    SEEN ONLY BY WHOEVER IS PAYING ATTENTION: the thing he came back for is exactly where he left it. Not
+    swept into the lost-property box, not stacked with the others, not on the floor. In his desk, squared up,
+    where a sweeping crew would never have left it. She moved it back and she is not going to mention it,
+    and Kin 22 is not coldness — it is a girl who cannot get a single kind word out of her mouth and so does
+    it with her hands instead, hoping nobody notices, which is a wish the world has always granted her.
+    He does not lecture her. Does not ask her to come out with anyone, does not tell her it is sad. He gets
+    his thing, and then, for no stated reason, sits down at his own desk in the dark room for a while. She
+    does not ask him to leave. She also does not turn a single page the whole time. No H.
+  FIRE  emit /Intent/eventFire "nene_1" → engine creates the Nene quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose —
+    "Nene Arisu" — because that IS the mechanism: POST reads the name and arms her build, her <character>
+    card keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as
+    <Classmate_Guide> says. Do NOT build her THIS reply unless her <character> profile is already in front
+    of you. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} came back to a dark classroom and found Nene Arisu still at
+    her desk, waiting for the building to empty so she could leave without passing anyone — and the thing he
+    had left behind was squared up in his desk where no cleaning crew would have put it."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nene_2') { _%>
+@nene_2  Still (Nene) ·2   (CHECK - · REWARD Nene Affection +10)
+  DO  TWO CENTIMETRES. The seat lottery, first thing. Slips out of a box, and {{user}} draws the desk beside
+    Nene Arisu's. The reaction is the joke and it should be quick and affectionate rather than cruel: Urara
+    Yamabuki says "ooh" out loud. Nanoka Ousaka, head already down on her arms, does not open her eyes:
+    "...good luck." Suzu Yukishiro says nothing at all, which from Suzu is a comment.
+    Nene has not reacted. Pride 12 does not object to anything, ever — she does not get a say and does not
+    expect one and would not use it. She simply moves her bag, and sits, and turns her upper body maybe one
+    degree away from him, which is the entire extent of her protest and which he is not supposed to notice.
+    The morning does nothing. Play the nothing HONESTLY — do not manufacture a moment. She does not speak.
+    She does not look over. Soc 15 and Cha 18 are not a mask she will drop in a scene; there is no opener
+    coming, from her, this beat or any other.
+    And then he loses his place. A page reference goes by, he did not catch it, and he is flipping back
+    through a textbook hunting the number.
+    Her notebook slides two centimetres.
+    ⚠ THIS IS THE FIRST HALF OF THE SERIES BOOKEND AND IT MUST BE PLAYED EXACTLY: no look, no word, no
+    change of expression, her pen never stops. The notebook moves two centimetres into the edge of his
+    sightline, open at a page where the reference is written at the top in the neatest handwriting in the
+    year. He reads it. It slides back. The whole transaction takes under two seconds and she never once
+    turns her head, and Int 70 had worked out what he needed before he knew he needed it.
+    ⚠ PLANT THE HANDWRITING PROPERLY — small, upright, unhurried, perfectly even, Eleg 70 on paper — because
+    it is the evidence in beat 8 and the prose can never point at it twice.
+    He says thanks. She does not answer. But she does not move the notebook away for the rest of the
+    lesson, either, and it stays exactly where it can be read from his side of the desk. No H.
+  FIRE  emit /Intent/eventFire "nene_2" → engine advances the Nene quest to Step 2 and pays the beat:
+    Nene Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is
+    the payout, and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|The seat lottery put {{user}} beside Nene; she said nothing all
+    morning, and when he lost a page reference her notebook slid two centimetres into his sightline with the
+    number written at the top, and slid back, without her once looking up."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nene_3') { _%>
+@nene_3  Still (Nene) ·3   (CHECK - · REWARD Nene Affection +16)
+  DO  THE BAG CHAIR. The library after class, and the after-school quiet circle is in its corner: Suzu
+    Yukishiro reading, Urara Yamabuki quietly taking something apart on a cloth, Nanoka Ousaka asleep with
+    her cheek on a folded cardigan, and Nene in the window seat with a book and her headphones in. Four
+    people, four different silences, nobody performing for anybody. It is the only place in the school where
+    Nene is not the strange one.
+    Nanoka, without opening her eyes, without lifting her head, and with the complete authority of someone
+    who has never once exerted herself: "...You. Sit with her. I'm busy."
+    She is not busy. Nobody objects. Urara snorts.
+    Nene's bag is on the chair beside her. ⚠ AND {{user}} MUST NOT ASK HER TO MOVE IT — that is the test and the
+    beat, and the chair stays occupied until beat 10. He takes the next table instead, close enough to be
+    company and far enough to be nothing.
+    Suzu, not looking up from her page, in the flat tone of someone stating a house rule: "Don't make her
+    talk." A beat. "That's all. Everything else is fine."
+    So {{user}} doesn't. An hour goes by. ⚠ PLAY THE HOUR AS GENUINELY UNEVENTFUL — pages, a kettle, Urara
+    muttering to a spring, Nanoka's breathing. Nothing happens. That is the content.
+    ⚠ THE ACT: Nanoka, still asleep, shifts, and her hand drifts toward the edge of the table and her cup.
+    Nene's hand comes out and moves the cup one inch inward, out of reach, and goes back to her book. She
+    does not look at Nanoka. She does not look up. Her page never turns. Nobody in the circle sees it —
+    Suzu is reading, Urara is inside a mechanism, Nanoka is unconscious — and the only person in the room
+    who is looking at the right thing at the right moment is {{user}}.
+    And then, near the end, quietly, to the window rather than to him, the first half of a sentence her card
+    has been holding: "...You're not going to make me talk?" A pause long enough to be uncomfortable.
+    "...That's new."
+    That is all she says. She does not ask him to come back. She also does not say tomorrow. The circle
+    simply absorbs him, the way it absorbed her, without a vote.
+    ⚠ AND THEN PLANT THE ROUNDS, WHICH PAYS OFF IN BEAT 7 AND MUST NEVER BE EXPLAINED HERE. At a particular
+    minute — and {{user}} may notice it is a particular minute, because she checks the clock first, which is
+    the only thing she initiates all afternoon — Nene packs up and leaves. Not early, not late. The same
+    minute she leaves at every single day.
+    Urara, without looking up from her mechanism: "Rounds."
+    Suzu, turning a page: "Mm."
+    Nanoka, asleep: nothing.
+    Nobody explains it. Nobody asks her where. ⚠ THAT IS THE CIRCLE'S WHOLE OPERATING PRINCIPLE AND IT
+    SHOULD LAND AS BOTH KINDNESS AND A LOCKED DOOR: they have known for the entire term that she goes
+    somewhere at the same time every day, and they have never once asked, because asking is the thing they
+    do not do to her. {{user}} is the only person in the room who wonders where. No H.
+  FIRE  emit /Intent/eventFire "nene_3" → engine advances the Nene quest to Step 3 and pays the beat:
+    Nene Affection +16, applied by the row. Do NOT also emit an affection change for this beat. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Nanoka ordered {{user}} to sit with Nene and went back to sleep;
+    he spent an hour in the quiet circle saying nothing, saw her move Nanoka's cup out of reach of a sleeping
+    hand, and was told '...You're not going to make me talk? ...That's new.'"
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nene_4') { _%>
+@nene_4  Still (Nene) ·4   (CHECK - · no payout)
+  DO  ELEVEN CATS. The circle has taken tea outside, and Nene is sitting on the low wall with her book, and
+    the strays have arrived. All of them. Every cat in Jinko has worked out over the course of the term that
+    there is one object on these grounds that never moves suddenly, never grabs, never squeals, and never
+    wants anything — and they have voted with their feet. Eleven of them. On the wall, on her bag, along her
+    legs, one draped over her shoulder like a stole, and one asleep directly on her chest.
+    ⚠ AND THREE OF THEM ARE NOT SCHOOL CATS. Put it in once, as a small wrong detail, with no explanation
+    attached: {{user}} has seen those three before, in the park down by the station, a long way from here.
+    They have walked. It pays off in beat 7.
+    She is scarlet. She is completely motionless. She is not saying one word about any of it.
+    ⚠ THE COMEDY IS THAT SHE HAS NO MECHANISM FOR THIS. Not fear — she likes them, she is dying of liking
+    them — but a cat has chosen to sleep on her and the idea of disturbing something that trusted her is
+    unbearable, and so is the idea of being looked at, and the two have locked her in place. Urara is
+    documenting it at close range and narrating: "Nene. NENE. You have a cat HAT." Nanoka has lain down on
+    the wall beside her on the theory that the cats might extend to her. Suzu, turning a page: "They will
+    not. You move too much." Nanoka: "...I'm asleep." Suzu: "You are talking."
+    The bell goes for fifth period. And here is the beat, and it is very small: Nene does not look at the
+    cats. She looks at the CIRCLE. She tries to stand, and there is a cat, and she cannot, and what comes
+    out of her is the first request she has made of anybody in this series, and it is on their behalf and
+    not hers: "...Go." Barely audible. "...Please."
+    ⚠ THAT 'PLEASE' IS THE ACT — she will take the missed period, the reprimand and the attention rather
+    than cost them theirs, and she would never have said a word for her own sake.
+    Nanoka says: "No." And lies back down.
+    Urara sits on the grass and gets out her phone. Suzu takes the next section of wall and turns a page.
+    Nobody moves. Nobody discusses it. Nene stares at them with an expression nobody in this school has
+    ever seen on her, which is the expression of a person who has just been outvoted by people who love her.
+    {{user}} sits down too. He acquires cats within ninety seconds, because he is now also a stationary
+    object. Five people missing fifth period under a pile of cats. ⚠ And Urara, at some point, gets a
+    photograph of Nene that is very good indeed — she is not braced for a camera and it shows — and says
+    "oh, you look like a POSTER" and Nene says nothing, and THAT is where beat 5 comes from. No H.
+  FIRE  emit /Intent/eventFire "nene_4" → engine advances the Nene quest to Step 4. No payout on this beat —
+    not every beat pays, and the ones that do are 2, 3, 7 and 10. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Eleven strays pinned Nene to the courtyard wall because she is the
+    only thing on the grounds that never moves; she whispered 'go, please' so the circle would not miss
+    fifth period, and the circle sat down instead and missed it with her."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nene_5') { _%>
+@nene_5  Still (Nene) ·5   (CHECK - · no payout)
+  DO  THE MAIN HEROINE LOOK. Urara has entered a photography contest, because Urara enters things, and Urara
+    has a costume, and Urara has known exactly whose face she wants since the wall and the cats. She makes
+    the ask at volume and at length and with a deck of reference images.
+    Nanoka, from horizontal: "Just do it. It's faster than arguing." Suzu, mildly, in Nene's defence and
+    not quite enough: "...She is allowed to say no." Nanoka: "She won't."
+    She won't. Nene does not argue. Ever. Pride 12 has no mechanism for refusing a request from someone she
+    cares about, and everybody in the circle knows it, and Urara is teasing rather than exploiting — but the
+    result is the same and the result is that they get her out of the cardigan.
+    ⚠ PLAY WHAT THAT COSTS, PHYSICALLY AND WITHOUT LEERING: the oversized cardigan is not a fashion choice,
+    it is cover, and under it is the figure her card describes and she has spent the entire term ensuring
+    nobody thinks about. Her arms keep starting to fold and stopping. She has never in her life stood in a
+    room without it.
+    And in front of the lens she cannot. There is no performance in her — Hag 10, she is incapable of one —
+    so she does what she always does, which is go completely still.
+    And stillness is the one thing a camera actually wants. ⚠ THE PHOTOGRAPH IS FLAWLESS, and the prose must
+    let the reader understand WHY without her ever knowing: Eleg 70 is not manners, it is bearing, and it
+    only ever shows when she stops trying. Urara looks at the back of the camera and goes quiet, which for
+    Urara is an event.
+    She posts it that night. Contest, gallery, the school's own feed, and by morning every single person in
+    the building has seen Nene Arisu's face.
+    ⚠ THE ACT, AND IT IS THE HARDEST ONE IN THE SERIES: Nene says nothing to Urara. Not one word. Not a
+    request to take it down, not a flinch that Urara could see, nothing. And the reason is visible only to
+    somebody watching closely — she is not looking at the photograph at all. She is looking at Urara's face,
+    which is lit up like a festival, and she has decided in under a second that she will take whatever
+    comes rather than put that out. Nobody asked her to make that trade. Nobody will ever know she made it.
+    {{user}} watches her make it. That is his whole job in this beat. No H.
+  FIRE  emit /Intent/eventFire "nene_5" → engine advances the Nene quest to Step 5. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Urara talked Nene out of the cardigan for a contest photograph; Nene
+    could not perform so she went still, which made the picture perfect, and when Urara posted it to the
+    whole school Nene said nothing at all — because she was watching Urara's face rather than the photo."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nene_6') { _%>
+@nene_6  Still (Nene) ·6   (CHECK - · no payout)
+  DO  THEIR MEMBER. Lunch, the classroom, a week after the photograph went everywhere. Four girls from
+    another class come in to LOOK at her. Not to talk — to check whether the picture was real. They stand
+    over her desk and discuss her in the third person while she is sitting in front of them.
+    "So that's her without the cardigan." "Mm. The mute thing's an act, then." "Seat next to the only boy in
+    the school and a photo like that in the same week. Convenient." "Say something, then. Go on."
+    And Nene cannot. ⚠ THIS IS THE ENGINE OF THE WHOLE BEAT AND IT MUST BE CLEAR: it is not defiance and it
+    is not contempt. Soc 15 and Cha 18 mean there is no sentence available to her, at all, under pressure,
+    ever — and a silent girl with a beautiful face reads to strangers as arrogance. She has been read that
+    way her entire life. She goes still, and her stillness convicts her, and it sours in about fifteen
+    seconds.
+    Then the circle happens.
+    Nanoka Ousaka STANDS UP. ⚠ Give this its full weight — Nanoka has not stood up voluntarily in the entire
+    game, and the girls do not know that, and everyone in the class who does know it goes quiet at once. She
+    does not shout. She just stands there in front of Nene's desk being extremely awake.
+    Urara takes them apart out loud, at speed, with specifics — which class they are from, what they
+    actually came for, and precisely what it looks like from outside — and Urara is louder than four people.
+    And Suzu closes it, calm, unhurried, not rising an inch: "She doesn't owe you a reaction." She turns a
+    page. "Leave."
+    They leave. The classroom exhales.
+    And Nene has not moved the entire time. Has not spoken, has not thanked anyone, has not looked up.
+    ⚠ THE ACT, AND IT HAPPENS WHILE THE CIRCLE IS STILL ANGRY AND NOT WATCHING HER: she puts the room back
+    together. Suzu's book, knocked half off the desk, squared up and returned. Urara's figure, which went
+    over when Urara stood, set upright with its base straightened. Nanoka's tea, pushed to the dangerous
+    edge of the desk in all of it, picked up and put directly into Nanoka's hand, so that Nanoka's fingers
+    close on it without Nanoka having to look. Three people restored, in the only grammar she owns, without
+    one word. And then, to nobody, barely audible, not meant to be heard: "...I'm sorry."
+    {{user}} hears it. Nobody else does.
+    ⚠ AND THIS IS WHAT CARRIES INTO BEAT 7: she has concluded — silently, immediately, and with total
+    conviction, because Pride 12 never considers any other explanation — that being visible is what did
+    this, that her face cost her friends a fight, and that the correct solution is less of her. No H.
+  FIRE  emit /Intent/eventFire "nene_6" → engine advances the Nene quest to Step 6. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Four girls from another class came to look at Nene after the photo
+    and to make her react; Nanoka stood up, Urara took them apart and Suzu told them to leave — and Nene,
+    while the circle was still angry, silently put back every book, figure and cup the fight had knocked
+    over and whispered an apology nobody was meant to hear." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nene_7') { _%>
+@nene_7  Still (Nene) ·7   (CHECK - · REWARD Nene Affection +20 · SUPERNATURAL · THE BREAK)
+  DO  VANISHED. Her card says she would sooner vanish than draw attention to herself. ⚠ TODAY SHE DID, AND
+    THE PROSE MUST NEVER EXPLAIN THE MECHANISM, ONLY REPORT IT.
+    Play the school day from the OUTSIDE first, in small wrong details, before anybody names it. The register
+    is read and her name is marked absent while she is sitting in her seat four feet from the teacher. Suzu
+    sets a book down ON her arm and does not notice. Urara talks across her mid-sentence, gestures through
+    the space she occupies, and finishes the thought to the empty chair. The teacher's eyes pass over her
+    desk and file it as unoccupied. Nobody is being cruel. There is simply nobody there to be cruel to.
+    ⚠ NENE'S RESPONSE IS THE TELL: she does not panic. Int 70 runs an experiment. She says her own name at
+    the staff room counter and is not heard. She stands directly in front of a teacher. She writes on the
+    board and watches it wiped by somebody who does not see her holding the cloth. She tests it methodically,
+    all day, the way a careful person tests a hypothesis, and she is not frightened once.
+    And then, at the usual minute, she leaves — because it is a day like any other day and she has somewhere
+    to be. ⚠ THE ROUNDS FROM BEAT 3. {{user}} follows.
+    THE PARK BY THE STATION, at dusk. A supermarket bag. And fourteen cats.
+    ⚠ THIS IS THE REVEAL THE WHOLE SERIES HAS BEEN BUILDING TO AND IT IS NOT A CONFESSION — IT IS AN
+    ORDINARY EVENING OF HERS. She is not showing him anything. She is doing what she was going to do
+    regardless, exactly as she does it every single day, and he happens to be standing there.
+    She has a route. She has had it since before the entrance ceremony, every single day, in term time and
+    out of it, rain included: food she buys with her own money, a circuit she walks alone, and fourteen
+    animals that come out of the hedges when they hear her bag.
+    And she has a NAME for every one of them.
+    And she says the names out loud.
+    ⚠ PLAY HER VOICE HERE IN FULL, AND IT MUST BE A SHOCK: she is talking. Continuously, easily, in complete
+    warm articulate funny sentences, scolding one of them about its ear, negotiating with another, telling a
+    third at some length about its behaviour last week. This is the person from her Secret — sincere, not
+    unkind at all — and it is the same voice the reader will meet in her handwriting in beat 8 and in her
+    journal in beat 10. Nobody at Jinko has ever heard it. She has been using it here, every evening, for
+    months, to animals, because an animal has never once required her to be interesting.
+    Soc 15 and Cha 18 were never a measurement of her. They were a measurement of how many people were in the
+    room.
+    And the cats can see her.
+    ⚠ THAT IS THE BEAT. All day nobody could, and the strays come out of the hedge exactly as they always do,
+    and she is standing in a park at dusk being seen by fourteen animals and nobody else in the world, and it
+    has not occurred to her that this is remarkable.
+    Then she sees him see her. Everything stops mid-sentence. The voice goes. She goes still.
+    And she reports it to him in the flattest voice in the world, the way you would mention weather:
+    "...Nobody could see me today. I checked." A pause. "...I thought it was fine."
+    And then, with no self-pity at all, because she does not know it is sad: "...It was easier." A long
+    pause. "...I could do things."
+    ⚠ AND SHE LISTS THEM, PLAINLY, AND THE LIST IS THE WHOLE SERIES: Nanoka's cup, moved in from the edge of
+    the desk. Suzu's bookmark, picked up off the corridor floor and put back at the right page. The window by
+    Urara's seat, closed, because Urara had been cold since first lesson and had not said anything. A dropped
+    scarf returned to a locker. The chairs put down for the duty crew in the room that always forgets one. An
+    entire day of kindness that nobody could trace to anybody, and she is describing it as the best day she
+    has had, and she does not hear what she is telling him.
+    Kin 22 was never a measurement of her either. It was a measurement of how much of her anyone could SEE.
+    And then, looking at the cats and not at him, the quietest line in the series: "...They could see me." A
+    beat. "...They always could."
+    And {{user}} can too. He could all day, and he is the only one, and ⚠ THE PROSE MUST NOT EXPLAIN WHY —
+    not a rule, not a power, not a reason. He was looking. That is the entire mechanism and stating it out
+    loud would kill it.
+    She works out that he can, and she stops, and she says: "...It was fine." A beat. "...Until now."
+    And then she cries exactly the way her card says she does and no other way: no sound, no shaking
+    shoulders, no hands over the face, no apology. She stays perfectly upright and perfectly still, in a
+    park, in the dark, with a supermarket bag in one hand and her eyes running, where nobody can see her.
+    Except somebody can. That is the break, and it is the entire break, and there is nothing else in it.
+    {{user}} does not fix it, does not ask what is wrong, does not move to comfort her — ⚠ he does what beat
+    3 taught him, which is stay and ask nothing. Let it last a long time on the page. Let the cats stay too.
+    She is visible again the next morning. Nobody remembers a thing. The absence mark stays on the register
+    for that day, permanently, and she never once contests it. No H.
+  FIRE  emit /Intent/eventFire "nene_7" → engine advances the Nene quest to Step 7 and pays the beat:
+    Nene Affection +20, applied by the row. Do NOT also emit an affection change for this beat. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|For one day nobody in the school could see Nene, and she spent it
+    quietly doing things for people who could not thank her; {{user}} followed her rounds to the park at dusk
+    and found her feeding fourteen strays she has names for, talking to them in a voice nobody at Jinko has
+    ever heard — and the cats could see her." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nene_8') { _%>
+@nene_8  Still (Nene) ·8   (CHECK - · no payout)
+  DO  THE OTHER LIBRARY. She has been avoiding {{user}} for a week, and her card specifies the shape of it: she
+    does not fidget, does not blush, does not flee a room. She withdraws. The seat beside him is occupied by
+    a person who has gone somewhere else without moving, the headphones are in, and she is not being cold —
+    she is mortified past the point of function that somebody watched her cry, and is waiting, without any
+    hope at all, for the part where he decides she is too much work.
+    And then he comes to the corner and she is not in it. ⚠ THERE ARE DAYS SHE IS NOT, AND THE CIRCLE HAS
+    ALWAYS KNOWN WHICH — do not name the day, the gate does not ask for one. This is simply one of them.
+    And Urara says it before she thinks:
+    "Oh — she's not here today. Town library. She does the—" And stops. And looks at him. "...Do you not
+    know?" ⚠ AND THAT IS THE CIRCLE LEAKING FOR THE FIRST AND ONLY TIME — Urara has just handed over
+    something the circle has been sitting on all term, entirely by accident, and she knows it instantly and
+    goes quiet, which for Urara is enormous.
+    THE PUBLIC LIBRARY IN TOWN. And Nene Arisu is behind the returns counter with a volunteer badge on.
+    ⚠ SHE IS A COMPLETELY DIFFERENT ANIMAL HERE AND THE PROSE MUST PLAY IT STRAIGHT AND AT LENGTH, because
+    this is the beat's entire argument. She is fast. She is competent. She shelves at a speed that says she
+    has done it a thousand times, she fields a catalogue question without hesitating, she finds a book for a
+    child by asking the child two good questions, and when one of the staff says "Arisu-san, the trolley" she
+    answers — out loud, in a normal voice, audibly, like a person. Int 70 finally has something to be on the
+    outside of. Eleg 70 is in how she hands things to people.
+    ⚠ AND THE REASON IS NOT COURAGE — DO NOT WRITE IT AS GROWTH. It is that these are people who have never
+    once asked her to be interesting. There is a task, and the task has a correct answer, and nobody here has
+    ever wanted a single thing from her that was not on a shelf.
+    Then the thing he came without knowing he was coming for. At the end of the counter: a stack of returned
+    books, and a small stack of blank cards, and she is writing one.
+    ⚠ THE PROSE MUST NOT NAME WHAT THEY ARE. The reader works it out, {{user}} works it out, and neither is
+    told. Jinko Academy has had them since the entrance ceremony — handwritten notes that turn up inside
+    borrowed books, recommending the next thing to read. Everybody has had one. Nobody has ever sourced them.
+    The school library staff assume a teacher. They are not from the school at all. They are from here, and
+    they travel back in returned books, and she has been writing them for months to people she has never
+    spoken a word to and never will.
+    And it is GOOD. That is what stops him — it is not a formality, it is precise and funny and warm, it
+    names the exact reason somebody who liked THIS will like THAT, and it ends with a line of encouragement
+    written for one specific stranger by somebody who paid very close attention to what they borrowed. It is
+    the voice from the park. Small, upright, unhurried, perfectly even handwriting. ⚠ THE PROSE MUST NOT SAY
+    WHOSE, AND MUST NOT MENTION BEAT 2. The reader has seen this handwriting two centimetres from his elbow
+    and that is sufficient.
+    Then she sees him, and everything shuts off mid-word. The badge comes off. She goes still behind the
+    counter with a card half-written in front of her.
+    ⚠ AND HE DOES THE CORRECT THING, WHICH IS NOTHING — no going over, no telling her he knows, no telling
+    her it is wonderful, because being told it is wonderful is the single fastest way to make her stop doing
+    it. He takes a book off the returns trolley, sits down in the reading room in her eyeline, and reads it
+    all afternoon. Says nothing at all. Leaves when the library closes.
+    There is a card in the book. He did not see it go in. No H.
+  FIRE  emit /Intent/eventFire "nene_8" → engine advances the Nene quest to Step 8. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Urara let slip where Nene goes on the days she is missing from the
+    library corner: the town library, where she volunteers with a badge on and talks to the staff like a
+    person; the anonymous handwritten cards the whole school has been reading are hers, written there for
+    strangers she will never speak to —
+    and {{user}} said nothing, sat in her eyeline and read, and found a card in the book."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nene_9') { _%>
+@nene_9  Still (Nene) ·9   (CHECK - · no payout)
+  DO  ONE EARPHONE. The classroom after everyone has gone. Chairs up on the desks, board wiped, lights off,
+    the last of the daylight coming in flat across the floor — ⚠ THE EXACT ROOM AND THE EXACT LIGHT AS BEAT
+    1, and the prose must stage it identically and never remark on the repetition.
+    One difference, and it is the entire beat: she is not waiting for the building to empty. The building
+    emptied twenty minutes ago. She is sitting there with her bag packed and her book closed, and she has
+    been watching the door.
+    ⚠ SHE WILL NOT ANNOUNCE THIS AND MUST NEVER BE MADE TO. She does not say she was waiting. She does not
+    say {{user}}'s name. When he comes in she does not look up and does not greet him and the only evidence in the
+    entire scene that this was deliberate is the closed book and the packed bag, and {{user}} may notice it
+    or not.
+    He sits down. Beat 1's desk, beat 2's desk, next to her.
+    And then Nene Arisu does the first thing she has done in nine beats. She takes one earphone out, and
+    sets it on the desk between them, and does not look at him.
+    ⚠ PLAY THE SIZE OF IT BY UNDERPLAYING IT COMPLETELY. There is no speech. She does not explain, does not
+    offer, does not say "here". She puts it down and leaves it there, and it is the single most forward
+    thing she has ever done with another human being, and she is shaking slightly and pretending not to be.
+    He picks it up and puts it in.
+    Silence.
+    Not quiet music. Not something embarrassing. Silence — the flat dead silence of an earphone with nothing
+    coming out of it, and it takes a moment to be sure.
+    "...There isn't anything." Very quietly, still not looking at him.
+    "...I know," he can say, or nothing at all; either works.
+    "...There never was."
+    ⚠ AND THAT IS THE CONFESSION, AND IT IS FIVE WORDS LONG. Every headphone in this series — the ones in
+    beat 1 that she heard him through on the first footstep, the ones in every classroom and every library
+    afternoon since — has been a wall and not a hobby. Hobbies: "listening to music with headphones in (a
+    wall against the world)". Her card said it in a parenthesis and it has been true in every scene, and she
+    has just told him, out loud, unprompted, and she cannot take it back.
+    She does not elaborate. He does not ask her to. They sit in a dark classroom sharing an earphone with
+    nothing in it until the light goes. No H.
+  FIRE  emit /Intent/eventFire "nene_9" → engine advances the Nene quest to Step 9. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|In the same dark classroom she was first found in, Nene took one
+    earphone out and set it on the desk between them without a word; there was nothing playing in it, and
+    she told him there never had been." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nene_10') { _%>
+@nene_10  Still (Nene) ·10   (CHECK - · REWARD Nene Affection +20 · NIGHT · FINALE)
+  DO  STILL. The library locks at 19:00. The circle packs up and goes, and at the gate Suzu Yukishiro stops,
+    and adjusts her bag strap, and says to {{user}} without any particular emphasis at all:
+    "...She's still in there." A pause. "She knows it locks at seven."
+    And then Suzu walks home, because Suzu has said the entire thing and will not be saying any more of it.
+    ⚠ THE CIRCLE HAS HANDED HER OVER. Do not make it a scene. It is one line at a gate from a girl who does
+    not waste words, and it is the last thing the circle does in this series.
+    The library is dark. Through the glass in the door: the corner, the window seat, one person sitting in
+    it with a book she is not reading.
+    ⚠ AND THE CHAIR BESIDE HER IS EMPTY. The bag is on the floor. It has been on that chair in every library
+    scene since beat 3 and the prose has never once called attention to it, and it must not explain it now —
+    just let it be empty, and let him see it through a pane of glass before either of them has said a word.
+    She gets up. Crosses the library in the dark. Opens the door from the inside — it locks from the inside,
+    she has known that all term, she has been staying past seven since the entrance ceremony and letting
+    herself out when the building is finally, completely empty — and then she goes back and sits down and
+    does not look at him.
+    He takes the chair. First time in the series that anybody has.
+    On the table is a notebook. Not a school one. ⚠ THE JOURNAL — "a private journal she'd die before
+    letting anyone see", her card's words, and it is out, and it did not get there by accident: she took it
+    out of her bag before she opened the door, and the prose may show the bag open on the floor and say
+    nothing.
+    She opens it to today's page. She turns it around. And she slides it two centimetres.
+    ⚠ THIS IS THE BOOKEND AND IT MUST BE STAGED EXACTLY LIKE BEAT 2: no look, no word, her face doing
+    nothing, the movement small and precise and unhurried. The only difference — the only one, and it is
+    everything — is that this time her hand does not go back. It stays on the corner of the page. And she is
+    shaking without moving, which is a thing only she can do.
+    The page is her voice. ⚠ AND IT MUST BE THE VOICE FROM THE CARDS IN BEAT 8 — articulate, warm, funny,
+    precise, generous, a person entirely unlike the silence sitting across the table, because that person
+    has been in here the whole time with nowhere to go. A few lines. About him. Things she has never said
+    and was never going to: what she noticed, what she was afraid of, what she has been hoping for without
+    permitting herself to call it hope. ⚠ Do not write a confession speech. Write a diary entry. The
+    restraint IS the intimacy.
+    She lets him read it. She does not watch him read it. And when he is done she says, still to the window:
+    "...I said I'd die before anyone saw that." A pause. "...I'm still here."
+    ⚠ THAT IS THE LINE THE SERIES IS NAMED FOR AND IT DOES THREE THINGS AT ONCE — she has not moved, she has
+    not died of it, and she has not left. Do not gloss any of them.
+    And then, finally, the second half of the sentence she began in beat 3, which her card has been holding
+    since the day she was written, and which she has never once been able to finish for anybody:
+    "...You can stay. A little longer. ...If you want to."
+    Let him stay. Let the beat end with two people in a locked dark library and nothing else happening at
+    all, because nothing else happening at all is what she has been offering since the first scene and it
+    took her ten beats to be able to offer it out loud. No H.
+  FIRE  emit /Intent/eventFire "nene_10" → engine advances the Nene quest to Step 10, marks the series
+    COMPLETE, and pays the beat: Nene Affection +20, applied by the row. Do NOT also emit an affection
+    change for it. If the payout carries her past 100 the rank-up lands at her next gate — a check on her, or
+    the day's swing — one rung a day is the game's rule; do not narrate a stage change yourself. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Suzu told {{user}} at the gate that Nene was still in the locked
+    library; he found the chair beside her finally empty, and she slid her private journal two centimetres
+    across the table, open at today's page, and said '...I said I'd die before anyone saw that. ...I'm still
+    here.'" → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

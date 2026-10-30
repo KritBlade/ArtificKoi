@@ -1,0 +1,372 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@haruka_') === 0
+<%_ /* v1.3 */ _%>
+<%_ /* The ten @haruka_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @haruka_N key is the armed one. The @@if line on top
+   repeats the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@haruka_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@haruka_1') { _%>
+@haruka_1  Undefeated (Haruka) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE CHALLENGE NOBODY TAKES. After class, and somebody is standing in the middle of the way out with
+    her arms folded, issuing a challenge to the entire corridor. HARUKA KURUSU: dark purple twin-tails with
+    pink streaked through them, black bunny-ear clips, hoodie open over the uniform, a choker, and the
+    posture of someone who has been standing there a while. "Anyone. ANYTHING. Sprints, arm-wrestling, who
+    can hold their breath longest, pick it yourself, I'll still win—" And the corridor goes around her. Not
+    unkindly. Just the practised, automatic way a crowd routes around something it has learned to route
+    around, three girls at a time, nobody meeting her eye. KIN 25 and PRI 90 have cost her exactly this:
+    admired for what she can do, avoided as a person. She keeps her chin up through every single one of
+    them, because the chin going down is not a thing she does.
+    Then she sees {{user}}, the one boy in the building, and the finger comes up and stays on him. "YOU.
+    You'll do. Unless you're too scared to lose to a girl?" He says yes. She does not hear it the first
+    time. When she does, there is a half-second where something enormous goes across her face before the
+    front snaps back over it, and then she is all swagger again: "HAH! Finally. Okay. Okay — staring
+    contest, right here, no blinking, no talking, loser admits it out loud." It is the pettiest possible
+    contest and she has chosen it because it is the one that can be played standing in a corridor RIGHT
+    NOW, before he changes his mind. She wins. She wins in about forty seconds and celebrates like a cup
+    final — both fists, a whoop that echoes down the whole hall, an actual lap of the corridor. For a
+    staring contest.
+    Then she produces a notebook from her bag. Small, battered, elastic band round it. She writes the date,
+    and "STARING — W", and "1 - 0", and holds it up so he can see the numbers. "That's official. You're on
+    the board now. Name's Kurusu. Haruka Kurusu. Same time tomorrow, I'm not done with you." She does not
+    ask whether he is free.
+    ⚠ AND HE ASKS HER ONE THING BEFORE SHE GOES, BECAUSE IT IS HOW HE IS BUILT: what did he do wrong? She
+    stares at him. Nobody she has beaten has ever asked. "...You blinked. With your whole face. You brace
+    before you blink." She says it like an insult and it is the first coaching she has given anybody.
+    Hag 48 — the swagger is a deliberate front and it is a GOOD one. No H.
+    Crack: none. Her cover is whole. In him: a loss, and one thing learned from it.
+  FIRE  emit /Intent/eventFire "haruka_1" → engine creates the Haruka quest (Step 1). NO payout on this
+    beat, on purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the
+    prose — "Haruka Kurusu" — because that IS the mechanism: POST reads the name and arms her build, her
+    <character> card keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as
+    <Classmate_Guide> says. Do NOT build her THIS reply unless her <character> profile is already in front
+    of you. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Haruka Kurusu was challenging an entire corridor that had learned to
+    walk around her; {{user}} said yes, lost a staring contest, and became entry one in a notebook she keeps
+    the score in." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@haruka_2') { _%>
+@haruka_2  Undefeated (Haruka) ·2   (CHECK - · REWARD Haruka Affection +10)
+  DO  THE SPRINT. The athletic field after class, and this time it is a real one on her own ground. STA 80,
+    and she is not being modest about it: she tells {{user}} the distance, the rules, and the result in
+    advance. Then she delivers the result. She wins by a street. She wins by such a street that she has
+    time to turn round and run backwards for the last stretch so she can watch him not catch her. "Losing
+    to a girl AGAIN. Does it sting? It should sting."
+    It does not seem to. ⚠ THIS IS WHO {{user}} IS IN THIS SERIES, AND IT MUST BE PLAIN FROM HERE ON: he is
+    not afraid of losing. A loss is information. He has a notebook of his own, and after each race he
+    writes one number in it — his own time — and asks her what went wrong. His start. His arms. Where he
+    tied up. She answers every time, sharply, accurately, because pushing somebody to improve is the one
+    warm thing she knows how to do, and she does not notice she is coaching him.
+    So she makes it two out of three. Then three out of five. Then she invents a handicap — she will start
+    ten metres back — and wins anyway. Then twenty. Then thirty, and at thirty she has to actually TRY, and
+    the noise she makes crossing the line first is something close to delight. He has not once said he is
+    tired, and he has not once sulked, and she keeps setting up another race, and another, well past the
+    point where either of them is getting anything out of it athletically, because the alternative is that
+    this stops. Nobody has given her a second lap since middle school. She is on her eighth.
+    It ends only when the sun does. She writes it up on the grass, the notebook on her knee, biro between
+    her teeth while she works out the running total, and hands him the tally like a scoreboard at a title
+    fight. "You're slow." A pause that is slightly too long. "...Same time tomorrow." Play her praise as
+    expensive: the closest thing to a compliment she manages all beat is not saying he was bad at it. No H.
+    Crack: none. In him: eight times in his own book, each a little better than the last, and one
+    observation — she has two books' worth of proof that she won, and she still did not want it to stop.
+  FIRE  emit /Intent/eventFire "haruka_2" → engine advances the Haruka quest to Step 2 and pays the beat:
+    Haruka Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is
+    the payout, and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Haruka raced {{user}} on the field until the sun went down, inventing
+    bigger and bigger handicaps to keep it going, while he wrote down his own time after every loss and
+    asked her what he had done wrong." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@haruka_3') { _%>
+@haruka_3  Undefeated (Haruka) ·3   (CHECK - · REWARD Haruka Affection +16)
+  DO  THE TECHNICALITY. She has decided to beat {{user}} at something that is not running, because a rivalry
+    that only covers one field is, in her words, a weak rivalry. So: the pop quiz, or the practice paper, or
+    whatever the week has provided. INT 58. This is not her weapon and she knows it, and she has prepared for
+    that the way her card says she prepares for everything — HOW she wins has never mattered to her, only
+    THAT she wins.
+    So she wins on a technicality. An outrageous one. She has read the instruction sheet more carefully than
+    the questions, and there is a clause about working shown, or answer format, or a question everyone
+    skipped because it was printed on the reverse, and she produces it with the triumphant flourish of a
+    barrister. By any honest measure he scored higher. By the rules as literally written, she did. She is
+    ENORMOUSLY pleased with herself. Cunning, exactly as her card allows, and entirely unembarrassed.
+    And {{user}} does not contest it. He is not being generous. He is looking at his own paper, at the two
+    questions he actually got wrong, working out why — the clause is no use to him, it will not make him
+    better at anything. And that is what breaks her rhythm, because everyone she has ever done this to has
+    fought her on it, and the fight is the part where she finds out whether the win counted. She goes quiet
+    in the middle of her own victory lap. The notebook comes out slower than usual. "...You didn't fight
+    that." A beat. "Why didn't you fight that?" He tells her the truth: he got question six wrong either
+    way. She cannot file that answer anywhere, and it bothers her for the rest of the day, visibly. She
+    writes the win down anyway. She writes down every one. No H.
+    Crack: none. In him: the guess, written under his own two wrong answers. A win nobody fights her for is
+    worth nothing to her — so it is not the win she is after. She thinks the score is what keeps a person
+    in front of her.
+  FIRE  emit /Intent/eventFire "haruka_3" → engine advances the Haruka quest to Step 3 and pays the beat:
+    Haruka Affection +16, applied by the row. Do NOT also emit an affection change for this beat. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Haruka beat {{user}} academically on an outrageous technicality, and
+    when he did not contest it she stopped mid-celebration to ask why he did not fight her on it."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@haruka_4') { _%>
+@haruka_4  Undefeated (Haruka) ·4   (CHECK - · no payout — a test, and it comes back as written)
+  DO  THE BRACKET. Lunch, and she arrives at {{user}}'s desk and puts down a document. It is LAMINATED. It is
+    a 47-event tournament bracket, hand-ruled, seeded, with a schedule down the side. Dates. Times. Venues.
+    It runs to the end of next month.
+    The events are the joke and they must be played completely straight, because she is not joking even
+    slightly: 100m and 400m, fine. Arm-wrestling, fine. Then — plank hold. Hand held in ice water, longest
+    wins. Who can stay awake longer, which requires, she explains, a controlled overnight environment.
+    Breath-holding, which requires the pool. Who can carry the other further. Who can go longest without
+    laughing, which requires sitting directly opposite one another. Spicy food tolerance, at a restaurant,
+    because a kitchen is not a controlled venue. She has thought about the CONTROLS. She talks about the
+    controls at length.
+    The room has worked it out. Somebody at the next desk makes a noise into their sleeve. A girl says
+    "...you could just ask him to hang out, Kurusu" and Haruka says "WHAT? This is a STRUCTURED RIVALRY"
+    with such force that the girl retreats entirely.
+    ⚠ {{user}} HAS ONE QUESTION READY, AND THE ANSWER WRITTEN IN HIS OWN NOTEBOOK BEFORE HE ASKS IT. The
+    prediction: there is no last event. He asks it plainly, as a scheduling matter: what happens when she
+    has beaten him at all forty-seven?
+    She does not hesitate. She turns the laminate over. Page two: events forty-eight to ninety, in pencil,
+    not yet seeded. "Obviously there's a second round. I'm not an amateur." ⚠ THAT IS THE RESULT. A girl
+    who lives to win has built a tournament with no final. She has annotated the seeding methodology of a
+    machine whose only output is his company, and she turns to him to confirm the other girl was being
+    stupid, and she is genuinely waiting for him to agree, because she cannot see it. He does not point it
+    out. He signs up for event one. No H.
+    Crack: the first, and it is his — asked for the end of it, she had none, exactly as written. It is not
+    winning she has scheduled; it is him coming back. Her cover is whole: she thinks she showed him how
+    thorough she is.
+  FIRE  emit /Intent/eventFire "haruka_4" → engine advances the Haruka quest to Step 4. No payout on this
+    beat — not every beat pays, and this one is the bracket's. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Haruka presented a laminated 47-event tournament bracket scheduled
+    to the end of next month; the class told her she could just ask him to hang out and she called it a
+    structured rivalry, and when {{user}} asked what happens after event forty-seven she turned it over to
+    a second round." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@haruka_5') { _%>
+@haruka_5  Undefeated (Haruka) ·5   (CHECK - · no payout — Yuki's lunch, from Haruka's side of the desk)
+  DO  YUKI. Lunch, and somebody has started arm-wrestling on the desks, and it is a full tournament within
+    four minutes, because that is what a classroom is. Yuki Tsukino beats everyone. ⚠ THIS IS THE SAME LUNCH
+    AS YUKI'S OWN SERIES, SEEN FROM HARUKA'S SIDE OF THE DESK — keep what happens, and watch a different
+    girl. Yuki beats Haruka. Haruka takes it extremely badly and demands a rematch, and loses that one
+    too. Yuki is the one person in the year she takes completely seriously — the rival who never gives her
+    an easy win and never takes a loss personally — and Yuki grins, shakes out her wrist and says "good
+    one, Kurusu" and means it.
+    And then Yuki, still at the desk, entirely casual, does the arithmetic out loud. Haruka has challenged
+    Yuki twice this term. Twice. Yuki counted, because Yuki always counts. And she has challenged {{user}} —
+    Yuki does not even have to think about it — nineteen times. "Nineteen, Kurusu. That's not a rivalry.
+    I'm your rival. So what's he?"
+    Haruka's route through that is worth playing in full and in order: blank incomprehension first, because
+    the sentence does not parse. Then a correction — the numbers are wrong, some of those were the same day
+    so they count as one. Then, when the numbers hold, anger, loud and aimed at Yuki, who does not rise to
+    it. And then the denial, which is the revealing part, because it is not "I don't like him", it is a
+    technical defence: he is simply the best available opponent, he is the only one who keeps showing up,
+    it is EFFICIENT. Yuki fist-bumps her shoulder and goes back to the tournament: "Sure. Efficient."
+    ⚠ THEN {{user}}'S SECOND TEST, AND IT IS THE QUESTION HE ASKS HIMSELF AFTER EVERY LOSS. She has just
+    lost twice in front of the whole class. He has the prediction written down: she will have no answer.
+    He asks it the way he would ask anybody: "What did you learn?"
+    She looks at him as if he had spoken another language. "LEARN? I lost. There's nothing IN a loss. You
+    don't look at it. You bury it and you win the next one." She means every word. ⚠ THAT IS WHERE SHE WENT
+    WRONG, IN HER OWN VOICE: to her a loss is not information, it is a hole where she used to be. He does
+    not argue. He writes Yuki's grip down in his own notebook — the wrist turn, the half-second she waits —
+    while Haruka watches him do it and cannot work out why anyone would. No H.
+    Crack: the second, and it is his — predicted and confirmed: she has never once looked inside a loss.
+    And the witness came free: nineteen to two. Her cover is whole; she thinks she explained winning to a
+    beginner.
+  FIRE  emit /Intent/eventFire "haruka_5" → engine advances the Haruka quest to Step 5. No payout on this
+    beat. Yuki Tsukino appears and is a cameo: NOT required by the gate, NOT built, and none of her
+    interior is written. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuki beat Haruka twice at arm-wrestling and then counted out loud —
+    two challenges to her this term, nineteen to {{user}} — and asked what that made him; Haruka called him
+    the most efficient available opponent, and when {{user}} asked what she had learned from losing she said
+    there is nothing in a loss." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@haruka_6') { _%>
+@haruka_6  Undefeated (Haruka) ·6   (CHECK - · no payout · NIGHT · SUPERNATURAL — the gates locked at 19:00)
+  DO  THE SHADOW. The athletic field after dark. The gates locked at 19:00 and she came over the fence,
+    because she does this, and has done it since the first week of term: PRI 90 does not stop training
+    because a caretaker went home. {{user}} is at the fence, where she does not know he is. One floodlight
+    still works. Everything outside its circle is black. She runs alone, because there is nobody left in
+    the year who will run against her after dark, and she has never once admitted that is why she comes.
+    Her shadow is wrong. It is a beat off her stride — she puts it down to the light. Then it is the wrong
+    SIZE, shorter, the legs turning over faster than hers. Then it is not behind her at all. It is beside
+    her, and it has a body attached to it.
+    A girl of about twelve, running level. Middle-school kit, an old design. Dark twin-tails with pink in
+    them. The same black bunny-ear clips, newer. She is grinning — not a taunt, nothing like a taunt, the
+    open unguarded grin of somebody who thinks running is the best thing that has ever happened to her — and
+    her breathing is easy, and she is FASTER.
+    Haruka does the only thing she has ever done with a faster opponent. She races her. Everything she has,
+    lap after lap after lap, her card's whole engine at full: she will not be second, she cannot be second,
+    being second is not a result it is an erasure. And she cannot close a metre of it. The child pulls away
+    at every bend and Haruka hauls it back on the straight and loses it again, and this goes on until Haruka
+    is on her hands and knees on the grass being sick, and the child is still out at the far turn, still
+    going, still grinning.
+    ⚠ THE DETAIL THAT IS THE WHOLE BEAT, and it must be PLANTED and NEVER EXPLAINED: the child never once
+    looks back to see where Haruka is. Not at any bend. Not at any lap. Put it in the prose twice, plainly,
+    and let it sit there being wrong.
+    ⚠ {{user}} DOES NOT STEP IN. He does not call out, climb the fence or offer a hand. He watches a girl
+    bury a loss while it is still happening. Haruka does not say the word. She will not say it. She lies
+    on her back on the wet grass with her lungs tearing and looks up at the floodlight and says, to a
+    twelve-year-old who is not there any more: "...Tomorrow." No H.
+    Crack: none. Her cover's worst night, and it holds by its fingernails: she lost, and the only thing
+    she took from it was a rematch. In him: he saw the child never look back, and he does not know yet
+    what it means either.
+  FIRE  emit /Intent/eventFire "haruka_6" → engine advances the Haruka quest to Step 6. No payout on this
+    beat — the loss has to cost, and a payout would pad it. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Haruka went over the fence to train after dark and found her own
+    shadow running beside her — herself at twelve, in an old middle-school kit, faster, grinning, never once
+    looking back — and could not close a metre of it." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@haruka_7') { _%>
+@haruka_7  Undefeated (Haruka) ·7   (CHECK - · REWARD Haruka Affection +20 · NIGHT · THE BREAK)
+  DO  THE ONE WHO WAS WAITING. She went back. Of course she went back. And she is in far worse shape than
+    last time, because between then and now she trained for a rematch the way she trains for everything,
+    which is to say she has not rested, has not eaten properly, and has emptied the tank before she got to
+    the fence. {{user}} followed her. She notices him and does not send him away, which is new, and says
+    something dismissive about spectators, which is not.
+    She loses inside one lap. And she keeps running anyway, well past the point where her legs are
+    cooperating, and somewhere out past that point she starts SHOUTING at the child, and what comes out of
+    her is her Secret in her own voice, at volume, to a twelve-year-old:
+    What happened to you. When did it stop being FUN. I train every day — every day, I never stopped, I did
+    everything right. Why are you faster than me. I'm BETTER than you. I'm better than you at everything and
+    you're still—
+    And the child stops running.
+    Turns round. And is simply standing there in the middle of the track, waiting, hands on her knees,
+    getting her breath — and it lands, all at once, and it is the worst thing Haruka has ever had land: she
+    was never racing. Not once. She had nobody to race; she was running because running was the best thing
+    in the world, against nothing but her own legs, and she slowed at every bend — every single bend, both
+    nights — so that the person behind her could catch up. She never looked back because she was not
+    checking a lead. She was waiting for company. And Haruka has spent two nights reading being waited for
+    as being beaten.
+    Haruka comes apart on the track, and do not make it graceful: she is filthy, she is wrecked, she cannot
+    breathe properly, and PRI 90 fights the whole way down, and when it goes it goes all at once.
+    ⚠ {{user}} STAYS, AND THAT IS NEARLY ALL HE DOES. No speech. He does not tell her what she is worth,
+    does not coach, does not offer a rematch. She is the one who asks, from the grass, furious: "I LOST.
+    Twice. To a KID. Why are you still here?" And he gives her back her own line: "Same time tomorrow."
+    "Don't PITY me—" And she grabs for the nearest thing to prove it is pity, and the nearest thing is his
+    notebook. ⚠ SHE READS IT HERSELF, AND IT BURSTS THE WHOLE BUBBLE. There is no win column in it. No loss
+    column. Her name is not in it as a score anywhere. Page after page of one boy's own times, getting
+    smaller, with a note under each one in her words: start late. arms. brace before the blink. He never
+    kept score against her. He stayed to learn from her, every afternoon, losing honestly every time —
+    and all those wins she stacked up to keep him bought her nothing at all. He would have come anyway.
+    PRI 90 gets one last sentence out and it breaks in the middle: "...All those. I didn't have to win a
+    single— ...t-tch. Say it again. What you said. Say it again." He says it again.
+    The child walks over. Reaches up. Straightens the bunny-ear clip that has come loose in Haruka's hair,
+    carefully, with both hands, the way she would have fixed her own. And then she is not there, and she
+    does not come back, and the floodlight is just a floodlight. No H.
+    Crack: the break, the only one, and it is hers — the child showed her she had read waiting as losing,
+    and his notebook showed her the wins were never the price. He led with four words that were hers
+    already. In him: nothing to add, and tonight's time still to write down.
+  FIRE  emit /Intent/eventFire "haruka_7" → engine advances the Haruka quest to Step 7 and pays the beat:
+    Haruka Affection +20, applied by the row. Do NOT also emit an affection change for this beat. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Haruka raced her twelve-year-old self a second time and lost, and
+    when the child stopped and turned round Haruka understood she had never been racing — she had been
+    slowing at every bend to be caught up with; {{user}} stayed, and in his notebook she found only his own
+    times and what she had taught him, and no score against her at all." → the World Log remembers only what
+    you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@haruka_8') { _%>
+@haruka_8  Undefeated (Haruka) ·8   (CHECK - · no payout)
+  DO  NO CONTEST. A free day, and she has asked {{user}} out. Not in those words — she would sooner be run
+    over — but there is no bracket, no wager, no terms, no stated event, and that is unprecedented, and she
+    has clearly decided to try Being Normal as a discipline she can master by application.
+    It is a catastrophe, and it should be funny before it is sad. She has no grammar for this. Conversation
+    without a scoreboard has no win condition, so she cannot tell whether it is going well, so she keeps
+    trying to install one. She reaches for a challenge four separate times and catches herself three: who can
+    finish their drink first — no. Who can — no. Bet you can't — no. The fourth gets out before she can
+    stop it and she has to sit there having audibly challenged him to a contest about the number of ice cubes.
+    There are silences. She fills one by listing her own personal bests, unprompted, in order. She fills the
+    next by asking him a question about himself, visibly from a list she prepared, and then does not know what
+    to do with the answer, because she has no follow-up prepared — and the honest thing, which she does not
+    say, is that she was listening so hard she forgot to plan the next move.
+    And then somewhere in the middle of it, twenty minutes go past and neither of them notices, and it is
+    fine. It is just fine. Nobody wins it. On the way out she cannot take it and races him to the till, and
+    beats him, and is triumphant, and then says — not looking at him, jabbing the point at a menu board —
+    "...That doesn't go in the book." It is the first result she has ever refused to record. Then, as if it
+    were nothing, she asks him the question she called a foreign language: what did he get wrong, on the way
+    to the till. She listens to the answer. No H.
+    Crack: none. She is walking it herself, badly and on purpose, the way she learns anything. In him: she
+    asked what there was to learn from a race she had won.
+  FIRE  emit /Intent/eventFire "haruka_8" → engine advances the Haruka quest to Step 8. No payout on this
+    beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Haruka tried to spend an afternoon with {{user}} with no contest in
+    it, failed at it four times, enjoyed twenty minutes without noticing, then raced him to the till and
+    refused to write the result in her book." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@haruka_9') { _%>
+@haruka_9  Undefeated (Haruka) ·9   (CHECK - · no payout)
+  DO  THE FORFEIT. A race. Her idea, her distance, her terms, and she is winning it — properly winning it,
+    the way she wins everything, three lengths clear with the line in sight and nothing in the world able to
+    take it off her.
+    She stops.
+    Mid-stride, dead, for no reason, with the line RIGHT THERE. She stands in the middle of the track with
+    her hands on her knees, getting her breath, and watches {{user}} come up to her. And the look on her
+    face is not disappointment and it is not a tactic. It is fear. Because she has just done something with
+    no explanation and she is a person who has an explanation for everything.
+    He stops beside her instead of finishing. He does not ask. She tries four answers on her own and
+    discards all four: cramp (no), tactical (no), testing him (no), tripped (she did not trip, they both
+    saw). And then the real one gets out sideways, quietly, and it is the closest she has ever come:
+    "...I didn't want it to end."
+    And then, immediately, because she cannot leave a sentence like that standing in the open: "The RACE. I
+    didn't want the race to end. It was a good race. Obviously the race." She does not know what "it" is.
+    She genuinely does not, and the prose must not tell her — the reader gets it, {{user}} gets it, she does
+    not. She takes out the notebook and stands there for a long time not writing anything, because there is
+    no column for this. Then she writes one number in it, and it is not a W. It is her own time to the
+    point where she stopped. It is the fastest she has ever run. ⚠ RHYME, do not state: stopping to wait at
+    a bend is the first thing she has ever done that the child on the track would have recognised. Let the
+    prose put her in the same posture and say nothing about it. No H.
+    Crack: none. She is walking it — she waited for somebody, and for the first time she wrote down a
+    number that was only about herself. In him: nothing to do but stand at the bend with her.
+  FIRE  emit /Intent/eventFire "haruka_9" → engine advances the Haruka quest to Step 9. No payout on this
+    beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Haruka stopped dead three lengths clear with the finish in sight
+    and waited for {{user}}, could only say she did not want it to end — then insisted she meant the race —
+    and wrote her own time in the book instead of a win." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@haruka_10') { _%>
+@haruka_10  Undefeated (Haruka) ·10   (CHECK - · REWARD Haruka Affection +20 · FINALE)
+  DO  THE TALLY. Her room, after 19:00. It is a trophy room and it is grim about it: shelves of them, medals
+    on ribbons three deep over a door handle, certificates in frames and certificates still in the envelopes
+    they came in. Dust on all of it, some of it going back to primary school. Nothing in here has been
+    looked at since the day it was won — winning them was the event; having them is not.
+    The notebook is on the desk, out, elastic band off. {{user}} picks it up. And it is a rivalry log exactly
+    as advertised: every contest since the corridor, every one, in her handwriting, dated. STARING — W.
+    100m — W. 100m (10m handicap) — W. PAPER, CLAUSE 4(b) — W. And so on, for pages, and the running total
+    in the margin, and a bracket folded into the back with things crossed off.
+    And somewhere in the reading it turns over, because the dates are every day. Not every contest — every
+    DAY. There are entries for days with no event in them at all, where the line just says the date and
+    "field, after class" or "walked back".
+    ⚠ HE DOES NOT SAY WHAT IT IS. He holds it out to her, open at one of those pages, and says nothing.
+    Haruka goes white. Not defensive — white, the whole front gone at once, because she is reading her own
+    handwriting and seeing it for the first time, and Hag 48 cannot get the mask back on in time. "That's
+    not— I keep RECORDS. I've always kept—" and it dies, because she is looking at "walked back" written in
+    her own hand under a date with no contest on it. She says it herself, slowly, appalled: "...That's not
+    a scoreboard. That's just— every day you were there."
+    And then the last page. Today. The date is already written, at the top, in this morning's ink — before
+    there was anything to record, written the way you write the date at the top of a page you are certain
+    you are going to need. The event line under it is blank.
+    She takes the book back, and she does the thing only she would do: she finds the bracket folded in the
+    back, all ninety events, and strikes his name out of it. "You're off the board. I can't race you. I
+    lost to you ages ago — not on a track. You lose and you just... write it down and come back better. I
+    can't beat that. I've TRIED." Chin up. Finger out. Entirely herself. "So. New opponent."
+    ⚠ SHE IS STILL HARUKA, AND THE BEAT MUST NOT SOFTEN HER. Same pride, same volume, same need to win —
+    aimed somewhere new. On today's blank line she writes, hard enough to dent the page: KURUSU vs KURUSU.
+    Under it, her time from the day she stopped at the bend. "That's the one to beat. Every day. And YOU"
+    — a stopwatch out of her hoodie pocket, shoved into his chest — "hold this. And you tell me what I did
+    wrong. Every time. Don't you DARE go easy." Then, not looking at him, the rarest thing she owns: "...I
+    don't want to beat you. I want to KEEP you. In the book. Every day." Let him start the watch. No H.
+    Crack: nothing left to crack. Same Haruka, same fire, same book — and the only opponent in it is the
+    girl who ran it yesterday.
+  FIRE  emit /Intent/eventFire "haruka_10" → engine advances the Haruka quest to Step 10, marks the series
+    COMPLETE, and pays the beat: Haruka Affection +20, applied by the row. Do NOT also emit an affection
+    change for it. If the payout carries her past 100 the rank-up lands at her next gate — a check on her, or
+    the day's swing — one rung a day is the game's rule; do not narrate a stage change yourself. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|In a room full of dusty trophies Haruka read her own tally book and
+    saw it was a dated record of every afternoon with {{user}}; she struck him off her bracket because she
+    had already lost to someone who is not afraid of losing, wrote Kurusu vs Kurusu on today's line, and
+    handed him the stopwatch." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

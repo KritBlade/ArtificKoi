@@ -1,0 +1,22 @@
+{
+  "id": "ee7987d4-7d4d-4143-ac16-c408d273f1d2",
+  "script_name": "DisplayStatBox",
+  "enabled": true,
+  "find_regex": "/<styled type=\"terminal\" title=\"Scene Stats\">\\n?((?:(?!<styled type=\"terminal\" title=\"Scene Stats\">)[\\s\\S])*?)\\n?<\\/styled>/g",
+  "replace_string": "<div style=\"border: 1px solid #3e4047; border-radius: 8px; background-color: #1e1e2e; margin: 8px 0; overflow: hidden;\">\n  <div style=\"color: #e0e0e0; font-weight: 600; padding: 6px 12px; border-bottom: 1px solid #3e4047;\">📊 Scene Stats</div>\n  <pre style=\"background-color: #111; color: #e0e0e0; margin: 0; padding: 8px 12px; font-size: 0.85em; white-space: pre-wrap;\">$1</pre>\n</div>",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": true,
+    "prompt": false
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null
+}

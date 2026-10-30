@@ -1,0 +1,23 @@
+{
+  "id": "4a2dc7b8-eefb-4056-937d-3d1df0e4d2fc",
+  "script_name": "PromptDeTagUpdateVariable",
+  "enabled": true,
+  "find_regex": "/<UpdateVariable>(?:(?!<UpdateVariable>)[\\s\\S])*?<\\/UpdateVariable>\\n*/g",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": false,
+    "prompt": true
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null,
+  "prompt_rewrite_intended": true
+}

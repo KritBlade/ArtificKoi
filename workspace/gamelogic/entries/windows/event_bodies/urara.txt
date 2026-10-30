@@ -1,0 +1,464 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@urara_') === 0
+<%_ /* v1.3 */ _%>
+<%_ /* The ten @urara_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @urara_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@urara_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@urara_1') { _%>
+@urara_1  Extremely Normal (Urara) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  SPECIMEN. After the last bell, {{user}}'s phone locks up mid-message — frozen screen, nothing responds — and
+    he asks the emptying classroom whether anyone has a charger. In the back corner, four girls at one
+    pushed-together desk go completely still.
+    One of them holds a hand out sideways without looking up. Short, orange hair in two thick braids tied with
+    navy bows, a curl standing straight up on top of her head, a small keychain figure hanging off her bag. She
+    takes the phone and fixes it in about forty seconds — thumbs moving faster than he can follow, a hard reset, a
+    cache purge, something in a developer menu — talking the whole time in a rapid low mutter, not to him, about
+    how the animation in this week's episode eight "went so hard they must have spent the whole season's budget on
+    it."
+    And while she works, he reads the cover of the stapled document lying on the desk in front of her. Typed.
+    Bold. BOY OBSERVATION LOG — Vol. 1. Under it, smaller: Subject: (there is one).
+    A calm girl with a book reaches over and closes it, without hurry.
+    The phone comes back working. The orange-haired girl finally looks up at him, and the eye contact lands on her
+    like a bucket of water: Cha 28 and Soc 28, and she has just realised that the subject is the one standing
+    there. She does not look away. She turns her head very slightly toward the calm girl and whispers, without
+    breaking eye contact with him, at a volume the whole corner can hear: "...Don't move. Chapter one. He
+    approaches when you don't move."
+    ⚠ THE CIRCLE PASSES THROUGH. Suzu Yukishiro, Nanoka Ousaka and Nene Arisu are the after-school quiet circle,
+    real classmates who may or may not be in the save. Do not require any of them for the scene. Suzu writes it down. Nanoka, over a teacup, drowsy: "mmh~
+    he did approach~." Nene, at the end of the desk, has not breathed since he arrived.
+    She introduces herself, because the chapter says the subject will ask and she would rather get ahead of it:
+    URARA YAMABUKI. "Same class. You know the class. You're in it." And then, because Hag 12 cannot stop the next
+    sentence once it has started: "I'm documenting."
+    The keychain on her bag is a girl in a very small towel. He looks at it. "From a normal anime." The curl on
+    top of her head stands straight up. "Extremely normal."
+    ⚠ THE RULE OF THE WHOLE SERIES: she never lies well and nobody ever says so. Hag 12 is the Transparent band —
+    she cannot hold a cover story for the length of one sentence, everyone at that desk can see it, and the joke
+    is that in ten beats nobody points it out. Do not have the circle catch her. Do not have him catch her. Let
+    the curl do it.
+    He leaves with a working phone. Behind him, very clearly: "Walks off without looking back. Pre-route state.
+    Textbook." Three pens move.
+    Crack: she classified him on sight from a textbook, and it is the wrong genre — her whole encyclopaedia of how
+    boys behave was written by people who make 18+ games, and three girls with no other source in the world just
+    copied it into their notes. No H.
+  FIRE  emit /Intent/eventFire "urara_1" → engine creates the Urara quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose — "Urara
+    Yamabuki" — because that IS the mechanism: POST reads the name and arms her build, her <character> card
+    keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide> says.
+    Do NOT build her THIS reply unless her <character> profile is already in front of you. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Urara Yamabuki fixed {{user}}'s frozen phone in forty seconds without
+    looking at him, while a stapled document on her desk read BOY OBSERVATION LOG - Vol. 1, Subject: (there is
+    one); she whispered to her friends not to move because 'he approaches when you don't move', said the
+    towel-girl keychain on her bag was from a normal anime, and wrote him down as pre-route." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@urara_2') { _%>
+@urara_2  Extremely Normal (Urara) ·2   (CHECK - · REWARD Urara Affection +10)
+  DO  TOAST. Morning, the corner of the hallway by the stairs, and {{user}} is on his way to class when he notices
+    the set-up. Suzu at the far wall with a stopwatch. Nanoka holding a clipboard, upside down, eyes closed. Nene
+    at the very end of the corridor holding a small card that says WITNESS. And round the corner, out of his
+    sight, somebody counting down under her breath.
+    Chapter two of the Log: THE COLLISION. A boy and a girl round the same corner from opposite sides; she is
+    late; she has toast in her mouth; they collide; the event begins. The Log is very clear that this is how it
+    starts. Every source agrees.
+    Urara has brought the toast from home. For this. It is in a sandwich bag; she takes it out, puts it between
+    her teeth, shuts her eyes — the chapter says the girl is not looking where she is going — and rounds the
+    corner at a dead sprint.
+    He sidesteps.
+    ⚠ PLAY THE FALL AS PURE SLAPSTICK AND KEEP THE CAMERA CLEAN. She goes past him, full length, onto the hallway
+    floor: braids everywhere, skirt up, white knee socks with clovers on them pointed at the ceiling, toast
+    skidding on ahead of her under a locker. He looks away — the honest reflex — and holds a hand down to her
+    without looking. She does not take it yet. From the floor, to the ceiling, with total scientific composure:
+    "...He looked away."
+    Suzu, calmly: "Noted."
+    "In the source material they don't look away. They LOOK. There's a whole— there's a CG." She sits up. "And he
+    DODGED. The subject is not supposed to be able to dodge, the collision is a fixed event, it's in every
+    single—" and she stops, because Hag 12 was about to say every single what, and the curl stands up instead.
+    ⚠ THE CIRCLE PASSES THROUGH — do not require any of them. Nanoka, eyes
+    still shut: "Mmh~ did it trigger~?" Nene turns her WITNESS card round; the back says NO. Suzu writes one line
+    and reads it out, because it is the finding: "Subject deviates from text."
+    ⚠ NOT "TEXT IS WRONG". SUBJECT DEVIATES. This is the engine of the series and it must be exact: the circle has
+    one book on this subject and one boy, and when they disagree the circle records a fault in the boy. Nobody at
+    that wall has any other source. Nobody doubts the book. They doubt him.
+    He fishes the toast out from under the locker, brushes it off, and hands it back to her. She takes it, and
+    eats it, and then asks him — the first thing she has said to him directly in two beats — whether he dodged on
+    purpose or on reflex, because the Log needs to know which column.
+    Crack: the first data point in the whole project contradicts the canon, and Urara, Int 85, sitting on a
+    hallway floor with crumbs on her collar, is faintly offended on the genre's behalf. No H.
+  FIRE  emit /Intent/eventFire "urara_2" → engine advances the Urara quest to Step 2 and pays the beat: Urara
+    Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is the payout,
+    and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Urara ran a hallway corner blind with toast in her mouth to trigger the
+    collision event from chapter two of her Log, and {{user}} sidestepped; she hit the floor alone, he looked
+    away, and Suzu recorded the finding as 'subject deviates from text'." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@urara_3') { _%>
+@urara_3  Extremely Normal (Urara) ·3   (CHECK - · REWARD Urara Affection +16)
+  DO  THE CURTAIN. A limited edition came out at midnight and Urara has not slept, and at lunch, halfway across
+    the grounds with a bag of merchandise and a can of coffee, she simply stops walking and folds up. Sta 50 and
+    no sleep; nothing dramatic, she just runs out. {{user}} is the nearest person, so he carries her to the
+    infirmary — she is 153 centimetres and weighs about as much as the bag — puts her on the bed behind the
+    curtain, and the nurse is not there.
+    Chapter four of the Log is titled THE NURSE'S OFFICE, and its first line is: this is where it happens.
+    So the circle arrives at the curtain at a run. ⚠ THE CIRCLE PASSES THROUGH — do not require any of them. Suzu first, notebook already open. Nene second, silent, scarlet before she
+    has seen anything at all. Nanoka last, at a walk, some time later, with the tea. The chapter says the girl's
+    friends arrive to "support", and none of them knows what that means, so they stand in a row outside the
+    curtain and Suzu asks him, in a calm, complete sentence: "Has it started?"
+    "Has what started?"
+    "...The event."
+    Inside the curtain, Urara has woken up. She has taken stock — boy, bed, curtain, daytime — and gone into the
+    full canon spiral: narrating what happens next in a whisper that keeps getting louder, blanket pulled to her
+    chin in both fists. "The curtain's closed. Okay. Okay. In a— in a NORMAL manga, the curtain closes, and then
+    he sits on the edge of the bed, and then the screen goes— no. No no no, it's DAYTIME, there's a rule about
+    daytime—" ⚠ SHE NEVER SAYS WHAT SCREEN. She has never in her life been inside a nurse's office with a boy in
+    it; she is describing it from a CG gallery; she is genuinely frightened; and the fright is also, unmistakably,
+    the most exciting thing that has ever happened to her.
+    He does none of it. He puts a bottle of water on the side table where she can reach it, steps back out through
+    the curtain, sits down on the bench next to Suzu, and asks — through the curtain, ordinary voice — whether she
+    wants the window open.
+    Silence from the bed. Then, small: "...In the games the boy never asks about the window."
+    Suzu, not looking up from writing: "Why do you know what happens in the games?"
+    "GIRLS' ROMANCE MANGA. There are WINDOWS in girls' romance manga." Nobody argues. The curl is visible over the
+    top of the curtain rail.
+    A folded slip comes under the curtain from the outside, in Nene's handwriting: is the window a flag. Urara
+    reads it and answers it honestly, which is the first honest data in the Log: "...I don't know. It's not in
+    anything."
+    ⚠ THE CIRCLE IS NOT LAUGHING AT HER AND NEVER DOES. Three girls with no other source on Earth, taking notes on
+    a curtain. Play their faith completely straight — that is what makes it funny.
+    Crack: she was braced, terrified and thrilled, for a scene that exists only in her library, and what actually
+    happened was a bottle of water and a question about a window, and she has no chapter for kind. No H.
+  FIRE  emit /Intent/eventFire "urara_3" → engine advances the Urara quest to Step 3 and pays the beat: Urara
+    Affection +16, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Urara collapsed on the grounds after an all-night release and {{user}}
+    carried her to the infirmary; her circle lined up outside the curtain to ask whether the event had started,
+    she narrated chapter four from behind the blanket, and he put a bottle of water by the bed, sat outside, and
+    asked if she wanted the window open." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@urara_4') { _%>
+@urara_4  Extremely Normal (Urara) ·4   (CHECK - · no payout)
+  DO  SECOND SOURCE. Lunch, the cafeteria, and {{user}} has ended up at the next table over from something that
+    looks like a job interview.
+    It began with Suzu. ⚠ THE CIRCLE PASSES THROUGH — do not require any of
+    them. Int 95, and the Log has offended her standards: "Every claim requires two sources." Urara: "There's only
+    one." "Then find another." So the circle went looking for the girl in the year most likely to have experience
+    of boys, and by the only metric available to them — popularity — they found AIRI KURAHA, and Urara, who has
+    wanted to be Airi's friend since first year and has never once managed a conversation with her that Airi
+    understood, is now conducting a thirty-minute interview from a prepared list.
+    ⚠ AIRI PASSES THROUGH TOO — a real classmate (Class_Clown, Soc 94, Hag 45) who may or may not be in the save;
+    do not require her. What matters is this: Airi has no
+    more experience than the four girls asking, and she would rather die than say so, because being the fun one is
+    the only reason she believes anyone keeps her around. So she improvises. For thirty minutes. With total
+    confidence.
+    Urara asks about routes. Airi thinks she means the bus and describes the number six in detail. Suzu writes it
+    down. Urara asks whether, per the Log, the subject will "bite" when the girl delivers the chapter-five line;
+    Airi says oh, he'll definitely bite, meaning he'll laugh at the joke; Suzu writes: biting — corroborated.
+    Urara asks what happens when the subject takes your hand, and Airi, who has no idea, does a shoulder roll and
+    says "like — that, but with feelings." Nene writes down the shoulder roll. Nanoka, from somewhere near sleep,
+    asks whether boys sleep. Airi: "Like... technically?"
+    He can hear every word from the next table and does not turn round. ⚠ AND NOBODY AT THE INTERVIEW HAS NOTICED
+    THE SUBJECT IS TEN FEET AWAY. Four girls researching the one boy in the school with their backs to him.
+    Vol. 2 is assembled on the spot: two columns, URARA and AIRI, and the columns disagree on nearly everything,
+    and the circle keeps both, because two sources is the standard.
+    Then Airi leaves, with a peace sign and a "good luck with the boy thing!", and Urara sits very still, and the
+    two feelings arrive together exactly as her card says they always do: delighted — Airi Kuraha talked to her,
+    for thirty whole minutes, and asked her name — and mortified, because not one thing Airi said made any sense
+    and all of it is in the Log now.
+    ⚠ THE THING SHE DID WITHOUT SAYING: before the interview started she had taken Airi's phone, whose speaker had
+    been crackling for a month, and fixed it in her lap under the table while Airi talked. Airi did not notice.
+    Airi never does. Kin 70 does not know how to give anything except that.
+    Crack: the circle has doubled its sources and halved its accuracy, and the specimen ate his lunch behind them
+    the whole time. No H.
+  FIRE  emit /Intent/eventFire "urara_4" → engine advances the Urara quest to Step 4. No payout on this beat — not
+    every beat pays, and the ones that do are 2, 3, 7 and 10. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Suzu demanded a second source for the Log, so Urara interviewed Airi
+    Kuraha for thirty minutes in the cafeteria; Airi improvised every answer, Vol. 2 came out as two columns that
+    disagree on everything, and {{user}} heard all of it from the next table without any of them noticing." → the
+    World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@urara_5') { _%>
+@urara_5  Extremely Normal (Urara) ·5   (CHECK - · no payout)
+  DO  THE BODY QUESTION. The library after four, the circle's table at the back, and {{user}} is one aisle over
+    looking for a book when Suzu puts her pen down and asks the question the whole Log has been circling for a
+    month, in one calm, complete sentence:
+    "What happens. Precisely. Afterward."
+    ⚠ THE CIRCLE PASSES THROUGH — do not require any of them. What matters is
+    the faith: three girls who have never held a boy's hand, with no other source on this subject anywhere in
+    their lives, are about to receive the whole of it from a fourth who has never held one either. Nobody at that
+    table knows that. Play it completely straight. Nobody is joking.
+    And Urara delivers. Int 85, total authority, hand gestures. It is like a rhythm game: the boy has to hit the
+    notes, in order, and if he hits them the girl — and here her voice drops to the whisper that carries furthest
+    in a library — the girl is INTENSE. Screaming. Her eyes do the thing. There are hearts. There is steam, from
+    somewhere. "Sometimes the text box shakes." And at the end the girl passes out, every time, that is standard,
+    because the boy has the stamina of a rhythm-game final boss, that is also standard, it is in every—
+    Nanoka, dreamily: "Does the boy also pass out~?"
+    "No. He gets a CG."
+    A slip of paper, folded twice, slides across the table from Nene's side. Urara unfolds it. In tiny
+    handwriting: does it hurt.
+    "Only in the first CG. Then the text box shakes." Nene turns the colour of the ribbon on her braid and does
+    not take the slip back.
+    Suzu has written every word of it in the beautiful hand she writes her poetry in, and says, without looking
+    up, "In the Brontës they close the door."
+    "The Brontës didn't have a CG budget."
+    ⚠ SHE BELIEVES ALL OF IT. Her entire understanding of what happens between a boy and a girl comes from 18+
+    games and manga, she has never once had a reason to doubt it, and she has just taught it to three people as
+    fact. Keep the ecchi in her WORDS and her hands. Nothing happens at this table but a lecture.
+    And then she turns her head, mid-gesture, and he is standing at the end of the aisle with a book he has
+    stopped pretending to read.
+    Hag 12 does the whole confession on her face in about a second and a half. Every line of it. He says only:
+    "...Which manga?" and she says "...A normal one," and the curl goes up, and Nanoka pours her some tea.
+    Crack: three girls' entire understanding of the subject was just dictated by a fourth who has never held a
+    hand, and the only person in the building the lecture was actually about attended it from the next aisle.
+    No H.
+  FIRE  emit /Intent/eventFire "urara_5" → engine advances the Urara quest to Step 5. No payout on this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Suzu asked Urara what happens afterward, precisely, and Urara told the
+    circle with total authority that it is like a rhythm game and the girl is intense and passes out every time;
+    Nene asked on a slip of paper whether it hurts, and {{user}} heard the whole lecture from the next aisle." →
+    the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@urara_6') { _%>
+@urara_6  Extremely Normal (Urara) ·6   (CHECK - · no payout)
+  DO  THE SEQUENCE. The Log has a date chapter, and it is SPECIFIC. Urara has asked {{user}} to "verify chapter
+    eight" after school, which is how she asks for a date, and the circle is coming, because the chapter has to be
+    observed.
+    Chapter eight, in order: (1) the crane game, and the boy must fail three times before he wins the prize — the
+    third failure is where the girl's affection rises; (2) one crepe, two mouths, the Log is specific; (3) a
+    ferris wheel; (4) "and then the scene fades." The chapter ends there. Every source agrees.
+    ⚠ THE CIRCLE PASSES THROUGH — do not require any of them. The research team
+    escorts the date down the shopping street: Suzu ten metres behind with the notebook, Nene walking ahead
+    holding a sign with the next checkpoint on it in beautiful handwriting, Nanoka asleep on a bench at every stop
+    and carried to the next one by Nene, who is smaller than her and manages.
+    He plays it straight, which breaks every step. He wins the crane game on the first try. Suzu, from ten metres:
+    "That is not in the sequence." Urara, hissing, appalled: "You have to FAIL first. You have to fail THREE
+    times, that's where the— you can't just WIN, it doesn't COUNT if you just—" He hands her the prize, a plush
+    cat the size of her fist. She holds it like evidence.
+    At the crepe stand he buys two crepes. Nene's sign says ONE. He did not read the sign. Urara stares at her own
+    whole crepe as if it has personally let her down.
+    There is no ferris wheel in Jinko. Suzu has anticipated this and substituted the station elevator, two floors,
+    glass on one side, and the circle waits at the bottom while the two of them ride it up and down twice for the
+    chapter's sake, and Urara stands in the corner of the elevator with her crepe and her cat and says, with
+    dignity, "This is the ferris wheel part."
+    Last checkpoint: the bus stop, dusk, and the chapter's final line. She has gone quiet. She knows what the
+    chapter says happens next, and she does not know what that means at a real bus stop with a real timetable and
+    Nene holding a sign that says FADE, and both her hands are full.
+    He says goodnight, and then does not leave — he waits with her for the bus, the way you do. Nothing fades. The
+    bus comes. She gets on it.
+    From the window, as it pulls away, to nobody: "...It didn't fade."
+    Nene, on the pavement, turns her sign round. The back says: END?
+    ⚠ THE DATE WAS A GOOD DATE AND THE PROSE MUST KNOW THAT EVEN THOUGH SHE DOESN'T. He won her a cat. He bought
+    her a whole crepe. He rode an elevator twice because she asked. Every "failure" in the Log tonight was a boy
+    being ordinary and kind, and she has no column for that.
+    Crack: the chapter's last step is the one step reality does not have, and she has spent an entire evening
+    checking a good time against a book and finding the good time wrong. No H.
+  FIRE  emit /Intent/eventFire "urara_6" → engine advances the Urara quest to Step 6. No payout on this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Urara ran chapter eight of the Log on {{user}} with the circle escorting
+    the date down the shopping street; he won the crane game first try, bought two crepes, and rode the station
+    elevator twice for the ferris wheel step, and at the bus stop nothing faded and Nene's sign said END?" → the
+    World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@urara_7') { _%>
+@urara_7  Extremely Normal (Urara) ·7   (CHECK - · REWARD Urara Affection +20 · THE TURN)
+  DO  ALL ROUTES AT ONCE. Morning. {{user}} slides the classroom door open and every girl in the room turns round
+    at once with the same face: the face of a class that has rehearsed.
+    Vol. 2 got out. Airi photocopied it — cheerfully, for everyone, because it was funny — and the class has read
+    the appendix, and the appendix has a TABLE. Urara built it from every heroine type in every game she has ever
+    finished, and it reads, give or take, like a list of this class: Shy_Girl, Bookworm, Mellow_Girl, Class_Clown,
+    Highborn_Lady, Tomboy, Pure_Innocent, Sadistic_Tease, Yandere, Wild_Child, Big_Sister. The appendix assigns
+    one type to each SEAT, by the seating chart, for research purposes. The class has decided that is binding.
+    ⚠ EVERY GIRL IS PERFORMING A TYPE THAT IS NOT HERS, ALL AT ONCE, AND THAT IS THE JOKE. The window row has been
+    assigned Tomboy and thumps him on the shoulder in sequence as he walks past, "yo, bro." The front row is
+    Big_Sister and offers, in unison, to pack his lunch. A girl shakes him awake at his desk shouting that he'll
+    be late — he is already here; she has been assigned Bright and this was the only chapter she could find. The
+    back row is Wild_Child and is just Nene, sitting normally, dying.
+    ⚠ THE CIRCLE AND AIRI PASS THROUGH — do not require any of them.
+    But if they are in the save: Suzu has drawn Party_Girl and raises one hand and says "yes" in a complete
+    sentence. Nanoka has drawn Sadistic_Tease: "mmh~ ...kneel~ ...zzz." Airi has drawn Highborn_Lady and does the
+    laugh, wrong, three times, louder each time. And somebody has assigned the coldest girl in the year
+    Pure_Innocent, and she is not participating, from the doorway, with her arms folded.
+    And Urara is standing on a chair.
+    "THAT'S ONE TYPE EACH. YOU CAN'T ALL BE ON AT ONCE. YOU HAVE TO PICK A ROUTE, THAT'S NOT HOW ROUTES WORK, THE
+    FLAGS CANCEL OUT—" ⚠ SHE IS NOT EMBARRASSED FOR HERSELF. She is furious on behalf of the SYSTEM. The whole
+    room is doing it wrong at the same time and the person who wrote the book is the only one in it who knows, and
+    Int 85 cannot bear it.
+    Then a girl in the second row asks, loud, over everything: "Urara, where's the table FROM?"
+    The room goes quiet and turns. Every face. And Urara Yamabuki, Hag 12, on a chair, says to all of them at
+    once: "...A normal manga."
+    Every face looks at the curl on top of her head, which is straight up. Every face nods politely. Nobody says
+    anything. That is the rule of the whole series and it holds at scale.
+    ⚠ THE TURN IS AFTER, AND IT IS SMALL. Bell, homeroom, the room settles, the rows forget their types. He comes
+    to the chair she is still standing on and hands her Airi's photocopy of Vol. 2, folded so that only one thing
+    shows: the footnote at the bottom of the appendix that she forgot to delete. A game's title. In her own
+    typing.
+    He says nothing. He has known since the library, a week ago, and never said. He just gives her the page so
+    that she knows that he knows, and goes and sits down.
+    And Hag 12 explains anyway — cannot not — at a whisper, leaning down off the chair, for the whole of homeroom,
+    to the one person in the building who did not ask: which title, which route, why the fan-disc is essential,
+    that she has never told anyone, that the towel keychain is from it too, that she is sorry. He listens to all
+    of it and at the end says only that the footnote was in nine-point, and nobody else reads footnotes.
+    Crack: found out — by exactly one person, silently — and it was the single worst thing she could imagine, and
+    what happened was a folded page and a boy who reads footnotes. No H.
+  FIRE  emit /Intent/eventFire "urara_7" → engine advances the Urara quest to Step 7 and pays the beat: Urara
+    Affection +20, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Vol. 2 leaked and the whole class performed a heroine type each at
+    {{user}} at once, by seating chart, while Urara stood on a chair shouting that that is not how routes work;
+    asked where the table came from she told the whole room 'a normal manga', and afterwards he handed her the
+    photocopy folded to the footnote with the game's title in it, and said nothing." → the World Log remembers
+    only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@urara_8') { _%>
+@urara_8  Extremely Normal (Urara) ·8   (CHECK - · no payout)
+  DO  THE SHRINE. Her house, after four. Urara needs a second pair of hands to seat a new graphics card — it is
+    heavy, the case is on the floor, and the one time she did it alone she dropped a screw into the power supply —
+    and she has asked {{user}} because he is the only person she knows with hands and no opinions about airflow.
+    The circle has come too. ⚠ THE CIRCLE PASSES THROUGH — do not require any
+    of them. Chapter nine of the Log is titled THE GIRL'S ROOM and the appendix cites it eleven times, and the
+    chapter says the girl's friends are present "in support", so Suzu, Nanoka and Nene have installed themselves
+    in the Yamabuki living room with tea from her mother, and Nene is holding a sign that says DO NOT DISTURB in
+    beautiful handwriting and will not look at it.
+    Upstairs is the shrine. Shelves of figures, floor to ceiling, and behind them, Urara knows and he knows, the
+    posters. He has known since the footnote. She knows he has known since the footnote. And she runs ahead of him
+    room-to-room anyway, on pure reflex, like bomb disposal: flips a poster to face the wall, turns the entire top
+    shelf of figures round one by one so that they are all looking at the plaster, and gets to the one on the end
+    — a bath scene, a girl in a wooden tub — a second too late, and tapes a folded square of tissue paper over her
+    like a towel, with two pieces of tape, while he stands in the doorway holding a graphics card.
+    ⚠ HE HAS KNOWN FOR A WEEK AND SHE HIDES IT ALL ANYWAY. That is Hag 12 exactly: she is not capable of the cover
+    story, and she is not capable of not attempting it either. He notices everything, says nothing, and studies
+    the ceiling, which has a poster on it she has forgotten about.
+    The card goes in. It takes forty minutes and both of them on the floor, and she is calm for all of it, because
+    a PC is a thing she understands. Then tea: she brings two mugs up, and puts his down on a coaster, and the
+    coaster is a game case.
+    The one she missed. Face up. Title, age rating, and a girl on the cover with nothing normal about her.
+    The mask shatters right on schedule — her card says it does the instant she is shown one, and here she has
+    shown him one herself — and the freeze is total: kneeling, mug in both hands, curl straight up, every muscle
+    braced for the thing she has been afraid of since she was thirteen. Disgust. The face. The step back.
+    He picks the case up, turns it over, reads the back, and asks which route has the better writing.
+    ⚠ THAT IS THE WHOLE BEAT AND IT IS THE RIGHT SIZE. He does not reassure her, does not say it's fine, does not
+    make a speech about acceptance. He asks the question a person asks about a thing another person loves, and
+    then he waits for the answer.
+    She answers for forty minutes. Which route, and why, and which fan-disc is essential, and why the sequel's
+    writer ruined the tone, and somewhere around the fan-disc she is crying and does not stop talking, and does
+    not stop crying either, and he keeps asking follow-up questions because that is what keeps her going. Through
+    the floor, from the living room, calm, Suzu: "Has it started?" Neither of them answers.
+    Crack: found out was last week. This is ACCEPTED, out loud, in her own room with the posters turned to the
+    wall, and the only sound in it is a PC fan and a girl explaining a true ending. No H.
+  FIRE  emit /Intent/eventFire "urara_8" → engine advances the Urara quest to Step 8. No payout on this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} helped Urara seat a graphics card in her room while the circle
+    sat in her living room in support; she turned every figure to face the wall and taped a tissue-paper towel on
+    the last one, then put his tea down on a game case, and when he asked which route had the better writing she
+    answered for forty minutes and cried." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@urara_9') { _%>
+@urara_9  Extremely Normal (Urara) ·9   (CHECK - · no payout · THE BREAK)
+  DO  ERRATA. The library after four, the circle's table, and Urara has a document. One page, printed, stapled to
+    nothing: Vol. 3 — ERRATA. {{user}} is not at the table. She does not know he is in the building.
+    ⚠ THE CIRCLE PASSES THROUGH — do not require any of them. She reads it
+    aloud, standing, because sitting felt like lying. The source of every prior volume. The genre. The age rating.
+    The names of the games. Her voice shakes the whole way through and Hag 12 does not let her stop, and at the
+    end she puts the page down and waits for the circle to end.
+    And the circle has no frame for it.
+    Suzu, after a moment, carefully: "A game. With writing."
+    Nanoka: "Mmh~ so it's a book~."
+    Nene: nothing, and then a slip, pushed across: is it still reliable.
+    ⚠ NOBODY AT THIS TABLE BUT URARA KNOWS WHAT AN 18+ GAME IS. That is the punchline of the whole series and it
+    must land without anyone explaining it: three girls with no source on this subject but her, who have no idea
+    what the thing she is confessing even means, and so cannot be scandalised by it. Her shame was the only thing
+    at the table that knew what the word meant.
+    So she answers Nene's slip honestly, and that is the real confession, worse than the first one: she doesn't
+    know.
+    Not the window. Not the curtain. Not the collision, not chapter five, not whether the text box shakes. Nene's
+    other slip, from the lecture — does it hurt — she doesn't know. In the games the girl is that intense and
+    Urara has no idea whether she would be, or whether she would be nothing, a plain text box, a blank. She has
+    never held a hand. Every volume was written by a girl who has never been in a room with one, describing the
+    room.
+    Then the only true pages she has, which she has been keeping without noticing: he looks away. He asks about
+    the window. He sits outside the curtain. He wins the crane game first try and hands you the cat. He folds the
+    page so only you can read it. He asks which route has the better writing.
+    Suzu writes it down, every line, in the poetry hand, and titles it Vol. 3, and it is the first volume in the
+    Log with a source.
+    ⚠ THE CIRCLE KEEPS HER. Not one of the three considers, for a second, leaving the table. Suzu would fight
+    anyone who stepped on a member of this circle and she does not have to today; she just keeps writing. Nanoka
+    pours the tea. Nene takes both her slips back and puts them in her pocket.
+    And then the thing Urara actually came to say, to them, because she cannot say it to him: she doesn't want the
+    data. She never wanted the data. She wants— and Suzu, without looking up, says, "He's behind you."
+    Urara, not turning round: "That's a chapter two event. That doesn't happen to real—"
+    It does. He has been at the end of the aisle since Vol. 3.
+    ⚠ SHE ASKS HIM HERSELF, AND IT IS THE FIRST THING IN NINE BEATS SHE HAS NOT READ FIRST. Turning round, red to
+    the braids, curl up: "There's a shelf. In my room. I want you to see it face-out." That is the ask, and it
+    costs her the entire canon, and she says it anyway, and he says yes.
+    Crack: she had a book for everything, and the one thing she has ever wanted was on no page in it. No H.
+  FIRE  emit /Intent/eventFire "urara_9" → engine advances the Urara quest to Step 9. No payout on this beat — the
+    ask costs her everything and a payout would price it. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Urara read Vol. 3 - Errata to the circle, the source of every prior
+    volume, and the circle had no idea what an 18+ game was and asked only whether it was still reliable; she
+    admitted she knows nothing herself, dictated the only true pages - what {{user}} actually did - and then, told
+    he was behind her, asked him to come and see her shelf face-out." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@urara_10') { _%>
+@urara_10  Extremely Normal (Urara) ·10   (CHECK - · REWARD Urara Affection +20 · FINALE)
+  DO  THE PROTAGONIST. Her room, a week on, after four, and {{user}} is the only other person in the house. No
+    circle in the living room. No sign.
+    Everything is face-out. Every poster on every wall, the one on the ceiling, the whole top shelf turned back
+    round to face the room. The bath-scene girl has her tissue towel off. Nothing is taped. It is, for the first
+    time since she was thirteen, just her room, and she stands in the middle of it with her hands behind her back
+    like somebody showing you a garden.
+    ⚠ NOTHING WILD HAPPENS IN THIS BEAT AND THAT IS DELIBERATE. No circle, no chapter, no sequence. The Log is
+    closed. The quiet is the reward.
+    On the shelf, beside the heroine from the towel keychain — the same girl, full size, in the same very small
+    towel — there is a figure he has not seen before. A boy. School uniform, hands in his pockets, and no face: a
+    smooth blank where the features would go, the way the protagonists are in those games, so that anyone can be
+    him. And at his feet, the one thing on any shelf in this room that is not from anything: a plush cat the size
+    of her fist, out of a crane game, won on the first try, which the Log said could not count. It did not fade.
+    "They only made two hundred." She is not looking at him. "Nobody buys the protagonist."
+    Then, from under the desk, a box. A second controller, still sealed. "The games I like are single-player. I've
+    never had a reason to own two of anything." She holds it out, and when he takes it she watches him hold it.
+    ⚠ THE BOOKEND, AND PLAY IT WITH NO SPEECH FROM HIM. He does not answer. He sits down on the floor in front of
+    the screen, where a second cushion has been put out, and opens the box. That is everything he does with his
+    mouth.
+    The first thing that comes up is the game from the coaster. She does not hide it. The load menu is already
+    there: one file, 100%, her name on it, the date she finished it — every route, every ending, every picture in
+    the gallery, five years of afternoons alone in this room.
+    She sits on the other cushion, close enough that the braids are in the way, and moves the cursor onto her
+    clear file. Not LOAD. DELETE.
+    The game asks the way games ask, in a small box in the middle of the screen: Delete this file? This cannot be
+    undone. And Hag 12, who has never held anything back in her life, holds this — looks at the box for a long
+    moment, then at him, and presses yes without looking at it again.
+    ⚠ SHE IS NOT ERASING HERSELF, AND THE PROSE MUST NOT PLAY IT AS LOSS. She is retiring the version she played
+    alone. Every hour in that file was real and she regrets none of it, and she is not going to have him sit down
+    next to a finished game. Play it steady, not tearful. The energy is in how still she is.
+    She says, in her serious voice, that it's a normal game. Extremely normal. The curl stands straight up — and
+    she looks at him, and, for the first time in the series, catches it herself.
+    "...It's not." Quieter. "It's the one with the best writing. I want you to see why."
+    NEW GAME. The name screen: a blank field, blinking, the same smooth empty the figure has. She does not type.
+    She looks at him and waits.
+    He types. ⚠ THE NAME IS HIS OWN — {{user}} — AND NOTHING ELSE. Do not invent one, do not have him type hers,
+    do not have her type it for him. The file is called whatever he enters, and he enters himself. She watches the
+    letters come in one at a time, and then she says the line she has been carrying up the stairs for a week — to
+    the screen, not to him:
+    "He doesn't have a face. That's how you know it's you."
+    A pause. "Skip chapter five in front of me. I'll tell you when."
+    ⚠ WHAT CLOSES HERE: she was found out by the whole class and it changed nothing, found out by him and it
+    changed everything, and told three friends who did not understand a word of it and kept her anyway. The Log
+    said the boy has no face so that anyone can be him. She has just watched him write the name. No H.
+  FIRE  emit /Intent/eventFire "urara_10" → engine advances the Urara quest to Step 10, marks the series COMPLETE,
+    and pays the beat: Urara Affection +20, applied by the row. Do NOT also emit an affection change for it. If
+    the payout carries her past 100 the rank-up lands at her next gate — a check on her, or the day's swing — one
+    rung a day is the game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|In Urara's room with every poster face-out for the first time, she showed
+    {{user}} the protagonist figure with no face, gave him a second controller, deleted her own 100% clear file of
+    the game from the coaster without a second look, started a new game, and left the name field blank until he
+    typed his own; 'he doesn't have a face, that's how you know it's you', said to the screen as the letters came
+    in." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

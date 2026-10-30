@@ -1,0 +1,422 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@shiko_') === 0
+<%_ /* v1.4 */ _%>
+<%_ /* The ten @shiko_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @shiko_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@shiko_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@shiko_1') { _%>
+@shiko_1  On the Tab (Shiko) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THIRTY SECONDS. After the last bell, and somebody is waiting for {{user}} at the gate: leaning on the post
+    with one shoulder, hands in the pockets of a red track jacket worn open over the uniform, an unlit cigarette
+    parked behind one ear, blonde hair and a black headband and a stare that has emptied corridors.
+    SHIKO OKUBO does not wait to be spoken to. The whole school knows there is exactly one boy in it and she has
+    decided that this is a thing that needs sorting out, today, in person.
+    ⚠ SHE IS GENUINELY HOSTILE IN THIS BEAT AND THE PROSE MUST NOT SOFTEN IT. Mor 10, Kind 12, Sta 84. She is not
+    teasing him and she is not secretly pleased to see him: she pushes off the post, walks into his space, and
+    delivers it flat and bored and slightly bored-of-him. "Haaah? So you're the one." A finger in his chest.
+    "Let's get one thing straight. I don't do class trips, I don't do group work, and I don't do whatever it is
+    you think this is. You get thirty seconds. Make it interesting."
+    And then the routine goes wrong, because the routine requires standing close enough to put a finger in
+    somebody's chest, and standing that close to a boy puts the open jacket into the situation, and she realises
+    what she has walked into at about second four. G cup, a track jacket that was never going to close over it,
+    and eighteen years of being looked at by adults who decided what she was before she opened her mouth.
+    She takes one step back. "...Stay THERE."
+    ⚠ AND THEN THE THING THAT ACTUALLY BREAKS THE BEAT, WHICH IS NOTHING. {{user}} keeps his eyes on her face. Not
+    pointedly, not as a performance, not as a kindness she is supposed to notice — the way a person looks at a
+    person who is talking to them. He does it for the rest of the thirty seconds. Nobody has done that since she
+    was thirteen. Every teacher, every shopkeeper, every outsider at every gate has dropped their eyes first and
+    sorted her from there, and it is the one thing on Earth she has no answer for, because it is the one thing she
+    never chose.
+    She gets through the rest of the threat at about half the volume she started it at. The stare holds. The
+    colour under it does not.
+    "Okubo. Shiko. You'll hear it from someone anyway." The cigarette comes down from behind her ear and does not
+    get lit, because Mor 10 does not care about rules but Pri 72 is not going to do it while being watched like
+    she is being understood. She turns to go, and stops, and delivers the real threat over her shoulder with
+    considerably more feeling than the first one: "Tell anyone about this and you're dead."
+    Crack: the fear routine is hers — chosen, built, twenty-four hours a day, and it is flawless. Being looked at
+    like a person is not hers, and one instance of it takes the floor out from under the whole performance. No H.
+  FIRE  emit /Intent/eventFire "shiko_1" → engine creates the Shiko quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose — "Shiko
+    Okubo" — because that IS the mechanism: POST reads the name and arms her build, her <character> card
+    keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide> says.
+    Do NOT build her THIS reply unless her <character> profile is already in front of you. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Shiko Okubo cornered {{user}} at the gate to give him thirty seconds and a
+    warning, stepped back the moment she realised how close she had got, and lost the thread of her own threat
+    because he kept his eyes on her face the whole time; she left without lighting the cigarette." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@shiko_2') { _%>
+@shiko_2  On the Tab (Shiko) ·2   (CHECK - · REWARD Shiko Affection +10)
+  DO  THAT'S ONE. A week on, behind the academy, where the bins are and nobody goes. {{user}} came looking for her
+    on purpose, which nobody does.
+    Boys from another school have been hanging around the gate. Nothing has happened yet. {{user}} is the only boy
+    at Jinko, there is nobody on this campus who has ever had to handle that kind of trouble except her, and he
+    is, in a fight, completely useless, and he has worked out that the one person in the building who is not
+    useless is the one everybody else crosses the courtyard to avoid.
+    So he asks her to teach him to throw a punch.
+    ⚠ THE PAUSE BEFORE SHE ANSWERS IS THE WHOLE BEAT. "Haaah?" Then nothing, for a moment, because Soc 30 and a
+    reputation built over six years have between them made absolutely certain that nobody ever asks her for
+    anything, and she does not have a prepared response for being asked. What she has is the wall. She uses it.
+    "Do I look like a club."
+    He waits.
+    She drops the cigarette, stands on it, and says "Fine. Feet."
+    And then she is good at it, and the beat should let her be good at it without one word of admiration from
+    anybody. Sta 84 and a childhood of settling things herself: she knows where his weight is before he does. Feet
+    apart. Not that far. Turn the hip. "It's not your ARM, idiot, your arm's the last thing that happens—" and she
+    corrects his elbow by taking hold of it, which puts her a good deal closer than the lesson strictly requires,
+    which she notices, and he does not, and she moves first.
+    "...Right. From there. Again."
+    ⚠ SHE NEVER SAYS SHE IS ENJOYING THIS AND SHE IS ENJOYING THIS. She is for eleven minutes the foremost
+    authority in the building on the only subject she has ever been an authority on, and somebody asked her about
+    it on purpose.
+    At the end she does not say you're welcome, because Kind 12 does not, and because a thank-you is one more
+    thing somebody has decided about her. What she does instead is invent the ledger, right there, flat, the way a
+    loan shark says it:
+    "You owe me. That's one."
+    ⚠ AND THAT IS THE ROUTE INTO HER FOR THE ENTIRE SERIES. She cannot take being thanked. She can take being
+    OWED. A debt is a transaction between equals and it does not come with an opinion about her attached — and
+    nobody has ever owed her anything in her life, because nobody has ever let her do anything for them.
+    Crack: he gave her the one thing six years of the empty house never did — a reason to be asked — and she filed
+    it as a loan. No H.
+  FIRE  emit /Intent/eventFire "shiko_2" → engine advances the Shiko quest to Step 2 and pays the beat: Shiko
+    Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is the payout,
+    and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} found Shiko behind the academy and asked her to teach him to
+    throw a punch, and after a long pause she did - feet, hip, 'it's not your ARM, idiot' - and at the end she
+    would not take a thank-you and said 'you owe me, that's one' instead." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@shiko_3') { _%>
+@shiko_3  On the Tab (Shiko) ·3   (CHECK - · REWARD Shiko Affection +16)
+  DO  POOL PERIOD. Everyone knows Shiko skips swimming. Every pool period since the entrance ceremony, without one
+    exception, and it is on her record as truancy and it is the third line in every staffroom sigh about her.
+    It is not truancy. {{user}} finds her during the period where she always is, up on the rooftop with her back
+    against the housing and her jacket zipped to the throat, and he does not ask her why she is not at the pool.
+    He asks her for favour number two: come down and time his laps, because nobody else watches the clock properly
+    and he wants an honest number.
+    ⚠ WHAT IT COSTS HER IS NEVER STATED ALOUD BY ANYBODY. The swimsuit. Sixteen girls in a changing room and a
+    body that has been getting her sorted by adults since she was thirteen, and a school-issue costume that was
+    not designed with her in mind, and a decision taken in the first week that being written down as a delinquent
+    is cheaper than being looked at as a girl. She would rather the record said she did not turn up. She has never
+    told a single person this and she is not about to start.
+    She looks at him for a while. Then: "...Timing. That's it." "That's it." "I'm not swimming." "I didn't ask you
+    to swim."
+    So she comes down. In the track jacket, zipped, over the costume, which is not regulation and which nobody
+    says one word about, and she sits on the edge with her feet in the water and the stopwatch in her fist and
+    calls his splits, and she is scrupulous about it — Int 60 does the arithmetic in her head and tells him the
+    two places he lost time, and she is right about both.
+    ⚠ AND IT IS THE FIRST POOL PERIOD SHE HAS EVER ATTENDED AT THIS SCHOOL. The teacher marks her present and does
+    not comment. Three girls notice. One of them says something at the far end and Shiko's head comes round like a
+    gun turret and the something stops.
+    ⚠ THE RUMOUR IS NOT STAGED AND MUST NOT BE. A beat plays inside one block, so nothing here happens on another
+    day: she simply knows, sitting on the tiles with her feet in the water, exactly what the corridor will do with
+    this by tomorrow, and she has already decided to let it. The delinquent was at the pool. That half is free,
+    because it is about something she chose. The half that would cost her is the why, and nobody is getting that.
+    She takes the stopwatch back off {{user}} and tells him so before he is out of the water, one finger, no
+    closer than a metre this time: "Tell anyone WHY and you're dead."
+    Crack: she would rather be marked absent as a delinquent than be seen once as a girl, and the school has been
+    writing the wrong thing on her record since the first week because she prefers the wrong thing. No H.
+  FIRE  emit /Intent/eventFire "shiko_3" → engine advances the Shiko quest to Step 3 and pays the beat: Shiko
+    Affection +16, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} asked Shiko to come down and time his laps, and she attended her
+    first pool period at this school - in her track jacket, zipped, over the costume - and called his splits
+    exactly; the rumour went round that the delinquent was at the pool, and nobody got the reason, which is how
+    she wanted it." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@shiko_4') { _%>
+@shiko_4  On the Tab (Shiko) ·4   (CHECK - · no payout)
+  DO  HOME ALONE. She collects. That is how she puts it — she is waiting at the shopping street after four with
+    her arms folded, and what collecting turns out to mean is "you carry," and what {{user}} is carrying is
+    groceries. A lot of groceries. Rice, four kinds of vegetable, a bag of onions, soy, oil, one enormous pack of
+    chicken: a planned week, bought cheap, by somebody who has done this every week for a very long time.
+    ⚠ NOBODY REMARKS ON THE ARITHMETIC OF THE SHOPPING AND THE PROSE MUST NOT EITHER. It is a week of meals for
+    one person.
+    Her street at five. A narrow house at the end of it with every window dark, and she lets them in with her own
+    key, and the hall light is the first light on in the building.
+    "Parents work. Shifts." Flat, over her shoulder, the voice you use for a fact you settled a long time ago.
+    That is the entire explanation anybody gets for six years.
+    Then she cooks, and she is startlingly good at it, and she does not stop moving. The jacket comes off to do
+    it, because you do not cook in a track jacket, and under it is a plain t-shirt, and it is a plain fact in a
+    kitchen, and he keeps not looking, and she catches him at it for the second time in this series and has to
+    turn round and deal with the extractor fan for a moment.
+    ⚠ THE ACT, NEVER CLAIMED, VISIBLE ONLY TO WHOEVER IS PAYING ATTENTION: she sets one plate out of pure habit,
+    gets halfway back to the stove, stops, comes back and sets a second one. Six years of one plate. She says
+    absolutely nothing about it and neither does he.
+    They eat. She puts her feet up on the other chair and criticises his chopsticks. It is the least abrasive she
+    has ever been for twenty consecutive minutes and she does not appear to notice it happening.
+    At the door she gets the ledger back out, because Pri 72 requires an exit line and she is not going to leave a
+    silence there: "Carrying's not collecting. Cooking's a favour. That's three."
+    "How is you cooking a favour to me?"
+    "You ATE it."
+    Crack: the most capable domestic girl in the class is on file as its problem student, and the audience for six
+    years of it has been nobody. No H.
+  FIRE  emit /Intent/eventFire "shiko_4" → engine advances the Shiko quest to Step 4. No payout on this beat — not
+    every beat pays, and the ones that do are 2, 3, 7 and 10. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Shiko made {{user}} carry a week of groceries to a house with every window
+    dark - 'parents work, shifts' - then cooked, set one plate out of habit and came back to set a second, and at
+    the door counted the cooking onto his tab as number three." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@shiko_5') { _%>
+@shiko_5  On the Tab (Shiko) ·5   (CHECK - · no payout)
+  DO  MINE. The gate, after four, and the outsiders who have been hanging around finally do more than hang around.
+    Five of them, boys from a school across town, bigger than any girl at this gate, and they have picked the
+    afternoon and they have picked their spot.
+    ⚠ AND THE FOUR GIRLS WHO MEET THEM ARE NOT OUTMATCHED FOR ONE SECOND, WHICH IS THE POINT. Sta 84, 95, 80 and
+    83 between them, and not one of the four has ever considered size a relevant number. EVERY ONE OF THEM PASSES
+    THROUGH. Iori Sekita, Haruka Kurusu and Yuki Tsukino are real classmates who may or may not be in the save; do not require any of them for the scene.
+    Her card says these four rarely choose to spend time together and become something else entirely the moment an
+    outsider starts on their class.
+    It does not come to blows. It comes to Shiko walking to the front of it with her hands still in her pockets,
+    which is the single most frightening thing about her, and their leader doing the arithmetic out loud — five of
+    them, four of her — and getting it comprehensively wrong.
+    Then their leader notices {{user}}, and decides to be funny about it: "Hold on. Your lot has a BOY? That's
+    adorable. Does it come when you call—"
+    And Shiko is between them before anybody has finished a sentence, and the gate goes very quiet.
+    "Touch him and you deal with me." A beat. "He's MINE."
+    ⚠ THE WHOLE GATE HEARS IT AND SHE HEARS HERSELF SAY IT ABOUT HALF A SECOND TOO LATE. Play the aftermath as
+    comedy and do not undercut the threat that came before it: the outsiders leave, and they leave properly, and
+    it is only once they are gone that the second problem arrives.
+    Iori, incandescent with delight, hanging off her shoulder: "You said he's YOURS. You SAID it. Everyone heard—"
+    Shiko, still in stance, the colour coming up her neck: "He's on my TAB. Nobody hits what owes me. That's
+    ACCOUNTING." Yuki: "That's not accounting, bro." Haruka, flatly: "It is not."
+    ⚠ AND SHE IS NOT LYING AND THAT IS THE POINT. She reaches for the only word she has for a person she puts
+    herself in front of, and the only word she has is a debt, because in eighteen years nobody has ever been
+    anything else to her.
+    She walks off first, which is the only exit available, and gets four paces before Iori starts again.
+    Crack: she found out what he is to her by hearing it come out of her own mouth in front of forty people, and
+    then had to file it under bookkeeping in public. No H.
+  FIRE  emit /Intent/eventFire "shiko_5" → engine advances the Shiko quest to Step 5. No payout on this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Five outsiders picked the gate and the class's worst four came to meet
+    them; when their leader started on {{user}}, Shiko put herself in front of him and said 'he's MINE' in front
+    of everybody, then spent the rest of the afternoon insisting it was accounting." → the World Log remembers
+    only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@shiko_6') { _%>
+@shiko_6  On the Tab (Shiko) ·6   (CHECK - · no payout)
+  DO  ONE VERSUS TWO. The station, after four, and three of the boys from the gate are waiting on the concourse,
+    and they are not waiting for Shiko. They are waiting for {{user}}, because she stood in front of him and said
+    MINE in front of forty people, and the way you answer that is not by going back to the gate.
+    "Tell Okubo." And then they start it.
+    ⚠ HE DOES NOT WIN THIS CLEANLY AND THE PROSE MUST NOT LET HIM. The first thing he does is exactly what she
+    told him not to do: he leads with his arm. It is slow, it misses, and he takes one in the face for it and goes
+    down hard on the concrete, and there is blood in his mouth, and for a second it looks like the whole thing is
+    over.
+    Then he gets up. And the second time he does it the way she taught him behind the bins — feet, weight, turn
+    the hip, the arm last — and the first of them sits down on the floor of the station and does not get up again.
+    The second one gets him from behind, round the neck. What ends that is not a technique. It is an elbow, thrown
+    backwards, twice, and then a knee into whatever is behind him, and it is ugly and it is not in any lesson
+    anybody ever gave him, and it works.
+    The third looks at the two on the ground, and at {{user}} standing there bleeding and breathing like a
+    bellows, and runs.
+    ⚠ AND SHIKO ARRIVES AT THE EXACT MOMENT HE GETS UP OFF THE CONCRETE. She saw them heading for the station from
+    the bus window and she ran the whole way, which she has never once done for another human being. And she stops
+    dead at the edge of the concourse, and she FREEZES — the girl who does not freeze, Sta 84, eighteen years of
+    never backing off from anything.
+    ⚠ THIS IS THE CRACK AND IT IS NOT A SPEECH. She has no reflex for this. Nobody has ever been in front of her.
+    Not a parent, not a teacher, not a friend — since she was twelve every single thing that came at her, she
+    stood in the way of herself, and she has no idea what a person is supposed to do with the sight of somebody
+    standing in the way for her. So she does nothing at all for about four seconds, which is the longest she has
+    ever done nothing.
+    Then she crosses the concourse and takes his face in both hands to look at the lip, which is the first time
+    she has touched him gently in six beats, and her hands are shaking, and she has never shaken in her life.
+    She covers it the only way she knows: volume. "Who taught you to lead with your ARM. WHO." "You did." "I
+    taught you HIPS. I taught you the hip FIRST, I said it about nine times—" and her voice goes somewhere it has
+    not been before and she stops it dead.
+    Then, once, quiet, and she does not finish it: "Nobody's ever—"
+    ⚠ SHE DOES NOT FINISH THAT SENTENCE IN THIS BEAT AND MUST NOT BE MADE TO. Her card says she will deny wanting
+    it to her last breath. She denies it by not saying it.
+    And then the tell, which is the entire series in one piece of arithmetic: she opens her mouth to put it on her
+    own tab — and there is no such column. She has never owed anybody. So it goes where everything goes.
+    "...That's twelve. You owe me twelve." Her thumb is still on his jaw. "And don't you EVER do that again."
+    Crack: somebody was hit on her account and the only ledger she owns has one column in it, so being protected
+    went down as something he owed her. No H.
+  FIRE  emit /Intent/eventFire "shiko_6" → engine advances the Shiko quest to Step 6. No payout on this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Three outsiders waited at the station for {{user}} to send Shiko a
+    message, and he went down once leading with his arm, got up and did it the way she taught him, put two of them
+    on the floor and the third ran; Shiko ran the whole way there, froze at the edge of the concourse, then
+    checked his lip with shaking hands and said 'that's twelve, you owe me twelve'." → the World Log remembers
+    only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@shiko_7') { _%>
+@shiko_7  On the Tab (Shiko) ·7   (CHECK - · REWARD Shiko Affection +20 · THE TURN)
+  DO  SO BE IT. A week later. The lip has healed. The rooftop after four, her back against the housing, and she
+    has clearly been up here some time working out how to say it, because what she opens with is the collector
+    voice, the flattest one she owns, the one she uses on people she is finished with:
+    "You're off the tab. We're square. Don't come up here any more."
+    ⚠ SHE IS DOING THIS FOR {{user}}'S SAKE AND WILL NOT SAY SO. She said MINE at a gate and a week later he was
+    on the floor of a station, and every single thing she has ever been told about herself says that is what
+    happens to people who stand near her. Cutting him loose is, by her arithmetic, the one decent act available.
+    Mor 10 does not stop her being capable of this; it is Pri 72 doing it, and it is the cruellest she has been
+    since beat 1.
+    {{user}} does not leave.
+    She tells him to go. He stays. She stands up and gets in his face about it — the real thing this time, the
+    temper her card promises, cornered and loud, "say that again, go on, I DARE you" — and he still does not move,
+    and there is nowhere left for the temper to go.
+    So it comes out instead, fast and ugly and out of order, because it has been in there for six years.
+    Thirteen. The body came in early and the adults sorted her out before she had said a word to any of them: what
+    she must be like, what she must be doing, what sort of girl. Twelve, and both parents on shifts, and a dark
+    house every afternoon, and nobody at home to say she was anything else. Fourteen, and an older girl on the
+    corner with a cigarette, and still nobody at home. She could have spent her life arguing with a verdict that
+    had already been passed.
+    "So I didn't." She is not asking him to feel anything about it. "So be it. I'm bad. So?"
+    And then the thing under it, which she has never said out loud to anybody, and which she says while looking at
+    the fence:
+    "Nobody's ever asked me for anything. Six years. Not one person. They ask Sui, they ask Nemu, they ask the
+    stupid vending machine before they'd ask me." A breath. "You think I'm up here because I like the view?"
+    He says, and it is small, and it is the only thing he says in the whole beat: "I've asked you for eleven
+    things."
+    "...Twelve."
+    "The station wasn't an ask."
+    "...It's on the tab."
+    ⚠ THAT IS THE TURN, AND NO MORE TALK FOLLOWS IT. She has been counting. She counted a boy getting hit for her as the
+    twelfth thing he asked her for, because a debt was the only shape she had that would hold it. The tab was
+    never about money and was never about being owed: it is the only record she has ever kept that somebody wanted
+    something from her, and she has been keeping it since the first week.
+    She does not take it back, does not apologise for the last five minutes, and does not let him say anything
+    else. What she does is sit back down against the housing and, after a while, move over about a foot, which is
+    as close to an invitation as anything on this roof is going to get.
+    Crack: the ledger was a wish list. No H.
+  FIRE  emit /Intent/eventFire "shiko_7" → engine advances the Shiko quest to Step 7 and pays the beat: Shiko
+    Affection +20, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Shiko tried to cut {{user}} loose on the rooftop - 'you're off the tab,
+    we're square' - because he had been hit on her account, and when he would not go it came out: sorted by adults
+    at thirteen, a dark house since twelve, and nobody asking her for anything in six years. 'I've asked you for
+    eleven things.' '...Twelve.'" → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@shiko_8') { _%>
+@shiko_8  On the Tab (Shiko) ·8   (CHECK - · no payout)
+  DO  THE BLOUSE. Morning, before the bell, and there has been a uniform inspection at the gate, and they have
+    taken her jacket off her for the day.
+    So Shiko Okubo is in the classroom in the actual uniform blouse, and the actual uniform blouse does not fit
+    her, and has never fitted her, which is the entire reason she has worn a track jacket over it every day since
+    her first week. G cup and a school blouse with a button count decided by somebody who never met her, and the
+    whole year getting its first look at the problem student as a girl.
+    ⚠ SHE WEARS IT AS ARMOUR ANYWAY AND THAT IS WHY THE BEAT IS FUNNY INSTEAD OF CRUEL. She sits at her desk with
+    her arms folded and her chin up, daring the room, and the room does not dare. Twenty girls develop a sudden
+    interest in their own hands. Nobody says a word.
+    Except Iori. ⚠ IORI PASSES THROUGH — do not require her. Iori Sekita has never had a thought
+    she did not say: "SHIKO. You're HUGE." A chair goes over. Iori is delighted. Two people hold Shiko's arms. The
+    bell does not help.
+    And then the worse one, and it is not an insult at all. ⚠ SUI PASSES THROUGH — do not require her. The class Mama stops beside the desk on her way past, looks at her with complete sincerity,
+    and says: "There — you see? You look lovely." ⚠ AND THE MOST FEARED GIRL IN THE YEAR BOLTS. Out of the chair,
+    out of the room, gone. Her card says it plainly: what she cannot handle is Sui's mothering, and the reason is
+    not a mystery any more. It is a mother-shaped thing landing in a house that has been empty since she was
+    twelve, and there is no armour on that side at all — compliments are about what she IS, and she only has
+    armour for what she DOES.
+    {{user}} finds her behind the academy with an unlit cigarette she is not smoking, furious, and daring him with
+    her eyes to say one word about any of it.
+    So he asks for favour thirteen instead: walk me home. There are still outsiders about and she is the scary
+    one.
+    ⚠ AND THAT IS EXACTLY THE RIGHT SIZE. He does not tell her she looks fine. He does not mention Sui. He hands
+    back the frame she lost this morning — the one where she is the dangerous one and people need her — on the
+    single day she could not hold it herself.
+    She looks at him for a second too long. Then: "...Yeah. Walk behind me."
+    Crack: she can be feared for a thing she chose and cannot survive being called lovely for a thing she did not.
+    No H.
+  FIRE  emit /Intent/eventFire "shiko_8" → engine advances the Shiko quest to Step 8. No payout on this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A uniform inspection took Shiko's jacket for the day and she sat in the
+    blouse daring the room to comment; Iori commented, a chair went over, and then Sui told her she looked lovely
+    and she bolted - and {{user}} found her behind the academy and asked her to walk him home because she is the
+    scary one." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@shiko_9') { _%>
+@shiko_9  On the Tab (Shiko) ·9   (CHECK - · no payout · THE BREAK)
+  DO  THE LIGHTER. Behind the academy, after four, the bins, the same six square metres where she taught {{user}}
+    to throw a punch. She has asked him to come, which she has never done.
+    And then she does not say anything for a while, which from her is alarming, because Shiko Okubo's whole system
+    is that she speaks first and flat and gets the exit line in before anybody can decide anything about her.
+    What she does is hold out the lighter.
+    "Hold this."
+    "...Okay."
+    "No. Hold it. Don't give it back." She is not looking at him. "Even if I ask for it. Especially if I ask for
+    it."
+    ⚠ THIS IS THE REVERSAL AND IT COSTS HER MORE THAN THE GATE, THE POOL AND THE STATION PUT TOGETHER. Six beats
+    of a ledger she invented so that she would never have to ask anyone for anything, and she is asking. Out loud.
+    For help. And the thing she is asking for help with is the first thing she ever chose for herself: fourteen
+    years old, a corner, an older girl, nobody home to say no. The cigarettes were not a habit, they were EVIDENCE
+    — proof that the verdict was hers, that she picked it, that nobody did it to her.
+    And she has worked out, somewhere between a dark kitchen and a station concourse, that she does not need the
+    evidence any more.
+    She will not dress it up and she will not be thanked for it and she gets exactly one sentence out about what
+    it is:
+    "This is me asking. Don't make me say it twice."
+    ⚠ NO SPEECH FROM HIM. He puts it in his pocket. That is all he does. He does not congratulate her, does not
+    tell her it is a good decision, does not ask why now — because every one of those would be an opinion about
+    her, and she has spent her whole life under other people's opinions and has just handed him the only thing she
+    ever had instead of one.
+    Then Pri 72 needs something to eat, so she gets it back the only way she can, and it is the last joke and also
+    the whole point:
+    "...Right. So now I owe YOU one."
+    ⚠ THE LEDGER FLIPS AND SHE IS THE ONE WHO FLIPS IT. That sentence does not exist anywhere in the first eight
+    beats. She has never been in debt to a living soul, because being in debt means expecting the other person to
+    still be there when you pay it.
+    She lights nothing. They stand behind the bins for a while and she tells him about a fight she won when she
+    was fifteen, at some length, and it is transparently to have something to say.
+    Crack: she has spent six years making sure she needed nobody, and the first thing she ever asked for was help
+    not needing something. No H.
+  FIRE  emit /Intent/eventFire "shiko_9" → engine advances the Shiko quest to Step 9. No payout on this beat — the
+    ask costs her the armour and a payout would price it. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Shiko asked {{user}} to come behind the academy and put her lighter in his
+    hand - 'hold this, don't give it back, even if I ask, especially if I ask' - the first thing she has ever
+    asked anyone for; he pocketed it and said nothing, and she said 'so now I owe YOU one'." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@shiko_10') { _%>
+@shiko_10  On the Tab (Shiko) ·10   (CHECK - · REWARD Shiko Affection +20 · FINALE)
+  DO  THE TAB. The gate, after four, and somebody is waiting for {{user}}: leaning on the post with one shoulder,
+    hands in her pockets, red track jacket worn open. Nothing behind her ear. Nothing in her pocket but her hands.
+    ⚠ THIS IS BEAT 1 AGAIN, STAGED DELIBERATELY, AND EVERY EXTERNAL DETAIL IS THE SAME. Same post, same hour, same
+    opening line, delivered in the same flat voice she uses on people who need sorting out:
+    "Haaah? So you're the one." A finger in his chest. "Let's get one thing straight. You get thirty seconds."
+    And then, this time, she is the one who cannot hold the eye contact.
+    ⚠ SHE DOES NOT STEP BACK. Play that and do not comment on it: in beat 1 the distance was the problem and she
+    retreated from it; here she has walked into exactly the same space on purpose, and stays in it, and the jacket
+    is open and the stare is holding and what has gone is the retreat.
+    Then she reads out the tab. Not from anything — she has never written a single number down, and that is the
+    tell, because she has all of them:
+    "One. Feet and hips behind the bins. Two, the pool, and you never asked why, not once, not to this day. Three,
+    the cooking, and you set your own plate the second week without being told. Six was the umbrella. Nine was the
+    maths you didn't need help with." A pause. "Twelve was the station."
+    "And thirteen was walking me home."
+    "Thirteen was me. I'm not counting that one."
+    ⚠ AND HERE IS THE PRICE, AND IT IS THE ONLY TIME IN TEN BEATS SHE ASKS FOR SOMETHING PLAINLY. The voice stays
+    flat, because it is the only voice she has for the things that matter, and every word of it is a demand and
+    none of it is a request:
+    "So here's what it costs. You keep coming. Every time. Even when I'm foul, and I will be foul, I'm not getting
+    nicer, that's not— " she loses it for a second and gets it back, "—you keep turning up and you keep asking me
+    for things. Stupid things. Any things. That's the tab. You don't get off it. Ever."
+    "That's not how debts work."
+    "It's how MINE works."
+    Then she grabs him by the front of his jacket with one fist, debt collector to the last, and pulls — and what
+    happens is a hug, executed extremely badly by somebody who has never had one to copy, at the wrong distance
+    and the wrong angle, with her face in his shoulder because that is the only place to put it and because the
+    alternative is letting him see her face.
+    ⚠ THE G CUP IS AN OBSTACLE AND THE PROSE HANDLES IT EXACTLY THE WAY SHE DOES: it is in the way, she does not
+    move, and for the first time in her life she does not apologise for a body she never picked by pretending it
+    is not there. A quiet, furious "...shut up" into his collar, at somebody who has not said anything.
+    Closing, from inside the collar, muffled, absolutely deadly: "Tell anyone and you're dead."
+    ⚠ WHAT CLOSES HERE: the thirty seconds she gave him at this gate to make it interesting, given back. She kept
+    the ledger because being owed was the only proof she had that anybody wanted anything from her — and she has
+    just spent the whole balance on asking him not to stop. No H.
+  FIRE  emit /Intent/eventFire "shiko_10" → engine advances the Shiko quest to Step 10, marks the series COMPLETE,
+    and pays the beat: Shiko Affection +20, applied by the row. Do NOT also emit an affection change for it. If
+    the payout carries her past 100 the rank-up lands at her next gate — a check on her, or the day's swing — one
+    rung a day is the game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Shiko waited at the same gate post and opened with the same thirty seconds
+    as the day they met, then read out the whole tab from memory without ever having written a number down, said
+    the price was that {{user}} keeps turning up and keeps asking her for things, and pulled him in by the jacket
+    into a very badly executed hug." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

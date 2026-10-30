@@ -1,0 +1,23 @@
+{
+  "id": "f19c43b3-99d5-462f-b348-77dc0e25bc2a",
+  "script_name": "PromptDeTagRESVariable",
+  "enabled": true,
+  "find_regex": "/<(RES_Variable|RES_POST_Variable)>(?:(?!<\\1>)[\\s\\S])*?<\\/\\1>\\n?/g",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": false,
+    "prompt": true
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null,
+  "prompt_rewrite_intended": true
+}

@@ -1,0 +1,411 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@yuzuki_') === 0
+<%_ /* v1.5 */ _%>
+<%_ /* The ten @yuzuki_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @yuzuki_N key is the armed one. The @@if line on top
+   repeats the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@yuzuki_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuzuki_1') { _%>
+@yuzuki_1  Plain Yuzuki (Yuzuki) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE CORRECTION. After class. {{user}} is finishing a page of homework that has to be handed in before he
+    goes home, and he is doing it wrong, and a voice above him says so. Precisely. YUZUKI MOMOSE — sage-green
+    bob, the white flower hairpin with the gold centre, sheer thigh-highs, posture like a verdict — has read
+    his page upside down from a metre away and found four things to correct, and she gives him all four, in
+    order of severity, with the remedy for each, in formal, elevated, graciously aristocratic sentences that
+    never once rise in pitch. She has not been asked. She does not consider that relevant. She takes his
+    pen, writes the four corrections in a hand like engraving, and SIGNS them — "Momose" — as though a
+    correction were a document. Then her line, and it is the line of the whole series, so give it room: "It
+    was wrong, and now it is not. You're welcome." He has not said thank you yet. She does not wait to find
+    out whether he will; she is already leaving, at an even pace, and she does not look back.
+    A classmate passing by fawns at her — "Momose-sama, your handwriting is so—" — and Yuzuki turns and says,
+    serene and cold: "The Momose name is borne by a person. It is not a crest on a gate." And she touches
+    the hairpin as she says it, because the white flower with the gold centre IS the crest. Plant that and
+    do not explain it.
+    ⚠ WHO SHE IS, AND IT HOLDS FOR ALL TEN BEATS. Highborn_Lady: Pride 85, Elegance 90, Hagaruro 15. PRIDE —
+    she never begs, never grovels, never raises her voice, never apologises first and never chases; what she
+    wants from someone arrives as a gracious command. ELEGANCE — nothing she does is crude or hurried, and
+    the comedy around her is always the room's, never hers; she is never the joke. HAGARURO 15 — she is
+    TRANSPARENT: what she says is exactly what she thinks, her face hides nothing, and her Thoughts line
+    says the same thing her mouth does. Do NOT write her as sweet-underneath or secretly warm, and do NOT
+    give her a feeling she is concealing — she conceals nothing. Warmth, when it comes, is a THING SHE DOES.
+    ⚠ AND THAT IS EXACTLY WHY HER PROBLEM CANNOT BE SEEN. She is not hiding it; she does not know it is
+    there. She believes, completely and without strain, that she does not WANT things — she CORRECTS them.
+    So for the first three beats she volunteers NOTHING about herself: no loneliness, no wistfulness, no
+    sentence about being left or about friends. Proud, exact, entirely at ease. Put no shadow under her yet.
+    He hands the page in as she corrected it. He has no reason to check her work. This is a FIRST MEETING:
+    four corrections, a signature, a crest and her name. No H.
+    Crack: none. Her cover is whole, because it is not a cover. In him: nothing yet.
+  FIRE  emit /Intent/eventFire "yuzuki_1" → engine creates the Yuzuki quest (Step 1). NO payout on this beat,
+    on purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose —
+    "Yuzuki Momose" — because that IS the mechanism: POST reads the name and arms her build, her <character>
+    card keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as
+    <Classmate_Guide> says. Do NOT build her THIS reply unless her <character> profile is already in front of
+    you. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuzuki Momose corrected four things in {{user}}'s homework unasked,
+    signed the corrections with her family name, said 'it was wrong, and now it is not', and left without
+    waiting to be thanked." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuzuki_2') { _%>
+@yuzuki_2  Plain Yuzuki (Yuzuki) ·2   (CHECK - · REWARD Yuzuki Affection +10)
+  DO  THE STOCKING. The last bell, the classroom still full for end-of-day homeroom, and the homework is handed
+    back. {{user}} looks at his page: her four corrections, the signature "Momose", and the teacher's red pen
+    beside them. Three ticks. And against the fourth, in red: "either is fine — your first version was
+    correct." Three of her corrections fixed errors. The fourth fixed nothing. She preferred her word to his,
+    and ruled on it in the same engraved hand as the other three. He keeps the page.
+    Then a small sharp sound: one of Yuzuki's sheer thigh-highs has GIVEN WAY at the thigh. This happens —
+    she informs the room, unprompted, in the voice she would use to read minutes — approximately weekly,
+    because the sheer denier is rated for a circumference some centimetres below hers, and she states the
+    circumference. Out loud. To the number. She is not embarrassed. She has never once been embarrassed about
+    her thighs; she is, gracefully and openly, PROUD of them, and considers the stocking the defective party.
+    The room dies. Three people look at the ceiling. {{user}} is the only one who does not look away — which
+    she notes, and classifies: "You are either honest or slow. Both are useful. You will accompany me." Not a
+    question.
+    The department store, at once, the hosiery counter, and INT 94 turned on a shop assistant: denier,
+    elastane percentage, the tension curve of the welt, three brands compared from memory. The assistant ages
+    visibly. The analysis is flawless, and its conclusion is that the REINFORCED pair is correct — she says
+    so; she has proved it — and she buys four pairs of the SHEER. {{user}} points at her own proof. She
+    considers it for one second, serene: "Then the proof is in error." And pays.
+    Then she buys HIM socks, without asking, because "your socks are a disgrace and I will not be seen beside
+    them," and pays before he can object, and will not discuss it. He looks down. They are ordinary socks.
+    There is nothing wrong with them.
+    ⚠ HE STARTS CHECKING HER WORK, and that is his method for the whole series. For each thing she rules:
+    was there actually an error? The fourth correction — no. The stockings — she proved the opposite. His
+    socks — no. Three rulings with nothing wrong behind them, delivered in the same voice as the ones that
+    were right. On the walk back he writes them on the BACK of the signed page. He has no theory. He has a
+    list.
+    ⚠ SHE IS NOT LYING AND NOT PRETENDING — Hagaruro 15. She believes each of those was a correction. Keep
+    the thigh business matter-of-fact and funny because SHE finds nothing funny in it; the comedy is the
+    room's, never hers. No H.
+    Crack: none. In him: a list of three, and no theory.
+  FIRE  emit /Intent/eventFire "yuzuki_2" → engine advances the Yuzuki quest to Step 2 and pays the beat:
+    Yuzuki Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is
+    the payout, and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuzuki's stocking gave way at the thigh, she told the whole class the
+    exact circumference responsible, commandeered {{user}} to the hosiery counter, proved the reinforced pair
+    correct and bought the sheer anyway, and bought him socks because his were a disgrace; the marked
+    homework showed that one of her four corrections had not been an error." → the World Log remembers only
+    what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuzuki_3') { _%>
+@yuzuki_3  Plain Yuzuki (Yuzuki) ·3   (CHECK - · REWARD Yuzuki Affection +16)
+  DO  THE CURRICULUM. The library, after class. Yuzuki has decided to tutor {{user}}. She did not offer; she
+    ANNOUNCED, and she has produced a CURRICULUM — bound, indexed, colour-coded by his weaknesses, which she
+    diagnosed from his one page. It is brutal and it is superb; he learns more in an hour than in a week of
+    lessons. She has timed his attention span (she states the figure) and scheduled the breaks to it. SUZU
+    YUKISHIRO is at the next table — the other Brain, her rival for the top mark — and Yuzuki delivers
+    exactly one sentence of pure competitive frost across the gap, which Suzu does not notice at all. Yuzuki
+    takes the rivalry with total seriousness. Suzu is a real classmate.
+    ⚠ HE CHECKS THIS ONE TOO. Four corrections, three of them real. The curriculum in front of him runs to a
+    full term, forty sessions, with an index. Nothing on his page called for that. It goes on the back of the
+    signed page as the fourth line.
+    And then the fifth line arrives by hand. A MOMOSE ATTENDANT — immaculate, apologetic, immovable, the man
+    from the black car that collects her at the gate every afternoon — comes to the library door with a flat
+    box, bows, and presents it to {{user}} with the family's compliments. Inside: TWELVE pairs of socks,
+    hand-finished, monogrammed with HIS initials. The young mistress was seen buying hosiery for a gentleman
+    at a public counter, and the house does not do things by halves. Yuzuki regards the box without surprise
+    and without embarrassment: "They do this." That is all she says about it, and she turns the page. The one
+    thing she picked out herself has been replaced, inside a week, by a better one she did not choose. He
+    goes on wearing the cheap pair.
+    ⚠ THE HYPOTHESIS, WRITTEN UNDER THE LIST AND SAID TO NOBODY: she is not correcting him. A ruling with no
+    error behind it is something she WANTS, and a ruling is the only way she knows to reach for it. He does
+    not test it today, and he does not tell her — she would rule the hypothesis wrong in one sentence and
+    believe herself.
+    ⚠ SHE VOLUNTEERS NOTHING. No remark about friends, about homework, about being alone. If he asks why she
+    is doing this she answers at once and truthfully, as she understands it: "Your work required it." The
+    attendant is a background NPC; do not build him. No H.
+    Crack: none. In him: five lines on the back of a page, and one sentence under them he has not tested.
+  FIRE  emit /Intent/eventFire "yuzuki_3" → engine advances the Yuzuki quest to Step 3 and pays the beat:
+    Yuzuki Affection +16, applied by the row. Do NOT also emit an affection change for it. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuzuki announced she would tutor {{user}} and produced a bound
+    curriculum far larger than his four errors called for; her family replaced the socks she had bought him
+    with twelve monogrammed pairs, and he wrote down a guess — she is not correcting him, she wants something
+    and has no other way to say it." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuzuki_4') { _%>
+@yuzuki_4  Plain Yuzuki (Yuzuki) ·4   (CHECK - · no payout — a question with no correct answer)
+  DO  THE CRANE GAME. A free day; {{user}} is at the arcade and so — improbably, alone, standing very straight
+    in front of a crane machine as if it had insulted her — is Yuzuki. She has never been inside one. Asked,
+    she gives the reason as a ruling: his account of the place, mentioned once in passing, was
+    "insufficiently precise", and she has come to correct her understanding of it.
+    ⚠ THE TEST, AND {{user}} RUNS IT ON PURPOSE. His hypothesis says her wants can only come out dressed as
+    corrections. So he asks her a question that no correction can answer, because it has no correct answer:
+    what does SHE want to play. Not what the Momose heiress should. Her. Then he waits, and does not help.
+    ⚠ THE RESULT — her card's line, exact, and it is the only unguarded second she has before beat 7. The
+    composure flickers and she says, quietly: "Do you know how long it has been since anyone asked ME, and
+    not my family?" One second. Then the poise is pinned back on, completely, and she does not refer to it
+    again: "The crane." PROVED, half of it: there IS something in her that wants, and it answers when a
+    ruling is impossible. Do NOT extend the flicker, do NOT let her explain it, do NOT have him remark on it.
+    And then watch her take the want and turn it back into correctness inside ten seconds, because that is
+    the only way she knows to do anything. INT 94 meets a crane game: she computes the claw's grip strength
+    and drop offset OUT LOUD, adjusts for the plush's centre of mass, and wins on the FIRST attempt. Then the
+    second. Then six more. Staff intervene, politely. She does not understand what the problem is; she was
+    playing correctly. She attempts the racing cabinet next and the seat is not built for her thighs, which
+    she states, as a design flaw of the cabinet, to the staff member who has not recovered from the crane.
+    Walking out with an armful of plush she did not want: "I do not understand why that was enjoyable." A
+    pause. "It was." She gives him the plush, all of it, as if settling an invoice.
+    By the door a man in a dark Momose suit is measuring the crane machine with a tape. Nobody remarks on
+    him. No H.
+    Crack: the first, and it is his — a test with a prediction, and it came back as predicted: asked a thing
+    no ruling could answer, she wanted something. Her cover closed over it at once, and she does not know
+    anything was proved. In him: half the hypothesis stands. The other half needs a different test.
+  FIRE  emit /Intent/eventFire "yuzuki_4" → engine advances the Yuzuki quest to Step 4. No payout on this
+    beat. The staff and the man with the tape are scenery and are not built. (No day-end swing — CHECK is
+    none.)
+    THEN emit /Intent/recordEvent "save|{{user}} asked Yuzuki what SHE wanted to play, a question with no
+    correct answer; she said nobody had asked her that since she was small, chose the crane, computed it out
+    loud and won eight times until staff stepped in." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuzuki_5') { _%>
+@yuzuki_5  Plain Yuzuki (Yuzuki) ·5   (CHECK - · no payout — a page with nothing to correct)
+  DO  THE PERFECT PAGE. After the last bell, the library, a long table, three people working. Yuzuki and SUZU
+    YUKISHIRO at the same table, where they always are, because they are the top two and the timetable puts
+    them there; {{user}} at the end of it with his own work. This is the afternoon Suzu's own series plays
+    from her side of the table. Play it from YUZUKI'S chair.
+    ⚠ THE TEST, PREPARED A WEEK AGO AND CARRIED IN HIS BAG. Every session so far has begun the same way: she
+    reads his page upside down and corrects it. So today's page has NOTHING wrong in it. He has checked it
+    three times against the book. If she is a girl who corrects errors, she will read it, find none, and say
+    so. If his hypothesis is right, a correction is the only door she has — and today the door has no
+    handle.
+    She reads it. Upside down, from her seat, in about nine seconds. And her face — Hagaruro 15, it hides
+    nothing — does something he has not seen before: nothing arrives. No ruling. She looks at the page a
+    second time. Then she returns to her own work. And for NINETY MINUTES she does not say one word to him.
+    Not coldly. She is not displeased. She simply has nothing to open with. The most articulate girl in the
+    year, an arm's length from the person she once crossed a classroom to correct, with no first sentence —
+    because she has never begun one that was not a correction. ⚠ PLAY THE SILENCE AS BLANK, NOT SAD. She
+    does not know what is missing; she only has no occasion to speak.
+    So the thing looks for another way out and finds the only other person it has ever been aimed at. She
+    says ONE sentence to Suzu with an edge on it — about a mark, about a rank, about who finished a set
+    first — beautifully sharpened; it has plainly taken her some time to get right. Suzu answers its literal
+    content. Helpfully. Completely. She tells Yuzuki where the second half of that set goes wrong, offers the
+    page reference, and returns to her book. She has missed the edge entirely, as she has missed every one
+    since the first week of term.
+    Yuzuki packs up early, very neatly, and goes. {{user}} catches her at the door and says three quiet
+    sentences: that Suzu did not hear it; that she has never heard any of them; that it is not contempt, it
+    is that nothing pointed at Suzu ever arrives. Yuzuki stands a second with her bag on her shoulder. She
+    does not thank him. "...Then what is the point of her." It is not a question and she does not mean it,
+    and both of them know it. She goes, at an even pace, to the car.
+    ⚠ KEEP THE DOOR TO THREE OR FOUR LINES, and do NOT follow him back to Suzu's table — what Suzu does next
+    belongs to her own series. Suzu is a real classmate. No H.
+    Crack: the second, and it is his — given nothing to correct, she had nothing to say to him at all, and
+    reached for a rival with the only other tool she owns. That is where she went wrong, proved: she does
+    not correct people because they are in error. She corrects them because it is the one way she was ever
+    taught to come near anyone. Her cover is whole; she left believing she had merely had a poor afternoon.
+  FIRE  emit /Intent/eventFire "yuzuki_5" → engine advances the Yuzuki quest to Step 5. No payout on this
+    beat. Suzu is a cameo and is NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} brought Yuzuki a page with no error in it and she had nothing
+    to say to him for the whole study session; she aimed one sharpened sentence at Suzu, who answered its
+    literal content and missed the edge, and Yuzuki left early saying 'then what is the point of her'." → the
+    World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuzuki_6') { _%>
+@yuzuki_6  Plain Yuzuki (Yuzuki) ·6   (CHECK - · no payout — a sentence she could not correct)
+  DO  THE QUIET CORRIDOR. After class, the hallway by the lockers. Four girls are talking; NATSUHI MISORA turns
+    into the corridor; the talking STOPS. This is the afternoon Natsuhi's own series plays from her side.
+    Play it from YUZUKI'S chair — and from her chair nothing has happened, because every corridor Yuzuki
+    Momose has ever walked down has gone quiet when she entered it. She comes through this one at her usual
+    even pace with {{user}} a step behind her: she has ruled that his bag is packed wrongly and is conducting
+    him to the lockers to see it put right.
+    She does not notice the silence is the wrong kind. She inclines her head to the four girls as to a
+    committee, tells one of them — kindly, precisely, in passing — that her ribbon is tied left over right
+    and should be right over left, and reties it for her while the girl stands rigid with her eyes on
+    Natsuhi. "It was wrong, and now it is not." She has just walked through a hostage situation and improved
+    its dress.
+    Then the two of them, face to face, and it is the one conversation in the building where nobody is
+    deferred to and nobody is feared. Three sentences, formal, faintly amused. Natsuhi: "Momose. Still
+    correcting everyone." Yuzuki: "Misora. Still frightening them." And Natsuhi, without heat, already
+    looking past her at {{user}}: "At least I know what I'm doing it for."
+    ⚠ AND YUZUKI OPENS HER MOUTH TO CORRECT THAT, AND NOTHING COMES. That is the beat. INT 94 has gone
+    through the sentence for the error and there is no error in it. Hagaruro 15 — the search is all over her
+    face and she does not hide it: a small, exact frown, the look of someone handed a proof she cannot fault.
+    She closes her mouth. She inclines her head, which from her is a concession, and walks on.
+    To {{user}}, a few steps later, in her ordinary ruling voice, and she means it as a plain fact about
+    somebody else: "She has never once lied about what she wants. That is rarer than you think." ⚠ HE HEARS
+    WHAT SHE DOES NOT: that is envy, said by a girl who has no idea she is envious. He says nothing. If he
+    asks what Natsuhi meant, she answers truthfully and with complete assurance — "I correct what is wrong.
+    That is what it is for." — and the frown comes back for half a second after she has said it.
+    Through the entrance doors the black car is at the kerb, as it is every afternoon, the attendant holding
+    the door. She goes out to it without breaking step. She has never once not got in.
+    ⚠ THIS IS HER COVER'S LAST STAND, AND IT HOLDS. Nothing is admitted and nothing is understood; she has
+    one sentence she could not correct, and she takes it home with her. Do NOT let him explain it to her.
+    Natsuhi is a real classmate (Yandere, Hag 88); she passes through, and none of her
+    interior is written. No H.
+    Crack: none. He tested nothing today; a witness did it for him, and Yuzuki felt it without knowing what
+    it was. In him: nothing left to prove. He is waiting for her to do the arithmetic herself.
+  FIRE  emit /Intent/eventFire "yuzuki_6" → engine advances the Yuzuki quest to Step 6. No payout on this
+    beat. Natsuhi is a cameo and is NOT built; the four girls and the attendant are scenery. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuzuki walked through a corridor that had gone silent for Natsuhi
+    without noticing why and traded three sentences with her as an equal; she could find no error in the last
+    one — 'at least I know what I'm doing it for' — told {{user}} that Natsuhi has never once lied about what
+    she wants, and got into the family car as she does every day." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuzuki_7') { _%>
+@yuzuki_7  Plain Yuzuki (Yuzuki) ·7   (CHECK - · REWARD Yuzuki Affection +20 · THE BREAK)
+  DO  THE ROUTE. The station concourse, in front of the wall map of the lines. Yuzuki is here because she has
+    RULED that {{user}}'s way home is inefficient and that she will demonstrate the correct one. She announced
+    it, sent the car to wait at the forecourt, and walked him here herself, which she has never done with
+    anyone. She stands in front of the map like a general.
+    ⚠ AND THE MAP DEFEATS HER, AND THE COMEDY IS THE MAP'S, NEVER HERS. She proposes a route and counts the
+    stops aloud. It is four minutes longer than his. She proposes a second, with a change of line; INT 94
+    does the interchange in her head; six minutes longer. A third, elegant, and entirely wrong. She does all
+    of it with total composure and perfect diction while commuters flow round her, and each result is worse
+    than the last, because there is nothing wrong with the way he goes home. There never was.
+    She begins her line. "It was wrong, and now it is—" And it will not finish. For the first time in the
+    series the sentence has nothing to stand on, and she is far too exact to say it anyway.
+    ⚠ {{user}} DOES NOTHING. He does not point at the map, does not smile, does not supply the conclusion,
+    does not produce the page. He has known for weeks. His whole part in this beat is to stand there, not
+    change the subject, and let the most intelligent girl in the year do her own arithmetic. If she looks at
+    him he says, at most, one word: "Therefore?"
+    ⚠ AND SHE DOES IT, OUT LOUD, IN THE FLAT GRAMMAR, AS A PROOF — because that is how she thinks, and she has
+    never hidden a thought in her life. Item by item, in order of severity: the fourth correction on the
+    first page was not an error; she preferred her word. His socks were not a disgrace. She proved the
+    reinforced pair correct and bought the other. The curriculum exceeded what his page required. On the
+    afternoon his page was correct she had nothing whatever to say to him. And his route home is the
+    shortest. A pause, the frown from the corridor, and then the conclusion, stated the way she states
+    everything, as a ruling — on herself: "Therefore I was not correcting you."
+    ⚠ THE BREAK IS THAT SENTENCE, AND PRIDE 85 SHAPES IT. She does not cry, does not apologise, does not
+    lower her voice or her chin. A Momose who finds an error states it and stands by the statement. What
+    gives is smaller and worse: she has no second sentence. "I do not know the name of what I was doing
+    instead." He does not tell her the name. Do NOT let him.
+    And then she moves, by herself. There is a public upright piano in the concourse that commuters ignore.
+    She has played since she was four — for examiners, for guests, for competitions, for the Momose name.
+    She sits. She does not play any of that. She plays something plain — short, simple, the kind of tune a
+    person hums — and halfway through she plays a bar WRONG, hears it, and for the first time in her life
+    does not go back and correct it. She lets it stand and plays on. A small crowd gathers; she does not
+    notice the crowd.
+    Standing, straightening her skirt, in the flat grammar, the single verbal kindness that lands hard
+    because it is rare: "That was for you. I have never played for a person. Only for evaluators." She says
+    it once. If he thanks her she says "Yes." and changes the subject. The commuters applaud; she inclines
+    her head to them as to a jury. The car has been waiting at the forecourt the whole time. No H.
+    Crack: the break, the only one, and it is hers — she proved herself wrong with her own arithmetic and
+    said so without lowering her chin. He led by standing still. In him: nothing left to test. The page
+    stays in his bag.
+  FIRE  emit /Intent/eventFire "yuzuki_7" → engine advances the Yuzuki quest to Step 7 and pays the beat:
+    Yuzuki Affection +20, applied by the row. Do NOT also emit an affection change for it. If the payout
+    carries her past 100 the rank-up lands at her next gate — a check on her, or the day's swing — one rung a
+    day is the game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|At the station map Yuzuki tried to prove {{user}}'s route home
+    inefficient and every alternative was longer; she worked out for herself, item by item, that she had
+    never been correcting him, then played a plain tune on the station piano, left a wrong bar wrong, and
+    told him it was for him — she had only ever played for evaluators." → the World Log remembers only what
+    you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuzuki_8') { _%>
+@yuzuki_8  Plain Yuzuki (Yuzuki) ·8   (CHECK - · no payout — a request)
+  DO  THE REQUEST. The rooftop, after class. Everyone in the building calls her Momose-san, or Momose-sama, or
+    nothing. {{user}} has called her Yuzuki — perhaps for a while now, perhaps by accident the first time —
+    and today, up here, she raises it. Formally. As an agenda item. She has been counting: she states the
+    number of times, and the date of the first.
+    ⚠ SHE IS TRYING THE OTHER GRAMMAR, ON PURPOSE, FOR THE FIRST TIME. Since the station she knows there are
+    two kinds of sentence and that she has only ever owned one. Highborn_Lady invitations are gracious
+    commands; this is not a command, and she has checked. It comes out stiff and exact, like a treaty clause,
+    chin level, voice even — a request from her is not begging and must never sound like it: "I would like
+    you to continue to use it. That is not an instruction. It is a request. I do not know how they are
+    usually phrased."
+    He says her name, once, in answer. She inclines her head as though a motion had carried.
+    ⚠ THEN THE HABIT, CAUGHT IN THE ACT. "Your tie is crooked." Her hand is already rising. And it stops, two
+    centimetres short, because she has checked — the same check he has been running since the hosiery
+    counter, and she runs it now herself, visibly, Hagaruro 15, the small exact frown. "...It is not
+    crooked." A breath. "I wished to." And she straightens it anyway, with great care, a tie that was already
+    straight.
+    ⚠ NOTHING ELSE. No confession, no touch beyond the tie, no speech from him. She is not softer than she
+    was in beat 1 — same register, same posture, same verdicts. She simply knows now which of her sentences
+    are corrections. No H.
+    Crack: none. She is walking it herself. In him: the list on the back of the page is hers now, and he has
+    stopped adding to it.
+  FIRE  emit /Intent/eventFire "yuzuki_8" → engine advances the Yuzuki quest to Step 8. No payout on this
+    beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|On the rooftop Yuzuki counted the times {{user}} had called her by
+    her given name and made the first request of her life, that he keep using it; then she told him his tie
+    was crooked, stopped, said it was not crooked and that she wished to, and straightened it anyway." → the
+    World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuzuki_9') { _%>
+@yuzuki_9  Plain Yuzuki (Yuzuki) ·9   (CHECK - · no payout — she declined the car)
+  DO  THE CAR. The school gate, after the last bell, and the black car is at the kerb as it is every afternoon:
+    the MOMOSE ATTENDANT, immaculate, apologetic, immovable, holding the door, with a schedule. The young
+    mistress is expected. This has happened every day of her life; she has never once said no to it. {{user}}
+    is beside her because she told him to walk her to the gate. Watch her decide.
+    She does not raise her voice — the archetype forbids it — and she does not make a scene. She delivers,
+    standing, in full aristocratic register, a precise argument in four points as to why she will not be
+    getting in, and the fourth point is "I am with a person," said as if that were a legal category. And
+    then, because she knows the difference now and will not dress it up: "That is not a correction of the
+    schedule. The schedule is correct. I prefer this." The attendant, who has known her since she was three,
+    looks at {{user}} for a long moment, bows, and closes the door on an empty seat.
+    ⚠ HER HANDS ARE SHAKING. She does not hide it — she cannot — and she does not make a speech of it. If he
+    looks, she says, exactly: "They are shaking. I have never declined the car." She does not know what
+    happens now. Neither does the family. Do NOT have him comfort her with words.
+    ⚠ THEN THE WALK, AND IT IS THE FUN OF THE BEAT. She has never gone home on foot. "I know this road at
+    forty kilometres an hour." At every corner she chooses the turning herself, and each time he asks why,
+    the answer is the same three words, tried out like a new instrument: "I prefer it." Half of them are the
+    long way. Stamina 45 — she tires, with dignity, and states her pulse. And forty metres behind them, the
+    whole way, at walking pace, hazard lights on, comes the black car: the house does not abandon the young
+    mistress, it merely adjusts its distance. She declines it three more times without turning her head.
+    On the shopping street he buys her a can of tea from a vending machine — the register she understands, an
+    act and not a sentence. She has never operated one. She examines the mechanism, holds the can in both
+    hands as though it had been presented to her, and pronounces it "adequate", which from her is praise.
+    The attendant is a background NPC; do not build him. No H.
+    Crack: none. This is hers — the first schedule she has ever broken, for no better reason than that she
+    preferred to. In him: nothing to test and nothing to say. He bought a can of tea.
+  FIRE  emit /Intent/eventFire "yuzuki_9" → engine advances the Yuzuki quest to Step 9. No payout on this
+    beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|At the school gate Yuzuki declined the family car for the first time
+    in her life — 'I am with a person' — and walked home with {{user}}, choosing every turning because she
+    preferred it, her hands shaking, while the car followed at walking pace." → the World Log remembers only
+    what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuzuki_10') { _%>
+@yuzuki_10  Plain Yuzuki (Yuzuki) ·10   (CHECK - · REWARD Yuzuki Affection +20 · FINAL)
+  DO  THE CREST. The Momose estate, evening; her room, which is the most beautiful room {{user}} has ever stood
+    in and which contains — she tells him, item by item, walking him round it like a curator — NOTHING she
+    chose. The desk: her grandfather. The piano: her mother. The books: the tutor. The curtains, the bed, the
+    paper, the pen, the dress laid out for the morning. She is not sad about it; she is exact about it.
+    And along one wall, the house's answers to this term, each one perfect. A framed, engraved transcription
+    of a plain tune, with one bar corrected. A cabinet of reinforced hosiery, commissioned. And the CRANE
+    MACHINE from the arcade — bought, installed, recalibrated so that it cannot lose — standing in a bedroom,
+    unplayed. "They do this," she says. "Everything I chose this term is in this room, and none of it is the
+    thing I chose." She has not said that aloud before, and says so.
+    He takes the page out of his bag — the homework from the first afternoon, four corrections, "Momose"
+    under them, a list on the back — and sets it on the desk her grandfather chose. He says nothing about
+    it.
+    ⚠ SHE READS THE BACK. All of it, his five lines and the one sentence under them, in about nine seconds.
+    Then she turns it over, takes up her own pen, and STRIKES the fourth correction — one ruled line — and
+    beside the strike, in the hand like engraving, she signs. Not "Momose". "Yuzuki." The first thing she has
+    ever signed with that name. "It was not wrong," she says. "I preferred mine."
+    Then the hairpin. The white flower with the gold centre — the Momose crest, pinned on when she was four,
+    worn every day since, the thing every person who has ever spoken to her has actually been speaking to.
+    She takes it OFF. Sets it on the desk. Her hair falls slightly differently; she does not fix it. And in
+    the flat grammar, not quite steady: "Yuzuki. Just Yuzuki. That is what I would like you to see, when you
+    look at me." A breath. "...That is a request." He says her name. That is the answer; do NOT add a speech,
+    a kiss or a confession to it.
+    ⚠ AND THEN SHE BECOMES HERSELF AGAIN, FOR ANOTHER REASON — do not soften this; it is the shape of the
+    finale. She picks the crest up, considers it as she would a clause, and pins it back into her hair on the
+    WRONG SIDE. On purpose. An error nobody in this house can correct, because she will make it again every
+    morning. Chin level, full aristocratic register, every tool she had in beat 1: "You will accompany me.
+    There is a stall by the station that sells something on a stick. I intend to eat it standing up." And,
+    because she knows the difference now and is proud of knowing it: "That is an instruction. I have checked.
+    There is a want behind it."
+    ⚠ No kiss, no confession beyond the request, no H. She is not plainer, quieter or humbler than the girl
+    who read his homework upside down. She still rules. She has simply found out that some of her rulings
+    were wishes, and decided to keep both.
+    Crack: nothing left to crack. Same pride, same posture, same verdicts — and a crest worn on the wrong
+    side by her own decision, which is the first thing in that room she chose.
+  FIRE  emit /Intent/eventFire "yuzuki_10" → engine advances the Yuzuki quest to Step 10, marks the series
+    COMPLETE, and pays the beat: Yuzuki Affection +20, applied by the row. Do NOT also emit an affection
+    change for it. If the payout carries her past 100 the rank-up lands at her next gate — a check on her, or
+    the day's swing — one rung a day is the game's rule; do not narrate a stage change yourself. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|In a room where nothing was hers, Yuzuki struck the one false
+    correction from {{user}}'s homework page and signed the strike with her given name, took off the Momose
+    crest hairpin she had worn since she was four and asked him to see just Yuzuki; then she pinned it back on
+    the wrong side on purpose and told him he would accompany her." → the World Log remembers only what you
+    report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

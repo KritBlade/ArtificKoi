@@ -1,0 +1,23 @@
+{
+  "id": "745d6798-67c1-48f6-9f23-55e4bce14130",
+  "script_name": "PromptDeTagPic",
+  "enabled": true,
+  "find_regex": "/<image_generation>(?:\\s|<span class=\"auto-img-wrap\"[^>]*>(?:(?!<span class=\"auto-img-wrap\")[\\s\\S])*?<\\/span>\\s*<\\/span>|<pic\\b[^>]*>)*<\\/image_generation>\\n*|<span class=\"auto-img-wrap\"[^>]*>(?:(?!<span class=\"auto-img-wrap\")[\\s\\S])*?<\\/span>\\s*<\\/span>\\n*|<pic\\b[^>]*>\\n*/g",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": false,
+    "prompt": true
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null,
+  "prompt_rewrite_intended": true
+}

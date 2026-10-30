@@ -1,0 +1,51 @@
+<%_
+// v0.7
+  // ============================================================================
+  // EJS1 — the [PRE] <Initiative_Menu> view (initiative-by-PRE). Rendered by
+  // mvu-helper at PRE-call assembly, on the LATEST /
+  // pre-turn stat_data. Its job: show the classify (PRE) model the DETERMINISTIC
+  // initiative gate — per heroine, her eligibility + freq band + unlocked types — so
+  // PRE PICKS who reaches out this reply (output-pre `initiative` field). This file
+  // only SURFACES the menu + the pick rules; the output field lives in <Reply_Request>.
+  //
+  // ============================================================================
+  let _menu = '';
+  let _initEngineMissing = false;
+  try {
+    const sd = getvar('stat_data') || {};
+    const _LE = (typeof globalThis !== 'undefined') && globalThis.LogicEngine;
+    if (_LE && typeof _LE.initiativeMenu === 'function') {
+      // AWAITED (v0.5) — mvu-helper 0.3.44+ runs the engine in a Worker, so this returns a Promise.
+      // String(Promise) is "[object Promise]", which is TRUTHY and non-empty: without the await the
+      // menu renders that literal text and no branch here ever notices. See event_candidates-pre.txt v0.6.
+      _menu = String(await _LE.initiativeMenu(sd) || '').trim();     // LIVE (option C) — the only source
+    } else {
+      _initEngineMissing = true;
+      globalThis.MvuHelper.log.child('EJS1').error('initiative-menu: LogicEngine not hosted — the deterministic initiative gate could not be computed this reply (enable/upload the engine in mvu-helper\'s LogicEngine tab).');
+    }
+  } catch (_e) { _menu = ''; _initEngineMissing = true; globalThis.MvuHelper.log.child('EJS1').error('initiative-menu render failed:', _e); }
+_%>
+<Initiative_Menu>
+# [PRE] initiative view — the DETERMINISTIC initiative gate (freq band · cooldown · unlocked types).
+# Read-only; the pick rules + PRE output field are in <Reply_Request>. The narrator (not you) WRITES the overture — you only PICK.
+<%_ if (_initEngineMissing) { _%>
+## WHO MAY INITIATE THIS REPLY
+(UNAVAILABLE this reply — the LogicEngine is not hosted, so the initiative gate could not be computed. This is NOT
+"nobody is eligible": treat it as no information and leave `initiative` empty.)
+<%_ } else if (_menu && !/^\(none eligible/.test(_menu)) { _%>
+## WHO MAY INITIATE THIS REPLY
+Each line: `· <Key>[ (absent)]: freq <band> | <unlocked types> [| never initiated] [| OVERRIDE only — <hold>]`.
+A girl acts on her OWN — reaching out is STATE-driven (her Affection band, cooldown, mood, stage), largely
+independent of {{user}}'s exact words. The gates below are ALREADY applied; only listed girls are eligible.
+<%- _menu %>
+
+PICK per <Reply_Request> `initiative`: choose AT MOST 1-2 girls who actually reach out this reply (stagger — rotate
+who; ≤1 type each), reading `freq` for eagerness ("almost never" ≈ skip unless a strong opening · "frequent+forward"
+≈ most replies) and her Mood in the state (Excited → more forward · Angry/Sad → skip non-confront · Irritated →
+terse). Most replies ONE girl, often none. An `(absent)` girl reaches him from elsewhere: T8 (off-scene outreach),
+or her listed T6/T7 while she is OVERRIDE only.
+<%_ } else { _%>
+## WHO MAY INITIATE THIS REPLY
+(none eligible this reply — no classmate initiates; set `initiative` = "none")
+<%_ } _%>
+</Initiative_Menu>

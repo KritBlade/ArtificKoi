@@ -1,0 +1,132 @@
+<%_
+  // v1.0
+  // ============================================================================
+  // EJS1 — the [PRE] <Event_Candidates>.  Its job: show the classify (PRE)
+  // model every event that is ONE condition away from firing in a way this
+  // reply can meet — a place, a girl joining him, her Affection rising (the
+  // engine's sweepCandidateLines keeps only those) — with the missing condition
+  // + current value, so PRE can judge whether {{user}}'s line meets one. This
+  // file only SURFACES the list — the readiness VERDICT rule and PRE's output
+  // field live in <Reply_Request>
+  // ============================================================================
+
+  let _cand = '';
+  let _ready = null;
+  let _candEngineMissing = false;
+  let _placeNeed = false;   // an offered event waits on a PLACE (`need Loc …`) — then [PRE] gets the location table
+  try {
+    const sd = getvar('stat_data') || {};
+    const _LE = (typeof globalThis !== 'undefined') && globalThis.LogicEngine;
+    if (_LE && typeof _LE.sweepCandidateLines === 'function') {
+      // AWAITED (v0.6). mvu-helper 0.3.44+ runs the engine in a Worker, so every LogicEngine export is
+      // a postMessage round-trip returning a Promise. Without the await this is not an error — it is a
+      // WRONG ANSWER that renders: Array.isArray(Promise) is false, so _cand becomes the string
+      // "[object Promise]" and PRE reads one nonsense candidate. Needs ST-Prompt-Template's async
+      // template compile (1.17.x has it on by default; the entry is dead in the water on older builds).
+      const _lines = await _LE.sweepCandidateLines(sd) || [];        // LIVE (option C) — the only source
+      _cand = (Array.isArray(_lines) ? _lines.join('\n') : String(_lines)).trim();
+      _placeNeed = /· need !?(Loc|World\.Location)\b/.test(_cand);
+      // Feature-detected on its own: an older engine bundle has the sweep but not readyEvent, and that
+      // must degrade to "no offer" (today's arm-next-reply behaviour), never to an error.
+      if (typeof _LE.readyEvent === 'function') _ready = await _LE.readyEvent(sd) || null;
+    } else {
+      _candEngineMissing = true;
+      globalThis.MvuHelper.log.child('EJS1').error('event-candidates: LogicEngine not hosted — candidate sweep UNAVAILABLE this reply, so same-round event firing cannot happen (enable/upload the engine in mvu-helper\'s LogicEngine tab).');
+    }
+  } catch (_e) { _cand = ''; _ready = null; _candEngineMissing = true; globalThis.MvuHelper.log.child('EJS1').error('event-candidates render failed:', _e); }
+_%>
+<Event_Candidates>
+# [PRE] event view — what is ONE condition from firing, and what is ripe RIGHT NOW.
+# Read-only; the readiness verdict rule + PRE output field are in <Reply_Request>. event-pack-plan
+<%_ if (_candEngineMissing) { _%>
+## EVENTS ONE CONDITION FROM FIRING
+(UNAVAILABLE this reply — the LogicEngine is not hosted, so the sweep could not run. This is NOT "no event is
+near": treat it as no information. Do not flag an event ready off this block.)
+<%_ } else if (_cand) { _%>
+## EVENTS ONE CONDITION FROM FIRING
+Each line: `<key> · need <missing condition>[ · now <current value>]`. The event is ELIGIBLE except for that ONE
+condition. THIS is the only place these near-ready events are surfaced to you.
+<%- _cand %>
+
+A line that needs a PLACE (`need Loc …`) is never yours to flag: report "destination" from the table below and
+the engine decides. For the others — he approaches the named girl, his line raises the named stat — flag it per
+<Reply_Request> when his line THIS reply meets it. Otherwise ignore this block: the event stays pending and the
+engine arms it on its own once the state actually lands, one reply later. A flag the reply does not back is not
+free: the beat plays, the engine rejects the fire, and the beat plays again later — so when in doubt, do not flag.
+<%_ } else { _%>
+## EVENTS ONE CONDITION FROM FIRING
+(none this reply)
+<%_ } _%>
+<%_ if (!_candEngineMissing && _placeNeed) { _%>
+
+## WHERE HIS LINE TAKES HIM — report it as "destination"
+An event above waits on {{user}} reaching a place. Do not judge whether his line gets there: report only WHERE his
+line moves him THIS reply — the key of the row below whose name is the place his line names (match the JP or the
+EN name, or the same place in his language: he walks to 中庭 → School_Courtyard). He stays where he is, names no
+place, or only mentions or plans one for later → "none". The engine compares your key with each event's need.
+<%_ /* LOCATION KEYS — stamped from location_list.txt by Tools/stamp_location_keys.cjs; edit that file, never these rows */ _%>
+School_Classroom = 教室 · Homeroom
+School_Hallway = 廊下 · Corridor
+School_Gate = 校門 · Main gate
+School_Entrance = 昇降口 · Entrance / shoe lockers
+School_Courtyard = 中庭 · Courtyard
+School_Rooftop = 屋上 · Rooftop
+School_Library = 図書室 · Library
+School_Infirmary = 保健室 · Nurse's office
+School_Cafeteria = 食堂 · Cafeteria
+School_Gym = 体育館 · Gymnasium
+School_GymStorage = 体育倉庫 · Sports storage
+School_Grounds = グラウンド · Athletic field
+School_Pool = プール · Pool
+School_LockerRoom = 更衣室/ロッカー · Changing room
+School_ShowerRoom = シャワー室 · Shower room
+School_Restroom = トイレ · Restroom
+School_ClubRoom = 部室 · Club room
+School_JapaneseRoom = 和室 · Japanese-style room
+School_StaffRoom = 職員室 · Staff room
+School_BackYard = 裏庭/校舎裏 · Behind school
+Home_MaincharRoom = 主人公の部屋 · MainChar's room
+Home_ClassmateRoom = 彼女の部屋 · Heroine's room
+Town_BusStop = バス停 · Bus stop (by school)
+Town_Station = 駅 · Station
+Town_ShoppingStreet = 商店街 · Shopping street
+Town_ShoppingMall = ショッピングモール · Shopping mall
+Town_Cafe = カフェ · Cafe
+Town_FamilyRestaurant = ファミレス · Family restaurant
+Town_CandyShop = 駄菓子屋 · Penny-candy shop
+Town_Karaoke = カラオケ · Karaoke
+Town_Arcade = ゲーセン · Arcade / game center
+Town_Library = 図書館/公民館 · Public library / hall
+Town_Bathhouse = 銭湯 · Public bathhouse
+Town_Park = 公園 · Park
+Town_LoveHotel = ラブホテル · Love hotel
+Outskirts_River = 川 · Riverside
+Outskirts_Waterfall = 滝 · Waterfall
+Outskirts_AncientRuins = 遺跡 · Ancient ruins
+Away_TripDest = 修学旅行先 · Trip destination
+Away_TripInn = 旅館 · Trip inn / room
+<%_ /* END LOCATION KEYS */ _%>
+<%_ } _%>
+<%_ if (!_candEngineMissing && _ready) { _%>
+
+## RIPE NOW — every condition already met
+`<%- _ready.key %>`<%- _ready.series ? ' (series ' + _ready.series + ')' : '' %> is ELIGIBLE THIS REPLY. Nothing is
+missing and nothing in {{user}}'s line is required — it is ripe on the state as it already stands.
+
+This is a TIMING call, and BOTH answers cost something — weigh them, do not default.
+
+FLAG it per <Reply_Request> when this reply can carry the beat. That is the normal answer: a ripe event woven
+into the scene it fits is the best result this system can produce.
+
+DECLINE only when something SPECIFIC is in the way — an active fight or crisis, a scene another character is
+driving to its own conclusion, or the cast the beat needs being absent or occupied. "Nothing much is happening"
+is NOT such a reason: a quiet reply is usually the BEST place for a quiet beat, not a reason to keep waiting.
+
+Deferring is not free. The engine arms it and it opens the NEXT reply COLD — detached from whatever is happening
+now, as an interruption rather than something the moment grew into. Choosing to wait means judging that the next
+opening will be better than this one, which is a claim about the scene, not a way to be careful.
+
+You are choosing WHEN it lands, never WHETHER — it cannot be lost. So pick the better moment honestly, and when
+this reply is already a fine one, take it.
+<%_ } _%>
+</Event_Candidates>

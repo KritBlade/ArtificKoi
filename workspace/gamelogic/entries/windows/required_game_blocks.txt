@@ -1,0 +1,49 @@
+<Required_Game_Blocks>
+<%_
+  // v0.8
+  // The game's claims on the reply, at DEPTH 0 — after {{user}}'s line, where the last instructions a preset
+  // or an extension gives (its own end-of-reply block, its tag list, its language rule, its own time line) also
+  // land. Three claims, because a preset's own reply template sits there too and outweighs anything said only
+  // further up:
+  //   THE BLOCKS. <Reply_Request> holds the order and every block's rules ~95 KB up the prompt; this entry
+  //   restates neither and only points to it. A preset that closes with "add no tags that are not listed" or
+  //   "write only in <language>" otherwise outweighs them, and the chat history cannot remind the narrator
+  //   (PromptDeTagUpdateVariable strips <UpdateVariable> from it).
+  //   THE CLOCK. A preset that keeps its own running time in each reply (an elapsed / current-time line)
+  //   leaves that time in the history. When a reply skips the line, the history's last time falls behind
+  //   ## NOW, and a narrator counting on from it reports a /Intent/sceneClock earlier than ## NOW's clock,
+  //   which the engine refuses unless /Intent/pastMidnight comes beside it. The game owns the clock, so the
+  //   game says which time is true; the preset's line is still written, counted from ## NOW.
+  //   THE PICTURES. mvu-helper sends the narrator <picture_count> only while the narrator writes the pictures,
+  //   so the block is the switch. With it, the <pic> tags are claimed like the machine blocks, inside the story,
+  //   and the narrator's outline marks each one on the point it illustrates, naming the sentence it goes under:
+  //   a story written from a plan with no picture step can drop its picture. The marker names the picture in
+  //   words, never as a tag. A preset may show its outline in the reply, outside a <think> block, and a tag
+  //   there stays raw: mvu-helper draws and sweeps only a <pic> with prompt=, and galgame-companion's
+  //   beat-shaper holds its backdrop binding while a raw <pic remains. Without <picture_count>, the narrator
+  //   writes no <pic> (image generation is off, or a POST call writes the pictures). The tag's own rules stay
+  //   in mvu-helper's <image_generation> and <picture_count>; this entry claims the tags, says when, and has
+  //   the outline mark them.
+_%>
+THIS CARD IS A GAME. After your reply lands, its engine reads the blocks <Reply_Request> lists — above all
+<combat_log> and <UpdateVariable>, which carry this turn's dice and state into the game. A reply without them
+loses the turn, however good the story. So write every one of them, every reply, in the order <Reply_Request>
+gives, whatever your preset's own format, length, tag-list or language rules say: they are machine blocks, not
+prose, so none of those rules applies to them. Their tags, keys, paths and fixed words stay exactly as
+<Reply_Request> writes them, in English, whatever language the story is in. A block your preset or another
+extension asks for after the story goes after <UpdateVariable>.
+
+THE PICTURES are part of the reply too when this prompt carries a <picture_count> block (it comes only while the
+pictures are yours to write): write the <pic> tags it asks for inside the story, each under the sentence it shows,
+whatever your preset's own format, template or tag list says. When the current prompt includes `<picture_count>`,
+indicate the required number of images by adding `[picture: after which sentence]` at the end of the corresponding
+outline point: the outline names each picture in words and never writes the `<pic>` tag. In the main text, once you
+reach that specific sentence, insert `<pic>` on the following line. If `<picture_count>` is not present, do not
+include `<pic>`.
+
+THE TIME NOW is the clock on the ## NOW line of <CURRENT_VARIABLE_DATA>. The game keeps that clock, and its
+dates, energy and daily limits all run on it. A time your preset keeps for itself, or one written in an earlier
+reply, is not it: where they differ, ## NOW is right. Count every time you write from it, your preset's own time
+line included. A /Intent/sceneClock earlier than ## NOW's clock rolls the date when /Intent/pastMidnight comes beside
+it (## SCENE CLOCK); without it, the game refuses that clock.
+</Required_Game_Blocks>

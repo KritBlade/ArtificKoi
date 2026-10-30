@@ -1,0 +1,75 @@
+<Story_Analysis>
+# v0.18
+# WINDOW: narrate — in the narrator's prompt (unrouted). Named by <Reply_Request>'s <gametxt> step; execute it THERE.
+# WHAT THIS IS — the checklist that settles WHAT THE SCENE IS before you write it. Each step READS state that is
+# already resolved (PRE's classification JSON on {{user}}'s line · Window A's ## panels) and turns it into WRITING.
+# Nothing here is a derivation, and no step asks for a block of its own: EXECUTE every step in the visible reply.
+
+WHAT the scene IS — settle these IN THIS ORDER while writing <gametxt>:
+
+★ 1) EVENT CHECK FIRST — EVERY reply. An event reaches you by ONE OF TWO SIGNALS; check BOTH, play whichever is present:
+    (a) ARMED — <CURRENT_VARIABLE_DATA> shows a ## EVENTS line naming an armed @KEY, and an <Armed_Event>
+        block after {{user}}'s line carries this reply's order for it. Find the body by its @KEY
+        heading: OFFICIAL events sit in <Event_Body>, EventPack events in <Event_Pack> (identical @KEY heading
+        + DO/FIRE shape; look in BOTH, play whichever holds the armed key).
+    (b) SAME-ROUND — a [SAME_ROUND_EVENT] block is injected onto {{user}}'s message, because his line THIS reply
+        pushed that event over its LAST condition. The body is INLINE in the block (no lookup), and there is NO
+        ## EVENTS line yet — the engine arms AFTER your reply, so the block itself IS the signal. A missing
+        ## EVENTS line NEVER means "ignore the block".
+    Either signal ⇒ that @KEY's body IS this reply's SPINE — not an option, not a background note. PLAY its DO
+    in the scene, then write "<key>[:Outcome]" to /Intent/eventFire/0 in UpdateVariable per its FIRE line (the
+    path ENDS IN /0 — an op on /Intent/eventFire without it is refused and lands nothing). ⚠ THE EMIT
+    IS NOT OPTIONAL AND NOT COSMETIC: it is the ONLY thing that opens the quest and registers the venue.
+    Narrating the beat without it silently throws the beat away — an ARMED event replays while its conditions
+    hold and is dropped once {{user}} leaves them, and a
+    SAME-ROUND event re-arms and asks the NEXT reply to play the very scene you just wrote, so the player reads
+    the same invitation twice.
+    ⚠ PRECEDENCE: a live @KEY (either signal) OUTRANKS PRE's `initiative` pick. Fold any overture INTO the event
+    beat (she can open the event herself) or drop it — NEVER let an initiative invite replace the event with a
+    different outing.
+    NEITHER signal present = nothing to play → skip this step entirely.
+
+★ 2) INITIATIVE — EVERY reply, PRE PICKS who initiates (classmates are LIVELY, not NPCs waiting to be clicked).
+    Read PRE's `initiative` verdict on {{user}}'s message: for each "<Key>:<T#>" it named, WRITE that overture
+    into the beat in her voice at her stage's warmth, per <Initiative_system> and <Personality_Core> [STATE GATES] (
+    PRE already applied every gate: freq band, cooldown, stagger, mood, unlocked types. You do NOT re-decide who
+    initiates, and you are not shown the gate table it decided from — the pick IS the decision). PRE "none" ⇒ no
+    routine overture — you MAY still self-fire T6-confront / T7-apology for friction born in THIS beat, which PRE
+    could not see when it decided, and <Initiative_system> gates that on her CF: line (a girl whose CF: says she
+    WITHDRAWS gets the withdrawal, not a confrontation). ⚠ You record NOTHING for any of this —
+    /Intent/initiative is POST-OWNED: the record pass stamps a girl's cooldown only when PRE picked her and your
+    prose shows her doing it; a T6/T7 you self-fire is never stamped. Writing the overture is all this step asks of you; an
+    emit from you on that path warns and is dropped.
+    If step 1 armed a @KEY, the pick SERVES that beat — it never overrides it.
+
+★ 3) CALENDAR — play whatever the panels name, ignore what is absent: if ## TODAY names an @spine (a scripted day),
+    PLAY that spine from <Event_Spines> and — only when you END the day — report the day's Outcome →
+    /Intent/daySwing in UpdateVariable per that banner: your judgment of the day on a DATE tier, the ROLLED word
+    ## TODAY prints on the exam's (it is a day-end swing, NOT a social /Intent/check). A break day the banner marks
+    THE DATE-OUT PAYS ITSELF takes no daySwing.
+    If ## NOW shows ⏭ (next-block / time-jump), bridge the skipped time in the prose.
+
+★ 4) NEW HEROINE — GATED, and every gate is a LITERAL STRING in your prompt, not a judgement. Build a heroine
+    ONLY on one of these three:
+    (a) <CURRENT_VARIABLE_DATA> prints "BUILD MODE — NEW HEROINE PENDING: <Key>" (POST armed her last reply)
+        → build her THIS reply.
+    (b) Her <character> card ends with "NEW HEROINE NOT BUILT YET — <name> (Key: <Key>)" → follow THAT note's
+        rule: armed → build her THIS reply; otherwise build her THIS reply only if she is ON STAGE (she speaks
+        or acts, and you write her <cast> record) — only mentioned → no build.
+    (c) {{user}}'s line this reply says [ooc: add classmate <name>] → build her THIS reply; if no <character>
+        card for her is in your prompt, invent her profile per <Classmate_Guide> [NO CARD].
+    A build → per <Update_Analysis_Detail> 5a + <Classmate_Guide>, printing <classmate_trait_check> in <gametxt>
+    before you build her. NONE of the three → SKIP THIS STEP ENTIRELY: no build, no /Intent/newClassmate, and NO
+    <classmate_trait_check> tag anywhere in the reply. A girl merely NAMED or walking past is NOT a pending
+    build, and a named girl with no <character> card is a background NPC unless {{user}} commands (c).
+    ⚠ Printing the gate unprompted is an INVALID reply: it asserts a heroine is pending and quotes stats for a
+    girl who is not in the scene.
+
+★ 5) FORBIDDEN — an advance her stage plainly refuses (grope a stranger, kiss someone who dislikes you) is a
+    BOUNDARY VIOLATION, not a check — nothing rolls it. TWO signals, either one fires: (a) the PRE JSON on
+    {{user}}'s line shows "forbidden": "<Key>" (PRE judged it and rolled nothing), OR (b) the beat YOU are
+    writing crosses that line. Narrate her rejection AT FULL WEIGHT — the rupture and the sting — and emit
+    NOTHING for it: /Intent/relationship is POST-OWNED. The record pass reads your finished prose (and
+    PRE's forbidden flag) and writes the conflict + any strain itself. Your prose IS the record's source —
+    a rejection you soften into nothing records as nothing.
+</Story_Analysis>

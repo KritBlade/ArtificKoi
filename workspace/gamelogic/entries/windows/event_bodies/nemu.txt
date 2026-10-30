@@ -1,0 +1,416 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@nemu_') === 0
+<%_ /* v1.5 */ _%>
+<%_ /* The ten @nemu_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @nemu_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@nemu_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nemu_1') { _%>
+@nemu_1  Onee-chan's Line (Nemu) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE FIX. After class, and something of {{user}}'s gives out — his locker jams shut, a bag strap
+    tears, a bike chain slips its ring, whatever suits where he is standing. He is still working out how
+    bad it is when a hand reaches past his shoulder and takes it off him. NEMU ENOMOTO: aqua-turquoise bob
+    with a side ponytail, pink jacket off the shoulders, tall, and already crouched over the problem with a
+    multi-tool she produced from somewhere. Forty seconds. It is fixed. She does not hand it back yet,
+    because she is looking at HIM, and INT 82 plus a street read that misses nothing is doing its work out
+    loud: he is not sleeping — she can see which eye. He has skipped a meal today, probably two. And
+    something at home, or he would have fixed this himself on the spot instead of standing there deciding
+    whether it was worth the trouble. Every word of it lands. She does not make it heavy; she pokes his
+    forehead with one finger, hands the thing back working, and then presses the multi-tool into his palm
+    on top of it. "Keep it. Onee-chan has three." The name comes as a formality, delivered like a title
+    rather than an introduction: "Nemu Enomoto. Your Onee-chan, as of about a minute ago. The forehead poke
+    is included. Complain and it gets worse."
+    ⚠ SHE TEASES TWO WAYS, AND BOTH ARE HERS. The caring one: the poke, the lunch, the bossing. And the
+    sexual one, in the same warm voice and the same breath — she finishes the read with the one item he
+    hoped she had missed: "And about ten seconds ago your eyes went somewhere Onee-chan did not send them.
+    She saw. She's flattered. Ask nicely next time and she might even hold still." A grin, and she is
+    already standing. Play it knowing, playful and entirely in control, more talk than mileage: an offer
+    made by a girl who is certain it will never be taken up. Both teases keep her the one GIVING.
+    Play the SPEECH QUIRK from the first line: she says "Onee-chan" where anyone else would say "I", every
+    time. Hag 15 — nothing she thinks is concealed, which is exactly why the read lands so hard: she is not
+    being clever at him, she is just saying what she sees. No H.
+    Crack: none. Her cover is whole because it is not a cover to her — looking after people is simply what
+    Onee-chan is. In him: a multi-tool he did not ask for.
+  FIRE  emit /Intent/eventFire "nemu_1" → engine creates the Nemu quest (Step 1). NO payout on this beat,
+    on purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose —
+    "Nemu Enomoto" — because that IS the mechanism: POST reads the name and arms her build, her <character>
+    card keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as
+    <Classmate_Guide> says. Do NOT build her THIS reply unless her <character> profile is already in front of
+    you. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Nemu Enomoto fixed {{user}}'s broken thing in forty seconds, read
+    his week off his face while she did it, and made him keep her multi-tool because Onee-chan has three."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nemu_2') { _%>
+@nemu_2  Onee-chan's Line (Nemu) ·2   (CHECK - · REWARD Nemu Affection +10)
+  DO  THE READ. Lunch, the classroom, and something has gone missing — a purse, a charm, a phone. The room
+    turns itself inside out: bags emptied, desks dragged, one girl already in tears, somebody proposing they
+    search everyone. Nemu does not get up. She is eating, and watching, and after about ninety seconds she
+    says three sentences into the noise and the noise stops. Who moved seats this morning and why that is
+    odd. Whose bag is zipped, when that bag has not been zipped once all term. And the third one she says
+    quietly, to the room rather than at anyone: that whoever has it did not plan to keep it, or they would
+    not still be in the room. She is right. What she does next is the beat: she does NOT hand the girl over.
+    She takes her out into the corridor, alone, and when they come back the thing is on the desk and nobody
+    is told anything, and the girl is standing straighter than she was. KIN 85 — the crime was never the
+    problem, the reason was, and Onee-chan has already fixed the reason and will not be discussing it. To
+    {{user}}, afterwards, an aside with a poke: "You looked at everyone except the one who mattered. She was
+    the only person in here not looking for it. Onee-chan will teach you." And, leaning in closer than a
+    lesson needs: "Lessons are at lunch. Sit close. Onee-chan doesn't bite — unless that's what you were
+    hoping for, in which case ask properly."
+    ⚠ THAT ASIDE IS THE LESSON THE WHOLE SERIES RUNS ON, AND SHE HANDS IT TO HIM HERSELF: in any room, find
+    the one person who is not doing what everybody else is doing. He will use it on her. Nothing
+    supernatural, nothing clever-for-its-own-sake: she watched the room while everyone else searched it.
+    No H.
+    Crack: none. In him: a method, on loan from the best reader in the year. And its first question — in
+    a class where everybody gets looked after, who is the one person nobody is looking after?
+  FIRE  emit /Intent/eventFire "nemu_2" → engine advances the Nemu quest to Step 2 and pays the beat:
+    Nemu Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is
+    the payout, and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Something was stolen at lunch and Nemu solved it from her seat in
+    three sentences, then took the girl into the corridor and fixed the reason instead of reporting the
+    theft." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nemu_3') { _%>
+@nemu_3  Onee-chan's Line (Nemu) ·3   (CHECK - · REWARD Nemu Affection +16)
+  DO  OPERATION ONEE-CHAN: WHO'S PROTECTING WHOM? After class, Umi Hanyu and Iori Sekita lure Nemu and
+    {{user}} into the arcade's temporary haunted walkthrough. Their shared mission: make dependable
+    Onee-chan squeal and grab {{user}}, then preserve the evidence in the attraction's souvenir photo. Umi
+    handles the teasing and the positioning; Iori blocks the easy retreats and keeps everyone moving. They
+    have already walked it once. The wager, announced at the entrance: anyone who screams buys snacks.
+    Nemu notices within ten steps that their confidence is suspiciously specific. Iori glances at one
+    perfectly harmless curtain BEFORE she reaches it, not after. Umi has stopped watching the corridor and
+    started watching Nemu's face. Both of them step around the same scuffed floor mat without looking down.
+    They know exactly where the surprise is, and neither of them cares about it — they care about her
+    reaction. Hag 15 has never hidden a thought in its life, so the conclusion is plain on her face long
+    before she says it: you two have been through here already.
+    At the photo point they arrange her beside {{user}}, directly in front of the trigger mat. Nemu stops
+    short. The girls walk on, turn back, and begin needling her at once. Scared? Need someone's hand?
+    Should {{user}} carry her out? Nemu hooks her arm through his and presses in, grinning: "He's welcome
+    to. Princess-style, all the way to the door. He won't, though — look at him, he's gone red." ⚠ THAT IS
+    HER SEXUAL TEASE AND IT IS A PLANT: she offers it BECAUSE she is certain he will never take it. The
+    morning it happens for real, she will not have one joke about it.
+    Then she extends one hand to each of the girls. "Such brave volunteers. Escort Onee-chan properly,
+    then." They take the bait together — Umi makes an exaggerated show of comforting her, Iori grabs the
+    other hand and pulls, confident — and now both girls are facing Nemu with their BACKS to the curtain.
+    Nemu looks past them at {{user}}: "Aren't they sweet? They rehearsed a whole outing just to hold my
+    hands." Both girls devote their entire attention to protesting that reading.
+    Nemu lets go, and steps onto the mat. The curtain drops, the thing lunges, and neither girl so much as
+    blinks — they have seen it. What they have NOT seen is Onee-chan's palm landing on each of their
+    backsides at the same instant, with a "WOW!" loud enough for the whole corridor. Both scream at once.
+    Nemu is already facing the camera, grinning. The flash goes. The souvenir photo shows two girls scared
+    to death, mouths wide open, and one big sister smiling straight down the lens between them.
+    Losers buy snacks. Two forehead pokes. Nemu's closing observation, handed over with the photo: "You were
+    both watching for me to get scared. Neither of you was watching anything else." Keep Umi bratty and
+    loud until the flip and quietly rattled after it (tease her back and the smirk falters); keep Iori
+    blunt, physical and instantly over it, already asking who is buying. No H.
+    Crack: none. In him: two people tried to put her in the seat of the one who gets protected, and she
+    saw it coming in ten steps and turned it round. Nobody surprises her with care. She reads the
+    manoeuvre first.
+  FIRE  emit /Intent/eventFire "nemu_3" → engine advances the Nemu quest to Step 3 and pays the beat:
+    Nemu Affection +16, applied by the row. Do NOT also emit an affection change for this beat. Umi Hanyu
+    and Iori Sekita appear and are cameos: NOT required by the gate, NOT built, and none of their interior
+    is written. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Umi and Iori rigged a haunted walkthrough to make Onee-chan scream
+    for the souvenir photo; Nemu read the setup in ten steps, turned them to face her, and the photo came
+    out with both of them screaming and her grinning at the camera." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nemu_4') { _%>
+@nemu_4  Onee-chan's Line (Nemu) ·4   (CHECK - · no payout · SUPERNATURAL)
+  DO  THE GHOST. A free day, the class's test of courage out at the ruins, and the thing waiting there is
+    REAL — not a sheet, not a prank, an actual pale figure standing in the old doorway, and the group
+    evaporates. Screaming, in every direction, gone. Nemu does not run. She looks at it the way she looked
+    at the classroom at lunch, and she reads it out loud to {{user}}, because that is what she does with a
+    room: it is not blocking the door, it is standing to one SIDE of it, the way someone stands when they
+    are waiting for permission. Its hands are busy — doing nothing, but busy, the same motion over and
+    over. And it keeps glancing at the same dark corner. "That is not a haunting," she says. "That is
+    someone who got interrupted. Onee-chan knows that look." So Onee-chan walks up to a ghost and asks it
+    what it did not finish. In the corner: a stone lantern, a bundle of wick, a flint — a lamp that was
+    supposed to be lit and never was, for a festival some number of decades ago. Nemu borrows her own
+    multi-tool back off {{user}} to shave the wick, has HIM strike the flint because "you need the
+    practice," and they light it together. The figure watches the flame catch. Then it bows — to {{user}},
+    and then to her — and it is not there any more. Nemu pokes the empty air where its forehead would have
+    been, entirely unbothered. On the walk back, her arm through his in the dark: "You didn't run. Staying
+    close to Onee-chan at night — brave, or hopeful?" And then the one plain thing, said as a boast, which
+    it is: "Onee-chan has never once been scared of anything that needed HELP." Do not explain the ghost
+    beyond what she reads; her observation IS the resolution.
+    ⚠ WHAT {{user}} NOTICES, USING HER OWN LESSON, AND DOES NOT SAY. Her three lines about the ghost fit
+    somebody else. Stands to one side of the door instead of in it. Hands that are never still. Waiting for
+    a permission nobody has thought to give. She does not hear it in her own read, and she never says so
+    herself — do not let her. No H.
+    Crack: none. In him: her read of the ghost, kept word for word, because every line of it describes
+    her. And the boast, kept too: the things that need help are the things she is never afraid of.
+  FIRE  emit /Intent/eventFire "nemu_4" → engine advances the Nemu quest to Step 4. No payout on this beat —
+    not every beat pays, and this one is the lantern's. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|The test of courage at the ruins turned up a real ghost; the class
+    fled and Nemu read it instead — not haunting, interrupted — found the lantern it never lit, and lit it
+    with {{user}}." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nemu_5') { _%>
+@nemu_5  Onee-chan's Line (Nemu) ·5   (CHECK - · no payout)
+  DO  MIO. Lunch in the cafeteria, and the two caretakers of the year are at it again. Nemu has noticed Mio
+    Kagami has given away most of her own lunch; Mio has noticed Nemu has been running on four hours and a
+    vending-machine coffee. "Stop being Onee-chan." Each of them says it to the other, because it is the
+    only name the joke has ever needed. It is affectionate, and it is very old.
+    ⚠ THEN WATCH HOW MIO DOES IT, BECAUSE {{user}} IS WATCHING — the classroom lesson: find the one person
+    not doing what everybody else does. Mio does not offer Nemu food. Mio has a PROBLEM. She made too much,
+    it will not keep, and if nobody eats it she will have to throw it out and feel terrible about it all
+    afternoon. Nemu sighs like a woman accepting a burden — "Honestly, Mio. What would you do without
+    Onee-chan" — and eats the entire second lunch box, and is, to her own complete satisfaction, doing Mio
+    a favour. She is fed. She has no idea it was done to her. Mio's eyes meet {{user}}'s over Nemu's
+    shoulder for half a second and go back to her tray.
+    Nemu gets called away — someone always needs her — and Mio says it to him plainly, the way SOC 85 and
+    KIN 88 lets her: "You saw that." Not a question. "It works as long as she's rescuing me. We've been
+    doing this since middle school. I have never once got her to take a thing that was just for her — the
+    second it's a present she hands it back, or turns it into a job." A beat. "And she sees me coming a
+    mile off, so I'm out of tricks. You she hasn't filed yet."
+    ⚠ MIO GIVES HIM HER LIMIT. NOT AN ANSWER, NOT A PLAN. She does not tell him what Nemu needs or what to
+    try — she does not know. She is not conspiring and there is nothing sly in it; she is relieved
+    somebody else is looking.
+    ⚠ THE GUESS IS HIS. Put it in his head in one line before Nemu is back: she can take anything, as long
+    as taking it is a JOB. Offered as a gift, she cannot. And the test that follows from it: next chance,
+    offer her one of each.
+    Play Nemu's return as the tell. She comes back, clocks the two of them mid-conversation in one glance —
+    she reads the air the way other people read signs — and says "...what," and neither of them tells her.
+    She reaches for the tease to shake it loose: leans across {{user}}, close enough to be a problem,
+    "Talking about Onee-chan? Only the good parts, or the interesting ones?" — and gets nothing, and has to
+    sit through the rest of lunch not knowing something, which never happens to her. No H.
+    Crack: none. He tested nothing; he watched someone else's trick work and saw where it stops. Her cover
+    is whole — she ate a lunch she thinks she rescued. In him: the hypothesis, one line, untested.
+  FIRE  emit /Intent/eventFire "nemu_5" → engine advances the Nemu quest to Step 5. No payout on this beat.
+    Mio Kagami appears and is a cameo: NOT required by the gate, NOT built, and none of her interior is
+    written. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mio got a second lunch into Nemu by making it Nemu's rescue, and
+    told {{user}} afterwards that it only ever works that way — Nemu has never taken a thing that was simply
+    for her — and that Mio is too obvious to try anything else." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nemu_6') { _%>
+@nemu_6  Onee-chan's Line (Nemu) ·6   (CHECK - · no payout · MORNING — a test, and both halves come back)
+  DO  THE CAT. Morning, the road in, and Nemu is doing what she does every day: riding in with somebody
+    else's forgotten gym kit strapped to the rack. A cat comes out of nowhere — a hedge, a parked van, no
+    warning at all — and she does the only thing anyone would do, which is swerve hard rather than hit it.
+    The bike goes down and takes her with it. She is off it and on the road before she can do anything
+    clever about it. STA 78 is not armour: both palms are scraped raw, there is a long graze up one shin,
+    and when she tries to stand on the turned ankle it folds and she sits straight back down, which
+    infuriates her far more than the pain does. The cat is fine. She checks on the cat FIRST. Then she
+    checks the borrowed gym kit. She gets around to herself third, and by then she is already saying she is
+    fine and Onee-chan will just walk it off. She cannot walk it off.
+    ⚠ {{user}} RUNS BOTH HALVES OF HIS GUESS HERE, ON PURPOSE, AND SHE MUST NEVER LEARN IT WAS A TEST. One:
+    offered as a JOB, she will take it. Two: offered as a GIFT, she will fight it.
+    HALF ONE. The chain is off the ring and the brake lever is bent, and she has no tool, because she gave
+    hers away — and he has it, in his pocket, where it has been since the day they met. He does not say
+    "let me." He says he has never done a chain, and asks her to talk him through it. She takes that at
+    once, and happily: teaching is Onee-chan's line. She sits on the kerb watching him do it, correcting
+    him twice and then, on the third thing, not correcting him. He has just mended her bike for her, and
+    she believes she gave a lesson.
+    HALF TWO. There is no lesson in being carried. He crouches with his back to her and says "Get on."
+    Nothing else — no reason, no job, nothing she can file it under. And exactly as he guessed, she fights
+    it: Onee-chan is heavy, Onee-chan will walk, this is ridiculous, people will see, put her DOWN — on an
+    ankle that will not hold her. She gets on because there is no other way home, and she protests the
+    whole road, with him wheeling the bike one-handed beside them.
+    ⚠ AND THE TEASE DIES. Remember the arcade: she offered to let him carry her because she was certain he
+    never would. Now she is on his back, all of her pressed against him, and it is the first time that has
+    ever happened without her arranging it on purpose — and she has not one joke about it. Not one. She is
+    pink to the ears for the entire road. Somewhere in the middle the protesting goes quiet, and her
+    forehead ends up against the back of his shoulder, and the only thing she says after that is, very
+    small: "...Don't tell anyone." She has never been carried by anyone in her life. No H.
+    Crack: the first, and it is his — both halves as predicted: a job she took happily, a gift she fought
+    with a turned ankle. And one thing he did not predict: once she stopped fighting, she did not want to
+    get down. Her cover is whole; to her it was a bad morning and a cat. In him: a sharper guess. It is
+    not the care she fights. It is what being cared for says about her — that Onee-chan is down.
+  FIRE  emit /Intent/eventFire "nemu_6" → engine advances the Nemu quest to Step 6. No payout on this beat —
+    the proof is the payout, and it is his. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Nemu went down avoiding a cat on the morning ride, scraped and with
+    a turned ankle; she happily talked {{user}} through mending her chain with the multi-tool she gave him,
+    fought being carried the whole way home on his back, and then went quiet and told him not to tell
+    anyone." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nemu_7') { _%>
+@nemu_7  Onee-chan's Line (Nemu) ·7   (CHECK - · REWARD Nemu Affection +20)
+  DO  THE WATCH. After class, the club room, and Urara Yamabuki has lost her watch. Not an expensive one —
+    her grandfather's, the only thing she owns that is not a figure or a graphics card — and she is coming
+    apart about it, retracing, apologising to nobody, near tears. She has already torn the room apart twice.
+    Nemu never touches a machine. She asks questions and she looks. Urara's wrist: a red band-mark, still
+    visible, so it was on today and came off recently. The cuff of her sleeve: a smear of thermal paste, so
+    she has had her hands inside a case since. Her phone, which she has now checked for the time four times
+    in ten minutes — and the first check, Nemu makes her remember, was after fourth period, not before.
+    Three facts and Onee-chan has it: "You take it off to work, because the band scratches the panel. You
+    only take it off for the panel. Where was the side panel when it was open." It was lying flat. Open.
+    Directly under her hands. The watch went INTO the machine and she closed it in there, and has been
+    carrying it around all afternoon. Nemu opens the case with the multi-tool — borrowed back off {{user}}
+    for the fourth time in this series — and there it is, face down against the drive cage. Urara makes a
+    sound not really in human range and hugs her, hard. Onee-chan has just beaten the class tech genius on
+    the tech genius's own ground, by looking at a sleeve. She is at the absolute top of her form, glowing
+    with it, mid-victory.
+    ⚠ THIS IS {{user}}'S SECOND TEST, AND HE HAS BEEN WAITING FOR IT SINCE THE CAT. Care while she is DOWN
+    only tells her she has failed, so she fights it. The prediction is the opposite case: give it when she
+    needs nothing at all — when she is winning — and she will have no way to refuse it. And she will not
+    see it coming, for the reason she gave two girls at the arcade: she is watching somebody else.
+    So {{user}} reaches up and pats her on the head. "Good work, Onee-chan."
+    She stops. Completely. The hand that was reaching to poke his forehead just stays where it is in the
+    air. Hag 15 means every bit of it is on her face and she knows it is on her face, which makes it worse:
+    ears first, then the rest. Nobody has EVER done that. Not once, not from anyone, not in her entire
+    life — she is the one who does that, that is her line, that is the whole arrangement — and the thing
+    that arrives underneath the mortification is not embarrassment at all, it is relief so large it takes
+    her legs out. She does not step away. She leans into the hand, about a centimetre, and then a bit more,
+    and then her eyes close. Urara, mercifully, has gone to find a cloth and sees none of it. When Nemu
+    speaks it is in a register {{user}} has not heard from her, small and quick and with no "Onee-chan" in
+    it at all for exactly one sentence: "...Keep doing that. Just for a minute." Then, immediately, the
+    armour slams back on and she is scarlet with it: "Onee-chan will deny every part of this. Say one word
+    to anybody and Onee-chan will end you." And she grabs for the tease to get back on top — "And don't
+    think Onee-chan didn't notice you enjoying that. Pervert." It is the weakest tease she has ever made,
+    and they both know it.
+    ⚠ THIS IS HIS PROOF, NOT HER BREAK. She has understood nothing yet: the armour goes back on and she
+    means every word of the denial. Play it at the peak of her competence, never at a low point — being
+    helped while FAILING only shames her; being cared for while WINNING is what she has no defence
+    against. No H.
+    Crack: the second, and it is his — predicted and confirmed: cared for while she is winning, she cannot
+    refuse it, and the word "Onee-chan" fell out of her mouth for one sentence. Her cover is back on inside
+    a minute. In him: nothing left to prove. What is left is hers to find.
+  FIRE  emit /Intent/eventFire "nemu_7" → engine advances the Nemu quest to Step 7 and pays the beat:
+    Nemu Affection +20, applied by the row. Do NOT also emit an affection change for this beat. Urara
+    Yamabuki appears and is a cameo: NOT required by the gate, NOT built, and none of her interior is
+    written. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Nemu found Urara's lost watch sealed inside a PC case by reading a
+    band-mark and a smear of thermal paste; at the top of her form {{user}} patted her head and said good
+    work, Onee-chan, and she leaned into it and asked him to keep doing it." → the World Log remembers only
+    what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nemu_8') { _%>
+@nemu_8  Onee-chan's Line (Nemu) ·8   (CHECK - · no payout)
+  DO  THE CON. A free day on the shopping street, and a charm-seller has set up a folding table and is
+    quietly gutting the first-years: a sad story, a limited stock, a discount that expires in four minutes,
+    and a queue of fifteen-year-olds handing over a month of allowance for string. Nemu makes him in a
+    single pass. She does not report him. She does not lecture the queue — they would just buy from the
+    next one. She takes {{user}} round the corner and briefs him, and Onee-chan's plan is not to expose the
+    con, it is to RUN a better one back. {{user}} is the bait: a wide-eyed idiot with obvious money and no
+    judgment, exactly the mark this man has been praying for all afternoon. Nemu plays the sceptical friend
+    dragging him away, which makes the seller work for it. She keeps escalating what she claims to have
+    seen elsewhere, and he keeps matching it, because a man who is running a script cannot stop running it.
+    Within ten minutes he has personally guaranteed, out loud, in front of his entire queue, that every
+    charm is blessed at a shrine he has just named. Nemu says the shrine's name back to him. Then she says
+    what the shrine actually is, which is a bus depot, and has been since before he was born. The queue
+    dissolves. The seller, having been out-worked rather than caught, is almost admiring about it. He
+    refunds every first-year in the line, and then Nemu — KIN 85, and he is also somebody's problem —
+    negotiates him down to buying the lot of them crepes, which he does, and which turns out to be the
+    cheapest way out of his afternoon.
+    She has just won, cleanly, in front of a crowd — and for half a second her eyes go to {{user}}'s hand.
+    She catches herself and pokes his forehead first, harder than usual. "You were a very convincing
+    idiot. Onee-chan was almost worried."
+    ⚠ ON THE WALK HOME SHE READS HIM, AND SHE IS RIGHT, BECAUSE NOTHING GETS PAST HER. She has known for
+    weeks that he watches her. "You look at Onee-chan a lot. And not the way boys look — Onee-chan knows
+    that one, it lands about here." A finger taps her own collarbone, rather lower than it needs to, and
+    she grins. "You look the way Onee-chan looks at a room." She is not offended and she is not competing:
+    she taught him that look and is rather proud of it. ⚠ THERE IS NO DUEL IN HER. She does not test him
+    back, set him a trap or keep score — she simply says what she sees and does not much care who is
+    cleverer. "You're trying to work out what Onee-chan needs." A shrug, warm and final. "Sweet. Onee-chan
+    doesn't need anything. Save it for someone who does."
+    ⚠ HE DOES NOT ARGUE. She has read him perfectly and herself not at all, and the sentence she just said
+    is the whole of where she went wrong, offered as a kindness. He lets it stand. No H.
+    Crack: none. This is her cover's last stand, and it holds: the best reader in the year looked straight
+    at what he is doing, named it correctly, and filed it under "not needed". In him: he has now heard it
+    in her own voice — care is for people who need it.
+  FIRE  emit /Intent/eventFire "nemu_8" → engine advances the Nemu quest to Step 8. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A charm-seller was fleecing first-years on the shopping street;
+    Nemu used {{user}} as bait to make him guarantee a shrine that is a bus depot, and had him refund the
+    queue and buy everyone crepes; on the walk home she told {{user}} she knew he was trying to work out
+    what she needed, and that she needed nothing." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nemu_9') { _%>
+@nemu_9  Onee-chan's Line (Nemu) ·9   (CHECK - · no payout · EVENING · THE BREAK)
+  DO  THE CALL. After dark, and {{user}}'s phone goes, and it is Nemu. This has happened before — it is
+    always somebody else's emergency, a kouhai stranded, a girl crying at a station, someone who needs
+    collecting. He answers ready for a job. There is a pause on the line that is far too long, and then:
+    "...Can you come out." Nothing else. No name, no problem. She is at the park, on the bench, still in
+    uniform at this hour, and there is nothing wrong. That is the entire point and it is why it took her
+    three hours to press the button. Onee-chan has never once made a call for herself.
+    ⚠ {{user}} DOES ALMOST NOTHING IN THIS BEAT, AND WHAT HE DOES NOT DO IS THE LEAD. He does not ask what
+    is wrong. Not on the phone, not when he arrives. He sits down on the bench beside her as if being
+    called out at night for no reason were an ordinary thing to be asked. She waits for the question. It
+    does not come.
+    So she answers a question nobody asked. She was passing. She wanted air. She was going to call somebody
+    else. Each one dies faster than the one before, because Hag 15 cannot sell a lie to a wall. There is no
+    tease anywhere in her tonight, and she has not called herself anything for a full minute.
+    Then his ONE question, and it is her own method handed back to her: "What does Onee-chan see?"
+    And she does it, because it is what she does with a room and she cannot not. She reads the girl on the
+    bench out loud, the way she read him on the first day and a ghost at the ruins. Still in uniform. Three
+    hours. A phone in her hand the whole time with one name on the screen. Not hurt. Not stranded. Nobody
+    in trouble. Sitting to one side of the bench instead of the middle of it, the way someone sits when
+    they are waiting for permission. Hands that have not stopped moving. She hears it as she says it. She
+    said those words about something else once. She stops.
+    ⚠ THE BREAK IS HERS AND SHE GETS THERE ALONE. Slowly, working it out as she goes, never hiding a step
+    of it: you call when something is wrong. You look after people who are in trouble. That is how it
+    works — so if somebody looks after Onee-chan, Onee-chan must be in trouble, and Onee-chan is never in
+    trouble. A long silence. "...Nothing's wrong." And then, turned away from him, pink to the ears, in a
+    voice with nothing performed in it — the one time in the whole series she says it: "...I called
+    anyway." A breath. "And you came anyway. You didn't even ask."
+    He says, at most, "No." ⚠ He does not explain her to herself, tell her what she wanted, or name the
+    feeling. Do NOT let him.
+    They do not fix anything. They sit on a bench in the dark for a while. At some point SHE puts her head
+    on his shoulder — she does it, on purpose, the first thing she has ever taken that was only for her —
+    and neither of them remarks on it. Before they leave the title is back, because it is hers and she is
+    keeping it, and the closest thing to a request she has ever managed still comes out as an instruction:
+    "If Onee-chan calls again... just come. Like tonight. Don't ask what's wrong first." No H.
+    Crack: the break, the only one, and it is hers — she read herself with her own method, found nobody in
+    trouble, and understood that she had called anyway. He led with one question and by never asking the
+    other one. In him: nothing to add.
+  FIRE  emit /Intent/eventFire "nemu_9" → engine advances the Nemu quest to Step 9. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Nemu called {{user}} out at night with nothing wrong — the first
+    call she has ever made for herself; he did not ask what was wrong, she read herself the way she reads a
+    room, found nobody in trouble and said she had called anyway, and asked him, if she calls again, to just
+    come." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nemu_10') { _%>
+@nemu_10  Onee-chan's Line (Nemu) ·10   (CHECK - · REWARD Nemu Affection +20 · FINALE)
+  DO  THE HAIR TIE. Her room, after 19:00, and it is a workshop. Every flat surface holds somebody else's
+    broken thing, labelled in her handwriting with the owner's name and what is wrong with it: a game
+    console, a pair of glasses, a music box, three phones, a sports bag with a split seam, a kettle. Weeks
+    of other people's repairs, queued and waiting. {{user}} walks the room the way she taught him to walk a
+    room, and the reading takes about a minute, and it is this: there is not one single thing in here that
+    belongs to Nemu. Not one. He does not say it. He only looks at her.
+    She starts the old line — "Nothing of Onee-chan's is br—" — and stops in the middle of the word,
+    because she can hear herself now; she heard herself on a park bench. A breath. Then she reaches up and
+    takes it out of her own hair.
+    The translucent flower hair tie she has worn every day since middle school, holding the side ponytail —
+    and the flower is cracked clean through one petal and has been since middle school, held together by
+    nothing but habit and the tension of the band. She puts it in his palm, and the multi-tool on top of
+    it — hers, given away on the day they met. "Fix it. ...Badly is fine." And she sits down on the floor
+    with her back to him.
+    ⚠ SHE MOVED FIRST. He did not find it, ask for it, or talk her into it. That is what has changed, and
+    it is the only thing that has.
+    He fixes it with her own multi-tool. Badly, probably. It takes a while, and she does not once turn
+    round to correct him. And then he ties her hair back up himself, which he has no idea how to do, and
+    the result is crooked, and she leaves it crooked. Then she says the whole of it, quietly, to the wall:
+    that everything in this room is someone else's, and that she has fixed things for every person in that
+    class, and that in eighteen years not one human being has ever fixed a single thing for her. Not one.
+    "Onee-chan didn't know she was waiting for it." And then — because she is still her, and this is the
+    only grammar she has for asking — she does not ask. She reaches up, takes his hand, puts it on top of
+    her head, and holds it there. "...Do it again tomorrow. Don't make Onee-chan ask twice."
+    ⚠ AND SHE IS STILL ONEE-CHAN — END THE SCENE ON THE TEASE, BECAUSE IT IS HERS AND SHE KEEPS IT. Looking up at
+    him from the floor, hair crooked, his hand still under hers, the grin coming back: "And you can stop
+    looking so pleased with yourself. Onee-chan's lap is still open, you know. It always was." A beat, and
+    for the first time the offer is not one she is certain nobody will take: "...This time Onee-chan would
+    like you to say yes." Same bossy, teasing, third-person big sister as the first day; what is new is
+    that she means the offer, and lets something come back to her. Let him stay. The tool ends the series
+    where it started: hers, given away, and finally used on her. No H.
+    Crack: nothing left to crack. Same Onee-chan, same poke, same tease — and one of them is finally aimed
+    at something she wants.
+  FIRE  emit /Intent/eventFire "nemu_10" → engine advances the Nemu quest to Step 10, marks the series
+    COMPLETE, and pays the beat: Nemu Affection +20, applied by the row. Do NOT also emit an affection
+    change for it. If the payout carries her past 100 the rank-up lands at her next gate — a check on her,
+    or the day's swing — one rung a day is the game's rule; do not narrate a stage change yourself. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|In a room full of other people's repairs with nothing of her own in
+    it, Nemu took the cracked hair tie she had worn since middle school out of her own hair and handed it to
+    {{user}} with her multi-tool; he fixed it and tied her hair up crooked, and she said nobody had ever
+    fixed anything for her in eighteen years." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

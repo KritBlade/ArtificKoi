@@ -1,0 +1,124 @@
+<Block_Transition>
+<%_
+  // v0.17
+  // ============================================================================
+  // The DEPTH-0 orders. Injected AT DEPTH 0 — after {{user}}'s line, the last thing the
+  // narrator reads — and near-blank on every other reply (~6 tokens when silent).
+  //
+  // WHY DEPTH 0: everything else the card ships lands at position 0, mid-system-block,
+  // ~95 KB before the prompt ends — behind the scene it is telling the narrator to
+  // abandon and behind the PRE check rolled for {{user}}'s line. An order there renders
+  // word-perfect and loses. Depth 0 is the only slot a card entry can reach that lands
+  // after {{user}}'s input.
+  //
+  // ONE COPY ONLY. A second wording of an order anywhere else is two instructions for
+  // one beat, so Window A carries FACTS about these states, never the imperative.
+  //
+  // FOUR PIECES, priority order:
+  //   1. GRADUATION ORDER — @Graduation owed (the prose crossed civil 07:30 with that
+  //                        day open). Every other owed day the engine closes itself on
+  //                        the reply that leaves it (the daysOwed catch-up), so nothing
+  //                        else is ordered. Graduation is the arc reset, which only prose
+  //                        may trigger, so its order repeats until narrate ends the day.
+  //   2. HANDOVER        — EngineDerived.IsClockAheadOfProse: the last resolve's advance
+  //                        (block cap, sceneAdvance, day settle) left the clock where no
+  //                        prose has been. PRE's no-dice gate reads the same flag.
+  //   3. LAST REPLY      — a SCHOOL day's morning, lunch or after-class block on the reply
+  //                        that reaches the block cap (Sta÷10, min 3 — the resolver's
+  //                        formula). The reply plays out the live scene, then skips to the
+  //                        next block and ENDS there, so the clock the engine moves to is
+  //                        the clock the prose reached and no handover is owed. Its
+  //                        sceneClock is the step: the resolver drops a sceneAdvance sent
+  //                        beside it on this reply (globalLogic (3b1)). The
+  //                        evening's cap rolls the day instead; Window A's day-end clause
+  //                        covers it. Silent while an H scene holds the cap, and while a
+  //                        Next-Block request is pending (Window A orders that skip).
+  //   4. BEAT ECHO       — one line on spine days naming the live band group
+  //                        (<Current_Variable_Data> ▶ CURRENT BEAT carries the detail).
+  // ============================================================================
+  let _order = '';
+  let _beat = '';
+  try {
+    const V = (t) => (Array.isArray(t) ? t[0] : t);
+    const sd = getvar('stat_data') || {};
+    const W = sd.World || {}, EngineDerived = sd.EngineDerived || {}, PendingState = sd.PendingState || {}, MC = sd.Mainchar || {};
+    const time = String(V(W.Time) || '07:30');
+    const date = String(V(W.Date) || '');
+    const sess = Number(V(EngineDerived.BlockReplyCount)) || 0;
+    const mode = String(V(EngineDerived.Mode) || 'SCHOOL');
+    const blockCap = Math.max(3, Math.floor((Number(V(MC.Sta)) || 30) / 10));
+    const nextBlockPending = V(PendingState.BlockDone) === true;
+    // GAME TIME = civil − 7:30; the band is a plain 5-segment ladder over the game minute.
+    const _tMin = (() => { const m = /^(\d{1,2}):(\d{2})$/.exec(time); return m ? (+m[1] * 60 + +m[2]) : 450; })();
+    const _gMin = (_tMin - 450 + 1440) % 1440;
+    const dayBand = _gMin >= 990 ? 4 : _gMin >= 690 ? 3 : _gMin >= 510 ? 2 : _gMin >= 270 ? 1 : 0;
+    const _addIso = (iso, n) => { const d = new Date(String(iso).slice(0, 10) + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+    const _sceneGameDate = _tMin < 450 ? _addIso(date, -1) : date.slice(0, 10);
+    const _dayDate = String(V(EngineDerived.DayDate) || '').slice(0, 10);
+    const _daysOwed = _dayDate ? Math.round((new Date(_sceneGameDate + 'T00:00:00Z') - new Date(_dayDate + 'T00:00:00Z')) / 86400000) : 0;
+    const daySpine = String(V(EngineDerived.DaySpine) || '').trim();
+    const BAND_LABELS = ['MORNING', 'LUNCH', 'AFTER CLASS', 'EVENING', 'SMALL HOURS'];
+    if (_daysOwed >= 1 && daySpine === '@Graduation' && !nextBlockPending) {
+      // 1. GRADUATION ORDER — the engine stamped PendingState.DayEndOrderedFor and holds the day open.
+      _order = '⛔ END THE DAY FIRST — the prose has crossed into ' + _sceneGameDate + ' but GRADUATION day was never closed.\n' +
+        'THIS reply: narrate the arc-end send-off and set /Intent/sceneAdvance=true — the engine runs the TIME-LEAP on it. ' +
+        'Nothing else can end this day; this order repeats until you do.';
+    } else if (V(EngineDerived.IsClockAheadOfProse) === true && !nextBlockPending) {
+      // 2. HANDOVER — the reply OPENS at the new clock. The three-part shape ("close the old scene, skip,
+      // open the new one") read wrong HERE: the old scene is already over under a caption showing the new
+      // time, so its closing lines came out as a live present-tense paragraph at the old clock (lunch still
+      // running at 16:00), and re-answered a line the previous reply had already answered. Nothing in this
+      // reply happens at the old clock; whatever the old scene still owes is one past-tense clause inside
+      // the opening, and if it owes nothing, nothing is said.
+      _order =
+        '⛔ TIME IS UP — the scene you just read is OVER, and this reply does not continue it.\n' +
+        'The game clock has ALREADY moved to ' + date + ' (' + V(W.Weekday) + '), ' + mode + ', ' + time + ' — ' + BAND_LABELS[dayBand] + '.\n' +
+        'OPEN AT ' + time + ': the FIRST sentence of the story is already in the new scene, at the new time and place. ' +
+        'No sentence of the story happens at the old clock — no last lines at the table, no packing up, no walking out.\n' +
+        'What the old scene still OWES — his last line, if the previous reply did not already answer it, and the PRE check ' +
+        'if one fired — is settled inside that opening as ONE past-tense clause, a thing that already happened before the ' +
+        'skip ("He had texted her back over the last of lunch; now, at ' + time + ', …"). Owed nothing, say nothing about it.\n' +
+        'Report /Intent/sceneClock as the clock this reply ends at — ' + time + ' or later. End it before ' + time +
+        ' and it is REFUSED: the clock is dropped, the block gains no reply, and you are handed this same order again next turn.' +
+        (dayBand >= 3 ? ' (Past midnight is fine — from the evening a small-hours clock like 01:30 is the night continuing, not a step backwards; send /Intent/pastMidnight/0 true beside it.)' : '');
+    } else if (mode === 'SCHOOL' && dayBand <= 2 && sess + 1 >= blockCap && !nextBlockPending && V(PendingState.IntimacyActive) !== true) {
+      // 3. LAST REPLY — here the scene is still LIVE, so it is played and closed in prose before the skip:
+      // the reverse of the handover's shape, because the caption this reply lands under shows where the
+      // prose ENDED. A check PRE rolled for his line is played in the scene it belongs to, before the skip.
+      const next = ['12:00', '16:00', '19:00'][dayBand];
+      _order =
+        '⏳ LAST REPLY OF THIS BLOCK — when this reply lands, the game clock moves to ' + next + ' (' + BAND_LABELS[dayBand + 1] + ').\n' +
+        'FIRST, in the scene you are in: play everything this reply owes — his line, the PRE check if one fired, an armed event — then bring that scene to a close.\n' +
+        'THEN skip ahead to ' + next + ' and open the new scene there: where he is now and what is happening. The story ENDS in that new scene.\n' +
+        'Report /Intent/sceneClock as the clock this reply ends at — ' + next + ' or later — and send NO /Intent/sceneAdvance: that clock IS the move to ' + next + '.';
+    }
+    // 3. BEAT ECHO — spine days only, one line: the live step and two pointers, never a rule. The step rules live in
+    // the /Intent/stepDone row of <COT_Guide>, the objective ask in Window A's ## DAY OBJECTIVE.
+    if (daySpine && dayBand < 4) {
+      // STEP mirrors Window A's stored-cursor derivation (LastStepDone + 1 in the current band, else .1)
+      const _lsm = /^(\d+)\.(\d+)$/.exec(String(V(EngineDerived.LastStepDone) || ''));
+      const _stepN = (_lsm && +_lsm[1] === dayBand) ? (+_lsm[2] + 1) : 1;
+      // A band with nothing left (all its declared steps reported, or none declared) names no step: the echo
+      // says where the next one opens instead. Counts from the engine, as Window A reads them; unavailable →
+      // the step echo below, unchanged.
+      let _ssB = null;
+      const _LEB = (typeof globalThis !== 'undefined') && globalThis.LogicEngine;
+      try { if (_LEB && typeof _LEB.spineStatus === 'function') _ssB = await _LEB.spineStatus(sd); }
+      catch (_be) { _ssB = null; globalThis.MvuHelper.log.child('EJS2').error('block-transition day steps (LogicEngine.spineStatus) failed:', _be); }
+      const _bc = _ssB ? (Number(_ssB.counts[dayBand]) || 0) : 0;
+      if (_ssB && (_bc === 0 || _ssB.done.includes(dayBand))) {
+        const _nb = [dayBand + 1, dayBand + 2, dayBand + 3].find((b) => b <= 3 && Number(_ssB.counts[b]) > 0);
+        _beat = '▶ ' + daySpine + ' — band ' + dayBand + (_bc ? ' is played out' : ' declares no steps') + '; ' +
+          (_nb != null ? 'the next step, ' + _nb + '.1, opens at ' + ['07:30', '12:00', '16:00', '19:00'][_nb] + '.' : 'no later band declares steps.') +
+          ' Follow his scene until then.';
+      } else _beat = '▶ ' + daySpine + ' — STEP ' + dayBand + '.' + _stepN + ' is live. How to play a step and when to report it: the /Intent/stepDone row of <COT_Guide>. What that report owes the day signpost: ## DAY OBJECTIVE.';
+    }
+  } catch (_e) { _order = ''; _beat = ''; globalThis.MvuHelper.log.child('EJS2').error('block-transition render failed:', _e); }
+_%>
+<%_ if (_order) { _%>
+<%- _order %>
+<%_ } _%>
+<%_ if (_beat) { _%>
+<%- _beat %>
+<%_ } _%>
+</Block_Transition>

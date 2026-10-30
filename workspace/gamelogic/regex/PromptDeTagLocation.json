@@ -1,0 +1,23 @@
+{
+  "id": "ae1b1320-258a-47ab-b54e-4c57539ca14e",
+  "script_name": "PromptDeTagLocation",
+  "enabled": true,
+  "find_regex": "/^(?:<p>)?📍 .*$/gm",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": false,
+    "prompt": true
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null,
+  "prompt_rewrite_intended": true
+}

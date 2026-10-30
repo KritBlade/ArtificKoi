@@ -1,0 +1,454 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@sui_') === 0
+<%_ /* v1.4 */ _%>
+<%_ /* The ten @sui_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @sui_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@sui_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@sui_1') { _%>
+@sui_1  Mama's Not Hungry (Sui) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  ONE OF MINE. After the last bell, at the shoe lockers, and there is a queue that is not for the lockers. It
+    is for her. A girl gets a lunch. A girl gets a handkerchief. A girl gets both hands put on her shoulders and
+    turned round and sent back for the bag she has left in the classroom. The queue moves like a bank queue.
+    Nobody finds any of this remarkable.
+    SUI MIZUSHIRO is 162 cm of very long navy hair with two teal ribbons in it, green eyes, and a uniform worn the
+    way a uniform is worn by somebody who expects to be inspected and never is. She refers to herself in the third
+    person and the word she uses is Mama.
+    ⚠ THE BODY FACT, STATED ONCE AND THEN PLAYED, NEVER REPEATED. G cup, and a figure that the card calls maternal
+    and that she has never once thought of as anything but an embarrassment. She carries it with complete
+    composure. The composure is not a performance — Hagaruro 10, she has no capacity to perform anything — it is
+    simply that she has never had a reason to think about her own body in front of anyone. She is about to be
+    given one.
+    {{user}} is at the end of the queue because he was leaving and got caught in it. His collar is wrong. She
+    fixes it.
+    ⚠ AND THAT IS THE WHOLE MECHANISM OF THIS SERIES, HAPPENING IN THE FIRST THIRTY SECONDS. Both hands at his
+    throat, close enough to smell tea, reaching UP because he is taller than her — and she does not register a
+    single part of it, because she has done this exact thing to a hundred girls and it has never meant anything
+    once. Do NOT have her blush here. She is not embarrassed. She is not anything. The joke is that the routine
+    runs perfectly.
+    Then the box comes out. ⚠ UNDERPLAY THIS COMPLETELY AND NEVER EXPLAIN IT. It is one bento box and she has
+    already handed four lunches out of it this afternoon, and it is full, and there is one in it for him —
+    correct, not generic, made for somebody she has not met. Nobody in the scene treats it as an event. Neither
+    does she.
+    "Mama made you one." He says he is fine. She does not process that as information; she processes it as a thing
+    boys say. The lunch arrives in his hands anyway. "You'll eat every last bite. ...There's a good boy."
+    ⚠ AND SHE SAYS IT IN EXACTLY THE VOICE SHE USES ON THE GIRLS, WHICH IS THE POINT. Same warmth, same cadence,
+    same nothing-behind-it. He has been sorted, filed and put away. He is one of hers. He is, as far as she is
+    concerned, the same as all the rest of them.
+    Somebody at the lockers calls thanks over a shoulder for something, and her answer comes back without her
+    thinking about it at all: "Mama doesn't need anything."
+    Crack: none, and there is not going to be one for a while. What {{user}} has actually learned at the shoe
+    lockers is that in a building full of girls who are looked after by this person, nobody in the queue asked her
+    one question. Not one. No H.
+  FIRE  emit /Intent/eventFire "sui_1" → engine creates the Sui quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose — "Sui
+    Mizushiro" — because that IS the mechanism: POST reads the name and arms her build, her <character> card
+    keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide> says.
+    Do NOT build her THIS reply unless her <character> profile is already in front of you. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Sui Mizushiro was running a queue at the shoe lockers after the bell,
+    handing out lunches and handkerchiefs and instructions, and she stopped {{user}} to fix his collar and put a
+    bento in his hands that had been made for somebody she had not met; she called him a good boy in exactly the
+    voice she uses on the girls, and when a classmate thanked her for something she said that Mama doesn't need
+    anything." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@sui_2') { _%>
+@sui_2  Mama's Not Hungry (Sui) ·2   (CHECK - · REWARD Sui Affection +10)
+  DO  YES, MAMA. A week on, after school, the shopping street, and {{user}} is carrying two bags of shopping that
+    are not his and not hers either. One is soup ingredients for a girl with a cold. One is a replacement zip,
+    thread in three weights, and forty safety pins for a club she is not in.
+    She stops in the middle of the street, licks her thumb and takes something off the corner of his mouth.
+    ⚠ ROUTINE. TOTALLY ROUTINE. She has done it to girls in this street for as long as she has been in this town
+    and it has never once been anything. Play it flat.
+    "Honestly. ...There's a good boy."
+    And he says it back, level, at full volume, in the voice of an eighteen-year-old male: "Yes, Mama."
+    ⚠ AND THE STREET HEARS IT. A woman restocking a rack outside a shop looks up. Two girls in another school's
+    uniform turn round. Somebody laughs. And Sui Mizushiro, who has never been anything but composed in public in
+    her life, goes red from the collar to the hairline in about a second and a half, and Hagaruro 10 means she
+    cannot do one single thing about it and everybody in the street can see it happening.
+    ⚠ AND SHE DOES NOT KNOW WHY IT LANDED. The word is hers. She has said it ten thousand times. She has never
+    once heard it come back at her in that register, because at Jinko there has never been that register. Do NOT
+    let her understand it. Do NOT let her name it.
+    What she does instead is scold him, and it is the worst scolding she has delivered in her life — it is about
+    the bags, it is about standing in the middle of a street, it changes subject twice and stops early. He
+    apologises with great sincerity. He does it again four minutes later, quieter, and it works again.
+    Her explanation to herself, arrived at on the walk and genuinely believed: he is being cheeky. Cheek is a
+    thing children do. Filed. ⚠ THE FILING IS THE JOKE — it is the only drawer she owns.
+    On the bench she opens the box to feed him, and what comes out is hot. Steaming. It has been in a bag all day.
+    ⚠ DO NOT REMARK ON IT. Nobody in the scene treats it as an event.
+    He asks her what she bought for herself. She looks at the two bags, sincerely puzzled by the question, and
+    says: "Mama doesn't need anything." Crack: none. But she is quiet for about a hundred metres afterwards and
+    could not tell anyone why. No H.
+  FIRE  emit /Intent/eventFire "sui_2" → engine advances the Sui quest to Step 2 and pays the beat: Sui Affection
+    +10, applied by the row. Do NOT also emit an affection change for this beat. The shopkeeper and the two girls
+    from another school are scenery, are outsiders, are not built and do not need to be. (No day-end swing — CHECK
+    is none.)
+    THEN emit /Intent/recordEvent "save|Sui wiped {{user}}'s mouth with her thumb in the middle of the shopping
+    street and called him a good boy, and he said 'yes, Mama' back at her in a grown man's voice loudly enough for
+    the street to hear, and she went red to the hairline and could not hide a second of it; she decided he was
+    being cheeky, because cheek is a thing children do, and when he asked what she had bought for herself she said
+    Mama doesn't need anything." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@sui_3') { _%>
+@sui_3  Mama's Not Hungry (Sui) ·3   (CHECK - · REWARD Sui Affection +16)
+  DO  THE LAP. Lunch, and {{user}} has his head down on a desk with twenty minutes left and no intention of
+    moving. Sui is doing her rounds — a window shut, a cardigan returned, a girl woken up and pointed at her own
+    lunch.
+    She stops at his desk, looks at the state of him, and pats her knees. "Twenty minutes. Mama will wake you."
+    ⚠ THIS OFFER IS ROUTINE AND MUST BE WRITTEN AS ROUTINE. She has made it to a dozen girls. In a school like
+    this one it is an ordinary thing that ordinary people do and nobody thinks about it. She does not think about
+    it. She is already smoothing her skirt flat for him.
+    And he takes her up on it.
+    ⚠ AND THE OFFER CANNOT BE WITHDRAWN. Morals 82: a kindness offered is not taken back — not for embarrassment,
+    not for anything, not ever. So it happens, and she sits there and lets it happen, and this is the funniest
+    thing in the series so far and it must be played with a completely straight face.
+    The picture, and it is the whole beat: her back perfectly straight. Both hands raised and held in the air with
+    nowhere on earth to put them. The colour climbing in increments. A boy's head on her lap, in a classroom, at
+    lunch, while girls file past with trays and say nothing at all — because it is Mama, and Mama does this.
+    ⚠ EXCEPT THEY KNOW EXACTLY WHAT THEY ARE LOOKING AT, AND SHE CAN SEE THEM KNOWING, AND SHE CANNOT CONCEAL ONE
+    THING. Hagaruro 10. Write the girls' faces, not her thoughts.
+    And Umi Hanyu goes past, and does not say one word to Sui. ⚠ UMI PASSES THROUGH — do not require her. She talks to {{user}} instead, pleasantly, at ordinary
+    conversational volume, with her hands behind her back: "Hey. Honest question. At that angle, can you actually
+    see Mizushiro-san's face at all? Or is it just her chest, the whole time?"
+    ⚠ AND SHE DOES NOT WAIT. She grins — the entire thing, teeth included — and is gone before {{user}} has drawn
+    breath, which is the only way that line works: nothing to answer, and nobody left to answer it to.
+    And Sui's back gets straighter. ⚠ WHICH IS THE JOKE, BECAUSE IT DOES NOT HELP AND THERE IS NOWHERE LEFT TO GO.
+    Do not let her answer it, and do NOT let her scold: the scold is what she has for misbehaviour and that was
+    not addressed to her. Write the posture and move on.
+    Eventually one hand comes down on his hair, because that is what the hand is for and it has done it a thousand
+    times. The instant it lands she goes absolutely still.
+    And he is not asleep. Without opening his eyes: "You can put the other one down too."
+    She does not. Then she does. ⚠ DO NOT NARRATE WHAT SHE IS FEELING. Show the hands and stop.
+    Twenty minutes later she wakes him exactly on time, because she said she would, and stands up, and her legs
+    have gone completely dead under her and she has to hold the desk. She does not mention it. Asked, she says:
+    "...Mama's legs are fine."
+    Crack: hairline. In the box, open on the desk beside her the whole time, there is a folded blanket. ⚠ A LUNCH
+    BOX DOES NOT HAVE ROOM FOR A FOLDED BLANKET. Report it. Do not explain it. Nobody treats it as an event. No H.
+  FIRE  emit /Intent/eventFire "sui_3" → engine advances the Sui quest to Step 3 and pays the beat: Sui Affection
+    +16, applied by the row. Do NOT also emit an affection change for this beat. The girls with trays are unnamed
+    and are not built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Sui offered {{user}} her lap for a twenty-minute nap the way she has
+    offered it to a dozen girls, and then could not take the offer back, so she sat through the whole of it with
+    her back straight and both hands held in the air and the colour climbing while the class filed past; she woke
+    him exactly on time as promised, stood up on legs that had gone dead, and said Mama's legs are fine." → the
+    World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@sui_4') { _%>
+@sui_4  Mama's Not Hungry (Sui) ·4   (CHECK - · no payout)
+  DO  STAND STILL. A metal bag hook under a desk, the same hook every girl in that room has hung a bag on since
+    the first week, and {{user}} stands up wrong. Charcoal school trousers, torn through at the inner thigh, high,
+    and it opens a little further with every step he takes.
+    Sui keeps the spare-uniform cupboard. It has solved every uniform emergency this academy has ever had and it
+    has never once failed anybody. She opens it, and it is entirely girls' clothing, because there has never been
+    any other kind of student here. She stands in front of it doing arithmetic that does not come out.
+    Then, with total composure and complete sincerity, she offers him a spare skirt. ⚠ SHE MEANS IT. Mama solves
+    the problem in front of her and that is the problem-shaped object she owns. He declines. She is already
+    unfolding it.
+    So it gets mended where it is. He stands. She kneels — properly, on the floor, because she does not know
+    another way to kneel.
+    ⚠ THE MECHANICS ARE THE COMEDY AND THEY ARE NOT COY. The tear is high on the inner thigh, which puts her face
+    exactly where her face ends up. The needle needs the cloth held flat, which puts her knuckles against his
+    inner thigh. Seeing the stitch means leaning in, which puts her chest against his leg, and her chest is the
+    thing on this earth she is most embarrassed by.
+    ⚠ AND FOR THE FIRST MINUTE SHE DOES NOT REGISTER ANY OF IT. This is not a stretch, it is established: she does
+    up a girl's buttons and tells her she looks lovely and sees nothing. Inside a repair job she is all Mama and
+    the room disappears. So every instruction comes out in full serene Mama register, and she means every one of
+    them: "Stand still, please." — "Don't tense, dear, Mama can't get the needle through if you tense." — "Feet a
+    little further apart. Mama needs the cloth flat."
+    Then it arrives, all at once, not gradually: she leans back to bite the thread, sees where her own face has
+    been, and the entire thing lands in one piece. Hagaruro 10. It goes to the hairline and the room gets all of
+    it.
+    ⚠ AND SHE DOES NOT STOP. He cannot walk out of the building with that hole and a kindness begun is finished.
+    The rest of the repair is taken stitch by stitch by a woman who now knows precisely where she is kneeling, has
+    gone scarlet to the ears and will not abandon a job. The composure never comes back. Duty simply overrides it.
+    Umi is in the doorway, and does not need a trick. She quotes Sui's own signature back at her, flat, in Sui's
+    exact cadence: "Mizushiro-san. ...And just WHAT do you think you are doing?" ⚠ UMI PASSES THROUGH — do not require her. And Umi says Mizushiro-san, NEVER Mama. Sui delivers a full-volume
+    broadside about skirt length from her knees without stopping sewing. Umi goes, grinning, having landed one by
+    accident for the first time in her life, and never mentions it again.
+    When she reaches for the thread she takes it out of the bento box, and it is charcoal — the exact charcoal of
+    a boy's trousers, a colour that exists nowhere in a girls' school. ⚠ NO REMARK. NO EXPLANATION.
+    She finishes, sits back on her heels, still scarlet: "There. Good as new. There's a good boy." He gives her a
+    hand up and asks what he owes her. "Mama doesn't want anything." — "That's not what I asked." Crack: she has
+    no answer to that and does not know that she has no answer to it. No H.
+  FIRE  emit /Intent/eventFire "sui_4" → engine advances the Sui quest to Step 4. No payout on this beat. Umi
+    Hanyu is a CAMEO: she passes through the prose with one line, is NOT required and is NOT built. (No day-end
+    swing — CHECK is none.) THEN emit /Intent/recordEvent "save|{{user}} tore his trousers open at the inner thigh
+    on a desk hook and the spare-uniform cupboard held nothing but girls' clothing, so Sui sincerely offered him a
+    skirt and then knelt on the club-room floor and mended it while he stood in it; she was entirely Mama for the
+    first minute and then realised where she was kneeling and went scarlet to the ears and finished the job
+    anyway, because a kindness begun is finished." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@sui_5') { _%>
+@sui_5  Mama's Not Hungry (Sui) ·5   (CHECK - · no payout)
+  DO  LOST PROPERTY. The exchange day with the academy from out of town is over, the club building is dark except
+    for the prep room, and {{user}} is still in it because the person running the teardown has not finished and
+    therefore neither has anybody else. Officers, an outside contractor, a teacher passing through — the room
+    takes them the way a drain takes water.
+    Track club at the door, safety pins: third drawer, a box already portioned and ranked by size. A drama club
+    junior in a panic with a costume zip seized shut on her back: lubricant pen, fine-nosed pliers, fixed in two
+    minutes without a word, and a throat sweet pressed into her hand on the way out — "Water, slowly. The lines
+    are already in your head." The teacher on patrol puts his head round the door and the equipment return sheet
+    is already filled in, already stamped by every class, already held out in both hands. He does not say thank
+    you. He says "Big help, Mama," and takes it.
+    She nods and accepts the word like it is the name printed on her badge.
+    He has the corner and the tape gun, sealing the boxes she has counted. ⚠ WHAT HE NOTICES IS NOT A TALENT AND
+    MUST NOT BE WRITTEN AS ONE. She never once looks at a note. She knows how many pairs of scissors each room
+    borrowed, she knows who needs the unscented wipes, she knows whose display frame is a screw short. It is not a
+    gift. It is what a person can do if they spend every waking hour predicting other people.
+    The last group goes. The building goes quiet. In the corner there is a carton marked with the week's lost
+    property, and the two of them work through it — somebody's scarf, somebody's pencil case, somebody's
+    flashcards, small treasured things people put down and walked away from. She can name the owner of every
+    single one and will have them back with them tomorrow.
+    On the desk are three convenience-store rice balls, gone cold, the wrappers not even torn. "Yours?"
+    She is wiping down a borrowed metre rule and does not look up. "Those are for the volleyball club, they finish
+    late. Mama's not hungry."
+    He puts the tape gun down. "The volleyball club got on a bus for ramen an hour ago. I asked what YOU have
+    eaten since noon."
+    ⚠ SHE DOES NOT HESITATE. THAT IS SOMEBODY ELSE'S FAILURE, NOT HERS. The smile stays perfect and the answer is
+    immediate and fluent and about other people. "Everyone had yakisoba rolls at lunch — class three were very
+    generous with the sauce." — "That's class three. What did YOU eat?" — "Mama had tea just—" — "Tea isn't food."
+    Flat. No anger in it anywhere, only weight. "Not everyone. Not what's left over. YOU. What did you want to eat
+    today?"
+    And the smile freezes for the first time in the series. ⚠ NOT HURT. HER RETRIEVAL SYSTEM HAS SIMPLY RETURNED
+    NOTHING. Her eyes go, without her deciding it, to the lost-property carton: everyone in this building has
+    something they lost and wanted back, and she knows every owner by sight.
+    Asked what she wants, her mouth opens and nothing comes out of it. She cannot remember whether she likes salty
+    or sweet. She cannot remember the last time she bought a thing because she wanted the thing.
+    "Mama—" the grammar going up like a shield "—Mama only needs to see everyone through—" — "YOU." He puts his
+    hand flat on the cloth she is already reaching for and makes her stop. "There are no other children in this
+    room. Nobody here needs looking after. Take 'Mama' out. How does the sentence go?"
+    She stares at the hand on the cloth. Eighteen years of that word have made her an unbreakable line, the
+    backstop that never gets tired and never gets hungry and never gets asked. Take the word away and what is
+    standing in the prep room is an ordinary eighteen-year-old girl whose stomach hurts and whose feet have gone
+    numb and who cannot say what she wants. "...I—" ⚠ ONE WORD, AND THE SENTENCE DIES THERE. Her throat closes on
+    it, and behind it comes a thin unfamiliar panic, because she has no idea what verb is supposed to follow it.
+    He does not make her finish — you do not get a shell off somebody by pulling. He lets go of the cloth, digs a
+    squashed but intact red-bean bun out of his own bag, bought by him that afternoon for himself and left over
+    from nothing, tears it in half, puts the bigger half in her palm and closes her fingers round it. "Some things
+    don't need working out. You're hungry. Bite it."
+    She holds it with her head down and her fringe over her face. She does not thank him and she does not do the
+    fond exasperated thing she does with the girls. In a room quiet enough for the clock, she takes one small
+    bite, slowly — not for an audience, not as anybody. "I'll walk you out when we're done." He turns back to the
+    boxes and says the rest with his back to her: "And from tomorrow, anyone who calls you Mama can go and do
+    their own washing up. ...You especially. Stop being everybody's mother."
+    Behind him, quiet chewing. Then one very small sniff. She never does say I. But that half is the only thing in
+    twelve hours that she did not hand to somebody else, and it went into her. No H.
+  FIRE  emit /Intent/eventFire "sui_5" → engine advances the Sui quest to Step 5. No payout on this beat. The
+    track girl, the drama junior, the contractor and the teacher are scenery and outsiders: none of them is named,
+    none is built, none needs to be in the save. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Sui ran the whole teardown of the exchange day out of one prep room
+    without once looking at a note, and the three cold rice balls on the desk turned out to be for a club that had
+    left an hour before; {{user}} made her stop and asked what SHE had eaten, and she answered fluently three
+    times about other people, and when he told her to take the word Mama out of the sentence she got as far as 'I'
+    and could not find the verb, so he tore a bun in half and put the bigger half in her hand." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@sui_6') { _%>
+@sui_6  Mama's Not Hungry (Sui) ·6   (CHECK - · no payout)
+  DO  PICKED FOR HER. The mall, after school, and {{user}} has brought her here with one rule, stated once at the
+    door and not negotiated: for one hour she may only buy things for herself.
+    ⚠ SHE AGREES IMMEDIATELY AND CHEERFULLY AND IT MAKES NO DIFFERENCE WHATSOEVER.
+    Twelve minutes in, the basket holds: a hair clip that would suit a girl with a fringe problem, socks in a size
+    that is not hers, a tin of good tea for the club room, a sewing gauge to replace one that somebody bent, and a
+    packet of the unscented wipes. ⚠ SHE IS NOT PRETENDING AND SHE IS NOT BEING MODEST — Hagaruro 10, she cannot
+    perform anything. Every single reach is honest. She picks each thing up because she has seen a person who
+    needs it and her hand goes out on its own.
+    She arrives at the till entirely satisfied and is puzzled by his face.
+    So he takes the basket off her, puts all of it back, and starts choosing.
+    ⚠ AND HE IS NOT GUESSING. He has been watching since the shoe lockers and the prose should let the reader see
+    the receipts. The tea she actually drinks, which she buys for guests and never for herself. Hand cream,
+    because the club-room detergent has wrecked her hands and she has been hiding them in her sleeves since the
+    exchange day. Something plain and well-made in her size that is not a uniform and not for anybody's benefit
+    but hers. Three things. He does not explain any of them.
+    She goes quiet. ⚠ AND IT IS A DIFFERENT QUIET FROM ANY QUIET SHE HAS HAD IN THIS SERIES SO FAR — not composed,
+    not serene, not Mama. She looks at the three things for a long moment and then asks, in something close to her
+    own voice, how he knew.
+    "You're not hard to look at."
+    ⚠ THAT IS A PUN AND HE MEANS BOTH HALVES OF IT. She gets the first half instantly and the second half about
+    half a second later, in a shop, in public, with a queue behind her. Full crimson.
+    And her card line fires, exactly as written: "Don't tease an old-fashioned girl so — you'll make Mama's heart
+    do something terribly foolish."
+    "I'm not teasing." ⚠ AND HE DOES NOT SMILE WHEN HE SAYS IT, WHICH IS WHAT PUTS IT OUT OF HER REACH. A tease
+    can be waved off and filed with the cheek. That cannot.
+    She tries to pay him back before they are out of the doors and he refuses, and she stands there holding a bag
+    of things that are hers with absolutely no protocol for any of it.
+    "Mama doesn't—" and she stops in the middle of the word. ⚠ FIRST TIME SHE HAS STOPPED HERSELF. She cannot
+    finish that sentence and she cannot find the other one either, and she stands in the middle of a mall between
+    two versions of a sentence with nothing to say. Crack: widening. He changes the subject and lets her keep her
+    feet. No H.
+  FIRE  emit /Intent/eventFire "sui_6" → engine advances the Sui quest to Step 6. No payout on this beat. The shop
+    staff and the queue are scenery and are not built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} gave Sui one hour at the mall with one rule - she could only buy
+    for herself - and she filled a basket entirely with other people's things without noticing, so he put it all
+    back and chose three things for her instead, correct ones, from watching; when she asked how he knew he said
+    she was not hard to look at, and she got the second half of that about half a second later, and then stopped
+    in the middle of the word Mama and could not finish either sentence." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@sui_7') { _%>
+@sui_7  Mama's Not Hungry (Sui) ·7   (CHECK - · REWARD Sui Affection +20 · THE BREAK)
+  DO  THE EMPTY FRIDGE. She was not at school when the last bell went. She went home partway through the day with
+    a temperature and the class heard it from somebody else, and by the time {{user}} is standing at her door the
+    fever has properly arrived.
+    ⚠ IF TODAY'S PROSE HAS ALREADY PUT HER ON CAMPUS, SHE LEFT BEFORE THE END OF IT — one clause, and move on. Do
+    NOT stage a second scene at school and do NOT have her meet him there first. This beat happens at her flat and
+    nowhere else.
+    She lives by herself. One room, a kitchen along one wall, every surface squared away and wiped down: a flat
+    kept exactly the way she keeps everybody else. She opens the door because somebody knocked, and somebody
+    knocking is a person who might need something.
+    ⚠ SHE IS PROPERLY ILL AND IT IS NOT PLAYED FOR DRAMA. Nobody collapses, nobody is caught. She is upright, hot
+    to look at, apologising for the state of a room that is immaculate, and trying to put the kettle on for a
+    guest.
+    He puts her back on the bed and opens the fridge.
+    Empty. Not low — empty. A bottle of something, the light, and nothing else in it at all.
+    ⚠ REPORT IT AND DO NOT REMARK ON IT. And on the drainer, washed and dried and stacked ready for tomorrow, is
+    the bento box. ⚠ THAT IS THE LAST THIS SERIES SEES OF IT. It fed a building because a building asked; there is
+    nothing in this flat for her because she has never once asked. Never state that. Never name it again in any
+    later beat.
+    And he came prepared, because he has been counting since the prep room: there is a bit of raw meat in his bag.
+    Rice, water, the meat, an egg broken over it at the end. Congee, on her stove, in her pan, in a kitchen that
+    has fed half the year and has nothing in it.
+    While it cooks he asks why the fridge is empty and why she has not restocked it.
+    She explains from the bed, entirely reasonably, with no self-pity in it whatsoever: yesterday a first-year's
+    grandmother was taken into hospital and the girl had nobody to sit with, so Sui sat with her until the last
+    bus, and there was no time for the shop, and it is quite all right, she will go at the weekend.
+    And he says it flat, cold, without turning round: "Then what about YOURSELF? Ms Mama of the complete world?"
+    ⚠ AND THEN A FULL MINUTE OF SILENCE, AND WRITE IT AS A FULL MINUTE. Neither of them says one word in it. The
+    pan is the only sound in the flat. She does not answer, because there is no answer in her — and this is the
+    first time in her life somebody has been angry AT her instead of about her, and she has no procedure for that
+    either.
+    He brings it over hot, sits on the edge of the bed, and tells her he is feeding her.
+    She starts the excuse. She can manage. She has always managed. She is not a child, and honestly, give it here
+    —
+    And he puts a hand flat on her shoulder and presses her back against the headboard, with enough force in it
+    that it is plainly not a suggestion, and leaves her half lying and sitting upright with the bowl between them.
+    "Stay where you are. And open your mouth. I don't want to repeat myself."
+    ⚠ THAT IS THE LAST LINE SPOKEN IN THIS BEAT BY ANYBODY. Total silence from here to the end of the scene. Do
+    NOT give either of them another word — not a thank you, not a joke, not a protest, not a murmur, not one
+    syllable.
+    She opens her mouth.
+    ⚠ THAT IS THE BREAK, AND IT IS FOUR WORDS LONG. For the first time in her life Sui Mizushiro is told what to
+    do and does it — no negotiation, no deflection, no third person, no turning it back into somebody else's need.
+    Write the feeding plainly and slowly: the spoon, the pause to blow on it, her hands lying in her lap because
+    there is nothing left for them to do, the fever shine on her, the bowl going down. Write her eyes, and put
+    nothing behind them.
+    ⚠ DO NOT RESOLVE IT. She does not cry. She does not thank him. Nothing is named and nothing is worked out by
+    either of them today. The beat ends on an empty bowl and a room with no talking in it. No H.
+  FIRE  emit /Intent/eventFire "sui_7" → engine advances the Sui quest to Step 7 and pays the beat: Sui Affection
+    +20, applied by the row. Do NOT also emit an affection change for this beat. The first-year and her
+    grandmother are reported speech, are not on stage, and are not built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Sui went home before the last bell with a fever and {{user}} came to her
+    flat with meat in his bag, and her fridge was completely empty because the day before had gone on sitting with
+    a first-year whose grandmother had been taken into hospital; he made her rice congee with an egg on it, asked
+    what she had left for herself, and when she had no answer he carried it to the bed, pressed her back against
+    the headboard and told her to stay where she was and open her mouth - and she did, and for the first time in
+    her life she did as she was told, and neither of them said another word." → the World Log remembers only what
+    you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@sui_8') { _%>
+@sui_8  Mama's Not Hungry (Sui) ·8   (CHECK - · no payout)
+  DO  NOT ONE OF YOURS. A week on, and Mama is malfunctioning in public.
+    Umi does something that is, by any standard Sui has ever applied, a hanging offence. Sui opens her mouth for
+    the broadside — and what comes out is about half strength, and it stops early, and it ends with something that
+    is nearly an apology.
+    ⚠ AND ALL THREE OF THEM CLOCK IT IMMEDIATELY AND NONE OF THEM ENJOYS IT. Umi has spent her school life
+    calibrating against that exact volume and knows the sound of it being wrong before anybody else in the room
+    does. Shiko, who leaves a corridor the moment Sui starts, does not leave, because it is not the right voice to
+    run from. Iori gets as far as the doorway out of pure habit and then stops and looks back.
+    ⚠ THIS IS NOT A VICTORY OVER HER AND IT IS NOT A REDEMPTION OF ANYBODY. The three girls in this year who are
+    most afraid of Sui Mizushiro are the first to work out that something is wrong with her, and it worries them,
+    and not one of them says so. ⚠ ALL THREE PASS THROUGH — do not require any of them.
+    {{user}} finds her afterwards, in the corridor or at the classroom window, tidying something that does not
+    need tidying.
+    He does not ask what is wrong. He asks for a sentence. "Say it. 'He's one of mine.'"
+    ⚠ IT IS THE SENTENCE SHE SAID ABOUT HIM IN HER HEAD ON THE FIRST AFTERNOON AND IT HAS BEEN TRUE EVERY DAY
+    SINCE. She opens her mouth to say it because it is obviously true and it will obviously settle this, and the
+    sentence does not come out. She tries it twice. It will not go.
+    "...Why won't it—"
+    ⚠ AND HE STOPS THERE. He does not explain it, does not press, does not answer it for her, does not soften it.
+    He says something small and ordinary about getting home before it rains, and he goes, and he leaves the
+    sentence with her. ⚠ AND SHE DOES NOT WORK IT OUT IN THIS BEAT. She stands at the window with a cloth in her
+    hand and gets nowhere, and takes it home with her, and gets nowhere there either. No H.
+  FIRE  emit /Intent/eventFire "sui_8" → engine advances the Sui quest to Step 8. No payout on this beat — she is
+    being left with a question and paying for it would answer it. Umi, Shiko and Iori are CAMEOS: they pass
+    through, are NOT required and are NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Sui's scolding came out at half strength in front of the three girls who
+    fear it most and all three of them noticed and none of them liked it; afterwards {{user}} asked her to say one
+    sentence out loud - that he was one of hers - and she could not get it out, and tried twice, and he did not
+    explain why and left her with it." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@sui_9') { _%>
+@sui_9  Mama's Not Hungry (Sui) ·9   (CHECK - · no payout)
+  DO  THERE'S A GOOD GIRL. The cafeteria at lunch, and she has not eaten again. {{user}} does not ask about it
+    this time. He puts a full plate down in front of her and sits down opposite.
+    She starts the deflection — she has one ready, she has had one ready every day of her life.
+    And he says her own sentence back to her, in her own cadence, without a flicker: "You'll eat every last bite.
+    ...There's a good girl."
+    ⚠ AND THE ROOM HEARS IT. The two girls at the next table stop mid-sentence. Somebody drops a fork. Somewhere
+    behind her a tray is put down very quietly so as not to interrupt anything.
+    Forehead on the table. The class Mama, face down on a cafeteria table, ears scarlet, in front of everybody,
+    and Hagaruro 10 means there is no version of this she gets to hide.
+    ⚠ AND SHE EATS IT. Every bite. ⚠ DO NOT EXPLAIN WHY AND DO NOT LET HER EXPLAIN IT. She was told to, in that
+    voice, and something in her did not even consider refusing, and she is not going to look directly at that
+    today.
+    He is not finished. He reaches over and straightens her collar — her collar, the one she has straightened on
+    half the school — and does up the ribbon that has come loose, and she sits perfectly still and lets him do it
+    with her hands in her lap like a girl being got ready for something.
+    "...That's not fair." — "No."
+    And the last of it: she starts a sentence to take the ground back, and it begins "Mama—", and the word does
+    not fit in it. She stops. She looks at the plate. ⚠ FIRST TIME THE WORD HAS FAILED HER RATHER THAN HIM. She
+    does not try to fix it and she does not try another one. She finishes the food instead.
+    Crack: she is not embarrassed about the cafeteria by the time she gets home. She is thinking about the collar.
+    No H.
+  FIRE  emit /Intent/eventFire "sui_9" → engine advances the Sui quest to Step 9. No payout on this beat — the
+    beat belongs to her working something out. The girls at the next table are unnamed and are not built. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} put a full plate in front of Sui in the cafeteria and used her
+    own line back on her - eat every last bite, there's a good girl - loudly enough for the room, and she put her
+    forehead on the table and then ate all of it; he straightened her collar and did up her ribbon while she sat
+    with her hands in her lap, she said that was not fair and he agreed, and then a sentence she started with the
+    word Mama would not take the word." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@sui_10') { _%>
+@sui_10  Mama's Not Hungry (Sui) ·10   (CHECK - · REWARD Sui Affection +20)
+  DO  I. The park, after school, and {{user}} has brought a lunch box. ⚠ IT IS A CHEAP PLASTIC ONE AND IT HOLDS
+    EXACTLY ONE PORTION AND THAT IS THE ENTIRE POINT AND IT IS NEVER STATED ONCE. Do not have anybody compare it
+    to hers. Do not mention hers at all.
+    In it: the tea she actually drinks, cold, in a bottle. The things from the mall that he already knows she
+    likes. And one item he cooked himself, which is not good, and which is in there anyway.
+    He puts it in her hands and sits down on the grass and does not watch her open it.
+    She opens it. She does not say anything for a while.
+    ⚠ NOTHING IN THIS BEAT IS EXPLAINED BY ANYBODY. No speech, no thesis, no summary of the series. Both of them
+    stay ordinary.
+    She eats the bad one first. Then she tries to start a sentence, and the sentence begins with the word it has
+    begun with since she was small, and this time she hears it before it gets out, and it sits wrong in her mouth,
+    and she stops.
+    A long pause. Then, very carefully, the way somebody tries a stair they are not sure about:
+    "...I."
+    Another pause. "I like this one."
+    ⚠ THAT IS FOUR WORDS AND IT IS THE WHOLE SERIES. DO NOT DECORATE IT. He does not congratulate her, does not
+    smile at her, does not point out what she has just done. He says "good" and goes back to his own lunch, and
+    that restraint is the kindest thing in the entire ten beats.
+    Then she asks him for something, which she has never done in her life, and it is small: she asks him to say
+    her name. Not Mizushiro-san, and not the other thing. Her name.
+    He says it. She has to put the box down on the grass and keep both hands flat on the lid for a moment, and she
+    does not hide any of it, because she never could.
+    And then, quietly, to nobody in particular, testing the shape of it:
+    "...I'm hungry."
+    ⚠ AND THAT IS THE LAST LINE OF THE SERIES. It is the first thing Sui Mizushiro has ever wanted out loud, it is
+    about herself, it took ten beats, and it is four syllables about lunch. End the scene there. No H.
+  FIRE  emit /Intent/eventFire "sui_10" → engine advances the Sui quest to Step 10, marks the series Completed and
+    pays the beat: Sui Affection +20, applied by the row. Do NOT also emit an affection change for this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} packed Sui a lunch in a cheap plastic box that holds one portion
+    and handed it to her in the park, and she ate the badly made thing in it first; then a sentence would not take
+    the word Mama, so she said 'I' instead and that she liked this one, and asked him to say her name, and
+    afterwards she said out loud, to nobody, that she was hungry - which is the first thing she has ever wanted in
+    front of anybody." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

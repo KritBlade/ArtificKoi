@@ -1,0 +1,125 @@
+<Classmate_Guide>
+<%_ let _wantsNativeName = false; try { _wantsNativeName = /^(zh|ja|ko)/i.test(String(getvar('stat_data.Preferences.Lang[0]') || 'en-US')); } catch (_e) { _wantsNativeName = false; } _%>
+# v0.31
+# HOW to MATERIALISE a new heroine from her FULL <character> profile. Read her COMPLETE <character> card (it
+# keyword-loads when her name appears) and copy ALL of it into one object; Window B (code) builds the full
+# Classmate record (tuples + runtime defaults) and validates it. A girl with NO card is built only on
+# {{user}}'s [ooc: add classmate <name>], from a profile you invent — see [NO CARD] at the end.
+# ⚠ EVERY EXAMPLE BELOW USES A FICTIONAL PLACEHOLDER — 範例太郎子 (Key: ExampleGirl), who NEVER exists
+# in any save. Copy the SHAPE only, and fill it from HER OWN <character>
+# card. NEVER substitute a real cast name into these shapes, and never treat example values as live data.
+
+## WHEN to add
+Only on a build signal (<Story_Analysis> step 4): the BUILD MODE banner, a "NEW HEROINE NOT BUILT YET" note under
+her <character> card whose rule says build, or {{user}}'s [ooc: add classmate <name>].
+(A named girl with no <character> profile is a background NPC: do not add her unless {{user}} commands it.)
+
+## HOW — write the WHOLE /Intent/newClassmate object in ONE op: op "replace" on the CONTAINER path
+## /Intent/newClassmate (it already exists as {}). KEY it by her English Key; value = a flat object copied from her
+## <character> card. Do NOT use op "add" / a sub-key path /Intent/newClassmate/<Key> — MVU REJECTS adding a new key
+## into the record (it is non-extensible); "replace" the whole object instead. ⚠ TWO+ heroines this reply → put EACH
+## as her own Key in that SAME object { "<KeyA>": {…}, "<KeyB>": {…} } — RES loops over every entry and builds each.
+PROFILE (copy verbatim from the card — do NOT invent or shorten):
+  key   : her English first name from the name line's parenthesis, e.g. "(ExampleGirl)" → "ExampleGirl" (letters/digits/_ only; this is the path key)
+  Name  : her DISPLAY name. Her card prints it in BOTH scripts — the LATIN half ("ExampleGirl Hanrei") and the
+          NATIVE half ("範例太郎子") — so ONE card serves either language. RECORD and PROSE take the SAME half —
+          the one the language this save is read in calls for (<Reply_Request> ★ NAME HER IN ONE SCRIPT states it
+          for the prose):
+<%_ if (_wantsNativeName) { _%>
+          this save reads Japanese/Chinese → take the NATIVE half ("範例太郎子"). NEVER the Latin one.
+<%_ } else { _%>
+          this save reads English → take the LATIN half ("ExampleGirl Hanrei"). NEVER the Japanese/Chinese one.
+          Ignore her card's JapaneseName line.
+<%_ } _%>
+          Copy that half verbatim, never a spelling you invent — every surface that shows her (status menu,
+          chat bar, companion GUI) reads this field, and one record in the other script reads as a
+          different person.
+  Age, Gender, Race, Occupation : from the card. Identity : "Classmate" (or her stated role).
+  Persona : the EXACT archetype from the card (e.g. ExampleArchetype) — one <Personality_Archetypes> defines, never invented.
+  Height, Cup_Size, Body_Measurements : from the card's body block (measurements → Body_Measurements, cup_size → Cup_Size).
+  Hair_Style, Physical_Features : copy the card's body lines verbatim.   Image : the card's Image URL.
+  Biography : compose from her `background` (+ a line of `personality`). Do NOT put her secret here.
+  Secret    : copy her `secret_and_trump_cards` verbatim.
+9 TRAITS (0-100): Sta, Int, Cha, Pride, Morals, Elegance, Sociability, Kindness, Hagaruro — PLUS M_level (−100…100)
+  → WRITE TEN SEPARATE NUMERIC FIELDS, one per name above: "Sta": 70, "Int": 60, "Cha": 84, and so on.
+    NEVER one joined field. A single "Traits" string is not read at all, and the build is then refused for
+    the ten that are missing — so a record that looks complete to you arrives with nothing the game runs on.
+  → Read her values off her card's TRAITS line. It is ONE line, labelled and pipe-joined:
+        TRAITS: STA:50|INT:55|CHA:96|PRI:50|MOR:40|ELE:30|SOC:72|KIN:60|HAG:80|M_level:-25
+    Take the number after each label and put it in the field that label names: STA→Sta · INT→Int ·
+    CHA→Cha · PRI→Pride · MOR→Morals · ELE→Elegance · SOC→Sociability · KIN→Kindness · HAG→Hagaruro ·
+    M_level→M_level.
+    ⚠ THE PIPES ARE HER CARD'S FORMAT, NEVER YOURS. Her line above becomes ten fields in your object:
+        "Sta": 50, "Int": 55, "Cha": 96, "Pride": 50, "Morals": 40, "Elegance": 30,
+        "Sociability": 72, "Kindness": 60, "Hagaruro": 80, "M_level": -25
+    Re-emitting her line as one pipe-joined string is the one mistake this section exists to prevent.
+  → M_level is her STARTING H submission, not a trait — the engine moves it scene by scene from here, and her
+    H scenes read it from the first one: negative = she leads in sex, positive = she yields, 0 = neither. Copy
+    it WITH its sign: a minus stays, and a positive number is written bare ("M_level": 15, never +15).
+    Only if the card has no TRAITS line, derive from her personality prose.
+Hobbies : a short string from her lifestyle.Hobbies.
+FullName: her name in LATIN letters, GIVEN NAME FIRST — a card writes FAMILY name first, so INVERT it:
+          the placeholder 範例太郎子 (family 範例 = Hanrei, given 太郎子, romanised ExampleGirl on her
+          card) has FullName "ExampleGirl Hanrei" — never "Hanrei ExampleGirl", never 範例太郎子 itself.
+          Its FIRST token is her Key, so the two always agree. MANDATORY, and it is not decoration: the engine
+          compares it against every built record to tell 'she already exists' from 'a different girl who
+          shares a first name'. Without it the build is refused. `Name` is the DISPLAY spelling and stays
+          in whatever language the story uses — the two fields are different jobs, not duplicates.
+Code fills everything else (RelationshipStage Acquaintance, Affection 0, Mood, Is_present true, Location, every other NSFW stat 0, …).
+
+## ALSO print <classmate_trait_check> (visible, once) — this IS the BUILD GATE (per <Update_Analysis_Detail> 5a).
+## Say each line OUT LOUD, point by point. The "Profile loaded" line is the proof, NOT a formality:
+## ⚠ THE SHAPE ONLY — every value below is a PLACEHOLDER to be replaced with the pending girl's own. Emitting
+## this block with these placeholder values still in it means you had no pending heroine and should not have
+## printed it at all (see the header warning).
+<classmate_trait_check>
+Pending: <her display name> (Key: <HerKey>) — <the BUILD MODE banner | her NEW HEROINE note | {{user}}'s command>.
+<HerKey> is COPIED from the banner or the note, never invented or re-spelled.
+Profile loaded: YES — TRAITS line found in her card, quoted verbatim: TRAITS: STA:<n>|INT:<n>|CHA:<n>|PRI:<n>|MOR:<n>|ELE:<n>|SOC:<n>|KIN:<n>|HAG:<n>|M_level:<n>
+Built from her card (NOT invented).
+</classmate_trait_check>
+# [NO CARD] build: the Profile line reads "Profile: INVENTED — {{user}}'s [ooc: add classmate] command, no
+# <character> card", and the last line reads "Invented on {{user}}'s command."
+# If you CANNOT find/quote her TRAITS line in context → write "Profile loaded: NO" → DISARM: clear BOTH
+# /PendingState/AddClassmate/0 = "" AND /PendingState/AddClassmateArmedAt/0 = -1 (the pair IS the closed
+# state). Do NOT build, do NOT invent from the scene or her appearance. On a BUILD you write NEITHER key —
+# code closes the gate, and a clear riding your build block cancels the build it came with.
+
+## EXAMPLE patch (in UpdateVariable per <COT_Guide>) — ONE op writing the WHOLE record on /Intent/newClassmate,
+## keyed by her Key. For 2+ heroines, add each as another Key INSIDE the same "value" object (never a second op /
+## a sub-key path). Note op "replace" (NOT "add") and the extra { } wrapping her flat object under her Key.
+## ⚠ PLACEHOLDER DATA — 範例太郎子 is not a heroine and every value here is a filler to be REPLACED. The field
+## NAMES are the contract (all ten numbers spelled in full: Kindness, never Kind · M_level, never M); the VALUES are not.
+{ "op": "replace", "path": "/Intent/newClassmate", "value": { "ExampleGirl": {
+    "key": "ExampleGirl", "FullName": "ExampleGirl Hanrei", "Name": "ExampleGirl Hanrei", "Age": "18", "Gender": "Female", "Race": "Human", "Occupation": "Student",
+    "Identity": "Classmate", "Persona": "<her EXACT archetype from her card>", "Height": "<n> cm", "Cup_Size": "<X> cup", "Body_Measurements": "<n>-<n>-<n>",
+    "Hair_Style": "<copied verbatim from her card's body lines>",
+    "Physical_Features": "<copied verbatim from her card's body lines>",
+    "Image": "<the Image URL printed on her card>",
+    "Biography": "<composed from her background + a line of personality — never her secret>",
+    "Secret": "<her secret_and_trump_cards, verbatim>",
+    "Sta": 0, "Int": 0, "Cha": 0, "Pride": 0, "Morals": 0, "Elegance": 0, "Sociability": 0, "Kindness": 0, "Hagaruro": 0,
+    "M_level": 0,
+    "Hobbies": "<a short string from her lifestyle.Hobbies>" } } }
+# The ten zeros are DELIBERATE placeholders, not defaults: copy the ten numbers off HER TRAITS line. A record
+# that reaches state with a trait still 0 is a copied example (M_level 0 is hers only when her line says 0).
+# ALL TEN ARE MANDATORY, as are Name and Persona — a record missing ANY of them is REFUSED WHOLE (she is not
+# half-built with defaults), and you build her again next reply. Everything else on the list above is copied
+# prose: it does not block the build, but an empty line is a line you skipped. Spell each of the ten names
+# EXACTLY as printed above — a misspelled one is a missing one ("Kind" for "Kindness" ⇒ refused for Kindness).
+# Next reply she is in <CURRENT_VARIABLE_DATA> fully populated — then she can be flirted with / checked normally.
+
+## [NO CARD] — a girl {{user}} added with [ooc: add classmate <name>] who has NO <character> card in your prompt
+## You invent her profile: every value is yours, consistent with how the story has shown her. Same record, same
+## ONE op, same mandatory fields as above:
+  key      : her given name in Latin letters (letters/digits/_) — the placeholder "ExampleGirl Hanrei" → "ExampleGirl".
+  FullName : Latin letters, given name first ("ExampleGirl Hanrei").   Name : per the Name rule above.
+  Persona  : EXACTLY one of these archetypes — PICK one, never invent one (code refuses any other value):
+             Bashful_Girl · Big_Sister · Bookworm · Bright · Class_Clown · Competitive · Delinquent · Friendly ·
+             Glamorous · Highborn_Lady · Mellow_Girl · Otaku · Party_Girl · Pure_Innocent · Sadistic_Tease · Sexy ·
+             Shy_Girl · Tomboy · Traditional_Lady · Wild_Child · Yandere
+  the nine traits : numbers 0-100 that fit her, all nine, each spelled in full.
+  M_level  : −100…100 for how she acts in sex — negative she leads, positive she yields, 0 neither.
+  Image    : "" (she has no card, so no image URL).   Secret : "" or one you invent.
+  Everything else (Age, Biography, Hobbies, the body lines …) — invent it to fit her.
+</Classmate_Guide>

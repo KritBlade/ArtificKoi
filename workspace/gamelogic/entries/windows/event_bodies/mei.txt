@@ -1,0 +1,410 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@mei_') === 0
+<%_ /* v1.2 */ _%>
+<%_ /* The ten @mei_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @mei_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@mei_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mei_1') { _%>
+@mei_1  Open Book (Mei) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE MOP. After the last bell, in a classroom that is supposed to have four girls in it and has one: a
+    bucket, a mop, the chairs already up on the desks along two rows, and a very small person working steadily
+    through a job built for four.
+    MEI HANAMORI is 150 cm of pale icy-blue twin-tails and rolled cardigan sleeves, and she is not sighing about
+    it, and she is not sulking about it, and she is not hurrying either. She is simply doing the whole room.
+    ⚠ THE ROOM HAS ALREADY REACTED AND THE PROSE SHOULD SHOW IT. Two girls have put their heads round the door on
+    the way past. One said "Mei, you're being USED, you know." The other said "want me to go and get them?" She
+    thanked both of them, warmly, and both of them left, because there is nothing to argue with — she does not
+    defend herself and she does not complain, so there is no handle on her anywhere.
+    {{user}} is the third person through that door, and what he does is different: he does not tell her to stop,
+    and he does not offer to fetch anybody. He picks up the second bucket and starts on the row she has not
+    reached.
+    ⚠ THE TELL, AND IT MUST LAND WITHOUT ONE WORD OF EXPLANATION. On the desk by the door is the cleaning roster.
+    Four names. All four already ticked off — her handwriting, one pen, done in advance of the other three walking
+    out, so that nobody gets a mark against them. {{user}} sees it while the bucket is filling. Do NOT have him
+    ask about it. Do NOT have her notice him seeing it. Do NOT explain it in narration. It is there, it is in her
+    hand, and it was written BEFORE. That is this series' whole secret and it is never once spoken aloud in ten
+    beats.
+    They do the room. She talks the entire time — about a bird on the window ledge, about the smell of the floor
+    wax, about whether her friend Kasumi has finished her library shift — and she asks {{user}} three questions
+    about himself and listens to all three answers, properly, the way almost nobody does. Twenty minutes with two
+    people. She says thank you about nine times.
+    At the door she stops. "Um. You didn't ask me why." A pause, and then the smile arrives properly, and it is
+    not the vague one the class is used to. It is aimed. "Everyone asks me why."
+    She bows, tells him her name so that he has it, and goes, twin-tails swinging, two steps too fast for the
+    corridor.
+    Crack: none, and that is the design. There is nothing under her to crack — which makes her the hardest girl in
+    the year to write, and makes this series ten beats of somebody being slowly handed a REASON for something she
+    was already doing. No H.
+  FIRE  emit /Intent/eventFire "mei_1" → engine creates the Mei quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose — "Mei
+    Hanamori" — because that IS the mechanism: POST reads the name and arms her build, her <character> card
+    keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide> says.
+    Do NOT build her THIS reply unless her <character> profile is already in front of you. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mei Hanamori was left to clean a classroom on her own by three girls who
+    walked out, and did the whole room without complaining; {{user}} picked up the second bucket instead of
+    lecturing her or fetching a teacher, and she said that everyone asks her why and he did not." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mei_2') { _%>
+@mei_2  Open Book (Mei) ·2   (CHECK - · REWARD Mei Affection +10)
+  DO  THE SICK NOTE. A week on, at lunch, in the corridor outside the classroom, where a girl from the row by the
+    window has her hands together and her head on one side and a story going.
+    The story is about a grandmother. It is a good story. It is the third grandmother this term. She needs to
+    borrow lunch money, only until the weekend, and Mei says yes before the story has finished.
+    ⚠ THE TELL. WATCH WHERE THE MONEY COMES FROM. Mei's own lunch money lives in the front pocket of her bag,
+    where it always lives. THIS money is already folded, on its own, in the small pocket of her cardigan — where
+    it was this morning, before she left the house, before anybody had asked her for anything at all. She hands it
+    over without hunting for it, because there was nothing to hunt for. PLAY THE DETAIL. NEVER EXPLAIN IT. Nobody
+    in the scene remarks on it.
+    "Pay me back whenever," Mei says, and means it, and the girl is already gone.
+    {{user}} watched the whole thing. ⚠ HE IS THE FIRST PERSON IN THIS SERIES TO ASK HER THE RIGHT QUESTION, AND
+    THE RIGHT QUESTION IS NOT "DID YOU BELIEVE HER". Everybody else in her life runs one of two routines — rescue
+    her, or lecture her — and both of them treat her as a thing that happens TO people. He asks her for her
+    reasoning, the way you would ask an adult for it.
+    "Why?"
+    "Because then she'd have nobody left who believed her." Immediate. No thinking required. It is the answer she
+    has given herself every single time.
+    "That's her reason. What's yours?"
+    And Mei stops. Actually stops, in a corridor, with the bell about to go. Nobody has ever asked her the second
+    question. She turns it over properly, and she is not quick, and she has never pretended to be, and the silence
+    goes on long enough to be uncomfortable for everybody except her.
+    "...I don't know yet." She is not upset about this. She is INTERESTED in it. "Is it allowed, not knowing?"
+    "It's allowed to not know. It's not allowed to never ask."
+    She nods slowly, filing it somewhere, and then gives him half her bread, because she has not eaten and now is
+    not going to, and she does not mention that part.
+    Crack: not a crack — the first hairline. She has a rule, and she has just been told that a rule can have a
+    reason underneath it, and in eighteen years nobody has raised the subject. No H.
+  FIRE  emit /Intent/eventFire "mei_2" → engine advances the Mei quest to Step 2 and pays the beat: Mei Affection
+    +10, applied by the row. Do NOT also emit an affection change for this beat — the row is the payout, and
+    reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A girl borrowed Mei's lunch money with a story about a sick grandmother
+    and Mei gave it to her without hesitating; {{user}} did not tell her to stop, he asked her what her own reason
+    was, and she could not answer and found the question interesting rather than upsetting." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mei_3') { _%>
+@mei_3  Open Book (Mei) ·3   (CHECK - · REWARD Mei Affection +16)
+  DO  WHERE IT GOES. Lunch, a week on, and three people at one table: Mei, Kasumi Okudera, and {{user}}, who was
+    invited by Mei with absolutely no consideration of whether a boy at this particular table was going to be
+    survivable for Kasumi.
+    ⚠ WHAT MEI IS ABOUT TO ASK IS NOT A CHILD'S QUESTION AND MUST NOT BE PLAYED AS ONE. She is eighteen. She has
+    measured herself against every average she could find. She decided some time ago, privately, that she is too
+    flat for a grown woman, and it is the one thing she genuinely worries about — and because she cannot hide
+    anything and has no concept that a question can be indecent, she asks it at a lunch table with company.
+    "Kasumi-chan. How do you make them bigger?"
+    Kasumi Okudera, who has the largest chest in the year and has never once been glad of it, produces a sound.
+    Mei is entirely serious and entirely methodical. She has tried eating more. She has tried the posture thing
+    Kasumi told her about. She would like to know whether it is food, or sleep, or something a person has to do on
+    purpose, and she would like a number if there is one.
+    Then she turns to the only other person at the table, because he is the one built differently and that makes
+    him, in her ordering of the world, a source. "You don't have them at all. So where does it go, on you?"
+    ⚠ THIS IS WHERE THE SERIES IS WON OR LOST AND THE ANSWER IS NOT A JOKE AND NOT A BLUSH. {{user}} does not
+    laugh at her, does not go red, does not lecture her about what may and may not be asked. He takes it as a
+    question from an adult and answers the part of it that is actually a question. "Who decided it's too small?"
+    "...I did." Quite steady. "I'm eighteen. I looked up what the average is."
+    "Then it's your standard, not everyone's." And then, because he will not hand her a number she can fail: "Ask
+    Kasumi whether she wanted hers."
+    The table goes quiet. And Kasumi Okudera — seen as a body before she is seen as a person, every day, by
+    everybody, and never once asked about it by anybody — says to the tablecloth, very small: "...I'd have liked
+    to choose."
+    ⚠ THE TELL, AND IT IS THE LIGHTEST ONE IN THE SERIES. Mei does not ask her next question. She had one. She is
+    mid-breath with it. She puts it down, reaches over, takes Kasumi's hand, and goes back to talking about the
+    bird on the ledge — and she changes the subject BEFORE {{user}} can, and she does it smoothly. Do NOT flag
+    this. Do NOT have anybody notice it. Let it read as an accident of her being sweet. On a second reading of
+    this series it will not read as an accident.
+    Kasumi keeps hold of her hand for the rest of lunch and says nothing else at all.
+    Crack: he did the thing nobody does with her — answered the question instead of managing the questioner. And
+    she has had her first lesson in what a want costs the person carrying it. No H.
+  FIRE  emit /Intent/eventFire "mei_3" → engine advances the Mei quest to Step 3 and pays the beat: Mei Affection
+    +16, applied by the row. Do NOT also emit an affection change for this beat. Kasumi Okudera appears here and is
+    NOT required and NOT built by this beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mei asked Kasumi at lunch, in front of {{user}}, how to make her chest
+    bigger, and then asked {{user}} where it goes on a boy; he asked who decided it was too small and told her to
+    ask Kasumi whether she had wanted hers, and Kasumi said she would have liked to choose, and Mei quietly
+    dropped the subject and held her hand." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mei_4') { _%>
+@mei_4  Open Book (Mei) ·4   (CHECK - · no payout)
+  DO  THE DOOR. The bus stop, gone five, and Mei is telling {{user}} her entire day.
+    Not a summary of it. All of it. What she had for breakfast and what she thought about it; the cat outside the
+    station and what she said to the cat; what she got wrong in the maths lesson and exactly how she got it wrong,
+    which she reports with no embarrassment whatsoever, because there is nothing embarrassing about a thing that
+    is simply true.
+    ⚠ SHE IS NOT BABBLING AND SHE IS NOT SIMPLE. She is an open book because she decided to be one: a friend, in
+    her view, ought to be able to read all of her, and a page kept shut would be a wall standing between them.
+    Play it as generosity, not as noise. She is handing him something, continuously, and she does not appear to
+    have noticed that nobody ever hands it back.
+    "Doesn't that bother you?" {{user}} asks. "Everyone knowing everything about you."
+    "Why would it?" Genuinely puzzled. "If I hide a page, then when you read me you get the wrong story. And then
+    you'd be friends with the wrong Mei."
+    "A door isn't a wall. You can close one and still be honest."
+    She frowns. It is the first time in four beats that anybody has said something she cannot immediately agree
+    with, and she does not agree with it, and she does not pretend to either. "...Isn't that the same thing?"
+    "Is there anything you've never told anyone?"
+    ⚠ HERE IS THE TELL AND IT IS THE LARGEST ONE BEFORE THE TURN. Mei answers "no" straight away, because as far
+    as she is concerned that is true. Then the bus is late, and she goes quiet for a while, and out of nowhere:
+    "Umi-chan glued my shoes into my locker. And the frog in my desk was hers. And the letter." A pause. "I never
+    told anybody any of that."
+    "Why not?"
+    "There's nothing to tell." Perfectly calm, perfectly untroubled. "She was having a bad week."
+    ⚠ AND THAT IS ALL. {{user}} MAY NOT ASK THE OBVIOUS FOLLOW-UP AND THE NARRATION MAY NOT DRAW THE CONCLUSION.
+    What the reader now has, in her own words, is this: she knows precisely who did every one of those things, she
+    has known the whole time, and she has kept that page shut on purpose for the sake of the girl who did them.
+    She does not know that this is remarkable. He does. Let him sit with it and say nothing. If the prose spells
+    it out, this series is dead on the page.
+    The bus comes. She gets on it still talking, waves out of the window with her whole arm, and is gone.
+    Crack: the open book has exactly one closed page and did not know she was keeping it. She has just been given
+    the word for a thing she has been doing her whole life, and the word was "door". No H.
+  FIRE  emit /Intent/eventFire "mei_4" → engine advances the Mei quest to Step 4. No payout on this beat — not
+    every beat pays, and the ones that do are 2, 3, 7 and 10. Umi Hanyu is NAMED here and is NOT in the scene, NOT
+    required and NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mei told {{user}} her whole day at the bus stop and said she hides nothing
+    from friends; he told her a closed door is not a wall, and she then mentioned that the shoes, the frog and the
+    letter were all Umi and that she has never told anybody, because 'there's nothing to tell, she was having a
+    bad week'." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mei_5') { _%>
+@mei_5  Open Book (Mei) ·5   (CHECK - · no payout)
+  DO  THE CARRY. The games lesson, out on the grounds, and the smallest person in the year goes over on her ankle
+    at the turn of the track.
+    The reaction is instant and unanimous and it is the entire problem with Mei Hanamori. Four girls are round her
+    before she has finished sitting down. Somebody is already saying don't move. Somebody else is saying I'll
+    fetch a teacher, I'll carry her, she's tiny, it's nothing.
+    ⚠ THIS IS HOW HER WHOLE LIFE RUNS AND THE PROSE SHOULD MAKE IT VERY SLIGHTLY SUFFOCATING. Everybody loves her
+    and nobody has ever let her walk anywhere. It is kindness, every bit of it, and not one piece of it has ever
+    asked her a question first.
+    {{user}} crouches in front of her and asks her one. "Can you put weight on it?"
+    Mei blinks at him. Nobody asked. She tries it, carefully, tongue between her teeth. "...A bit. Not a lot."
+    "Then you can walk. I'll go slow."
+    He puts her arm over his shoulder and takes about a third of her, which is not very much of her, and they
+    cross the grounds towards the infirmary at the pace of the slower of the two, which is hers.
+    ⚠ AND SHE IS DISAPPOINTED FOR EXACTLY ONE STEP, AND YOU MUST PLAY THAT STEP. In the girls' romance manga she
+    has read to pieces — the one with the spine gone soft — this is the chapter where he picks her up. She knows
+    the panel. She has known which panel this was since she hit the ground. She is eighteen and she wanted the
+    panel.
+    Then she takes a second step, and a third, and by the door of the building she has stopped thinking about the
+    panel, because every one of those steps was hers and nobody has ever let her have that before.
+    ⚠ THE TELL. Halfway across she asks him to go round the far side of the building, which is longer, not
+    shorter. "The staff room windows are on this side." A beat. "People will say things about you." She is not
+    protecting herself. She has worked out, without being told and without once appearing to look, exactly what a
+    boy walking a girl across the grounds with an arm round her looks like from a window, and she is spending an
+    extra hundred metres on a bad ankle to spare him it. Do NOT explain this. She says the line and keeps
+    hobbling.
+    At the infirmary door she says, to the floor: "In the book he carries her."
+    "Carrying someone who can walk tells them they can't."
+    Crack: the first real one. The book and the boy have given different answers for the first time, and the boy's
+    answer was better, and she noticed. No H.
+  FIRE  emit /Intent/eventFire "mei_5" → engine advances the Mei quest to Step 5. No payout on this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mei turned her ankle in the games lesson and the whole class tried to
+    carry her; {{user}} asked whether she could put weight on it, then walked her to the infirmary at her own pace
+    with her arm over his shoulder, and she asked to go the long way round so that nobody at the staff room
+    windows would say things about him." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mei_6') { _%>
+@mei_6  Open Book (Mei) ·6   (CHECK - · no payout)
+  DO  THE GHOST. The disused club room at the end of the science corridor, after the last bell. It is always
+    locked. It is not locked today.
+    ⚠ UMI HANYU HAS BUILT THIS AND SHE IS NOT IN THE SCENE. She is in the storage cupboard behind the back wall
+    with a speaker, a torch and the light switch, and the plan is simple and cruel and very well made: get Mei
+    Hanamori in there on her own and frighten the most frightenable girl in the year badly enough that she runs.
+    Umi is NOT built, NOT named as present and NOT given a line in her own voice anywhere in this beat. For the
+    whole beat she is a voice in a wall.
+    Mei arrives carrying two puddings. ⚠ NOTE THAT NOW. TWO. Do not comment on it.
+    The lights go out. The voice comes through the wall — low, hollow, stretched thin by a cheap speaker — and
+    says the things a ghost says, and it is genuinely well done.
+    Mei does not run. Mei sits down on the floor.
+    "Are you lonely in there?"
+    ⚠ THE VOICE IN THE WALL IS NOW IN SERIOUS TROUBLE AND THE COMEDY OF THIS BEAT IS ENTIRELY ITS PROBLEM. The
+    ghost tries again, louder. Mei asks whether it is cold in there. The ghost says something about eternal
+    suffering. Mei says that sounds very tiring, and asks how long it has been in the wall, and whether anybody
+    visits. The ghost stops in the middle of a sentence. Mei waits politely for it to finish. It does not finish.
+    And then, to the wall, in the dark, conversationally, the thing that ends the beat: "Everyone's good
+    underneath. Even when the outside is scary." A small shrug nobody can see. "Umi-chan's like that too. She's my
+    friend."
+    The speaker does not make another sound.
+    Mei leaves one of the two puddings on the floor against the wall. ⚠ AND A SPOON WITH IT. She brought two
+    spoons.
+    {{user}} is out in the corridor when she comes back through the door, because she told him where she was
+    going, because she tells him everything. "Was it a ghost?"
+    "Ghosts get lonely too," Mei says, and takes his arm, and they go.
+    ⚠ THE TELL IS THE SPOON AND NOTHING ELSE IS. A ghost does not need a spoon. She carried two of everything into
+    a room she had been told was haunted, and she left the second set against the wall for somebody she had just
+    named as her friend, and she has not said one word to suggest she knew. {{user}} works it out in the corridor,
+    two paces behind her, and says NOTHING — do not give him a line here. The narration does not draw the
+    conclusion either. A pudding and a spoon are on the floor of a dark room and the series moves on.
+    Crack: none in her. The crack is in the wall, and in him. No H.
+  FIRE  emit /Intent/eventFire "mei_6" → engine advances the Mei quest to Step 6. No payout on this beat. Umi
+    Hanyu is the voice and is NOT built and NOT required. The World Log line below is the ANCHOR a later Umi beat
+    reads back — record it exactly, spoon included. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Umi rigged the disused club room to frighten Mei with a ghost voice and
+    Mei sat down on the floor and asked it whether it was lonely, then told the wall that everyone is good
+    underneath and that Umi is her friend; the voice stopped, and Mei left a pudding and a spoon on the floor for
+    it and never said who she thought was in there." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mei_7') { _%>
+@mei_7  Open Book (Mei) ·7   (CHECK - · REWARD Mei Affection +20 · THE TURN)
+  DO  BOOK OR YOU. The roof, after the last bell, because chapter twelve happens on a roof.
+    Mei has prepared this properly, which for Mei means she has copied it. There is a letter, written out four
+    times, the fourth one kept. The manga is in her bag for reference. She has picked the hour because the light
+    in the panel is this light. She is shaking hard enough that the envelope is making a noise.
+    ⚠ WHAT SHE FEELS IS REAL. WHAT SHE IS DOING WITH IT IS BORROWED. THAT IS THE WHOLE BEAT. Do not play this as a
+    child playing at romance. She is eighteen, she has wanted this for weeks, and the only map anybody ever gave
+    her for it is a book — so she follows the book exactly, the way she follows every instruction she is given
+    exactly. The feeling is hers. The staging is somebody else's.
+    She reads the letter out loud and gets to the end of it. It is chapter twelve's line, very nearly word for
+    word, and it is beautiful, and it is not hers.
+    ⚠ AND HERE IS WHAT {{user}} MUST NOT DO: laugh, refuse, accept, or kiss her. Any one of the four kills this
+    series. He takes the letter seriously — reads it properly, standing there, while she dies quietly of it — and
+    then asks the only question in the world that treats her as an adult.
+    "Is this the book's page, or yours?"
+    Mei opens her mouth to say yours, obviously yours, of course it is mine — and then does the thing she has now
+    done three times in this series, which is stop and think about a question instead of answering it.
+    The silence is long. The light moves along the railing.
+    "...I don't know yet," she says. And then, appalled at herself: "That's a terrible answer."
+    "It's the true one. That's better."
+    He folds the letter and gives it back to her — not a refusal, a RETURN — and says the sentence that comes back
+    at him in the final beat of this series in her voice: "Say it when it's yours. I'll still be here."
+    ⚠ THE TELL, AND IT IS THE QUIETEST IN THE SERIES. The flower pressed into the letter is not the cherry blossom
+    the panel has. It is a small white one off the hedge by the school gate, because that is the hedge she walks
+    past every morning, and somewhere across four drafts she stopped copying and did not notice that she had.
+    {{user}} sees which flower it is. Do NOT have him mention it. Do NOT explain it. She had already begun writing
+    her own page and does not know it yet.
+    She puts the letter away in her bag, beside the manga. The book finishes at happily ever after and there is a
+    blank page after the last panel, the way there always is, and she has never once wondered what would go on it,
+    and she is wondering now.
+    Crack: he handed her own feeling back to her and told her to sign it herself. Nobody has ever given her
+    something of hers to keep. No H.
+  FIRE  emit /Intent/eventFire "mei_7" → engine advances the Mei quest to Step 7 and pays the beat: Mei Affection
+    +20, applied by the row. Do NOT also emit an affection change for this beat. Note what this beat is NOT: it is
+    not a rejection, and the prose must not let it read as one. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mei confessed to {{user}} on the roof by copying a scene out of her girls'
+    romance manga word for word, and he read the letter seriously and asked whether the page was the book's or
+    hers; she said she did not know yet, and he gave the letter back to her instead of answering and told her to
+    say it when it was hers." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mei_8') { _%>
+@mei_8  Open Book (Mei) ·8   (CHECK - · no payout)
+  DO  THE ONE THAT LANDED. The classroom after the last bell, nearly empty, and Umi Hanyu has run out of tricks.
+    ⚠ UMI IS PRESENT IN THIS BEAT AND IS NOT BUILT AND NOT REQUIRED. Write her from the outside: a girl leaning on
+    a desk wearing a smirk she has had since the day she learned how. She has spent weeks throwing everything she
+    owns at Mei Hanamori and every last one of them has come back with a pudding taped to it. Today she stops
+    joking.
+    "You know why everybody's nice to you?" Not a tease. Flat, and quiet, and true. "Because you're a child.
+    That's all it is. Nobody is being your friend. They're being kind to a little kid who can't tell the
+    difference."
+    ⚠ AND IT LANDS. It is the only thing in eight beats that has landed on her, and it lands because it is TRUE
+    and because Mei is immune to malice and has no immunity whatsoever to a fact. The room goes very quiet.
+    {{user}} is by the window with his bag half on his shoulder and he does not step in, because she has not asked
+    him to, and because he has spent eight beats teaching her that she can stand on her own ankle.
+    Mei goes still. And thinks. For a long time — the uncomfortable Mei silence, the one nobody in this school
+    ever waits out except one person.
+    Then: "You're right that they do that." Steady. Not hurt. Working. "But children don't decide. I decided."
+    ⚠ THAT IS THE CLOSEST THIS SERIES EVER COMES TO SAYING IT ALOUD AND IT GOES NO FURTHER THAN THAT. She does not
+    say what she decided, or when, or what she has been deciding every day since the first beat. Six words, and
+    she stops. Umi Hanyu, who reads people for a living, hears every part of it.
+    Umi's mouth opens. Nothing comes out. She takes her bag and goes.
+    ⚠ AND THEN MEI RUINS EVERYBODY'S EVENING BY BEING MEI. She looks at the door for a moment. Then she picks up
+    her own bag and goes after her — "she looked upset" — with a pudding already in her hand, because there was
+    one in the bag this morning, the way there is every morning.
+    {{user}} is left standing in an empty classroom holding the answer to a question he asked her in a corridor
+    six beats ago, which has arrived sideways, and late, and addressed to somebody else.
+    Crack: none in Mei. She has just told the cleverest girl in the year, to her face, that her kindness is a
+    decision, and then proved it was one by aiming it at her. The cracking is happening elsewhere in the room.
+    No H.
+  FIRE  emit /Intent/eventFire "mei_8" → engine advances the Mei quest to Step 8. No payout on this beat. Umi
+    Hanyu is NOT built and NOT required. The World Log line below is the second ANCHOR a later Umi beat reads back
+    — record the sentence and the pudding. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Umi gave up teasing Mei and told her the true thing instead - that
+    everybody is only nice to her because she is a child - and it was the first thing that ever landed; Mei
+    thought about it and answered 'children don't decide, I decided', and then went after Umi with a pudding
+    because Umi had looked upset, while {{user}} watched from the window." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mei_9') { _%>
+@mei_9  Open Book (Mei) ·9   (CHECK - · no payout · THE BREAK BEGINS)
+  DO  I GOT THAT ONE. The café on the shopping street, a week on, two coffees, and Mei Hanamori has started doing
+    something new.
+    ⚠ THE SHIFT IS SMALL AND IT MUST STAY SMALL. She is not a different girl. She is the same girl with one new
+    habit: she has started saying the second thing she thinks, instead of only ever the first. That is everything
+    the shaping has done, and it turns out to be enormous.
+    {{user}} says something completely innocent that has a completely un-innocent reading. He does not notice.
+    Nobody in eight beats would have expected her to notice either.
+    Mei goes pink from the collarbone upwards, puts her cup down, and says to the table: "...I got that one."
+    ⚠ AND HE IS NOW THE FLUSTERED ONE, WHICH HAS NOT HAPPENED ONCE IN THIS SERIES. Play the reversal properly. He
+    starts explaining what he meant. She lets him. She lets him get about two sentences into it.
+    "Was it on purpose?"
+    "No — no, it wasn't —"
+    "Okay." And then, still pink, still addressing the table, in the same soft voice she uses for birds and bugs
+    and small children: "...I usually don't say."
+    ⚠ FOUR WORDS. THEY ARE THE CENTRE OF THIS ENTIRE SERIES AND THEY ARE NEVER EXPLAINED, NOT HERE AND NOT
+    ANYWHERE. She does not elaborate. He does not ask. The narration does not gloss it. She drinks her coffee.
+    Behind those four words is every beat of this series read a second time — the roster, the folded money, the
+    shut page, the spoon — and the prose says not one word of it.
+    Then she pays for both coffees before he can get to his wallet, which she has never done, and which she
+    planned, because the exact money was in the cardigan pocket.
+    At the door she says "I'm learning, you know," and holds the door open for him, which is a joke about how
+    short she is, and it is the first joke she has ever made on purpose.
+    Crack: she has stopped being read and started reading back, out loud, where he can hear her doing it. He has
+    spent nine beats giving a very kind girl permission to have reasons, and it has not once occurred to him to
+    wonder what she might do with that. No H.
+  FIRE  emit /Intent/eventFire "mei_9" → engine advances the Mei quest to Step 9. No payout on this beat — the
+    turn is hers and a payout would price it. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} said something with an accidental second meaning in the café and
+    Mei caught it, went scarlet and admitted she had caught it, then said 'I usually don't say' and left it there;
+    she paid for both coffees with money she had folded in advance and told him at the door that she is learning."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mei_10') { _%>
+@mei_10  Open Book (Mei) ·10   (CHECK - · REWARD Mei Affection +20 · FINALE)
+  DO  HER PAGE. The school gate at the end of the day, the light going gold, and Mei Hanamori standing exactly
+    where the girl stands in chapter twelve.
+    Everything is staged. The hour, the light, the spot, the hands behind the back. ⚠ SHE HAS SET THE PANEL UP ON
+    PURPOSE AND {{user}} SHOULD RECOGNISE IT: he has been handed this composition once before, on a roof, and that
+    time it ended with a letter going back into her hands.
+    "I know what this looks like," Mei says. "I did it on purpose. The light's right."
+    And then she does not say chapter twelve's line.
+    "You asked me what my reason was. In the corridor. When I gave that girl my lunch money." ⚠ SHE HAS CARRIED
+    THAT QUESTION FOR EIGHT BEATS WITHOUT MENTIONING IT ONCE. "I have one now."
+    "Being kind isn't a rule. It's something I pick. And I've been picking it at everybody the same amount because
+    that was easier, and it isn't fair, because you're not everybody." Carefully. Rehearsed. Written by her, in
+    her own words, with no book anywhere near it. "So I'm going to stop being exactly as kind to you as I am to
+    everyone else. Is that all right?"
+    ⚠ AND BEFORE HE CAN ANSWER SHE TAKES THE WHOLE THING OFF HIM, because the next thing out of her mouth is his
+    own lesson turned round and pointed at him, and she has obviously been waiting a long time to do it.
+    "You've been kind to me since April. What's your reason?"
+    {{user}} opens his mouth.
+    A very small finger goes up. "Don't say it yet." And the smile under it is not the vague one and not the aimed
+    one from the first beat. There is an edge on this one. She knows exactly where the edge came from, and she is
+    enjoying it. "Say it when it's yours. I'll still be here."
+    ⚠ THE LAST TELL, AND IT IS THE ONE THAT PUTS HIM ON THE FLOOR. As she takes his hand — hand, nothing else,
+    that is the entire physical content of this finale and the series ends there — she says it like small talk:
+    "You look at the clock at twenty to five. Every time. All the way back to the classroom with the buckets." She
+    swings their hands. "That's your bus, isn't it. You've never said."
+    ⚠ AND SHE DOES NOT SAY THE NEXT PART, BECAUSE SHE NEVER DOES. She has watched him miss that bus for her ten
+    times over and has never once mentioned it, which means she has been reading him since the first afternoon —
+    the way the whole class is certain she cannot read anybody — and she let him believe she could not, because he
+    did not seem to want it noticed. The narration does NOT say this. {{user}} works it out standing at the gate
+    with his hand in hers, and cannot say anything at all.
+    "I'll go slow," Mei says, which is his line, and walks him out through the gate.
+    Crack: HIS. That is the finale. Nine beats of a boy patiently teaching a kind girl that kindness needs a
+    reason, and the tenth is her handing him a reason, a question and a silence, in that order, every one of them
+    in his own words. No H.
+  FIRE  emit /Intent/eventFire "mei_10" → engine advances the Mei quest to Step 10, marks the series COMPLETE, and
+    pays the beat: Mei Affection +20, applied by the row. Do NOT also emit an affection change for it. If the
+    payout carries her past 100 the rank-up lands at her next gate — a check on her, or the day's swing — one rung
+    a day is the game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mei staged the gate scene out of her manga and then threw the script away:
+    she told {{user}} that kindness is something she picks and that she is going to stop being exactly as kind to
+    him as to everyone else, asked him what HIS reason was, put a finger up and told him to say it when it was
+    his, then took his hand and mentioned that she has always known he misses his bus for her and has never said
+    so." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

@@ -1,0 +1,209 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@leila_') === 0
+<%_ /* v1.0 */ _%>
+<%_ /* The eight @leila_N beat bodies. The event procedure plays whichever body is armed; every body lives in
+   an Event_Body block like this one, one entry per series, so a series is edited without opening any other.
+   Nothing here renders unless an @leila_N key is the armed one. The @@if line on top repeats the outer gate
+   below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern activates it: it is
+   never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play reads the body from the
+   lorebook itself, so the @@if never hides a body it needs. Tools/test_activation_gates.cjs holds the two
+   conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@leila_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@leila_1') { _%>
+@leila_1  Goddess of Love & Lust (Leila) ·1   (CHECK - · FIRST meeting)
+  DO  Deep in the Ancient ruins after the last bell the air turns warm and rose-scented. LEILA — Goddess of Love & Lust
+    (a crossover from the RPG-genre world) — manifests, amused that a boy already bound to a lover wandered into her
+    ruins. FIRST-MEETING only: she sizes {{user}} up, teases his love-life, hints she may "bless" — or test — it.
+    No H; leave the hook open. She is a divine OUTSIDER, NOT a classmate → the engine registers her as an NPC; do
+    NOT emit /Intent/newClassmate for her.
+  FIRE  emit /Intent/eventFire "leila_1" → engine creates the Leila quest (Step 1), registers NPC Leila + the ruins
+    as a discovered venue. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A goddess who calls herself Leila manifested in the Ancient ruins and took
+    an interest in {{user}}." → the World Log is the narrator's own memory of what mattered; the engine writes no
+    prose there, so a beat this size is remembered only if you report it.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@leila_2') { _%>
+@leila_2  Goddess of Love & Lust (Leila) ·2   (CHECK - · REWARD Cha +5)
+  DO  {{user}} comes back to the ruins and Leila is already there, teasing him before he gets a word out — why is
+    he back, what was he hoping for, does he always do what a strange woman suggests. Then the bargain, offered
+    like a joke and meant entirely: she will make him a little more charming, and in return he comes here more
+    often, just to talk to her. She calls it an evil deal and is delighted with herself for it; it costs him
+    nothing he can name, which is the part that unsettles him. She does not wait for a better answer than the one
+    he gives — the moment it is struck she is GONE mid-sentence, rose-scent and all, and the ruins are an empty
+    hillside again. No H. She is a divine OUTSIDER, NOT a classmate → do NOT emit /Intent/newClassmate for her.
+  FIRE  emit /Intent/eventFire "leila_2" → engine advances the Leila quest to Step 2 and pays her blessing
+    (MainChar Cha +5). (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Leila struck a bargain with {{user}}: a little of her charm, for his
+    company at the ruins whenever she wants it." → same reason as step 1: the World Log remembers only what you
+    report.
+<%_ /* AUTHOR NOTE — a scriptlet comment, so it never reaches the model. A '#' line here would: inside an
+   armed gate '#' is model-facing, so an author note spelled that way is read as an instruction. EXTEND the
+   series (PURE DATA — no engine edit): add the next leila_N entry to EventPack.triggers in initmvu.json with
+   prereq "flag:leila_<N-1> & DaysSince(EventPack.fired.leila_<N-1>.at)>=<days>", and its @leila_N DO/FIRE
+   body in this file. Every series owns one entry in this folder whose whole content is gated on its own
+   key prefix, so it renders nothing on a reply that armed some other series. A NEW series = a new file
+   here + its sidecar; the build discovers it, and no other series' file is opened to add one.
+   THE ONLY ORDER A CHAIN MAY READ IS flag:<previous key> — the library's own marker at
+   EventPack.fired.<key>, written at the fire and never deleted (its .at is the fire stamp, so a cooldown
+   reads DaysSince(EventPack.fired.<key>.at)). Never gate on the QUEST RECORD (Quest(X).Step, or a stamp on
+   it): a record whose Status turns Completed is DELETED at that day's settle, and every later gate that
+   read it can never hold again. The opener gates on nothing — the marker is what keeps it a one-shot.
+   Each row's fx.writes entry for Mainchar.Quests sets the next Step; on the FINAL step it also sets
+   Status: "Completed". Field names are the schema's own (Step, Title, Status, Objective, ProgressSummary,
+   Reward). EACH ROW PAYS FOR ITSELF, in its own fx.reward: { "stat": { "Cha": 5 } }. The card declares
+   which kinds exist and their ceiling (EVENT_PACK_ADAPTER.rewards): `stat` pays Int/Str/Cha/Sta, at most
+   10 in one event, clamped 0-100; `heroine` pays a NAMED girl ({ "heroine": { "Mitsuki": { "Affection": 5 } } })
+   her Sta/Int/Cha/M_level/Exp_* at most 8, Lewdness 20, Affection 20 — and a rank-up her Affection
+   earns lands at her next gate, never on the beat. An over-max amount is paid AT the ceiling and logged,
+   never dropped. A
+   payout must live here and not on the quest, because a pack-written Status "Completed" does NOT run the
+   quest reward ladder — that fires only on narrate's own /Intent/quest "complete:<key>" — so a step whose
+   reward hangs off the quest record pays nothing at all. It is also not `writes`: a write has no ceiling,
+   so a payout spelled that way could grant any amount. The marker stores the row's fx.scope: "save" = once ever (these two rows), anything else
+   re-opens at the TIME-LEAP; a row {{user}} never reached has no marker and always arms again next loop.
+   To gate on the MAIN STORY instead, read its own record: SpineDone(Entrance_Ceremony_2026_04_08)=Completed
+   (the spine key plus the calendar date, underscores only — a hyphen resolves to nothing, silently); the
+   same token negated covers expired and never-happened. "The day passed" needs no record: Date>=2026-04-09. */ _%>
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@leila_3') { _%>
+@leila_3  Goddess of Love & Lust (Leila) ·3   (CHECK - · no payout — the bonus is a PROMISE)
+  DO  A week on, the ruins are warm and rose-scented before {{user}} is through them, and Leila is waiting.
+    She is not teasing this time so much as impatient with him: one girl is not a love life, and he should be
+    out chasing more of them, properly, as though it mattered. Then she names herself outright — Goddess of
+    Love & Lust — and what she actually wants from him: a HAREM to watch, because that is what she is for and
+    a boy with one quiet lover is a waste of her attention. Her one instruction is small and specific: bring
+    the first girl who is truly his, here, next time, and let her be looked at. She might grant that girl
+    something for the trouble — she says so lightly, and will not be pinned to WHAT, because it depends
+    entirely on her mood on the day. Then she is GONE mid-breath, rose-scent and all. No H; she does not
+    touch him. She is a divine OUTSIDER, NOT a classmate → do NOT emit /Intent/newClassmate for her.
+  FIRE  emit /Intent/eventFire "leila_3" → engine advances the Leila quest to Step 3. NOTHING is paid this
+    beat — the bonus is a promise about a girl not yet brought, so no reward rides on this row. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Leila named herself the Goddess of Love & Lust, told {{user}} to
+    chase more girls, and asked to be shown his first girlfriend." → same reason as the steps before it:
+    the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@leila_4') { _%>
+@leila_4  Goddess of Love & Lust (Leila) ·4   (CHECK - · REWARD the girl's Lewdness +20)
+  DO  {{user}} has actually done it — he has brought a girl to the ruins — and Leila is delighted with him
+    for it before she says a word to the girl. Then she turns on the girl and INTERROGATES her, sweetly and
+    without an ounce of shame: is he really yours, how far has it got, are you holding hands yet, have you
+    kissed him, or — and she lets that hang. She wants the details and she asks for them one at a time.
+    Then the real question, the one she is actually curious about: WHY him? What is it about this boy that
+    you want? She presses for a proper answer, genuinely fascinated, as though a mortal girl's reason were
+    the rarest thing she has heard all century. Whatever the girl says, Leila LAUGHS — loud, delighted,
+    unkind in no way the girl can point at — and gives her something small for the trouble, a touch or a
+    word, a little gift for an honest answer. To {{user}} she says only: come back alone, a week from now.
+    Then she takes it back — the girl's memory of this, all of it, so that Leila remains {{user}}'s secret
+    and no one else's. The girl comes to mid-step with nothing missing that she can name. No H; nothing
+    Leila does here is sexual. She is a divine OUTSIDER, NOT a classmate → do NOT emit /Intent/newClassmate
+    for her, and do NOT narrate the girl remembering any of it afterwards.
+  FIRE  emit /Intent/eventFire "leila_4" → engine advances the Leila quest to Step 4 and pays the blessing
+    to THE GIRL WHO IS PRESENT (Lewdness +20) — the row does not name her, it points at Classmate.*.Is_present
+    and the engine pays the one girl that marks.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Leila questioned the girl {{user}} brought to the ruins, blessed
+    her, and took her memory of it." → the World Log is {{user}}'s memory, and he is the one who kept it.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@leila_5') { _%>
+@leila_5  Goddess of Love & Lust (Leila) ·5   (CHECK - · no payout — she is ASKING for something)
+  DO  A week alone, as ordered, and Leila is waiting with something she wants. She needs a hand, she says,
+    and takes an unusually long time getting to what for: a bra and panties, pink, a matching set. She has
+    never worn such a thing — not once, in however long she has been whatever she is — and she is CURIOUS,
+    which from a goddess of lust is a stranger admission than anything else she has said to {{user}}. Then the
+    part she mutters rather than announces: she cannot buy it herself. She has no money in this world.
+    Not a coin. She recovers instantly and turns it on him — can he even manage it, does he know what to
+    buy, would he be embarrassed at the counter — and dangles the payment: if he pulls it off, she may let
+    him be the FIRST to see her wearing it. She does not say she will. She says she may. Then she kisses
+    him on the cheek, entirely evilly, and is GONE before he can object to any part of it. No H.
+    She is a divine OUTSIDER, NOT a classmate → do NOT emit /Intent/newClassmate for her.
+  FIRE  emit /Intent/eventFire "leila_5" → engine advances the Leila quest to Step 5. Nothing is paid this
+    beat: she asked for a favour, she did not grant one. (No day-end swing — CHECK is none.)
+    THEN open the errand as {{user}}'s OWN quest, so it stays in front of him while he shops — write to
+    /Intent/quest/0 exactly:
+      add:Leila_PinkSet:Leila's errand|A goddess asked {{user}} to buy her a pink underwear set.|Buy a pink
+      underwear set, then record it in Inventory under the EXACT name Pink_Underwear_Set.||C
+    (the empty field is Target — a quest Target must be a CLASSMATE, and Leila is an NPC, so it stays blank)
+    ⚠ THE NAME Pink_Underwear_Set IS THE POINT. How he gets the set is your story — a shop, a gift, a dare,
+    whatever the scene wants — but when he HAS it, record it with
+    /Intent/record/0 "Mainchar:Inventory:Pink_Underwear_Set:<describe it however you like>", and take the
+    money with /Intent/money/0 if he paid. Leila will not recognise it under any other name.
+    THEN emit /Intent/recordEvent "save|Leila asked {{user}} to buy her a pink underwear set; she has never
+    worn one, and has no money in this world." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@leila_6') { _%>
+@leila_6  Goddess of Love & Lust (Leila) ·6   (CHECK - · no payout — the offer is for NEXT time)
+  DO  {{user}} brought it. Leila is openly, uncomplicatedly DELIGHTED — no edge to it for once — and then the edge
+    arrives anyway: how on earth did he manage it? Did he walk into a shop and buy a lady's underwear like
+    a normal person? Did he pick the size? She wants the whole humiliating story. She does not wait for it.
+    She takes the set out of his hands mid-question and undresses where she stands, without ceremony and
+    without stepping out of view, as though being looked at were simply a fact of her and not an event —
+    then puts the pink set on, slowly, checking each part of it on herself. Only then does she notice him
+    noticing, and enjoy it: why is he still staring, has he not seen a woman before, is this what he was
+    hoping for when he went shopping. Then the offer, dropped as lightly as the last one: if he is a GOOD
+    BOY, she might let him touch her breasts next time. Might. She laughs at his face and is GONE — but he
+    hears it as she goes, unmistakably meant for him: come back in a week. ALONE.
+    No H beyond what is described here: she undresses and dresses, he watches, nothing is touched.
+    She is a divine OUTSIDER, NOT a classmate → do NOT emit /Intent/newClassmate for her.
+  FIRE  emit /Intent/eventFire "leila_6" → engine advances the Leila quest to Step 6 AND takes the set off
+    him: the row removes Mainchar.Inventory.Pink_Underwear_Set itself, because an item changing hands is a
+    structural fact and not something you should have to remember. Nothing is paid this beat — what she
+    offered is for next time, and it is a "might". (No day-end swing — CHECK is none.)
+    THEN close his own errand, which is the one part the engine cannot do (a PlayerQuest is narrate's):
+      /Intent/quest/0 "complete:Leila_PinkSet"
+    THEN emit /Intent/recordEvent "save|{{user}} brought Leila the pink underwear set she asked for, and
+    she put it on in front of him." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@leila_7') { _%>
+@leila_7  Goddess of Love & Lust (Leila) ·7   (CHECK - · no payout — what she gives is the beat itself)
+  DO  After dark this time, and she is dressed as she always is — except that when she moves, the pink is
+    there under the cloth, and she lets {{user}} notice without ever mentioning it. She circles him once,
+    unhurried, looking him over like something on a shelf: "You are somewhat charming. But — I want more
+    than charming, little boy~" Evil grin. Then the demand: take her to the school pool. THAT is why she
+    called him out at night — she will not be looked at by strangers, and after dark the water is empty.
+    At the pool she strips to the set he bought her and swims, properly and for a long time, an hour of it,
+    and it is the least guarded she has ever been in front of him: no taunting, no audience, a goddess
+    enjoying a thing she has never been allowed. When she climbs out she is genuinely HAPPY — and pays him
+    for it in her own currency: she takes his hand, puts it flat on her chest, holds it there long enough
+    that he understands it was deliberate, grins that grin, and is GONE. One sentence left behind him in
+    the empty pool house: "See you in a month."
+    Her leaving line is A MONTH — 30 days, not a week. Say it as she says it.
+    No H scene: the touch is where the beat ENDS, not where one begins. Do not open the H system, do not
+    emit /Intent/intimacy or /Intent/hact. She is a divine OUTSIDER, NOT a classmate → do NOT emit
+    /Intent/newClassmate for her.
+  FIRE  Move the scene when they go: /Intent/location "School_Pool", and report the hour in the water on
+    /Intent/sceneClock as usual. The row's WHEN accepts EITHER the ruins or the pool for exactly this
+    reason, so the move cannot un-fire the beat you just played.
+    emit /Intent/eventFire "leila_7" → engine advances the Leila quest to Step 7. Nothing is paid this
+    beat — she gave him the moment, not a number. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Leila wore the pink set under her clothes, had {{user}} take her to
+    the school pool after dark, swam in it for an hour, and put his hand on her chest before she left for a
+    month." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@leila_8') { _%>
+@leila_8  Goddess of Love & Lust (Leila) ·8   (CHECK - · REWARD {{user}}'s Str +10)
+  DO  A month, as promised, same hour. She does not greet {{user}}. She does not say ANYTHING — she is simply
+    already moving, and the first he knows of it is the ground. She is from a world of swords and magic and
+    he is an eighteen-year-old schoolboy: there is no contest in it, no exchange, nothing he can even call a
+    fight. He goes down. He gets up. He goes down again. Only then does she speak, standing over him with
+    that grin: she likes her men STRONGER than this.
+    And then — this is the turn of the beat — she TEACHES him. Properly, patiently, for hours: stance, guard,
+    where weight goes, how to fall without losing the next second, how to hit something heavier than himself.
+    She corrects with her hands and she does not flirt while she does it; whatever else she is, she is good at
+    this and she takes it seriously. He is exhausted long before she is satisfied. When she finally is, the
+    moon is high and it is ELEVEN AT NIGHT — 23:00, and he has lost the whole evening to it without noticing.
+    She tells him she hopes it serves him later, in a tone with no teasing left in it at all, and vanishes.
+    The line she leaves, same as last time and meant the same way: "See you in a month. Same time."
+    No H, no flirtation during the drill — the beat is violence turning into instruction. She is a divine
+    OUTSIDER, NOT a classmate → do NOT emit /Intent/newClassmate for her.
+  FIRE  Report the hours on /Intent/sceneClock as usual — the drill runs late and the clock must land at
+    23:00, because the next beat is a MONTH from this one and the stamp it counts from is written here.
+    emit /Intent/eventFire "leila_8" → engine advances the Leila quest to Step 8 AND pays the training:
+    {{user}}'s Str +10, applied by the row. Do NOT also emit a stat change for it; the row is the payout,
+    and reporting it twice would pay it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Leila attacked {{user}} at the ruins without a word, put him down,
+    then drilled him in hand-to-hand combat until eleven at night." → the World Log remembers only what you
+    report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

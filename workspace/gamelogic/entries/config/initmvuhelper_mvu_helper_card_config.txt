@@ -1,0 +1,128 @@
+# mvu-helper card config — auto-imported on load (PRE/POST calls, input regex, groups, timeout).
+# The small-LLM CONNECTION is intentionally NOT carried (it's a local per-user profile) — assign it per call
+# in the extension's "Extra LLM Calls" tab. Edit config via the GUI, then re-export from the Main tab.
+#
+# PRE's JSONPatch is applied to the user floor BEFORE narrate runs (PRE-time apply), so the narrator reads
+# a state that already carries this turn's rolls. It writes FOUR paths: /Intent/check (the social roll),
+# /Intent/fwb (the INTIMATE-route opt-in), /Intent/puppy (the Loyal-Puppy demand; die ⑥) and /Intent/dayCheck
+# (the day's own d20 on a rolled tier — ACADEMIC, the exam; die ⑤, once per day). Nothing in this config names those paths:
+# PRE may write any path the card's own Zod schema declares — the schema is the containment, and a path it
+# does not declare is stripped whoever writes it. PRE reads state the way every call does, with EJS in its
+# own [PRE] entries (mvu-helper retired the per-call "ownedRoot" in 0.3.378; a card still carrying it is
+# named in the console and the field is ignored).
+#
+# PRE's "outputRegex" is anchored at the START only, and the missing $ is deliberate. mvu-helper splits the
+# JSONPatch blocks out FIRST and tests this pattern against the PROSE half alone, so it catches every way a
+# model opens wrong — a preamble, a ```json fence, a <think> block, or no JSON at all — and allows trailing
+# text. Every other lorebook entry routed to [PRE] shares this one output, so a plugin's line appended after
+# the JSON must not fail the pattern: a failed check drops all of the output's prose, this card's verdict
+# included. The card names nothing about who else writes here and does not need to.
+#
+# The "imagegen" block states WHICH FIELDS OF THIS CARD mvu-helper's image pipeline should read. It is
+# required, not optional: the extension is a generic platform and ships these blank on purpose (it does
+# not know any card's schema), so a card that omits them gets H guidance on every turn and no man in frame.
+# The latch path is a stat_data path into THIS card's own tree, and the main-character key names this card's
+# own registry entry — a different genre names its own. "charimgVia" is where a new player starts for Harvest
+# via: "narrate" has the main reply describe each newcomer's look, with no extra call. It is the player's own
+# preference, so re-importing this config keeps whatever a player has picked.
+#
+# The "statBox" block declares the per-reply "Scene Stats" box mvu-helper writes at the end of the story
+# text: one line per record whose declared fields moved this reply, e.g. "Mitsuki Tachibana: Affection 13
+# (+3)". mvu-helper diffs the previous reply's state against this one's and names nothing of this card —
+# the paths, labels and wrapper below are ALL of what it knows. Affection "resetWith" RelationshipStage +
+# "onReset" hide: a stage change resets Affection (the -1 advance sentinel, 0 on a demote), so on that
+# reply the Stage line explains the turn and Affection is left off. The wrapper is galgame's <styled>
+# block, so the GUI draws it as a terminal box; the regexes PromptDeTagStatBox (keeps it out of the prompt)
+# and DisplayStatBox (dresses it in the ST chat) key on the same open tag — change one, change all three.
+# The box goes before the first "placeBefore" anchor the reply carries: the envelope's close, so it sits
+# inside the envelope, where galgame draws it; else <combat_log>. A reply written with no envelope gets one
+# from galgame-companion, closed before the reply's first engine block, and galgame-companion moves a
+# <styled> card it finds after that close to the end of the story, so the box still lands inside it.
+# How to write this block: mvu-helper/devdoc/statbox-guide.md.
+#
+# The "leadText" block names the story block, so mvu-helper knows where the engine's date and location bars go
+# (globalLogic.cjs renderLeadText returns them as leadText): at the top of the story, inside <gametxt>, or inside
+# <maintext> once galgame-companion renames it. mvu-helper skips every tag block the model writes above the story
+# (a preset's thinking, the <tucao> line) and puts the bars in front of the story's first line, so a preset's
+# thinking box, which folds everything above its closing tag, never takes them. Without this block no bar is
+# written. How it works: mvu-helper/devdoc/gamelogic-pack-format.md §4.2.
+<initmvuhelper>
+{
+  "version": 1,
+  "extraLlmCalls": {
+    "enabled": true,
+    "parallel": true,
+    "timeoutSec": 60,
+    "groups": [
+      {
+        "tag": "llmshare",
+        "members": [
+          "POST",
+          "PRE"
+        ]
+      }
+    ],
+    "calls": [
+      {
+        "name": "PRE",
+        "phase": "pre",
+        "enabled": true,
+        "outputRegex": "^\\s*\\{[\\s\\S]*\\}"
+      },
+      {
+        "name": "POST",
+        "phase": "post",
+        "enabled": true,
+        "inputRegex": "<(?:gametxt|maintext)>([\\s\\S]*?)</(?:gametxt|maintext)>"
+      }
+    ]
+  },
+  "imagegen": {
+    "intimacyLatchPath": "PendingState.IntimacyActive",
+    "maincharRegistryKey": "Mainchar",
+    "charimgVia": "narrate"
+  },
+  "statBox": {
+    "open": "<styled type=\"terminal\" title=\"Scene Stats\">",
+    "close": "</styled>",
+    "placeBefore": ["</maintext>", "</gametxt>", "<combat_log>"],
+    "groups": [
+      {
+        "path": "Mainchar",
+        "kind": "record",
+        "nameField": "Name",
+        "fields": [
+          { "path": "Str", "label": "STR" },
+          { "path": "Sta", "label": "STA" },
+          { "path": "Int", "label": "INT" },
+          { "path": "Cha", "label": "CHA" },
+          { "path": "Money", "label": "Money" }
+        ]
+      },
+      {
+        "path": "Classmate",
+        "kind": "collection",
+        "nameField": "Name",
+        "fields": [
+          { "path": "RelationshipStage", "label": "Stage" },
+          { "path": "Affection", "label": "Affection", "resetWith": "RelationshipStage", "onReset": "hide" },
+          { "path": "AffectionCapNote", "show": "whenSet" },
+          { "path": "Lewdness", "label": "Lewdness" },
+          { "path": "Exp_Caress", "label": "Exp Caress" },
+          { "path": "Exp_Oral", "label": "Exp Oral" },
+          { "path": "Exp_Vaginal", "label": "Exp Vaginal" },
+          { "path": "Exp_Anal", "label": "Exp Anal" },
+          { "path": "M_level", "label": "M Level" },
+          { "path": "ClimaxGauge", "label": "Climax Gauge" },
+          { "path": "Arousal", "label": "Arousal" },
+          { "path": "Energy", "label": "Energy" },
+          { "path": "ConflictActive", "label": "In Conflict" }
+        ]
+      }
+    ]
+  },
+  "leadText": {
+    "storyEnvelope": ["<gametxt>", "<maintext>"]
+  }
+}
+</initmvuhelper>

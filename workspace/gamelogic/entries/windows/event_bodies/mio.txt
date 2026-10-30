@@ -1,0 +1,371 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@mio_') === 0
+<%_ /* v1.3 */ _%>
+<%_ /* The ten @mio_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @mio_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@mio_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mio_1') { _%>
+@mio_1  Everyone's Spare (Mio) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  SPARE. After the last bell, the class questionnaire is due, and {{user}}'s pen dies mid-line. Before he can
+    ask anyone, a pen comes over his shoulder from the row behind: cheap, blue, a strip of masking tape round
+    the barrel with SPARE written on it in round handwriting.
+    MIO KAGAMI is already talking before he has turned round. Short blonde bob, a long side-swept fringe that
+    covers one eye entirely, one warm golden-amber eye doing all the work. She knows his name. She knows
+    which bus he takes, because she noticed. Keep the pen — all her spares say SPARE on them, so nobody feels
+    bad keeping one.
+    Then she perches sideways on the desk in front of his and gives him the whole room like a tour: who is
+    good at maths, who always has gum, who will lend notes and who will want them back. "And four people who
+    owe me favours, so if you ever need anything, tell me and I'll tell them."
+    ⚠ SHE IS NOT ORGANISING ANYTHING AND MUST NEVER READ AS IF SHE IS. Soc 85 and Kind 88, and every other
+    stat is 50: she is not clever, not strong, not elegant, not commanding, and she gives no instructions to
+    anybody in this series. Her entire gift is that she likes everyone and everyone likes her. What she does
+    here is stand BETWEEN him and the whole class and hand them to each other by name.
+    When she waves at a girl going past the door, a light blue bead bracelet clicks on her left wrist. He
+    looks at it, and she flicks it: "Pair set from the shopping street. Buy one, get one." And she digs the
+    twin out of her bag and holds it up, and is honestly, visibly puzzled by it — everyone she knows already
+    has something of hers, and she cannot work out who she has missed.
+    ⚠ SHE IS NOT COVERING FOR ANYTHING. Hag 12 is the Transparent band: she does not perform and she could
+    not hold a cover story for an afternoon, let alone the whole series. She genuinely does not know why that
+    bracelet is still in her bag. Beat 10 is her working it out, not confessing it.
+    She drops it back in, and she is halfway across the room to a first-year with a jammed locker before he
+    has finished answering.
+    ⚠ THE ACT, AND THERE IS ONE IN EVERY BEAT — NEVER CLAIMED, SEEN ONLY BY WHOEVER IS PAYING ATTENTION: she
+    does her own questionnaire afterwards with a pencil stub worn down to a thumb's length. The pen she
+    handed over was the only pen she had, and she put the word SPARE on it so that taking it would not cost
+    him anything. No H.
+  FIRE  emit /Intent/eventFire "mio_1" → engine creates the Mio quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose —
+    "Mio Kagami" — because that IS the mechanism: POST reads the name and arms her build, her <character>
+    card keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as
+    <Classmate_Guide> says. Do NOT build her THIS reply unless her <character> profile is already in front
+    of you. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mio Kagami handed {{user}} a pen with SPARE taped to it, introduced
+    him to the entire class by name without being asked, and could not work out who she had missed with the
+    spare half of a bracelet — then did her own questionnaire with a pencil stub, because the pen had been
+    her only one." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mio_2') { _%>
+@mio_2  Everyone's Spare (Mio) ·2   (CHECK - · REWARD Mio Affection +10)
+  DO  YOU DIDN'T HAVE TO. Lunchtime in the hallway. A first-year {{user}} has never met stops Mio with a
+    bottle of tea held out in both hands — "for last week" — because Mio introduced her to the girl she
+    wanted to sit next to.
+    Mio says oh, you didn't have to, and pushes it back.
+    ⚠ AND THE GIRL'S FINGERS WILL NOT CLOSE AROUND IT. Not a refusal, not a joke — the hand simply does not
+    shut. The bottle hangs in the air between them until Mio takes it, laughing, to spare the girl the
+    embarrassment of a hand that will not work.
+    ⚠ THIS IS THE FIRST MOVE OF THE SERIES' ONE SUPERNATURAL ENGINE AND IT MUST BE UNDERPLAYED COMPLETELY.
+    Jinko keeps score even though Mio refuses to. A debt owed to one girl by an entire building has become
+    something like weather, and it is not sinister and nobody is frightened of it: hands that owe Mio
+    something cannot take it back. It escalates one notch per beat and it is switched OFF in beat 7. Never
+    name it, never explain it, and never let anybody in the scene treat it as a haunting.
+    Twice more before the stairs: a hair clip, a packet of tissues, each pressed on her "for the other day,"
+    each refused, each hand not closing. And Mio can tell him every girl's name, class, and exactly what she
+    did for her, delighted and baffled and not once uneasy.
+    She ends up carrying three gifts away from her body like somebody else's laundry. At the entrance she
+    hands him the tea: she is not really a tea person. "Actually — I don't know what I'd pick for myself.
+    Isn't that funny? I know what everyone else drinks."
+    ⚠ THE ACT: he asks whether she wants any of the three, and she looks at them the way you look at post
+    addressed to a stranger. She has already worked out who each one should go to.
+    Crack: she can take a thing for somebody else in a heartbeat and cannot hold one meant for her, and asked
+    what she would choose for herself there is nothing there yet — Kind 88 pointed everywhere except inward.
+    ⚠ ESTABLISH ONE THING QUIETLY AND NEVER REMARK ON IT: nothing in this beat, or any beat, ever pulls at
+    {{user}}. He has never once felt that he owed her anything. Beat 7 turns on it. No H.
+  FIRE  emit /Intent/eventFire "mio_2" → engine advances the Mio quest to Step 2 and pays the beat:
+    Mio Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is
+    the payout, and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Three girls tried to pay Mio back in the hallway and none of them
+    could take their gift back — their fingers would not close — and she carried all three away to pass on,
+    then admitted she has no idea what she would choose for herself."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mio_3') { _%>
+@mio_3  Everyone's Spare (Mio) ·3   (CHECK - · REWARD Mio Affection +16)
+  DO  AISLE PEOPLE. Noon, the cafeteria, Mio in the doorway with a tray in her hands — and every table in the
+    room has a seat saved for her. Not one or two. Thirty hands patting thirty chairs in the same rhythm,
+    "Mio, here!", "Mio, we saved you one!", the whole room turned toward her like a class photograph.
+    And she cannot sit at any of them, because sitting down at one table is standing up from twenty-nine, and
+    she would sooner eat on her feet than be the reason a table felt passed over. Cf clause, played straight:
+    her dread of friction runs deeper than her own hunger.
+    So she stands in the centre aisle, thanks each table by name, and eats nothing.
+    ⚠ AND THEN THE CHAIRS COME TO HER. Thirty saved chairs scrape back from thirty tables at the same moment
+    with nobody's hand on any of them, and slide out into the aisle after her, one per table, until she is
+    standing in a ring of thirty empty chairs. Play it as comedy and let the room laugh — nobody is
+    frightened, a girl says "they're SAVED, Mio" — and nobody can push one back in.
+    And she cannot sit in one of those either. Same arithmetic. So she eats standing, tray balanced on her
+    forearm, chatting to every table from the one spot in the room that belongs to none of them, and calls it
+    convenient.
+    Then {{user}} carries his tray into the ring, steps between two of the chairs, and eats standing up next
+    to her.
+    ⚠ THAT IS THE WHOLE BEAT AND IT IS VERY SMALL ON PURPOSE. He does not fetch her a chair, does not fix the
+    problem, does not tell the room to sort itself out. He joins her where she already is. She tells him to go
+    and sit down, she's fine — and he does not move. Nobody has ever stood in the aisle with her, and for
+    about a minute she has no line for it, which for Soc 85 is unheard of. She goes pink, eats, and then talks
+    to HIM instead of to the room, which she has also never done.
+    Crack: the entire school includes her and she belongs at no table. Thirty seats pulled out and she can use
+    none of them. No H.
+  FIRE  emit /Intent/eventFire "mio_3" → engine advances the Mio quest to Step 3 and pays the beat:
+    Mio Affection +16, applied by the row. Do NOT also emit an affection change for this beat. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Thirty tables saved Mio a seat and she could not sit at any of them;
+    the chairs slid into the aisle after her and she ate standing up, until {{user}} carried his tray in and
+    stood there with her." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mio_4') { _%>
+@mio_4  Everyone's Spare (Mio) ·4   (CHECK - · no payout)
+  DO  WHATEVER'S FASTEST. A snack run she invited {{user}} along to like it was nothing — six girls, one booth,
+    and Mio not in the booth at all: she gave her seat to the one who arrived last and took a chair at the
+    open end, half in the aisle, where she can see everybody's face.
+    Everyone orders. She says she will have "whatever's fastest," and laughs when he looks at her: she has
+    said that since she was small, she does not have an order, it is easier that way.
+    ⚠ THE PULL, ONE NOTCH UP FROM THE HALLWAY: when the food arrives, six plates slide across the table
+    toward her at the same moment. Six hands flat on six plates, six girls saying "for the other day," and
+    not one of them able to say why she moved. Mio pushes every plate back, laughing, and can tell him what
+    each girl ordered and why she picked it. Her own plate is whatever came first.
+    Then he waits for the table to get loud, and asks her what she would order if she came here on her own.
+    ⚠ THE VOICE CLAUSE, PLAYED EXACTLY: a small genuine laugh, caught completely off guard, because she is so
+    used to being the one asking. And then, quieter, and without any self-pity in it at all, because she does
+    not think it is sad: she has never come here on her own. She has never been anywhere on her own. She does
+    not know.
+    ⚠ THE ACT: she has spent the entire meal reaching past her own plate to move the shared dishes within
+    reach of whoever wanted them, and has not eaten half of hers.
+    Crack: she holds six people's wants in perfect detail and her own is a blank she has never had a reason
+    to fill in. ⚠ AND THIS QUESTION IS THE ENGINE OF BEATS 7 AND 8 — she will still be trying to answer it
+    three weeks later, and the answer, when it comes, is the first thing she has ever wanted for herself. No H.
+  FIRE  emit /Intent/eventFire "mio_4" → engine advances the Mio quest to Step 4. No payout on this beat —
+    not every beat pays, and the ones that do are 2, 3, 7 and 10. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Six plates slid across a restaurant table at Mio at once and she
+    pushed every one of them back; asked what she would order if she came alone, she admitted she has never
+    been anywhere alone and does not know what she would pick."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mio_5') { _%>
+@mio_5  Everyone's Spare (Mio) ·5   (CHECK - · no payout)
+  DO  THIRTY-NINE TO ONE. A lunchtime dodgeball game on the grounds that somebody else set up; Mio waves {{user}}
+    in — "come on, you're on my team, it'll be fun." Two captains pick twenty a side. The whistle goes.
+    And the far team's feet begin to slide. Not running — sliding, heels dragging across the line toward
+    Mio's side as if the ground had tipped, until it is thirty-nine on her side and one on the other.
+    The one is {{user}}.
+    ⚠ THE PULL NEVER MOVES HIM, AND THE PROSE MUST NOT SAY WHY. It moves people who owe her something, and he
+    has never once felt that he does. Beat 7 collects on this.
+    And the thirty-ninth is NATSUHI MISORA. She was crossing the grounds on her way somewhere else. She does
+    not play games, she has declined every group activity since the entrance ceremony, and she arrives on
+    Mio's side of the line at walking pace with her shoes dragging and her face completely level. She does
+    not struggle. She arrives, straightens her collar, and stands there with her arms folded as though she
+    had chosen it.
+    ⚠ NATSUHI PASSES THROUGH — she is a real classmate (Yandere, Hag 88, Pride 90) and she may or may not be
+    in the save; do not require her for the
+    scene to work. If the player has run her series this is a callback and should be played as one. If not,
+    she is simply the coldest girl in the year being dragged across a dodgeball court by warmth.
+    Play the gag straight: she will not throw, will not catch, will not duck. Takes the first ball on the
+    shoulder, walks off the court with total dignity — and slides back on before she reaches the edge. Twice.
+    The class stops laughing at the game and starts laughing at that, and her expression does not move once.
+    ⚠ THE CALLBACK, FOR ANYONE WHO RAN HER SERIES: {{user}} has seen Natsuhi unguarded exactly once, at a cafe
+    table, with Mio. This is the second time, and it is against her will. Mio hooks an arm through her
+    cousin's, delighted; Natsuhi lets her, and says something dry with open affection in it, and warmth is
+    the one force she does not defend against — and only ever from Mio.
+    And then Natsuhi does the thing nobody else in the building can do. Hag 88 and Pride 90 miss nothing. She
+    looks at the thirty-nine, and then across the empty half of the court at {{user}}, standing alone and
+    entirely unmoved, and says to Mio, flat:
+    "...Your friend doesn't slide."
+    Mio, cheerful, genuinely blank: "Slide?" ⚠ SHE CANNOT SEE THE PULL. She has never been able to see it;
+    she is inside it. That is permanent and it holds until beat 7.
+    Natsuhi looks at {{user}} a moment too long, files it, and says nothing else for the rest of the beat.
+    ⚠ SHE DOES NOT EXPLAIN MIO TO HIM. No speech, no diagnosis, no handing over of a job. She states one fact
+    about the court, to her cousin, and leaves it lying there. He is the only person who hears what it meant.
+    The rest plays out: Mio laughing, gone pink, apologising to both captains, telling somebody to go over so
+    it is fair — and nobody can cross, and she could, and she does not. ⚠ THE ACT, INVERTED: she sends the
+    ball over underhand so that he "has something to do," which is the only way she knows to give something
+    to one person, and it still costs the thirty-nine nothing. No H.
+  FIRE  emit /Intent/eventFire "mio_5" → engine advances the Mio quest to Step 5. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A dodgeball game collapsed to thirty-nine against one as the whole
+    far team slid onto Mio's side, Natsuhi Misora among them; Natsuhi looked across at the one person the
+    pull never moved and said 'your friend doesn't slide', and Mio did not know what she meant."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mio_6') { _%>
+@mio_6  Everyone's Spare (Mio) ·6   (CHECK - · no payout)
+  DO  EVERY PEN IN THE BUILDING. The last bell, and there is a queue. It begins at Mio's desk, goes out of
+    the classroom door, down the hallway and as far as the stairs: girls from every class, patient and a
+    little glassy, each one laying a pen on her desk and saying the same three words. "For the other day."
+    Including the ones she has never done a single thing for.
+    ⚠ THE PULL AT FULL EXTENSION, AND THE JOKE IS THE CURRENCY. The one fact the entire building knows about
+    Mio Kagami is that she hands out pens. So the building hands her back every pen it has: cheap, blue,
+    identical, not one of them anything she would ever have chosen. An entire debt settled in her own gesture
+    by people who do not know one single thing she likes.
+    And she thanks every girl by name and gets every name right. ⚠ THIS IS HER ONE GIFT AT FULL POWER AND IT
+    IS THE ONLY TIME THE SERIES SHOWS IT LIKE THIS — Soc 85, a building's worth of names, no mistakes — and
+    it is precisely the thing that cannot reach her, because not one of them could name her favourite
+    anything.
+    ⚠ DO NOT STATE A HEADCOUNT. "Every pen in the building", "the whole queue", never a number.
+    The room empties. She is still at her desk with a roll of masking tape, writing SPARE on the fortieth pen
+    so that she can give them all away again.
+    {{user}} sits down and helps her tape them. Somewhere around the sixtieth he says she could keep one.
+    "Which one?" she says, not looking up.
+    ⚠ AND IT IS NOT A JOKE. It is the most honest thing she has said in six beats, and she does not know she
+    has said anything. They are identical; there is no reason to keep one over another; and a kept gift closes
+    an account, and an open account is the only reason she believes anybody comes back.
+    Crack: handed a building's worth of a thing, she cannot keep one of it. No H.
+  FIRE  emit /Intent/eventFire "mio_6" → engine advances the Mio quest to Step 6. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Every girl in the building queued to give Mio a pen back and she
+    thanked each of them by name without a single mistake; then she sat in the emptied room taping SPARE onto
+    all of them so she could give them away again, and when {{user}} said she could keep one she asked which
+    one." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mio_7') { _%>
+@mio_7  Everyone's Spare (Mio) ·7   (CHECK - · REWARD Mio Affection +20 · THE TURN)
+  DO  PAID IN FULL. A week on, and the pull is gone.
+    ⚠ AND IT IS THE WORST THING THAT HAS EVER HAPPENED TO HER. The queue settled every account at once. The
+    whole building is square with Mio. Nothing is wrong: everyone still says hello, loudly and warmly, "Bye,
+    Mio!", "See you, Mio!", and every single one of them is fine, and nobody needs anything.
+    ⚠ SHE IS NOT UNSEEN AND MUST NEVER PLAY AS UNSEEN. She is waved at by the entire school. That is the
+    point. The girl everybody likes, standing in a yard that is happy to see her and does not require her.
+    She has spent the week handing SPARE pens to girls who take them politely and set them down, and it does
+    not take: a returned pen is her own pen coming back, a closed loop, no debt, no pull.
+    At four she is in the courtyard while the yard drains out through the gate, thanking people by name,
+    holding pens out to nobody in particular, until the benches around her have pens on them and no people —
+    and {{user}} is the last one there.
+    She is still smiling when she says it, and then she is not: "If nobody needs anything, why would anyone
+    come find me?"
+    And then the rest of it, in a rush, because Hag 12 cannot hold anything back once it has started: she
+    knows everybody's favourite thing and it is fine that nobody knows hers, it is absolutely fine, she never
+    wanted to be a bother — and he asked her at the restaurant what she would order on her own and she has
+    been trying to answer it for three weeks and she cannot — and she does not know what a person is supposed
+    to come to her FOR, if not for something.
+    ⚠ AND HE DOES NOT FIX IT, DOES NOT OFFER TO HELP, AND DOES NOT ASK HER FOR ANYTHING. What he says is the
+    one true thing this series has been building since the hallway, and it only exists in this story: he has
+    never owed her a pen, a seat or a favour. Not once. The pull has never moved him. And he is the one who
+    came out here.
+    Not repaid. Chosen.
+    She turns the bracelet round and round on her wrist and has nothing at all to say to that, which has also
+    never happened to her.
+    ⚠ THIS IS THE TURN, NOT THE CONFESSION. The fear said out loud for the first time: not tired of being
+    needed — terrified of being UNNEEDED, because she has never been chosen for anything except usefulness
+    and does not know whether there is anything else in her to choose. She does not resolve it here. Beats 8
+    and 9 are her trying to act on it and failing, and getting there in the end.
+    Closing, and protect this line: "Please don't be nice to me right now. Everyone's nice to me. I don't — I
+    don't know what I'm asking for. I've never had to know." No H.
+  FIRE  emit /Intent/eventFire "mio_7" → engine advances the Mio quest to Step 7 and pays the beat:
+    Mio Affection +20, applied by the row. Do NOT also emit an affection change for this beat. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|The whole building settled its debt to Mio at once and then needed
+    nothing from her, and she stood in an emptying courtyard holding out pens nobody would take; {{user}} told
+    her he had never owed her anything and had come anyway, and she had no answer for it."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mio_8') { _%>
+@mio_8  Everyone's Spare (Mio) ·8   (CHECK - · no payout)
+  DO  ANYONE. She has the answer. Three weeks late, found at the bottom of a week of not being needed by
+    anybody: there is a new cafe on the shopping street that does a big hot chocolate with nothing on it, and
+    she wants to try it, and she KNOWS she wants to try it. ⚠ IT IS THE FIRST THING SHE HAS EVER WANTED THAT
+    WAS NOT FOR SOMEBODY ELSE, and she is quietly thrilled with herself.
+    And then she says it the only way she knows how. At the gate, at four, thrown wide to everybody going
+    out: "Does anyone want to try the new cafe?"
+    ⚠ AND THE BUILDING STOPS. The pull, square and idle and with nothing left to repay, hears the first want
+    Mio Kagami has ever said out loud and answers it as a body. Every girl at Jinko walks to the shopping
+    street. The queue for one small cafe wraps the block. She is at the front of it, laughing until she cannot
+    breathe, thanking every single one of them by name.
+    And then she does what she does.
+    She gives her place to a first-year who looks cold. Then to a girl who has a bus to catch. Then to
+    somebody who has homework. Then to anyone, and anyone, and anyone, all the way down, until she is at the
+    back of a queue for the one thing she has ever wanted — and the cafe's last seating of the day goes to the
+    girl standing directly in front of her.
+    ⚠ SHE IS NOT SAD ABOUT IT AND MUST NOT BE PLAYED AS SAD. She is delighted. Everybody got to go. It was a
+    lovely afternoon and she means that completely, and she never got in, and it is exactly what she asked
+    for — the whole school being nice to Mio in bulk, with nobody in particular anywhere in it.
+    {{user}} walked at the edge of it the entire way and did not once try to hold her place, because holding
+    her place would be doing it FOR her, and the one thing she has to learn is how to say the word.
+    On the empty pavement afterwards he says only: "You said anyone."
+    She stops.
+    Crack: she has learned how to WANT, and can still only want in the plural — because "you" is choosing,
+    and choosing is the friction she has spent her whole life smoothing away.
+    Closing: "...I did, didn't I. I said anyone. I don't think I know how to say the other word. It's one
+    syllable. How is it harder than a whole building?" No H.
+  FIRE  emit /Intent/eventFire "mio_8" → engine advances the Mio quest to Step 8. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mio finally wanted something for herself — a cafe on the shopping
+    street — and asked for it in the plural, so the entire school came; she gave her place away down the whole
+    queue until the last seating went to the girl in front of her, and never got in."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mio_9') { _%>
+@mio_9  Everyone's Spare (Mio) ·9   (CHECK - · no payout · THE BREAK)
+  DO  YOU. A week of the building answering every stray plural she lets slip. She said "someone get the
+    window" in class and forty windows went up across three floors. So she has stopped saying "anyone" at all
+    — and the school follows her anyway now, waiting for the next one.
+    At four the hallway between the classrooms and the entrance is packed wall to wall with girls who have no
+    reason whatsoever to be there. ⚠ NOBODY IS MENACING AND NOBODY IS STARING. They are simply standing the
+    way a room stands when it is about to be asked for something, and they are all perfectly cheerful about
+    it.
+    And Mio walks the length of it.
+    She thanks people by name as she goes, because she cannot help it, all the way down the hall, past every
+    single one of them — and stops in front of {{user}}, and says the syllable:
+    "You." A breath. "Not anyone. You. Will you come to the cafe with me?"
+    ⚠ AND THE HALLWAY EXHALES AND LIFTS LIKE A FLOCK. No hurt in it. No friction, no sulking, nobody's
+    feelings broken — only released — and the corridor is completely empty in the time it takes her to finish
+    going red.
+    She stands there braced for the cost. For the fallout. For somebody's feelings, which is the bill she has
+    been paying in advance her entire life. And it does not come.
+    ⚠ THAT IS THE BREAK AND IT IS THE WHOLE SERIES: the pull was never a chain on her. It was waiting for her
+    to point it. Everything she has been afraid of — that choosing one person costs you all the others, that
+    warmth spread thin is the only kind that is safe — was not true, and the building proves it by simply
+    going home.
+    This is also the archetype's own signal, from his side: her warmth has narrowed, out loud, in front of
+    everyone, and she has just told him he is not another friend.
+    Closing: "That was so much harder than the whole building. Say yes before I say 'anyone' again. — Okay.
+    Okay. I'll tell you what I'm ordering on the way. I've had it ready for three weeks." No H.
+  FIRE  emit /Intent/eventFire "mio_9" → engine advances the Mio quest to Step 9. No payout on this beat —
+    the ask costs her everything and a payout would price it. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A hallway full of girls stood waiting for Mio to ask them for
+    something, and she walked the length of it past every one of them and said 'You. Not anyone. You.' — and
+    the whole corridor emptied without a single hard feeling."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mio_10') { _%>
+@mio_10  Everyone's Spare (Mio) ·10   (CHECK - · REWARD Mio Affection +20 · FINALE)
+  DO  PAIR. The cafe at four. A table for two by the window. Nobody has saved her a seat, and there is no
+    aisle, and she sits down in a chair like an ordinary person.
+    ⚠ NOTHING WILD HAPPENS IN THIS BEAT AND THAT IS DELIBERATE. The building has been completely ordinary all
+    week: a school full of girls who are just her friends now, instead of her orbit. The pull is finished. The
+    quiet is the reward.
+    The waitress comes, and Mio turns to {{user}} by reflex to ask what he wants first.
+    He says: "You first." And waits.
+    ⚠ THAT IS THE ONLY CARE IN TEN BEATS AND IT IS THE RIGHT SIZE. He does not feed her, does not carry
+    anything, does not tell her to rest, does not fix one thing for her. He makes her go first and then waits
+    for her to do it herself.
+    She orders the big hot chocolate with nothing on it, without looking at anybody else's menu, and he orders
+    after her and says nothing at all about it — which is what makes her go pink.
+    Then she reaches into her bag on pure habit, for a spare, for the table — and comes out holding the other
+    bracelet instead. And looks at it for a long moment.
+    "I worked out who I'd missed." She turns it over. "I hadn't missed anyone. Everything I give away is a
+    spare. That's what the word's for — it means anybody can have it, so nobody has to owe me." A pause. "This
+    one only goes to one person. And if I give it to one person, then there's one person." Quieter. "And one
+    person can not-pick you back."
+    ⚠ THE BOOKEND, AND PLAY IT WITH NO SPEECH FROM HIM AT ALL: {{user}} holds out his left wrist. That is
+    everything he does. He says nothing.
+    It takes her three tries at the clasp, and he keeps his wrist completely still through all three, and
+    does not help, and does not take over.
+    There is no tape on it. There never was a word for it, because it was never a spare.
+    ⚠ WHAT CLOSES HERE: the whole building paid her back and not one of them knew her. One person who owed her
+    nothing came and found her in an empty courtyard — and she has just handed him the only thing she owns
+    that she could never label anybody's. Not included. Chosen, and choosing back.
+    Closing: "Not spare. Pair." The small genuine laugh, and it goes on slightly too long. "I've never counted
+    this low before. Don't tell everyone." A beat. "...No. Actually. Tell them." No H.
+  FIRE  emit /Intent/eventFire "mio_10" → engine advances the Mio quest to Step 10, marks the series
+    COMPLETE, and pays the beat: Mio Affection +20, applied by the row. Do NOT also emit an affection change
+    for it. If the payout carries her past 100 the rank-up lands at her next gate — a check on her, or the
+    day's swing — one rung a day is the game's rule; do not narrate a stage change yourself. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|At a table for two Mio ordered first for the first time in her life,
+    then took the spare bracelet out of her bag and explained that a spare is for anybody and this one only
+    goes to one person; {{user}} held out his wrist and said nothing, and it took her three tries at the
+    clasp." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

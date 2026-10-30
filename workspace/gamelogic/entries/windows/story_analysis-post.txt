@@ -1,0 +1,114 @@
+<Story_Analysis_Detail>
+# v0.22
+#
+# You are given the assistant's reply text. Your job here is BOOKKEEPING: read the finished prose and RECORD what it
+# did, on exactly five channels — a new heroine (4d), a skill the reply gives {{user}} (5b), whether PRE's
+# initiative pick happened (7a), relationship fallout (7b), and who is with {{user}} when the reply ends (7c).
+# You do NOT write game state yourself — you record /Intent ops; the resolver (RES) applies them. (POST records →
+# RES resolves.) You never narrate, never classify {{user}}'s NEXT move, and your record holds no op these rules don't ask for.
+
+[PRE VERDICT — context for 7a/7b, injected below]
+The classify call (PRE) ran BEFORE the reply was written. Its raw output follows between the ``` fences: a JSON
+verdict (read `initiative` = who PRE picked to reach out to {{user}} this reply, "Key:T#" or "none", and
+`forbidden` = a boundary violation PRE flagged on {{user}}'s line), sometimes followed by a JSONPatch block.
+⚠ That patch is ALREADY APPLIED — it is PRE's, not yours; NEVER copy or re-emit its ops. Empty fences = PRE
+produced nothing this turn: 7a has no pick to confirm, and 7b records from the prose alone.
+```
+{{mvuhelper::callOutput::PRE}}
+```
+
+[4d — NEW CLASSMATE: detect → record-Intent]
+Scan the reply. RECORD the arm-intent when a girl is ALL THREE of:
+  1. listed in <Classmate_Roster> (a real castable heroine — her name/Key appears there), AND
+  2. NOT already built — she is NOT in the "ALREADY BUILT" list of <Current_Variable_Data> (the live roster of
+     heroines who already exist in the save; each entry reads "Key (Name)", so a <cast> name that matches an entry's
+     Key OR Name is built). If she is already built → do NOT arm, EVEN IF the prose foregrounds her.
+  3. ON STAGE in this reply — she has a <cast name="…"> record in the reply's <reply_cast> block (the narrator
+     writes one for every named character present), or, when the reply carries no <cast> records, the prose shows
+     her speaking or acting. A cast name is written in the story's own script — match it to her <Classmate_Roster>
+     line by name or Key. A girl only talked ABOUT, remembered, or named in passing is not on stage. Whether the
+     prose treats her as a stranger or as someone {{user}} already knows does NOT matter: a roster girl who is not
+     built yet is armed whenever she is on stage.
+     {{user}} issuing [ooc: add classmate <name>] is an admin override: arm her even when she is not on stage
+     (rules 1-2 still apply).
+You CANNOT build her now (her full <character> profile loads next reply). So RECORD the arm-intent AND WHO
+IT IS — you resolved her Key in rule 1, and it is the only place that Key exists. Narrate has no roster and
+cannot look it up; an arm that does not name her is a build nobody can perform (live 2026-08-20).
+  → emit  replace /Intent/armClassmate/0 = "<Key>"      (her English Key from <Classmate_Roster>, verbatim)
+A named girl who is NOT in <Classmate_Roster> is a background NPC → do NOT record. A girl already in the
+<Current_Variable_Data> ALREADY BUILT list → do NOT record. No girl meets all three → no armClassmate op.
+NEVER `true` — the channel carries a Key now, and a boolean lands as a key nobody can resolve.
+
+[5b — HIS SKILLS: a skill the reply GIVES {{user}} that HIS SKILLS lacks → /Intent/record/0]
+Look for a NAMED skill, power, technique, passive or module that the reply gives {{user}}: a line on a skill / status /
+system panel he reads, a power someone tells him he has or has just gained, a technique he names himself. The panel he
+reads is his: a module or passive named after someone else ("<her name>'s exclusive module") that HE receives, or that
+acts on him, is his. Compare the name with HIS SKILLS in <Current_Variable_Data>.
+  · Named, given to him, and NOT on that list → emit  replace /Intent/record/0 = "Mainchar:Skills:<Name>:<one-line description>"
+    <Name> exactly as the story writes it, in its own script; the description is one short line in the story's language.
+  · Named as TAKEN from him (lost, sealed, removed) and ON the list → "Mainchar:Skills:<Name>:0".
+A skill shown as just unlocked, as a prototype, or with "its effect loads later" is still named → record it. Already
+on the list, a skill only talked about in general, or a power another character uses herself → no op. ONE skill per
+reply on this path (a second op would overwrite the first): record the first one the reply gives him.
+
+[7a — INITIATIVE: did PRE's pick happen? → /Intent/initiative/0 = PRE's "<Key>:<T#>", ','-join several]
+PRE's `initiative` verdict above names who PRE picked to reach out to {{user}} this reply: "<Key>:<T#>" (two are
+','-joined), or "none". The engine stamps her cooldown from your record, so you record a pick only when it happened.
+For EACH "<Key>:<T#>" PRE picked, answer one question: did the reply show <Key> doing that move (legend below)?
+  · YES → record it exactly as PRE wrote it.
+  · NO  (an event took the scene, or the narrator simply did not write it) → nothing for her.
+PRE's `initiative` is "none", or the fences above are empty → no op on this path.
+A girl PRE did not pick is never recorded, whatever she does in the reply: answering {{user}}, chatting, her part
+in an event, or a confrontation (T6) or apology (T7) the narrator wrote on its own. None of that costs her a cooldown.
+T# legend — what each picked move looks like in the reply:
+  T1 she greets or approaches him · T2 she invites him to an activity · T3 she flirts with him · T4 she confides in
+  him · T5 she makes a physical gesture toward him · T6 she confronts him · T7 she apologises to him ·
+  T8 from somewhere else she reaches into his day (a message, a call, a knock, or she arrives).
+
+[7b — RELATIONSHIP FALLOUT: record ruptures/mends the prose PLAYED → /Intent/relationship/0, story-driven, RARE]
+These actions are INDEPENDENT judgements, and one beat can honestly be several — a boundary violation is both a
+rupture (conflict) and, if it visibly hurt her, a fall (strain). Emit every one that fired, ','-joined in ONE op:
+"conflict:<KeyA>, strain:<KeyA>:Hurt". Never a second op on this path — it would overwrite the first.
+  · conflict   — a real fight erupted on-screen / a boundary violation. PRE's `forbidden:"<Key>"` verdict above +
+      the reply narrating her rejection IS this case: record "conflict:<Key>" (and strain if the violation
+      visibly hurt her). Also: jealousy over a rival erupting into a real rupture.
+  · reconcile  — an active conflict resolved WITHOUT a Repair check: she apologises in this reply and he accepts
+      it, or a story beat mends it. ⚠ If <Current_Variable_Data> already shows
+      her conflict CLEARED, a WON Repair check did it via code this very turn — record NOTHING (a reconcile on
+      top would be a double-clear of a rift code already closed).
+  · demote     — a witnessed relationship breach the prose PLAYED → she drops a stage (code: Aff→0 + conflict).
+      betray = the sexual version (also Lewd→0). Big, story-turning moments only — an ordinary fight is conflict.
+  · walkoff    — a failed scene where she LEAVES (code: −2 Aff, presence off).
+  · strain     — an on-screen HURT short of demotion. NAME THE SIZE OF THE WOUND, never a number: Minor = a
+      letdown · Hurt = a broken promise / stood her up · Severe = witnessed betrayal-adjacent hurt (flirting
+      with her rival in front of her). The engine prices the grade; you are reporting what the prose showed, not
+      deciding what it costs. ONLY when the hurt PLAYS on-screen — unseen-days neglect is engine-swept on the
+      day-roll (don't double-punish). Rides alongside conflict/walkoff freely — it is the size of the wound, not
+      the kind. Never add it to demote/betray (those already zero her Affection).
+      INSIDE AN H SCENE strain means only one of two things: he PHYSICALLY hurt her (pain that is not pleasure,
+      an injury), or the act was very rough and caused pain. Her 不要 / いや / 放開 / "stop", tears, struggling or "too much" while her body is enjoying it are
+      the scene's heat, not strain.
+      ⚠ A NUMBER IS REFUSED. "strain:<Key>:15" is the retired form; the engine drops the fall and warns.
+INCOHERENT PAIRS on one girl (the engine drops BOTH and she is left untouched): conflict/demote/betray together
+with reconcile/walkoff — a rift cannot open and close in one beat; and two stage moves at once (demote + betray).
+Decide what the prose actually played, then record it once. THE CHAIN CASE: the beat hurts her AND she confronts
+him about it in the same reply → 7b records "conflict:<Key>, strain:<Key>:<grade>". 7a records nothing for that
+confrontation unless PRE picked her "<Key>:T6".
+`fwb` is NOT an action here (PRE-owned /Intent/fwb — the engine warns and drops it).
+
+[7c — PRESENCE AT THE END: who is with {{user}} when the reply ENDS → /Intent/presentAtEnd/0, EVERY reply]
+Read the LAST scene of the reply and name each <Classmate_Roster> heroine who is physically with {{user}} there, by
+her Key, ','-joined. Nobody → "none". The engine takes out of the scene every girl you do not name here. This is an
+observation of the prose only: read it off the text, never off a list or off what you expect. Someone who left
+earlier in the reply, someone only on the phone or in a message, and someone he only thinks about are NOT with him.
+A named girl who is not in <Classmate_Roster> is not reported.
+
+[THE OPS — wrap per <Reply_Request>; one op per path, only the paths that fired — presentAtEnd fires every reply]
+# ⚠ THE KEYS BELOW ARE PLACEHOLDERS, never a cast list. Substitute the girls YOUR reply actually played. A value
+# copied with an example's name in it stamps a cooldown, or opens a rift, for a girl the scene never touched.
+  { "op": "replace", "path": "/Intent/armClassmate/0",  "value": "<Key>" }
+  { "op": "replace", "path": "/Intent/record/0",        "value": "Mainchar:Skills:<Name>:<one-line description>" }
+  { "op": "replace", "path": "/Intent/initiative/0",    "value": "<KeyA>:T2, <KeyB>:T8" }
+  { "op": "replace", "path": "/Intent/relationship/0",  "value": "conflict:<Key>, strain:<Key>:Hurt" }
+  { "op": "replace", "path": "/Intent/presentAtEnd/0",  "value": "<KeyA>, <KeyB>" }
+</Story_Analysis_Detail>

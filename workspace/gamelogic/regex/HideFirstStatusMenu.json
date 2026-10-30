@@ -1,0 +1,22 @@
+{
+  "id": "6f3efd46-7cc2-4060-8319-8b9d0487c3d9",
+  "script_name": "HideFirstStatusMenu",
+  "enabled": true,
+  "find_regex": "/<GameStartMenu\\/>[\\s\\S]*?<StatusPlaceHolderImpl\\/>[\\s\\S]*/g",
+  "replace_string": "<GameStartMenu/>",
+  "trim_strings": [],
+  "source": {
+    "user_input": true,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": true,
+    "prompt": false
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": 0
+}

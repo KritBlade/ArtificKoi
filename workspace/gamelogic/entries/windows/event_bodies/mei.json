@@ -1,0 +1,29 @@
+{
+  "comment": "Event_Body_Mei",
+  "type": "constant",
+  "keys": [
+    "Event_Body_Mei"
+  ],
+  "position": "at_depth_as_system",
+  "depth": 0,
+  "order": 994,
+  "enabled": true,
+  "probability": 100,
+  "logic": "and_any",
+  "filter": [],
+  "filters": [],
+  "scan_depth": "same_as_global",
+  "case_sensitive": "same_as_global",
+  "match_whole_words": "same_as_global",
+  "use_group_scoring": false,
+  "automation_id": null,
+  "exclude_recursion": true,
+  "prevent_recursion": false,
+  "delay_until_recursion": false,
+  "group": "",
+  "group_prioritized": false,
+  "group_weight": 100,
+  "sticky": null,
+  "cooldown": null,
+  "delay": null
+}

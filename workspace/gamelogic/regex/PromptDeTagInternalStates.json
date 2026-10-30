@@ -1,0 +1,23 @@
+{
+  "id": "55511aab-cfad-4477-ba97-699a9d0df6de",
+  "script_name": "PromptDeTagInternalStates",
+  "enabled": true,
+  "find_regex": "/<!-- GFX_START -->(?:(?!<!-- GFX_START -->)[\\s\\S])*?<!-- GFX_END -->\\n*|<internal_states>(?:(?!<internal_states>)[\\s\\S])*?<\\/internal_states>\\n*/g",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": false,
+    "prompt": true
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null,
+  "prompt_rewrite_intended": true
+}

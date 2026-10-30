@@ -1,0 +1,22 @@
+{
+  "id": "3f2c1e84-9a56-4b7d-8e02-6c4d1b9f7a25",
+  "script_name": "HideStoryAnalysis",
+  "enabled": true,
+  "find_regex": "/<StoryAnalysis>(?:(?!<StoryAnalysis>)[\\s\\S])*?</StoryAnalysis>/gm",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": true,
+    "prompt": false
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null
+}

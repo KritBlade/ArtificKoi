@@ -1,0 +1,240 @@
+<%_
+// v0.22
+  // ============================================================================
+  // EJS1 — the [PRE] <Check_DC_Dice> view (PRE_Call_Revisit §4.1e + P3). Rendered
+  // by mvu-helper at PRE-call assembly on the pre-turn stat_data. Its job: hand
+  // the PRE model the facts its ROLLS need — the per-heroine DC ladder (each tier
+  // value already folds in her [dcmod], which itself prices her stage + affection),
+  // her REPAIR row (a dcmod without stage, affection or conflict), the H SCENE line (whether
+  // a scene runs, and per girl whether a line crossing into one is rolled), the
+  // ★ FWB opt-in gate with its
+  // Morals DC, the ★ LOYAL-PUPPY DEMAND gate, the ★ DAY CHECK (the showcase day's own d20,
+  // on the day that carries it) and the dealt dice — so every one is rated, DC-locked and ROLLED at PRE
+  // (output-pre RESOLVE). The narrator's Window-A ladder retired with the check
+  // move and its FWB roll with P3: this is the ONLY ladder and the ONLY FWB DC.
+  //
+  // Dice come from PRE's OWN named pool: rollPool(count, hash, 'PRE') — the pool
+  // name is this CALL's name by convention, so a future PRE2 call deals its own.
+  // The narrator's ①-⑧ pool is a DIFFERENT (unnamed) pool; the two can never
+  // collide on a slot. Same dealer, same epoch cache (stable across re-renders,
+  // fresh per generation), and RES's §9c receipt verifies the UNION of pools.
+  // ============================================================================
+  let _cddLadder = '';
+  let _cddMods = '';
+  let _cddFwb = '';
+  let _cddPuppy = '';
+  let _cddDay = '';
+  let _cddIsHSceneRunning = false;
+  let _cddCrossing = '';
+  try {
+    const _cddSd = getvar('stat_data') || {};
+    const _cddV = (t) => (Array.isArray(t) ? t[0] : t);
+    // Whether an H scene runs as this turn starts: the fact the PhysicalRequest rule needs to tell the line that
+    // CROSSES into H from a line inside a running scene (never rolled) — <Social_check_system> PhysicalRequest.
+    _cddIsHSceneRunning = _cddV((_cddSd.PendingState || {}).IntimacyActive) === true;
+    // HER FIRST H WITH HIM — whether a line of his that crosses into H is rolled for her: until an act has landed on her
+    // in an H scene (every H experience field 0), never for a Loyal_Puppy. ⚠ MIRROR of globalLogic.cjs isCrossingRollOwed
+    // — change one, change both (Tools/test_check_dc_dice.cjs holds them together).
+    const _cddIsCrossingRollOwed = (c) => String(_cddV(c.RelationshipStage) || '') !== 'Loyal_Puppy'
+      && ['Exp_Caress', 'Exp_Oral', 'Exp_Vaginal', 'Exp_Anal'].every((f) => (Number(_cddV(c[f])) || 0) === 0);
+    const _cddCrossingParts = [];
+    const _cddSkip = (k) => (k === '$meta' || k === '$key' || k === 'template');
+    const _cddMC = _cddSd.Mainchar || {}, _cddCM = _cddSd.Classmate || {};
+    const _cddDIFF = [['Trivial', 8], ['Easy', 11], ['Moderate', 14], ['Hard', 17], ['Extreme', 20]];
+    const _cddMod = (s) => Math.floor((Number(_cddV(s)) || 0) / 25);
+    _cddMods = 'CHA +' + _cddMod(_cddMC.Cha) + ' (social) · INT +' + _cddMod(_cddMC.Int) + ' (MENTAL Compete) · STR +' + _cddMod(_cddMC.Str) + ' (PHYSICAL Compete)';
+    const _cddHobbies = (c) => {
+      const H = c && c.Hobbies;
+      if (!H || typeof H !== 'object') return '';
+      const parts = [];
+      for (const h of Object.keys(H)) {
+        if (_cddSkip(h)) continue;
+        if (h === 'General') { const d = String((H[h] && H[h].Desc) || '').trim(); if (d) parts.push(d); }
+        else parts.push(h);
+      }
+      return parts.join('·');
+    };
+    for (const k of Object.keys(_cddCM)) {
+      if (_cddSkip(k)) continue;
+      const c = _cddCM[k] || {};
+      if (_cddV(c.Is_present) !== true) continue;
+      // STAGE + AFFECTION — how far along she already is, priced HERE as arithmetic so it is the
+      // same every reply. It is NOT the tier rater's job: <Social_check_system> [RATE THE TIER] asks
+      // for the ACT alone, because a model rates the act consistently and the stage barely at all
+      // (measured: the same kiss moved 1.25 DC across Friend Aff10 → Dating Aff30, a quarter of one
+      // tier step, on two different models).
+      //
+      // ROMANCE ROUTE — Affection RESETS to the -1 sentinel at every advance (tryStageGate), so it
+      // IS progress within the stage: slide from this stage's anchor toward the NEXT stage's. That
+      // makes the seam continuous — Friend Aff 100 and a freshly-advanced Dating girl price the same.
+      // INTIMATE ROUTE — Friend → Friends_With_Benefits KEEPS Affection across the transition (she
+      // enters FWB above Aff 80, and FWB/Loyal_Puppy cap at 100), so Affection there is NOT
+      // within-stage progress and the anchor is FLAT.
+      const _cddSTAGE_DC = { Stranger: 4, Acquaintance: 2, Friend: 0, Dating: -2,
+        Girlfriend: -8, Friends_With_Benefits: -4, Loyal_Puppy: -8 };
+      const _cddSTAGE_NEXT = { Stranger: 'Acquaintance', Acquaintance: 'Friend', Friend: 'Dating',
+        Dating: 'Girlfriend' };
+      const _cddStageDc = (stg, af) => {
+        const a = _cddSTAGE_DC[stg];
+        if (a === undefined) return 0;                            // an unknown stage prices as neutral
+        const nx = _cddSTAGE_NEXT[stg];
+        const b = (nx === undefined) ? a : _cddSTAGE_DC[nx];
+        return Math.round(a + (b - a) * Math.min(100, Math.max(0, af)) / 100);
+      };
+      // SITUATIONAL — how she is RIGHT NOW (mood, embarrassment, public setting, compatibility). Every
+      // row carries it, the Repair row included.
+      let sit = 0;
+      const mood = String(_cddV(c.Mood) || '');
+      if (mood === 'Angry' || mood === 'Irritated') sit += 2;
+      const emb = String(_cddV(c.Embarrassment) || '');
+      if (emb === 'high' || emb === 'very high') sit += 1;
+      const soc = Number(_cddV(c.Sociability)) || 50;             // school = public setting
+      if (soc > 70) sit -= 1; else if (soc < 30) sit += 2;
+      // COMPATIBILITY: her defining stat vs MainChar's matching stat (small nudge)
+      const hInt = Number(_cddV(c.Int)) || 50, hSta = Number(_cddV(c.Sta)) || 50;
+      if (hInt > 60) { const mi = Number(_cddV(_cddMC.Int)) || 0; sit += mi >= 80 ? -2 : mi >= 60 ? -1 : mi <= 30 ? 2 : mi < 40 ? 1 : 0; }
+      if (hSta > 60) { const ms = Number(_cddV(_cddMC.Str)) || 0; sit += ms >= 80 ? -2 : ms >= 60 ? -1 : ms <= 30 ? 2 : ms < 40 ? 1 : 0; }
+      // trait levers (her extremes → the MATCH/CLASH judgement the tier rater makes)
+      const levers = [];
+      const push = (n, val) => { const x = Number(_cddV(val)); if (x >= 70) levers.push(n + '+'); else if (x <= 30) levers.push(n + '-'); };
+      push('Int', c.Int); push('Cha', c.Cha); push('Sta', c.Sta); push('Pride', c.Pride); push('Ele', c.Elegance); push('Soc', c.Sociability); push('Kind', c.Kindness); push('Hag', c.Hagaruro);
+      const stage = String(_cddV(c.RelationshipStage) || '');
+      const aff = Number(_cddV(c.Affection)) || 0;
+      _cddCrossingParts.push(k + (_cddIsCrossingRollOwed(c) ? ' rolled (her first H with him)'
+        : stage === 'Loyal_Puppy' ? ' no roll (Loyal_Puppy)' : ' no roll (H with him before)'));
+      // Every check but Repair: situational + an open rift (+5) + her stage/affection anchor.
+      const m = sit + (_cddV(c.ConflictActive) === true ? 5 : 0) + _cddStageDc(stage, aff);
+      let line = k + ' [dcmod ' + (m >= 0 ? '+' : '') + m + ']' + (stage ? ' [' + stage + ' · Aff ' + aff + ']' : '') + ':';
+      for (const d of _cddDIFF) line += ' ' + d[0] + ' ' + (d[1] + m);
+      const hob = _cddHobbies(c);
+      _cddLadder += line + '   [levers ' + (levers.join(' ') || 'mid') + ']' + (hob ? '  [hobbies ' + hob + ']' : '') + '\n';
+      // REPAIR — situational ONLY. The rift is what a Repair exists to close, so it cannot also price the
+      // roll that closes it; and an apology asks the same of her at any stage, so the stage/affection anchor
+      // stays off this row too. Her mood still counts: an angry girl is harder to win back.
+      let repairLine = '  ' + k + ' REPAIR [dcmod ' + (sit >= 0 ? '+' : '') + sit + ']:';
+      for (const d of _cddDIFF) repairLine += ' ' + d[0] + ' ' + (d[1] + sit);
+      _cddLadder += repairLine + '\n';
+    }
+    _cddCrossing = _cddCrossingParts.join(' · ');
+    // ★ FWB OPT-IN (PRE_Call_Revisit P3) — the INTIMATE-route entry, and PRE's second roll. A Friend at
+    // Aff>80 and not in conflict MAY become FWB, but ONLY if {{user}} VERBALLY proposes it; the roll is
+    // her MORALS, so a saint (DC 19-20) nearly always refuses. Rendered per girl here because PRE is the one
+    // that rates the proposal now — narrate used to read this off Window A, roll it, and declare the verdict.
+    // Aff is printed because PRE REPORTS IT BACK (`aff:`) and the engine gates on THAT number, not on a live
+    // re-read at resolve time — a check landing in the same reply moves her Affection after this render.
+    for (const k of Object.keys(_cddCM)) {
+      if (_cddSkip(k)) continue;
+      const c = _cddCM[k] || {};
+      if (_cddV(c.Is_present) !== true) continue;
+      if (String(_cddV(c.RelationshipStage) || '') !== 'Friend') continue;
+      const aff = Number(_cddV(c.Affection)) || 0;
+      if (!(aff > 80) || _cddV(c.ConflictActive) === true) continue;
+      const dc = Math.min(20, Math.round(((Number(_cddV(c.Morals)) || 0) - 1) / 5) + 1);
+      _cddFwb += k + ': Morals DC ' + dc + ' (need RawDie ≥ ' + dc + ') · aff ' + aff + '\n';
+    }
+    // ★ LOYAL-PUPPY DEMAND — PRE's third roll. A present Dating or Girlfriend heroine with Lewdness at 50 or more, and
+    // Hagaruro above 60 or M_level at 30 or more (her H submission at Submissive), MAY become Loyal_Puppy, but ONLY
+    // when {{user}} demands her total submission; one raw die
+    // (⑥) against a flat target, no mods. ⚠ MIRROR of globalLogic.cjs PUPPY_DEMAND — change one, change all three
+    // (Tools/test_resolver.cjs holds them together).
+    const _cddPUPPY = { target: 16, stages: ['Dating', 'Girlfriend'], minHagaruro: 61, minMLevel: 30, minLewdness: 50 };
+    for (const k of Object.keys(_cddCM)) {
+      if (_cddSkip(k)) continue;
+      const c = _cddCM[k] || {};
+      if (_cddV(c.Is_present) !== true) continue;
+      const stage = String(_cddV(c.RelationshipStage) || '');
+      const hag = Number(_cddV(c.Hagaruro)) || 0, lewd = Number(_cddV(c.Lewdness)) || 0, mlv = Number(_cddV(c.M_level)) || 0;
+      if (_cddPUPPY.stages.indexOf(stage) < 0 || lewd < _cddPUPPY.minLewdness || (hag < _cddPUPPY.minHagaruro && mlv < _cddPUPPY.minMLevel)) continue;
+      _cddPuppy += k + ': need RawDie ≥ ' + _cddPUPPY.target + ' · ' + stage + ' · Hag ' + hag + ' · M ' + mlv + ' · Lewd ' + lewd + '\n';
+    }
+    // ★ DAY CHECK — the STAT-SHOWCASE day's own roll (globalLogic DAY_CHECK: ACADEMIC = the exam, SPORTS = the
+    // sports festival). Dealt ONCE on
+    // the day it belongs to and never again: EngineDerived.DayCheckRoll holds the frozen numbers once RES has them,
+    // and this block renders only while that field is empty. Not a social check — no target, no tier, no fit — so
+    // it takes a die of its own (⑤) and its mod is MainChar's stat fold, the same /25 the channel line prints.
+    // ⚠ MIRROR of globalLogic.cjs DAY_CHECK (the dc) and Window A's _DAY_DC — change one, change all three
+    // (Tools/test_resolver.cjs holds the three copies together).
+    const _cddDAY = { ACADEMIC: { stat: 'Int', label: 'INT', dc: 12 }, SPORTS: { stat: 'Str', label: 'STR', dc: 11 },
+      CULTURE: { stat: 'Cha', label: 'CHA', dc: 9 } };
+    const _cddED = _cddSd.EngineDerived || {};
+    const _cddTier = String(_cddV(_cddED.DayCheck) || '').trim();
+    const _cddDaySpec = _cddDAY[_cddTier];
+    if (_cddDaySpec && !String(_cddV(_cddED.DayCheckRoll) || '').trim()) {
+      const _m = _cddMod(_cddMC[_cddDaySpec.stat]);
+      _cddDay = _cddTier + ' — DC ' + _cddDaySpec.dc + ' · MainChar ' + _cddDaySpec.label + ' mod +' + _m + ' · die ⑤';
+    }
+  } catch (_e) { _cddLadder = ''; _cddFwb = ''; _cddPuppy = ''; _cddDay = ''; _cddCrossing = ''; globalThis.MvuHelper.log.child('EJS1').error('check-dc-dice render failed:', _e); }
+  // Dice — PRE's own pool, through globalThis.MvuHelper (the platform door — present even where
+  // LogicEngine is not; rollPool-revisit R1/R5). Synchronous, no await — mvu-helper's own dealer.
+  // NO FALLBACK (R5b): the door is there whenever mvu-helper is, and without mvu-helper nothing
+  // would resolve these dice anyway. Throwing names the cause; a receipt-less deal would hide it.
+  if (typeof globalThis === 'undefined' || !globalThis.MvuHelper || typeof globalThis.MvuHelper.rollPool !== 'function') {
+    throw new Error('check-dc-dice: globalThis.MvuHelper.rollPool is unavailable — mvu-helper is not loaded, so no dice can be dealt and nothing would resolve them.');
+  }
+  // FOUR dice: ①②③ for up to three checks, and ④ RESERVED for the FWB opt-in roll (P3) — a FIFTH, ⑤, on a day
+  // that carries a ★ DAY CHECK still unrolled, and a SIXTH, ⑥, while a girl is eligible for the Loyal-Puppy demand
+  // (⑤ is then dealt too, and shown only on its day, so ⑥ keeps its slot). A reserved slot rather than "take the
+  // next unused" on purpose — with a shared run, which die a check took versus which a roll took is ambiguous the
+  // moment either is skipped, and the die is what decides each verdict. The deal is growth-APPEND per pool, so
+  // widening 4 → 5 → 6 leaves the earlier dice exactly as they were.
+  const _cddDice = globalThis.MvuHelper.rollPool(_cddPuppy ? 6 : _cddDay ? 5 : 4, null, 'PRE');
+_%>
+<Check_DC_Dice>
+# [PRE] check data — the per-heroine DC ladder + YOUR dealt dice. The MEASURE procedure that consumes this
+# lives in <Reply_Request> (fixed order: rate tier → copy dcmod+base → judge the two fits → state dc → read die)
+# with the tier/FIT rules in <Social_check_system> [RATE THE TIER]. You report numbers; the engine judges them.
+<%_ if (_cddLadder) { _%>
+## DC LADDER (per present heroine — each tier value ALREADY folds in her [dcmod], and her [dcmod] ALREADY PRICES
+## her [Stage · Aff]: for the SAME act, a girl who is further along is CHEAPER on this line than one who is not.
+## You rate the ACT; this row has already priced WHO SHE IS — never rate an act harder because she barely knows
+## him, that charges him twice. [levers] = her trait extremes for MATCH/CLASH; [hobbies] = hobby-fit material)
+## ★ A REPAIR CHECK READS HER INDENTED "REPAIR" LINE, NEVER HER MAIN LINE — copy dcmod AND base off it. Its dcmod
+## leaves out her stage, her affection and any open rift: an apology is priced on her mood, not on how far along
+## she is or on the fight it is closing. Every other type reads the main line; a Repair's [levers] and [hobbies]
+## are still the ones on her main line.
+## ⚠ THE ONE THING STILL MISSING FROM EVERY NUMBER BELOW IS THE FIT, and it is the ONLY arithmetic left on this
+## line: dc = <the tier value you rated> + (traitfit match −2 · clash +2 · neutral 0) + (hobbyfit 0 / −2 / −3).
+## A CLASH RAISES the DC — courting her against her lever makes the move HARDER, not easier. Report the fit as a
+## WORD ("traitfit:clash"); the engine applies the sign, recomputes the dc, and logs any disagreement.
+## ⚠ THE +/- INSIDE [levers …] IS NOT A DC NUMBER. "Cha+ Kind+ Hag-" means her Charisma and Kindness run HIGH
+## and her Hagaruro runs LOW — those are WHICH extremes to court toward, never something to add to a DC.
+<%- _cddLadder %>
+MainChar roll mod by channel: <%- _cddMods %>
+<%_ } else { _%>
+## DC LADDER
+(no present heroine — no check can target anyone this reply)
+<%_ } _%>
+## H SCENE: <%- _cddIsHSceneRunning ? 'RUNNING — his line goes on inside it (<Social_check_system> PhysicalRequest: no roll inside a running scene)' : 'NONE — a line of his that crosses into one, per girl: ' + (_cddCrossing || 'no present heroine') + ' (<Social_check_system> PhysicalRequest)' %>
+<%_ if (_cddFwb) { _%>
+## ★ FWB OPT-IN AVAILABLE (the INTIMATE-route entry — FWB, a no-strings physical arrangement)
+Fires ONLY when {{user}} VERBALLY proposes it THIS reply (a plain flirt/advance is a normal check, never this).
+It is NOT a check type: no tier, no MainChar mod — a flat MORALS roll on die ④. Report it in `fwb` and roll
+NOTHING when he did not propose. Her aff below is the number the engine gates on — copy it back as written.
+<%- _cddFwb %>
+<%_ } _%>
+<%_ if (_cddPuppy) { _%>
+## ★ LOYAL-PUPPY DEMAND AVAILABLE (she may give herself over to him for good — a SECRET devotion stage)
+Fires ONLY when {{user}} DEMANDS her total submission THIS reply (be his to command, his pet, his slave). It is NOT a
+check type: no tier, no MainChar mod — one raw die ⑥ against the target on her line. Report it in `puppy` and roll
+NOTHING when he did not demand it.
+<%- _cddPuppy %>
+<%_ } _%>
+<%_ if (_cddDay) { _%>
+## ★ DAY CHECK (today's showcase roll — the exam, the relay or the booth; rolled ONCE, by you, this reply; not a
+## check: nothing {{user}} says fires it or stops it)
+<%- _cddDay %>
+Report it on /Intent/dayCheck/0 as "rawdie:<⑤>;mod:<mod>;total:<⑤ + mod>;dc:<DC>" — four plain integers, copied from
+the line above and die ⑤. No target, no tier, no fit and no verdict: the engine derives it (raw 20 = CritSuccess,
+raw 1 = CritFail, else total ≥ DC), the narrator writes the day to that word, and the day-end swing pays it. This
+block is gone once the roll is in — a reply without it rolls nothing here.
+<%_ } _%>
+## YOUR DICE (PRE pool — independent of the narrator's ①-⑧ pool; the deal is RECORDED, so a die value that was
+## never dealt is flagged at resolve time — never invent or adjust a number)
+RawDie pool (PRE) — <%- _cddDice.map((d, i) => ['①','②','③','④','⑤','⑥'][i] + d).filter((t, i) => (i !== 4 || _cddDay) && (i !== 5 || _cddPuppy)).join('   ') %>
+HOW TO PICK (exactly): consume IN NUMBER ORDER — your 1st check = ①, 2nd = ②, 3rd = ③. A single check uses ① and ONLY ①. NEVER skip ①; NEVER pick a die by its value — the die you take decides the outcome outright, so choosing one for its size is choosing the result. Report it as a plain integer (`rawdie:14`, not `①14`).
+④ IS NOT A CHECK DIE. It is reserved for the FWB opt-in roll above and used ONLY on the reply {{user}} proposes the arrangement; a check never takes it, even when it is the only die left.<%_ if (_cddDay) { _%>
+
+⑤ IS THE DAY-CHECK DIE. It is shown only while the ★ DAY CHECK block above is showing and belongs to that block alone — never to a check, never to the FWB or Loyal-Puppy roll.<%_ } _%><%_ if (_cddPuppy) { _%>
+
+⑥ IS THE LOYAL-PUPPY DEMAND DIE. It belongs to the ★ LOYAL-PUPPY DEMAND block alone and is used ONLY on the reply {{user}} demands her submission — never by a check, the FWB roll or the day check.<%_ } _%>
+</Check_DC_Dice>

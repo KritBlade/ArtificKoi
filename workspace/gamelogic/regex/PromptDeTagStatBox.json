@@ -1,0 +1,23 @@
+{
+  "id": "c5cb88f3-8034-4c4d-b3a7-7be241018e34",
+  "script_name": "PromptDeTagStatBox",
+  "enabled": true,
+  "find_regex": "/<styled type=\"terminal\" title=\"Scene Stats\">(?:(?!<styled type=\"terminal\" title=\"Scene Stats\">)[\\s\\S])*?<\\/styled>\\n?/g",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": false,
+    "prompt": true
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null,
+  "prompt_rewrite_intended": true
+}

@@ -1,0 +1,23 @@
+{
+  "id": "c761e5b7-5580-4ea2-9356-720142d30d40",
+  "script_name": "PromptDeTagCastOutfit",
+  "enabled": true,
+  "find_regex": "/(<cast\\b(?:(?!\\sclothes\\s*=)[^>\\n])*?)\\s+outfit\\s*=\\s*\"[^\"<>\\n]*\"((?:(?!\\sclothes\\s*=)[^>\\n])*>)/gi",
+  "replace_string": "$1$2",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": false,
+    "prompt": true
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null,
+  "prompt_rewrite_intended": true
+}

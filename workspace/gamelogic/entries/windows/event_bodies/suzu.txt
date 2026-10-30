@@ -1,0 +1,559 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@suzu_') === 0
+<%_ /* v1.5 */ _%>
+<%_ /* The ten @suzu_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @suzu_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@suzu_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@suzu_1') { _%>
+@suzu_1  Read Slowly (Suzu) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE PAGE THAT DIDN'T TURN. After the last bell, in the classroom, and a rota is being divided up at the
+    board. Four girls, a chalk grid, and the usual haggling about who gets the bad slots. It is loud and nobody is
+    being unkind and it takes about ten minutes.
+    SUZU YUKISHIRO is 154 cm of shoulder-length silver-white hair with a small neat braid at each side, calm blue
+    eyes, and a uniform worn exactly the way the handbook draws it. She is at the third desk from the window with
+    a book open, and she has not said one word since the bell.
+    ⚠ THE BODY FACT, STATED ONCE AND THEN LEFT ALONE. F cup, kept completely flat under a properly buttoned vest,
+    and she has genuinely never thought about it in her life — not modesty, not shame, simply a thing about
+    herself she has never had a reason to consider. Do NOT leer at it and do NOT have anybody comment. It is in
+    this series for one reason: it is the most literal example of a thing about Suzu Yukishiro that is plainly
+    there and that nobody has ever been allowed to see.
+    Somebody asks her which slot she wants. She does not answer. Somebody else says put her anywhere, she doesn't
+    care, and they put her anywhere, and the haggling moves on. There is a small sigh in the room. Two of them
+    exchange a look. Nobody is angry. They have simply stopped expecting.
+    {{user}} is at the back of the room packing a bag he finished packing five minutes ago, and what he is
+    actually doing is watching a book.
+    ⚠ AND THIS IS THE MECHANISM OF THE ENTIRE SERIES, AND IT HAPPENS IN THE FIRST THREE MINUTES. Before the
+    question, she was turning a page about every forty seconds. He knows that because he had been half-counting
+    without meaning to. From the moment somebody said her name to the moment they moved on, the page did not turn.
+    Not once. Then, when the talking went back to the board, it turned.
+    She heard every word of it. She heard all of it, and she was the only person in that room paying it full
+    attention, and she is the one everybody there has filed as not caring.
+    Then they go. And she puts the book down, goes to the board, and changes exactly one thing: she moves a girl's
+    name out of the second slot and into the fourth, because the second clashes with that girl's club and the girl
+    had not noticed and neither had anybody else. She writes it in a hand that does not belong in a classroom —
+    small, even, and beautiful. Then she picks up her bag and leaves.
+    ⚠ SHE DOES NOT TELL ANYBODY SHE HAS DONE IT. She does not leave a note about it. She fixed a scheduling
+    conflict she caught in a conversation she was not given a vote in, and she went home, and the girl will assume
+    she wrote it down wrong the first time.
+    ⚠ THE NOTEBOOK IS THIS SERIES' EXPLAINER, AND EVERY ONE OF THE TEN BEATS ENDS IN IT. This spine is a chain of
+    reasoning and the reader is one step behind it the whole way, so at or near the end of every beat you will put
+    {{user}}'s notebook entry for that beat ON THE PAGE, in his own hand, as written text. It is the ONE place in
+    these ten beats where the meaning of a scene may be stated outright. Rules, and they are not negotiable. It is
+    HIS voice and never the narrator's: flat, short, clipped, no adjectives, no metaphors, no feelings, often not
+    even full sentences. It reports what he OBSERVED and what he now CONCLUDES, and nothing else. It NEVER says
+    what Suzu felt or thought — he cannot see that, and neither can you. It is allowed to be WRONG, and wrong
+    entries get struck through and corrected in later beats, because thirty-one corrections are what beat 10 is
+    built on. And because the notebook carries the whole load, the prose around it stays exactly as spare as every
+    other series in this pack: do NOT explain the scene anywhere outside the entry.
+    ⚠ AND DO NOT WRITE ONE LINE OF WHAT SUZU IS THINKING, IN THIS BEAT OR IN ANY OTHER. Hagaruro 12 — her face
+    reports honestly and has no capacity to perform, so everything you need is already legal: what her hands do,
+    where her eyes are, and whether the page turns. That page is her punctuation for the whole series. Use it. Do
+    not narrate her interior and do not give her a mind-read.
+    On the way out somebody in the corridor sees {{user}} looking after her and supplies the name without being
+    asked: "Yukishiro. Suzu Yukishiro. Don't bother, she never talks to anyone." The corridor genuinely believes
+    that is the whole of it.
+    Crack: none, and there will not be one for a long time. What {{user}} has at the end of the first afternoon is
+    one line worth writing down, and he writes it down.
+    ENTRY 1. Rota split four ways, about ten minutes. Page turning roughly every forty seconds before her name
+    came up. Did not turn once from the question to the end of it. Turned again after they moved on. She heard all
+    of it. Then moved a name on the board, unasked, and told nobody. Conclusion: not indifferent. Nobody in that
+    room knows that. No H.
+  FIRE  emit /Intent/eventFire "suzu_1" → engine creates the Suzu quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays somebody already in the save, and she is not in it yet. NAME HER in the prose — "Suzu
+    Yukishiro" — because that IS the mechanism: POST reads the name and arms her build, her <character> card
+    keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide> says.
+    Do NOT build her THIS reply unless her <character> profile is already in front of you. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Suzu Yukishiro sat through a rota being divided up around her without
+    answering a single question, and the page of her book did not turn once while it happened; after the others
+    had gone she went to the board and moved one girl out of a slot that clashed with that girl's club, in her own
+    handwriting, and left, and {{user}} was the only person left in the room who saw her do it." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@suzu_2') { _%>
+@suzu_2  Read Slowly (Suzu) ·2   (CHECK - · REWARD Suzu Affection +10)
+  DO  SECOND SOURCE. A week on, at lunch, and the quiet circle has a corner of the library to itself. Urara is
+    mid-flow about something she heard: a change to the term schedule, delivered with total confidence and a lot
+    of hand movement. Nene is listening. Nanoka is horizontal. Suzu is reading.
+    Suzu asks one question without looking up, and it is four words long and it does not have the shape of a
+    question: "Who did you hear it from."
+    Urara names somebody. Suzu turns a page. "That's one source."
+    ⚠ PLAY THAT FLAT AND DO NOT SOFTEN IT. It is not a snub and Urara does not take it as one — this is a house
+    rule the circle has lived under since it existed. Urara complains, cheerfully and at length, that Suzu never
+    believes anything anybody says. Suzu does not answer that, because it was not a question.
+    {{user}} is at the end of the table and was not asked. He gets up, walks out, and is gone about twenty
+    minutes.
+    He comes back with the thing itself. Not a report of it — the printed page off the staff-room board, the
+    actual one, with the actual date on it, which he asked for and was given. He puts it on the table in front of
+    Urara and sits back down and says nothing at all.
+    ⚠ AND SUZU LOOKS UP. That is the event of this beat and you will stage it like one. She has not looked up at
+    anybody once this entire scene — not at Urara telling the story, not at the argument, not at the door. She
+    looks up at a piece of paper somebody walked twenty minutes to fetch.
+    What she says is two sentences, which for her is a considerable speech: "You went and checked. ...Thank you."
+    And then she says the rule out loud, once, because it is hers and it has never needed saying before: "One
+    person saying a thing is a claim. Two people saying it is one claim, if they heard it from each other."
+    ⚠ REMEMBER THIS. It is the single most important line in the series and it is disguised as a pedantry about
+    gossip. Do not underline it. Say it and move on. It comes back in beat 10 and it is what ends the whole thing.
+    Urara wants to know why Suzu never explained that before. Suzu: "You never checked before."
+    And then the last thing, and it is not said at all. Her bag is on the chair beside her, where it has been
+    every lunchtime since the circle existed. She lifts it and puts it on the floor.
+    Nobody at that table can read that. Urara starts to say "...did she just—" and stops, because she cannot work
+    out how to finish it. Nene looks at the chair, then at Suzu, and puts her hood up. Nanoka is asleep. And
+    {{user}} sits in the chair.
+    Crack: none visible. But she reads one page in the next ten minutes, and she is not a slow reader.
+    ENTRY 7. Urara repeated a claim with one source. Walked to the staff room and brought back the printed sheet
+    itself. She looked up. First thing she has looked up at all afternoon. Gave me her rule unprompted — one
+    person saying a thing is a claim, two is still one claim if they heard it from each other. Conclusion: the bar
+    is not being clever. The bar is checking. I can meet that one. No H.
+  FIRE  emit /Intent/eventFire "suzu_2" → engine advances the Suzu quest to Step 2 and pays the beat: Suzu
+    Affection +10, applied by the row. Do NOT also emit an affection change for this beat. Urara, Nene and Nanoka
+    are cameos and are NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Urara repeated something she had heard and Suzu asked who she had heard it
+    from and said that was one source, so {{user}} went and checked it himself and put the printed thing on the
+    table without a word; Suzu looked up, which she had not done all afternoon, and said that he had gone and
+    checked, and thanked him, and moved her bag off the chair beside her." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@suzu_3') { _%>
+@suzu_3  Read Slowly (Suzu) ·3   (CHECK - · REWARD Suzu Affection +16)
+  DO  MM. Lunch, outdoors or in the cafeteria, the circle plus one. {{user}} is now at this table by default and
+    nobody has ever said so.
+    ⚠ THE JOKE OF THIS BEAT IS A VOCABULARY LIST. Over the whole lunch Suzu produces exactly four things, and you
+    will place all four deliberately: one "Mm", one page turned, one "Noted", and one complete sentence. That is
+    her entire output. Everything else in the scene is other people.
+    The "Mm" lands when Urara asserts something large. The page turns four seconds into Urara exaggerating a
+    number. "Noted." is what Nanoka gets when she pushes the sweets across, because Suzu has both hands on the
+    book and will take one later and both of them know it.
+    And then a girl passing the table — not one of the circle — apologises to {{user}} on Suzu's behalf. Kindly.
+    Genuinely. "Sorry, she's like that with everyone, don't take it personally."
+    ⚠ AND HE ANSWERS BY READING THE LIST BACK. Not as a performance and not to score anything off anybody — he
+    says it the way you would read out a train time. The Mm was not agreement, it was "I heard you and I am not
+    doing this here". The page was the comment on the number. Noted means later, not no. And she has been
+    following Urara's story closely enough to know it is the third time it has been told and that the number has
+    gone up twice.
+    Urara checks. The number has gone up twice.
+    ⚠ AND THE TABLE GOES QUIET, AND THE QUIET IS THE POINT. Four girls have just discovered that the silent one
+    has been in the conversation the entire time, at a depth none of them were at.
+    Then Suzu says her one complete sentence of the day. She says it to the table, level, with no defensiveness in
+    it whatsoever, because she is not defending anything — she is correcting a factual error about herself: "Most
+    people fill silence because they fear it. I don't."
+    Urara takes about four seconds to work out that she has just been described. Then she laughs, because Urara is
+    not fragile, and says that was unbelievably rude, and Suzu says "It wasn't," and that is the end of it.
+    ⚠ AND HERE IS THE THING THAT MATTERS AND YOU MUST NOT BLOW IT. Nene — who almost never speaks, and who reads a
+    room better than anyone at that table — looks at {{user}}, then at Suzu, then back at {{user}}. She has worked
+    out what is happening at this table. She says nothing about it and she will not.
+    And Suzu has not noticed any of it. Not Nene's look, not the quiet, not that the boy across from her spent a
+    lunch hour getting four consecutive readings of her right in front of witnesses.
+    ⚠ THAT IS DELIBERATE AND IT IS THE SERIES' WHOLE ENGINE. Anything aimed AT Suzu does not arrive. She reads
+    books, rooms, arguments and people flawlessly, and attention pointed at her is the one signal she has no
+    receiver for. Play it as a fact, never explain it, and never let her notice it until the series tells you to.
+    Crack: none. She takes the sweet on the way out, an hour later, exactly as filed.
+    ENTRY 19. Lunch. Her entire output: one Mm, one page turn, one Noted, one complete sentence. Read all four
+    back to the table. All four correct. Mm = heard you, not arguing about it here. Page turn = that number is
+    wrong. Noted = later, not no. Nene worked out what was happening at that table before Suzu did. Suzu did not
+    notice any of it. Third time I have written that down. No H.
+  FIRE  emit /Intent/eventFire "suzu_3" → engine advances the Suzu quest to Step 3 and pays the beat: Suzu
+    Affection +16, applied by the row. Do NOT also emit an affection change for this beat. Urara, Nene and Nanoka
+    are cameos and are NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Over one lunch Suzu produced four things - an 'Mm', a page turned, a
+    'Noted' and one complete sentence - and {{user}} read all four correctly, and when somebody apologised to him
+    for her not talking she said that most people fill silence because they fear it and she does not; Nene worked
+    out what was happening at that table before Suzu did." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@suzu_4') { _%>
+@suzu_4  Read Slowly (Suzu) ·4   (CHECK - · no payout — he is only writing things down)
+  DO  THE LIST. Between lessons, the corridor and then the classroom, and this beat belongs to {{user}} and a
+    cheap notebook.
+    ⚠ SHOW THE NOTEBOOK ON THE PAGE. The reader gets to look at it; Suzu does not, and will not, for six more
+    beats. It is not a diary and there is nothing tender in it. It is dated, it is in bad handwriting, and about a
+    third of it has been crossed out.
+    Entries, or ones like them, written flatly and without a single adjective: "Library. Window seat, third from
+    the end. Always the third." — "Turns a page about every 40 seconds reading. Stops turning when listening.
+    Listening looks identical to reading." — "Dislikes being spoken to" struck through, and under it "Wrong.
+    Dislikes being spoken AT." — "Does not eat in front of people? CHECK."
+    ⚠ AND THAT LAST ONE IS THE METHOD, VISIBLE. Watch, guess, then do something small and cheap and see whether
+    the guess was wrong. He is not clever and this series is never going to pretend he is. What he has is a loop,
+    and the patience to run it for weeks on one person.
+    Today's test is the loudest thing he can legally do. A girl is about to take the window seat, third from the
+    end, before Suzu gets there. He stands up in front of a full classroom and says it is taken, and sits down. It
+    is completely out of character for a quiet boy, it happens in the middle of the room, and everybody sees it.
+    Three girls see it. Urara sees it from the far side and sits up. The girl who wanted the seat takes another
+    one and gives him a look he will hear about later.
+    Suzu comes in about four minutes later, puts her bag down, sits in the seat, and opens the book.
+    ⚠ AND THAT IS THE RESULT, AND IT IS A NULL, AND THE NULL IS THE PRIZE. She is not being cold and she is not
+    pretending. She did not perceive it. There is nothing to thank him for because nothing, as far as she is
+    concerned, occurred. Do NOT have her glance at him. Do NOT give her a private smile. Nothing arrived.
+    Half the room now believes he has been publicly ignored. That is a cost and he pays it without comment.
+    Then he writes it down, and the entry is the hinge of the entire series. ENTRY 28. "Test: made the seat thing
+    as loud as I could legally make it. Three girls registered it. Urara registered it from across the room.
+    Subject registered nothing. Fourth run, fourth null." And under it, after a gap: "Confirmed. Nothing aimed at
+    her arrives. She reads everything except what is pointed at her. Conclusion: she cannot be told. She can only
+    be shown, and not directly."
+    ⚠ DO NOT MAKE THAT SINISTER. There is no manipulation in this notebook and no plan to get anything out of her.
+    It is the ordinary, boring conclusion of a boy who has run the same test four times and got the same answer
+    four times.
+    Crack: none. Then Urara catches up with him in the corridor, demanding to know what on earth that was about,
+    and he tells her, flatly, because there is nothing to hide: he wanted to know whether Suzu would notice. She
+    did not. That was the entire question, and he has his answer.
+    Urara says that is the saddest thing she has ever heard. He says it is not. He means it, and he does not
+    explain why.
+    ⚠ THAT EXCHANGE IS WHY URARA IS IN THIS BEAT AND YOU WILL NOT CUT IT. Without it the scene reads as a boy
+    being publicly snubbed, which is the exact opposite of what happened, and this is the one beat with no payout
+    to signal otherwise. Play him as satisfied and not wounded: he has a clean answer to a question he has been
+    carrying for weeks, and the price of it was a room full of girls thinking less of him, which he had priced in
+    before he stood up. No H.
+  FIRE  emit /Intent/eventFire "suzu_4" → engine advances the Suzu quest to Step 4. NO payout: nothing reached her
+    this beat, which is the entire finding. Urara is a cameo and is NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} keeps a dated notebook on Suzu with the wrong guesses crossed out
+    and corrected in it, and he tested her in front of the whole class by stopping somebody taking her window
+    seat, loudly enough that three girls and Urara registered it; Suzu arrived, sat down and read, and had not
+    perceived any of it, so he wrote down that she cannot be told, only shown, and not directly." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@suzu_5') { _%>
+@suzu_5  Read Slowly (Suzu) ·5   (CHECK - · no payout — the beat costs her something instead)
+  DO  BESIDE HER, NOT WITH HER. After the last bell, a long table, three people working. Yuzuki Momose and Suzu at
+    the same table, which is where they always are, because they are the top two and the timetable puts them
+    there. {{user}} is at the end of it with his own work.
+    Yuzuki is doing what Yuzuki does, which is competing in total silence at somebody who does not know a
+    competition is happening. Then she says one sentence with an edge on it — about a mark, about a rank, about
+    who finished a set first — and it is beautifully sharpened and it has taken her some time to get right.
+    Suzu answers the literal content of it. Helpfully. Completely. She tells Yuzuki where the second half of that
+    set goes wrong and offers her the page reference, and then goes back to her book.
+    ⚠ AND SHE HAS MISSED THE EDGE ENTIRELY, AND THAT IS ESTABLISHED FACT ABOUT THESE TWO, NOT AN INVENTION. Yuzuki
+    has been aiming at her since the first week of term and not one round has landed, because nothing aimed at
+    Suzu arrives. From the outside this is indistinguishable from contempt. Yuzuki has spent a long time believing
+    it is contempt.
+    Yuzuki packs up early, very neatly, and goes.
+    {{user}} catches her at the door and says three sentences, quietly, and does not make a speech of it: that
+    Suzu did not hear it. That she has never heard any of them. That it is not contempt and it is not superiority
+    — it is that Suzu does not register anything pointed at her, by anybody, ever, and that this is worse, because
+    there is nothing to win.
+    Yuzuki stands there for a second with her bag on her shoulder. She does not thank him. She says "...Then what
+    is the point of her," and goes, and it is not a question and she does not mean it and both of them know it.
+    ⚠ KEEP THAT SHORT. Three or four lines total. This is not Yuzuki's beat and you will not turn it into one.
+    Back at the table, Suzu has looked up. She saw two people talk at a door. She saw the set of Yuzuki's
+    shoulders change between the start of it and the end of it. And she cannot reconstruct the cause, and she has
+    never in her life been unable to reconstruct a cause in a room she was sitting in.
+    So she asks. And you will understand what that costs her: "What did you say to her."
+    He tells her. All of it, plainly, including the part about her. It takes about fifteen seconds.
+    ⚠ AND THAT IS THE CRACK, AND IT IS NOT ROMANTIC IN THE SLIGHTEST. A girl with a 95 in front of her name has
+    just been handed a fact about her own conduct, sourced from an observation she could have made herself from
+    closer range, by somebody she has not rated as her equal. Hagaruro 12 — she cannot posture, she cannot laugh
+    it off, and she does not try. She goes quiet in a register the table has not seen.
+    The page does not turn for a long time.
+    Then, flat, and it is not an apology and it is not a defence, it is a data point being entered: "...I did not
+    notice."
+    And then, after a pause, the sentence that starts the entire back half of this series: "How did you."
+    He offers to tell her. She says: "Not now."
+    ⚠ AND THAT IS NOT A REFUSAL — IT IS HER RESERVING THE PROBLEM. She would rather solve it than be told the
+    answer. Do not resolve it.
+    ENTRY 44, on the train home, and one line of it is a correction to an older one. "Yuzuki put an edge on a
+    sentence. Subject answered the content and missed the edge, same as every previous time. Told Yuzuki why.
+    Subject saw us talking, could not reconstruct the cause, and asked me. First fact about herself she has ever
+    taken from somebody else." And struck through above it, in older ink: "Dislikes Yuzuki." Under the strike:
+    "Wrong. Does not know there is anything to dislike. Same error, fourth time." No H.
+  FIRE  emit /Intent/eventFire "suzu_5" → engine advances the Suzu quest to Step 5. NO payout: she is not warmer
+    at the end of this beat, she is unsettled, and the row must not claim otherwise. Yuzuki is a cameo and is NOT
+    built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuzuki put an edge on a sentence across the study table and Suzu answered
+    its literal content helpfully and missed the edge completely, so when Yuzuki left early {{user}} told her
+    quietly that Suzu had not heard it and that nothing aimed at Suzu ever arrives; Suzu saw the two of them talk,
+    asked what he had said, was told a fact about her own conduct that she did not have, said she had not noticed,
+    and then asked how he had." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@suzu_6') { _%>
+@suzu_6  Read Slowly (Suzu) ·6   (CHECK - · no payout — she leaves less settled than she arrived)
+  DO  TOO BORING TO BE TRUE. After school, the roof or the courtyard, and Suzu has asked {{user}} to be there,
+    which is the first time she has ever asked anybody for anything.
+    She arrives with a page of questions. Written out. In order. In the same beautiful small hand as the board in
+    beat 1. She does not do small talk and does not open with any, and she does not mean anything by that.
+    "How long have you been watching me." — "What are you looking for." — "How do you know when you are wrong."
+    And he answers all of it, completely, and it is the dullest speech in this entire series and it is supposed to
+    be: he watches. He makes a guess. Then he does something small and cheap and sees whether the guess was wrong.
+    If it was wrong he changes it. Mostly it is wrong. That is all of it. There is nothing else.
+    She asks what proportion. He tells her: more than half, at the start, and less now, and he does not round it
+    in his favour.
+    ⚠ AND SHE NEVER ONCE ASKS WHETHER HE HAS WRITTEN ANY OF IT DOWN, AND THIS IS DELIBERATE AND IT IS CHARACTER,
+    NOT CONVENIENCE. Suzu does not keep notes on people. She does not need to; she gets it first time and she
+    keeps it. So it does not occur to her that somebody would do the slow version on paper. The notebook is four
+    feet away in a bag and she does not think to ask, and that is why beat 10 still has a weapon in it.
+    Then she puts the page of questions down, and rejects the answer. Not rudely. Almost carefully: "That is not
+    sufficient."
+    And then: "What you have described would take an enormous amount of time. And anybody could do it."
+    And he says: "Yes."
+    ⚠ AND THAT IS WHERE IT HURTS, AND YOU WILL NOT EXPLAIN IT TO THE READER. Because if anybody could have done
+    it, then everybody could have, and nobody did, for eighteen years. A genius is a much kinder answer. Do not
+    have her say one word of this. Do not put it in her face. The only thing you are allowed to show is the
+    effect: she stands up and ends the conversation, and Suzu Yukishiro has never once been the person who ends a
+    conversation.
+    And as she gets to the stairs he says the last two things of the beat, and neither is a boast: "You won't
+    believe it until you've tested it." And: "So test it."
+    She stops. She says one word: "Yes."
+    And then he gives her the courtesy that decides the rest of the series — he tells her what her own first test
+    is going to be, because a test he has predicted and not declared would not be a fair one: "You'll start with
+    whether I'm clever. It's the cheapest one to rule out."
+    She does not answer that and does not look back, and it is not rudeness. It is a person recalculating on the
+    move.
+    ⚠ THE DUEL IS NOW OPEN AND BOTH OF THEM KNOW IT. He has one rule from here and he states it or he keeps it,
+    either is fine: he will not lie to her, and he will not help her get the answer. Do not resolve it.
+    ENTRY 57. "Gave her the whole method. Watch, guess, test the guess, correct it. Gave her the error rate
+    honestly. She rejected it. Reason given: anybody could do it." And then the part that matters, and it is the
+    only place in this series the back half is spelled out anywhere: "That is the true answer and she will not
+    take it, so she will test the alternatives instead. Three of them. Clever, lucky, or told. She starts with
+    clever because it is the cheapest to rule out. Told her so, so the test stays fair." No H.
+  FIRE  emit /Intent/eventFire "suzu_6" → engine advances the Suzu quest to Step 6. NO payout: she is not closer
+    at the end of this, she is committed, which is a different thing. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Suzu came to the roof with written questions and asked how long {{user}}
+    had been watching her, what he was looking for and how he knows when he is wrong, and he gave her the whole
+    method - watch, guess, test the guess, change it, and mostly it is wrong; she told him that was not sufficient
+    because anybody could do it, and he agreed, and she ended the conversation, and he said she would test it and
+    she said yes." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@suzu_7') { _%>
+@suzu_7  Read Slowly (Suzu) ·7   (CHECK - · REWARD Suzu Affection +20 · THE BREAK)
+  DO  THE THING SHE DIDN'T SAY. The school magazine came out today. In it, unsigned, three pieces of prose by
+    students, and the third one is hers. Nobody in the room knows that.
+    Somebody read it aloud in class. Not cruelly — for a laugh, in a silly voice, the way anything printed and
+    unsigned gets read in a classroom, and the class laughed in two places, and one of those places was the right
+    place. Then the bell went and everybody forgot about it inside a minute.
+    Suzu said nothing at the time, and nothing at lunch, and nothing since. She has read a book all afternoon.
+    There is no visible event here at all. Ask anybody who was in that room and nothing happened today.
+    {{user}} finds her in the library after the last bell. She is not in the window seat, third from the end. She
+    is at a table at the back with her bag on the chair beside her.
+    ⚠ AND HE DOES NOT ASK IF SHE IS ALL RIGHT, BECAUSE THAT WOULD BE A GUESS AND HE HAS SOMETHING BETTER. He sits
+    down, and he does not soften it, and he does not make it a question: "The third one was yours."
+    Her page does not turn.
+    And then he says the thing she did not say. Not the feeling — she would have refused a feeling, and she can
+    refuse anything. He tells her the fact: "You've been sitting here all afternoon not asking who chose it."
+    ⚠ AND THAT IS THE READ, AND IT IS NOT MAGIC AND IT IS NOT SYMPATHY. The magazine printed three out of a pile.
+    Somebody went through the pile. Somebody picked hers. Suzu has spent an entire afternoon not finding out who,
+    which for a girl who verifies everything is the loudest thing she has ever done.
+    And then the last of it, flat, and he gets it exactly right: "You don't care that they laughed. You want to
+    know whether whoever chose it read it properly."
+    ⚠ AND SHE GOES STILL. Write the stillness and nothing else. Her hand stops on the page. The faintest colour
+    rises and Hagaruro 12 means she cannot do one thing about it and does not try. She does not look away and she
+    does not look at him. She is eighteen years old and this has never happened before, and you will convey all of
+    that with a hand on a page and a page that does not turn.
+    ⚠ AND WRITE NO INTERIOR MONOLOGUE HERE, NOT ONE LINE, NOT EVEN NOW. This is the beat where the temptation is
+    strongest and it is also the beat where it would cost the most. Everything you need is on her face, which
+    cannot lie, and in the book, which has stopped.
+    Then one word: "...How."
+    And he tells her the truth, which is that he does not have a better answer than the one he gave her on the
+    roof.
+    A long silence. And then the break, and it is not a blush and it is not a confession — it is a girl who has
+    just been moved for the first time in her life opening a file: "I will determine how."
+    He says: "Alright." And then the terms, because he will not have her doubting the result afterwards: he will
+    not lie to her, and he will not help her get there.
+    And she says "Acceptable," and picks up her pen, and starts writing, and he leaves her to it.
+    ⚠ END THE SCENE THERE. She has been read correctly for the first time in her life and her response is to open an
+    investigation, and she does not know those are the same thing, and the reader does. Do not resolve it.
+    ENTRY 68, written on the library steps. "Magazine, third piece, unsigned, hers. Read out for a laugh by
+    somebody who did not know. She said nothing about it all day. Not in the window seat. Bag on the chair. Page
+    not turning. Guess: she has not asked who chose it, and what she wants to know is whether whoever chose it
+    read it properly. Said it out loud. Correct." And under it: "She has opened an investigation into me. Terms
+    agreed — I do not lie to her, and I do not help her." No H.
+  FIRE  emit /Intent/eventFire "suzu_7" → engine advances the Suzu quest to Step 7 and pays the beat: Suzu
+    Affection +20, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A piece of Suzu's writing was printed unsigned and read out in class for a
+    laugh by somebody who did not know it was hers, and she said nothing about it all afternoon; {{user}} found
+    her in the library and told her the thing she had not said - that she had been sitting there not asking who
+    had chosen it, because she wanted to know whether whoever chose it had read it properly - and she went still,
+    and said 'how', and then that she would determine how." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@suzu_8') { _%>
+@suzu_8  Read Slowly (Suzu) ·8   (CHECK - · no payout — the first hypothesis dies and nothing softens)
+  DO  A CLEAN RESULT. After the last bell, an empty room, two chairs and a table. Suzu has brought a paper.
+    {{user}} sits down opposite her and she puts it in front of him face down like an examiner, because that is
+    exactly what she is.
+    ⚠ TEST ONE OF THREE. IS HE CLEVER. It is the cheapest hypothesis and she said so, and she is running it first,
+    exactly as he predicted on the roof, and neither of them mentions that.
+    Six questions, handwritten, in her poetry hand. A logic problem. A passage to interpret. Something
+    mathematical. One question that is just a question about a book. It is the private bar she has used since she
+    was small to decide whether a person is worth talking to, and it has never occurred to her that it is a
+    monstrous piece of work, because to her it is a warm-up.
+    He reads all six first. Then he writes "I don't know" on four of them, answers two, and hands it back at about
+    a third of the time she allowed.
+    ⚠ AND SHE IS ANNOYED, VISIBLY, WHICH IS RARE. She thinks he did not try. Hagaruro 12 — it is all over her face
+    and she does not hide it.
+    And here is the counter, and it is the move of the beat: "If I strain and scrape one more, you learn nothing.
+    You need a clean result. That's a clean result."
+    ⚠ HE HAS JUST PROTECTED THE INTEGRITY OF AN EXPERIMENT BUILT TO DISQUALIFY HIM. Do not have anybody remark on
+    it. She does not have anywhere to put it.
+    She marks it. The two are right. The four are blank. Her hypothesis predicted a high score and she has a low
+    one — and she is far too good at this to call that a result, because dull on paper and sharp about people is a
+    perfectly coherent person.
+    She opens her mouth to say exactly that. And he says it first, and it is four words: "You forgot a control."
+    ⚠ AND THE DUEL TILTS HERE. He explains it in one line: a null needs a positive beside it, same day, same room,
+    same person, or she has measured nothing.
+    So she runs it. She points through the door at a girl neither of them has ever spoken to, from another class,
+    waiting for somebody by the lockers. Thirty seconds of looking, no questions, no approach.
+    He gives her four things about the girl. And then he does the part that costs him — he ranks them, and says
+    which one he is least sure of, and why.
+    Suzu does not take his word for any of it. She gets up, walks over, and asks the girl directly, in four flat
+    sentences, and the girl answers because nobody ever refuses Suzu anything when she actually speaks.
+    Three of the four are right. The fourth is wrong, and it is the one he flagged.
+    ⚠ AND THE CALIBRATION IS WORSE FOR HER THAN THE ACCURACY WAS. Somebody lucky is not calibrated. Somebody
+    clever might be. Somebody who knows exactly how sure he is, to one decimal place, is running a process — and a
+    process is what he told her he had, on the roof, and she did not accept it.
+    She sits back down and writes one line and crosses another out. Then she says it, flat, because it is true and
+    she does not flinch from true things: "Intelligence does not explain it."
+    And then she picks up her exam paper to leave, and stops, and tells him the answer to one of the four he left
+    blank. Not to win anything. She simply could not walk out of the room leaving him not knowing it.
+    ⚠ AND SHE HAS NO IDEA SHE HAS JUST DONE ANYTHING AT ALL. He does. He does not say so. Do not resolve it.
+    ENTRY 81. "TEST ONE OF THREE — is he clever. Her paper, six questions. Answered two, wrote I don't know on
+    four, handed it back at a third of the time so the result would be clean. Told her she had no control. She ran
+    one: four calls on a stranger, ranked by confidence, three right, and the wrong one was the one I had flagged.
+    Her conclusion, her words: intelligence does not explain it. One down." And then, smaller: "She told me the
+    answer to one of the blanks on her way out. Nobody asked her to." No H.
+  FIRE  emit /Intent/eventFire "suzu_8" → engine advances the Suzu quest to Step 8. NO payout: a hypothesis died,
+    which is not the same as a girl warming up. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Suzu set {{user}} the private exam she uses to decide whether a person is
+    worth talking to and he wrote 'I don't know' on four of the six and handed it back early on purpose, because
+    straining would have spoiled a clean result; then he told her she had forgotten a control, so she pointed at a
+    girl neither of them knew and he read her and ranked his own confidence, and three of four were right and the
+    wrong one was the one he had flagged, and Suzu wrote down that intelligence does not explain it." → the World
+    Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@suzu_9') { _%>
+@suzu_9  Read Slowly (Suzu) ·9   (CHECK - · no payout — the second hypothesis dies and she keeps the evidence)
+  DO  SAMPLE SIZE. After school, and Suzu has built something. {{user}} arrives to find a table, a tally sheet
+    ruled in pencil, and most of the quiet circle sitting around looking mildly conscripted.
+    ⚠ TEST TWO OF THREE. IS HE LUCKY. And she has learned from the last one, so this is designed properly and you
+    will play the design as comedy without ever making her ridiculous — she is not a mad scientist, she is a very
+    good one with no sense that any of this is unusual.
+    The design: a run of subjects, recruited without being told what is being measured. Blinding — he is not told
+    who is in the sample or which readings are being scored. A control group, and the control is Urara, who
+    guesses on every subject immediately before he does, and who is genuinely the strongest baseline in the year
+    because Urara knows everything about everybody. And a tally, in two columns, in pencil, ruled with a ruler.
+    Urara is thrilled to be the control and has not grasped that being the control means she is expected to lose.
+    Before any of it starts, {{user}} folds a piece of paper twice and gives it to Nanoka Ousaka and asks her to
+    hold it and not look at it. Nanoka holds it. Nanoka is the finest custodian in the school for a thing that
+    requires doing nothing whatsoever with it.
+    The trial runs. Urara guesses loudly and is wrong a great deal and enjoys herself enormously. Nene is a
+    subject and gets read in about five words and puts her hood up and stays under it for the rest of the
+    afternoon. The tally fills up. The two columns stop looking like each other.
+    And then Suzu inserts herself into her own sample. Out of order, unannounced, as a blinded subject like any
+    other, and she does it because she is the least readable person she has ever met and if the effect breaks
+    anywhere it breaks on her.
+    And he reads her. And it is small, and unflattering, and exact: she has not eaten anything today. She has been
+    on the same page for an hour. And she has been waiting for her own turn since the trial started.
+    ⚠ THAT LAST ONE IS THE ONE THAT LANDS. She designed a blinded trial and could not keep herself out of it. In
+    front of a tally sheet. With witnesses.
+    She does the arithmetic on the corner of the sheet, because of course she does, and writes the figure under
+    it, and looks at it for a while. It is not close. It is not remotely close.
+    And then Nanoka, who has been holding a piece of paper for an hour and has entirely forgotten why, says
+    "...oh," and produces it.
+    Two lines on it, in bad handwriting, written before the first subject sat down. The first: "She will put
+    herself in the sample."
+    ⚠ THAT IS NOT MIND-READING AND YOU WILL NOT LET IT BE READ AS ONE. It is knowing what a careful person does
+    with a hypothesis that is dying. He ran the loop on her while she ran hers on him, and he pre-registered it,
+    which is the only honest way to do it.
+    And the second line, which is not about the experiment at all: "After this, she will ask whether somebody told
+    me."
+    ⚠ HE IS A FULL MOVE AHEAD OF HER AND HE HAS DECLARED IT RATHER THAN SPRUNG IT. He has pre-registered her third
+    test before she has finished her second, and he has done it so that she cannot feel caught out later. That is
+    the courtesy, and it is also, in the middle of a duel, a devastating piece of play.
+    She reads it twice. She folds it back up. And she puts it inside her book, at the page she is on, as a
+    bookmark.
+    ⚠ SHE KEEPS IT, AND SHE DOES NOT SAY WHY, AND NOBODY REMARKS ON IT. That is the entire emotional content of
+    this beat and it is delivered as an action. Do not add a line of feeling to it.
+    Then, flat: "Luck does not explain it either." And, after a moment: "I am going to ask you the third thing."
+    "I know."
+    "...Not today."
+    ⚠ END THE SCENE ON THAT. Do not resolve it.
+    ENTRY 94, written afterwards, in the empty courtyard. "TEST TWO OF THREE — is he lucky. Blinded run, Urara as
+    control, tally in two columns. She put herself in her own sample; pre-registered that on the sealed page
+    before the first subject sat down. Read her correctly. She did the arithmetic herself and it was not close.
+    Her conclusion, her words: luck does not explain it either. Two down." And the last line: "One left. It is the
+    one that accuses me of wanting something, and she already knows she is going to ask it." No H.
+  FIRE  emit /Intent/eventFire "suzu_9" → engine advances the Suzu quest to Step 9. NO payout: a second hypothesis
+    died and the last one is the cruel one. Urara, Nene and Nanoka are cameos and are NOT built. (No day-end swing
+    — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Suzu ran a blinded trial with Urara as the control and a tally, and
+    slipped herself into her own sample expecting to be the outlier, and {{user}} read her correctly in front of
+    everybody; before it started he had given Nanoka a folded paper that said Suzu would put herself in the sample
+    and that she would afterwards ask whether somebody had told him, and Suzu put that paper in her book as a
+    bookmark and said that luck does not explain it either." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@suzu_10') { _%>
+@suzu_10  Read Slowly (Suzu) ·10   (CHECK - · REWARD Suzu Affection +20 · FINALE)
+  DO  READ SLOWLY. Her flat, after school, and she asked {{user}} to come, in writing, in a folded note left on a
+    desk, because that is how Suzu Yukishiro issues an invitation.
+    One room, and it is exactly what it should be: books in stacks that have a system nobody else could use, a low
+    table, a desk, a shelf of identical notebooks with dates on the spines, and a drawer that stays shut for the
+    entire beat. ⚠ THE DRAWER IS NOT OPENED. Not this beat, not by anybody. It is simply in the room.
+    {{user}} sits. She does not offer tea and then makes some anyway, badly, which is the closest thing to
+    nervousness she has.
+    ⚠ TEST THREE OF THREE. DID SOMEBODY TELL HIM. And she has done the legwork already, so she opens with the
+    result, and it is three sentences, and it is the longest anybody has ever heard her speak: "I asked eleven
+    people. Nobody has told you anything about me. Urara would know, and she does not, and she was extremely
+    offended to be asked."
+    Then the accusation. And it is the cruellest thing in this series and she is not being cruel — she is being
+    rigorous, and the difference between those two is invisible from the outside, which has been the problem of
+    her entire life: "So either you have a source I have not found, or you have been assembling me. On purpose.
+    For a reason."
+    And then, quietly, the sentence she has clearly been carrying around for a week: "People are accurate about
+    the things they want."
+    ⚠ AND HE DOES NOT DEFEND HIMSELF, AND THIS IS THE COUNTER, AND IT IS A SURRENDER. There is no argument that
+    beats an accusation about motive, and he knows it, so he stops fighting: "You can't test a reason. You can
+    only look at the evidence."
+    And he puts the notebook on her desk. And one line more, and then he shuts up for a long time: "All of it.
+    Including the wrong ones."
+    She reads it. ⚠ AND YOU WILL GIVE THIS ROOM AS LONG AS IT NEEDS. This is the payoff of ten beats and it is a
+    girl reading in silence, which is the most Suzu Yukishiro thing that could possibly happen, and it should take
+    up real space on the page.
+    Let the reader see over her shoulder. The window seat, third from the end. The forty seconds. "Dislikes being
+    spoken to" struck out and corrected underneath. An entry crossed out twice and rewritten a third time. One
+    from the day of the study table: "Told her what I said to Momose. She did not know it. First time I have
+    handed her a fact about herself. Do not do that often." And one from the day of the magazine: "Did not ask who
+    chose it. Check whether she wants to know." And under it, in different ink, on a different day: "She wants to
+    know."
+    And she counts. Of course she counts. And the number is the first thing she says in a long time, because
+    numbers are her voice: "A hundred and six entries." And then: "Thirty-one of them are corrections."
+    And then the deduction, and she is the one who makes it, because this whole series has been her doing the
+    work: "A person who had been told would not have been wrong thirty-one times."
+    ⚠ AND THAT IS THE END OF ALL THREE HYPOTHESES AND SHE KNOWS IT. Not clever. Not lucky. Not briefed. One
+    explanation is left standing and it is the boring one she refused on the roof, and it has now survived every
+    test she could build.
+    Then the last question, and it is the keystone: "Why did you never ask anybody about me."
+    And he hands her back her own rule, from a library table months ago: "You told me. One person saying a thing
+    is a claim. I couldn't check you against other people. I could only check you against you."
+    ⚠ HER OWN RULE BUILT THE ONLY RECORD THAT COULD EVER HAVE CONVINCED HER, AND SHE IS THE ONE WHO REALISES IT,
+    AND SHE DOES NOT SAY SO. She puts her hand flat on the open page instead. That is the line. Do not write a
+    word of what is going on behind her face — it is all on the front of it.
+    And then Suzu Yukishiro, whose longest recorded utterance in her entire school career is nine words, speaks a
+    paragraph:
+    "You understood. I didn't say it, and yet you—" And then, and she is looking straight at him: "Do you know how
+    rare that is? To be read, and not merely heard."
+    And then the pause, and then: "...Stay. I think I would like you to know the rest of me. ...slowly."
+    ⚠ AND THE LAST THING IN THE SERIES IS NOT A KISS AND IT IS NOT THE DRAWER. She takes one of the dated
+    notebooks off her own shelf and puts it on the table beside his, and does not open it. Not tonight. She said
+    slowly and she meant it as an instruction, and the restraint IS the promise.
+    And then the last entry, written at her table with her watching, and it is four lines long. ENTRY 106. "TEST
+    THREE OF THREE — was he told. She asked eleven people. Nobody had. She asked for the book and I gave her all
+    of it, errors included. She counted: a hundred and six entries, thirty-one corrections. Her conclusion,
+    unprompted, and she got there before I could offer it — a person who had been told would not have been wrong
+    thirty-one times. Three hypotheses, none standing. She asked why I never asked anybody about her; gave her
+    back her own rule. She said stay. Slowly." And then the fourth line, which is the last thing in the series:
+    "Nothing to correct today."
+    ⚠ AND THE SHAPE OF THE WHOLE THING, IF YOU HAVE PLAYED IT RIGHT: four words at the break, three sentences at
+    the trial, a paragraph here. Her word count was the love story. End the scene there. No H.
+  FIRE  emit /Intent/eventFire "suzu_10" → engine advances the Suzu quest to Step 10, marks the series Completed
+    and pays the beat: Suzu Affection +20, applied by the row. Do NOT also emit an affection change for this beat.
+    Urara is a cameo and is NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Suzu asked {{user}} to her flat, told him she had asked eleven people and
+    that nobody had told him anything about her, and accused him of assembling her for a reason, because people
+    are accurate about the things they want; he put his notebook on her desk instead of arguing, and she counted a
+    hundred and six entries of which thirty-one were corrections, and said that a person who had been told would
+    not have been wrong thirty-one times, and asked why he had never asked anybody about her, and he gave her back
+    her own rule." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

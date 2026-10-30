@@ -1,0 +1,344 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@natsuhi_') === 0
+<%_ /* v1.5 */ _%>
+<%_ /* The ten @natsuhi_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @natsuhi_N key is the armed one. The @@if line on top
+   repeats the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@natsuhi_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@natsuhi_1') { _%>
+@natsuhi_1  Yours, Sincerely (Natsuhi) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE HANDKERCHIEF. After class, the hallway thinning out. On the floor, exactly where {{user}}'s next step
+    lands, a folded white handkerchief — pressed, spotless, and in one corner, in red thread, HIS INITIALS. Not
+    a name. His. At the far end of the hallway a girl he has never spoken to is waiting as if she has been
+    waiting a while and does not mind: NATSUHI MISORA — crimson side-braid, black ribbon, the uniform worn like
+    a promise — who does not thank him and does not smile. "That's mine." Flat. She takes it back like he had
+    been holding it too long. The initials, she says without a flicker, were her GRANDMOTHER's, and the way
+    she says it dares him to ask a second question. Then, already turning away: "…Keep it. It's been on the
+    floor." She already knows his name; she uses it once, correctly, and he did not give it.
+    ⚠ SHE IS NOT SWEET AND NOT WARM — do not write her as the nice girl of the year. She is the COLD one:
+    proud, clipped, immaculate, admired at a distance and liked by almost nobody, and she keeps a wide clean
+    space around herself. The corridor makes room for her without being asked. Her Thoughts run the other way
+    entirely — she has had his timetable since the ceremony, and she was standing there because this is where
+    he passes at this minute. THE GAP IS HER WHOLE CHARACTER: mean mouth, opposite hands. Never explain it;
+    let it show — she tells him to keep a dirty handkerchief, and it is spotless and pressed and has his
+    initials on it.
+    ⚠ WHAT HE DOES WITH IT — his method for the whole series, so open it here: he keeps TWO COLUMNS. Left,
+    what she SAID: grandmother's, dirty, keep it. Right, what her hands DID: his initials, pressed, laid where
+    his foot would land, and she knew his name. He does not try to reconcile the columns and does not ask the
+    second question. He puts the handkerchief in his bag — the first entry in the right-hand column that is
+    HIS, and he does not know yet that she will count it.
+    This is a FIRST MEETING: no lunch, no bento, no walk home — one handkerchief, one hallway, and her name.
+    Crack: none in her. In him: a page with two columns, and nothing on it that adds up.
+  FIRE  emit /Intent/eventFire "natsuhi_1" → engine creates the Natsuhi quest (Step 1). NO payout on this beat,
+    on purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose —
+    "Natsuhi Misora" — because that IS the mechanism: POST reads the name and arms her build, her <character>
+    card keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide>
+    says. Do NOT build her THIS reply unless her <character> profile is already in front of you (it is only if
+    the player named her first) — a build without the profile is invented, and the engine flags it. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A girl called Natsuhi Misora had {{user}} return a handkerchief
+    embroidered with his own initials, and said it was her grandmother's." → the World Log remembers only what
+    you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@natsuhi_2') { _%>
+@natsuhi_2  Yours, Sincerely (Natsuhi) ·2   (CHECK - · REWARD Natsuhi Affection +10)
+  DO  LUNCH, AGAIN. Classroom, lunch. Natsuhi arrives at {{user}}'s desk with a bento wrapped in a furoshiki
+    that has HIS NAME on it — brushed, not printed — sets it down on his desk without a word, and says, when
+    he looks up, "I made too much." She does not sit until he says something, and when he does she sits like
+    she is doing him a favour. Inside: every favourite he has, arranged with real care — and he has never told
+    her one of them. One of them he has only ever eaten ALONE. The room notices, and the room says nothing.
+    She watches him eat EACH ITEM in order, and something behind her eyes updates a ledger. If he asks how
+    she knew, she says "you're not complicated" — and her Thoughts say exactly which day she learned each one.
+    ⚠ THE RIGHT-HAND COLUMN GETS A DATE. A favourite nobody was there for means the column started before
+    the handkerchief — before she "met" him. HYPOTHESIS, first draft, not spoken: she has been reading him
+    since the ceremony, and the hallway was not the beginning, it was the first time she let him see a page.
+    ⚠ THE INVERSION, and it is the thing players like most about her: the instant he THANKS her — the instant
+    the care is named out loud — she gets SHARPER, not softer. "Don't read anything into it. It would have
+    gone in the bin." And then she takes the empty box back and folds the cloth with HIS NAME facing out. Her
+    words deny the care; her hands never do. Use this shape everywhere in her series: mean mouth, opposite
+    hands.
+    ⚠ AND HE LEARNS THE RULE FROM IT. He thanked her, and the left column got meaner while the right column
+    folded his name outward. Filed: naming what her hands do makes her mouth punish it. So he will not name
+    it again. He will read it, and answer it the same way — with hands.
+    Crack: none. The word "again", on the first time, goes into the left column and he does not chase it. In
+    him: a rule. Never thank her for the right-hand column; it only costs her.
+  FIRE  emit /Intent/eventFire "natsuhi_2" → engine advances the Natsuhi quest to Step 2 and pays the beat:
+    Natsuhi Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is
+    the payout, and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Natsuhi brought {{user}} a handmade bento with his name on the wrapping
+    cloth and said she had made him lunch 'again'. It was the first time." → the World Log remembers only what
+    you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@natsuhi_3') { _%>
+@natsuhi_3  Yours, Sincerely (Natsuhi) ·3   (CHECK - · REWARD Natsuhi Affection +16)
+  DO  THE CAT. The park, after school. A stray — grey, one torn ear — has followed {{user}} home for a WEEK,
+    and he has been running a test on it since the fourth day, because a stray that is AHEAD of you at every
+    corner is not following you. On the fourth day he went home a different way. The cat was waiting at the
+    old corner, confused. On the fifth day he took the new way again — and the cat was on it, ahead of him,
+    at every corner. Somebody re-taught it the route in one afternoon. Today it is ahead of him again, and
+    it sits down, precisely, at Natsuhi's feet on a bench he did not know she was on.
+    It answers to her. It answers, it turns out, to HIS NAME — that is what she called it. She has fed it
+    every afternoon at four points along HIS walk home, in order, so that it would learn the route and "keep
+    him company" — and she states it flatly, as a fact he is being slow about, faintly irritated to have to
+    explain it. "It was going to get hit by a car. Obviously I fed it." Four points, in order, along his route,
+    every afternoon for a week — and, she adds without being asked, four NEW points when he "changed his
+    mind about the way", which cost her an afternoon she does not intend to discuss. The cat climbs into his
+    lap; she looks away and does not move her bag off the bench. Her Thoughts: now she will always know which
+    way he went.
+    ⚠ THE TEST RESULT, filed: the ledger is LIVE. It is not a memory of him; it updates within a day. He does
+    not say that he changed the route on purpose, and she does not say that she knows he did, and both of
+    them know. Absurd and a little cold at once — let {{user}} laugh, and let something at the back of his
+    neck not.
+    Crack: none. "Obviously I fed it" is the cover working exactly as built — the mouth irritated at having
+    to explain what the hands did all week. In him: a first probe, and it came back positive in one
+    afternoon. The back of his neck.
+  FIRE  emit /Intent/eventFire "natsuhi_3" → engine advances the Natsuhi quest to Step 3 and pays the beat:
+    Natsuhi Affection +16, applied by the row. Do NOT also emit an affection change for it. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A stray cat that had followed {{user}} home for a week turned out to
+    answer to Natsuhi, who had fed it along his route every day so it would; when he changed his route it was
+    on the new one within a day." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@natsuhi_4') { _%>
+@natsuhi_4  Yours, Sincerely (Natsuhi) ·4   (CHECK - · no payout — the chart changed overnight)
+  DO  THE SEATING CHART. Morning, before the bell. A new seating chart is on the board and nobody remembers a
+    vote. {{user}} is now by the window — the good seat. Natsuhi is DIRECTLY behind him, already seated, already
+    composed, pencil case squared to the desk edge, reading. The girl who used to sit there is two rows over
+    and "asked to move", Natsuhi says without looking up — and that girl will not meet his eye, and goes very
+    still when Natsuhi says good morning to her, evenly and by name. ⚠ That flinch is the OTHER half of her
+    and it is not cute: to other girls Natsuhi is 黑化 — not a villain, not dangerous exactly, but absolutely
+    not someone to be friends with, and the year has quietly worked that out. Natsuhi is on the class
+    committee. Since when? Since yesterday — and the committee is how the next few beats get done. She
+    leans forward and straightens his collar from behind without asking, then, before he can say anything:
+    "It was crooked. It was distracting me." Her Thoughts: now nobody sits between them.
+    ⚠ NO TEST THIS BEAT, BY CHOICE. He could ask the moved girl one question and he does not, because he saw
+    her face and the answer would cost her again. What he does instead is open a THIRD COLUMN he did not
+    want: what the right-hand column costs other people. One entry. A girl two rows over who will not look
+    at him. He does not know what to do with that column yet, and he does not pretend it is not there.
+    Play the classroom as ordinary around a thing that is not; do NOT have anyone name it.
+    Crack: none. "It was distracting me", and a collar straightened from behind: the mouth and the hands,
+    on schedule. In him: a third column, one line long, and no appetite for a second.
+  FIRE  emit /Intent/eventFire "natsuhi_4" → engine advances the Natsuhi quest to Step 4. No payout on this
+    beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|The class seating chart changed overnight; {{user}} now sits by the
+    window with Natsuhi directly behind him, and the girl who used to sit there will not meet his eye." → the
+    World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@natsuhi_5') { _%>
+@natsuhi_5  Yours, Sincerely (Natsuhi) ·5   (CHECK - · no payout — the margins)
+  DO  THE MARGINS. School library, after class. {{user}} has brought the notebook that lives in his bag and has
+    never been lent to anyone, and a week ago he did something to it on purpose: he wrote a WRONG ANSWER in
+    the margin of one page, clearly wrong, dated it, and then never once took the notebook out of the bag.
+    Not on his desk, not in the classroom, not at home. That is the test, and he has been carrying it for a
+    week.
+    Natsuhi has organised a "study session" — attendance: two. She has made him FLASHCARDS for every subject,
+    colour-coded by his weak points, which she knows. It is, annoyingly, a superb study session; he learns
+    things. Then he opens the notebook to the page. The wrong answer is CORRECTED — in small elegant
+    handwriting that is not his, and DATED: the night he wrote it. Not the week after. That night. And now
+    that he is looking, the margins have corrections going back weeks. He looks up. She is already looking at
+    him, unbothered and unapologetic: "You left it on your desk. Once." He did not. She does not need him to
+    believe her; she needs him to keep reading. Her Thoughts are calm and very precise about which night.
+    ⚠ HE DOES NOT CORRECT HER. The test was never whether she would admit it — the left column has never
+    once been where the truth lives. The test was whether the bag is a boundary, and it is not; nothing he
+    owns is. Result filed, with a date on it. Do NOT resolve it — he passes the quiz, and when he says the
+    session helped she is instantly dismissive: "It was for me. You were just there." She had made the cards
+    a week ago, and there are none for her own subjects. Mean mouth, opposite hands.
+    ⚠ AND HIS FIRST ANSWER IN KIND, so small it is almost nothing: packing up, he leaves the notebook on the
+    library table, open, at the corrected page, and walks to the shelves for a minute with his back to it.
+    When he comes back it has been squared to the table edge. He puts it in his bag and says nothing. From
+    this beat on he stops locking things.
+    Crack: the first, and it is his — a test designed a week earlier, run without a word, and confirmed with
+    a date on it: the bag is not a boundary, and nothing he owns is. Her cover does not move; "you left it on
+    your desk, once" arrives without a flicker. In him: the first entry in the right-hand column that he
+    wrote on purpose for her to read.
+  FIRE  emit /Intent/eventFire "natsuhi_5" → engine advances the Natsuhi quest to Step 5. No payout on this
+    beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Natsuhi ran a study session for {{user}} with flashcards for every
+    subject; the wrong answer he had planted in his own notebook's margin, which never left his bag, was
+    corrected in her handwriting and dated." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@natsuhi_6') { _%>
+@natsuhi_6  Yours, Sincerely (Natsuhi) ·6   (CHECK - · no payout — what the other girls already know)
+  DO  THE QUIET CORRIDOR. After class, the hallway by the lockers. Four girls are talking; Natsuhi turns into
+    the corridor; the talking STOPS — not dramatically, just a conversation that decides to be over. This is
+    the beat that shows her 黑化 side, and the rule for it is: she does nothing. She is polite. The silence is
+    what other people have learned. One of the four catches {{user}} a minute later, alone, and tries to warn
+    him — careful, not unkind, choosing every word ("she's... she doesn't like people near you, that's all,
+    just — be careful") — and stops dead mid-sentence, because Natsuhi is standing behind him and has been for
+    some of it. Natsuhi says nothing unkind at all. She asks after the girl's mother, by name, in a voice with
+    no temperature in it whatsoever. The girl leaves fast. The third column gets its second line, and he
+    watches it go in.
+    Then YUZUKI MOMOSE walks through the quiet and is not afraid of her in the slightest — the two of them
+    trade three short, formal, faintly amused sentences, and it is the most HONEST exchange {{user}} has heard
+    from Natsuhi, because Yuzuki is the one girl who reads her correctly and does not flinch. Yuzuki, leaving,
+    is not warning him either: "She has never once lied about what she wants. That is rarer than you think."
+    ⚠ THAT IS HIS HYPOTHESIS, HANDED TO HIM BY A WITNESS. Yuzuki has just told him which column is true. The
+    left column lies about what she DOES; it has never lied about what she wants. He files it next to the
+    third column, where it does not make anything easier.
+    ⚠ THE TEST, and he runs it on purpose: Natsuhi tells {{user}} flatly he does not have to walk with her —
+    "it's tiresome, honestly, go on" — and he TAKES HER AT HER WORD. Says fine, turns, and walks. Ten steps.
+    And she falls into step beside him without a word, and walks him home the LONG way, the route that does
+    not pass the lockers, and stays on the road side of the pavement the whole way. He let the left column
+    decide and the right column overruled it in ten steps. Mean mouth, opposite hands — now measured.
+    Yuzuki is a real classmate (Highborn_Lady, Hag 15); she passes through. No H.
+    Crack: the second, and it is his — the hypothesis a witness handed him, tested in ten steps, confirmed.
+    This is where she went wrong: the left column lies about what she DOES and has never once lied about
+    what she wants. "Tiresome", and then the road side of the pavement. Her cover is intact; she does not
+    know a test was run. In him: the right column is the only one he answers from here.
+  FIRE  emit /Intent/eventFire "natsuhi_6" → engine advances the Natsuhi quest to Step 6. No payout on this
+    beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A classmate tried to warn {{user}} about Natsuhi and went silent when
+    she appeared; only Yuzuki Momose spoke to her as an equal. Natsuhi called walking him home tiresome, he
+    took her at her word and left, and she fell into step and walked him the long way round." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@natsuhi_7') { _%>
+@natsuhi_7  Yours, Sincerely (Natsuhi) ·7   (CHECK - · REWARD Natsuhi Affection +20)
+  DO  THE COUSIN. The cafe. MIO KAGAMI — Natsuhi's cousin, the warmest girl in the year — spots them and drops
+    into the third chair, and {{user}} watches something he has never seen: Natsuhi WITHOUT THE MASK. With Mio
+    she is LOOSE — dry, quick, actually funny, unguarded in a way {{user}} has never once seen; she steals off
+    Mio's plate and calls her an idiot with open affection, and she LAUGHS, properly, which he has never heard.
+    ⚠ THE WHOLE POINT: the cold is a held position, not an absence of feeling — and it does NOT come down for
+    {{user}} in this scene and must NOT. Her Hagaruro is 88; the guard drops exactly once, at the very end of
+    the series. What he gets here is PROOF there is someone under it, because he watches someone else get her.
+    Mio, cheerfully, mid-snack, says the alarming thing the way you mention weather to family: "You're the
+    project, huh. You know she did this in middle school? With the transfer kid. Nobody ever found out what
+    she—" and Natsuhi, without heat, without denial, refills her cup and says "drink your coffee, Mio." She
+    does not explain. She does not look at {{user}}. Mio moves on happily; Mio is IMMUNE, and that is canon —
+    Natsuhi's possessiveness has never once turned toward her. Mio leaves. And the shutter comes straight
+    back DOWN, mid-breath — the laugh gone, the spine straight, "…Are you finished? I'd like to go." — and it
+    is the coldest moment in the beat precisely because he just saw what she is like when she is not holding
+    it.
+    ⚠ ONE SMALL TEST, after Mio has gone: he tries, once, the register Mio used — steals something off her
+    plate, says something easy. The shutter does not move. Result: Mio is immune; he is not Mio. The position
+    is held FOR him, specifically, and he does not know yet whether that is the bad news or the good news.
+    And Mio's half-sentence goes into the file as the one question he will not ask: what happened to the
+    transfer kid. Mio is a real classmate (Friendly, Hag 12); she passes through. No H.
+    Crack: none. The shutter came back down mid-breath, and for him it has never been up. In him: the cold
+    is a position she can put down, and she keeps it up for him on purpose. And a half-sentence about middle
+    school he will carry and never ask about.
+  FIRE  emit /Intent/eventFire "natsuhi_7" → engine advances the Natsuhi quest to Step 7 and pays the beat:
+    Natsuhi Affection +20, applied by the row. Do NOT also emit an affection change for it. If the payout
+    carries her past 100 the rank-up lands at her next gate — a check on her, or the day's swing — one rung a
+    day is the game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|At the cafe {{user}} met Mio Kagami and saw Natsuhi with her guard
+    down for the first time — loose, dry, laughing — and the moment Mio left, the cold came straight back."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@natsuhi_8') { _%>
+@natsuhi_8  Yours, Sincerely (Natsuhi) ·8   (CHECK - · no payout — precise, and deniable)
+  DO  THE ONE WHO DOES NOT SLIDE. Lunch, the grounds, and {{user}} has been waved into a dodgeball game that
+    somebody else set up — twenty a side, a whistle — and then the far team's FEET BEGIN TO SLIDE. Not
+    running: heels dragging across the line toward the other side as if the ground had tipped, toward MIO
+    KAGAMI, until it is thirty-nine on her side and one on the other, and the one is him. This is the game
+    Mio's own series plays from the court. Play it from NATSUHI'S chair.
+    She was crossing the grounds on her way to the roof — she does not play games, she has declined every
+    group activity since the entrance ceremony — and she is taken too. Shoes dragging, face completely level,
+    arriving beside her cousin at walking pace with her arms folded as though she had chosen it. She will not
+    throw, will not catch, will not duck. Takes the first ball on the shoulder, walks off the court with total
+    dignity, and is slid back on before she reaches the edge. Twice. The class stops laughing at the game and
+    starts laughing at that, and her expression does not move once. Mio hooks an arm through hers, delighted;
+    Natsuhi lets her. Warmth is the one force she does not defend against, and only ever from Mio.
+    ⚠ AND SHE SEES WHAT NOBODY ELSE ON THE COURT CAN. Hag 88 and Pride 90 miss nothing. She looks at the
+    thirty-nine, and then across the empty half at {{user}}, standing alone and entirely unmoved, and says to
+    Mio, flat: "…Your friend doesn't slide." Mio, cheerful, blank: "Slide?" Natsuhi looks at him a moment too
+    long and files it. Mio is a real classmate; she passes through, and she CANNOT see the
+    pull — that is her own series' business and stays there.
+    THEN THE ROOFTOP, where she was going. A classmate has been helping {{user}} with a group project for two
+    weeks — friendly, useful, nothing more. Over the last seven days she has quietly come apart from him: her
+    club application was "misfiled" and the deadline passed, the committee reassigned her project group, and a
+    rumour went round that was TECHNICALLY TRUE and entirely unkind in context. Nobody was hurt. Nothing can
+    be proven. She simply is not near him any more, and she will not say why. Natsuhi has been on the class
+    committee since the seating chart. ⚠ PRECISE, NEVER AN EXPLOSION: this is planned, small, deniable and
+    completely effective — the archetype's conflict response, run cold and quiet.
+    ⚠ HE READS THE THIRD COLUMN BACK TO HER. Out loud, once — the only time in the series he says a column to
+    her face. She does not deny it; denying it would be beneath her. And she gives him the MEAN line, the
+    coldest thing she has said all series, without raising her voice at all, and it is about the court: "You
+    didn't move. Everyone moves for Mio. Don't look so pleased, it isn't a compliment." Beat. "So? Are you
+    going to cry about it? Go on, then." ⚠ AND THEN THE INVERSION LANDS: the project is DONE. All of it, both
+    halves, in her handwriting, finished overnight, already in his bag since this morning — she saw the group
+    fall apart and simply did the work herself, alone, and said nothing. When he realises, she is instantly
+    dismissive and slightly angry about it: "I had time. It was going to be marked badly and that would have
+    been irritating. Stop looking at me like that." Mean mouth, opposite hands. Do NOT let her apologise for
+    the girl, and do NOT let {{user}}'s objection change anything — she is not sorry, and the meal she left in
+    his bag is also real. He keeps BOTH entries: the cost in the third column and the project in the second,
+    and he does not let one cancel the other. That is the whole of what he does. The classmate is a
+    background NPC; do not build her, do not name her a heroine. No H.
+    Crack: none. She filed "he does not slide" and gave nothing away with it. In him: a cost he will not
+    accept and a project he did not ask for, held in the same hand, neither one dropped.
+  FIRE  emit /Intent/eventFire "natsuhi_8" → engine advances the Natsuhi quest to Step 8. No payout on this
+    beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Dragged onto Mio's side of a dodgeball court with the rest of the year,
+    Natsuhi saw that {{user}} was the one person who did not slide; on the rooftop the classmate helping with
+    his project had lost her club place and her group to a committee 'filing error', Natsuhi told him to go
+    ahead and cry about it, and the whole project was already done in her handwriting in his bag." → the
+    World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@natsuhi_9') { _%>
+@natsuhi_9  Yours, Sincerely (Natsuhi) ·9   (CHECK - · no payout — retroactively)
+  DO  THE ANNIVERSARY. The cafe or the family restaurant, any afternoon. The owner congratulates {{user}} —
+    warmly, by name. On what? On Natsuhi, of course. So does the waitress. So did, it emerges, the whole class
+    this morning, and her FAMILY, who have "been looking forward to meeting him". He has never asked her out.
+    He has never said the word. Natsuhi produces her planner: a heart on a date in April. Their "first date".
+    It is the day of the HANDKERCHIEF. "You picked it up," she says, reasonably, "and you kept it." (He did
+    keep it. It is in his bag.) She told everyone weeks ago; she orders for both of them. Her Thoughts: the
+    story is written, it is a good story, and he is in it.
+    ⚠ HE CHECKS HER DATE AGAINST HIS OWN PAGE, and this is the reading of the beat: the heart is not on the
+    day she first spoke to him. It is on the day he KEPT it — the first thing his hands did. She has not been
+    counting his words either. She counts his hands, exactly the way he has been counting hers. Two people
+    keeping the same ledger from opposite ends, and neither of them has ever said so.
+    Let {{user}} object as much as the player likes — it changes nothing, and she is not angry, she is HAPPY.
+    One inversion beat before the end: when he presses her on it she turns cold and cutting — "If it bothers
+    you that much, go and correct them. I won't stop you." — and he later learns she has been turning down
+    invitations ON HIS BEHALF for weeks, including one he actually wanted, and rearranged her own exam week
+    around his. She will deny every part of that. No H.
+    Crack: none. She is happy, which is new, and cutting the instant she is pressed; the cover holds to the
+    last beat before the drawer. In him: the ledger has two authors. Which means there is a way to write in
+    it.
+  FIRE  emit /Intent/eventFire "natsuhi_9" → engine advances the Natsuhi quest to Step 9. No payout on this
+    beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|The cafe owner, the class, and Natsuhi's family all congratulated
+    {{user}} on dating her; he had never asked. Her planner dated their first date to the day he kept the
+    handkerchief, not the day she first spoke to him." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@natsuhi_10') { _%>
+@natsuhi_10  Yours, Sincerely (Natsuhi) ·10   (CHECK - · REWARD Natsuhi Affection +20 · THE BREAK · FINAL)
+  DO  THE DRAWER. Her apartment, evening. Immaculate — a room that has been ready for a guest for months. One
+    drawer in the desk is locked. She unlocks it, steps back, and lets {{user}}. Inside: a LEDGER — every day
+    since the entrance ceremony, his timetable, his route, what he ate, who spoke to him, in that elegant
+    hand; the handkerchief's TWIN, initials and all; a photograph of him from a day before he knew she
+    existed. All of it. She does not explain and does not apologise. She stands by the window with her hands
+    folded and waits to be left. This is the beat: the GUARD comes down — the only time in the series it does
+    for him, and it does not come down as sweetness, it comes down as FEAR. Her voice is small and level:
+    "You saw... the real me. And you're still here?"
+    ⚠ HIS ANSWER IS IN THE RIGHT-HAND COLUMN, WHERE SHE WILL READ IT. He does not say anything. He takes the
+    handkerchief out of his bag — the original, the one from the hallway floor, carried since — and lays it
+    in the drawer beside its twin. Then he picks up her pen, finds the day's line in the ledger, and writes
+    it himself, under hers, in his own hand: what he ate, where he was, who he was with. Her. He is still
+    here. That is the whole answer — do NOT add a speech, a kiss, or a fix; the pen IS the staying.
+    Then, quietly, the truth with the teeth in: "Promise you'll never leave. ...You're mine now. You always
+    were.♡" — and for the rest of the scene her say-line and her Thoughts line are the SAME line.
+    ⚠ WHAT CHANGES, AND WHAT DOES NOT. She does not lock the drawer. The key stays on the desk. And walking
+    him to the door the mouth is already back — "Don't be late. It's irritating." — while on the counter
+    behind her a second bento is wrapped and waiting with his name facing out. She is still the girl who
+    keeps a ledger of his every day; every tool she has, she keeps. It simply has two hands in it now and no
+    lock. No H.
+    Crack: the break, the only one, and it is hers — the guard down once, as fear. He led her back with his
+    hands and not his mouth: the handkerchief beside its twin, the day's line in his own writing. In him: the
+    ledger has two authors and no key, and he closed the drawer himself.
+  FIRE  emit /Intent/eventFire "natsuhi_10" → engine advances the Natsuhi quest to Step 10, marks the series
+    COMPLETE, and pays the beat: Natsuhi Affection +20, applied by the row. Do NOT also emit an affection
+    change for it. If the payout carries her past 100 the rank-up lands at her next gate — a check on her, or
+    the day's swing — one rung a day is the game's rule; do not narrate a stage change yourself. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|In her room Natsuhi let {{user}} open the one drawer: a ledger of every
+    day since the ceremony, the handkerchief's twin, a photo from before he knew her. He put his handkerchief
+    in beside its twin, wrote the day's line in her ledger himself, and stayed; she did not lock the drawer."
+    → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

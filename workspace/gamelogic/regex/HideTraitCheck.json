@@ -1,0 +1,22 @@
+{
+  "id": "97608a3d-f526-47b5-ac02-19f5ca115242",
+  "script_name": "HideTraitCheck",
+  "enabled": true,
+  "find_regex": "/<classmate_trait_check>(?:(?!<classmate_trait_check>)[\\s\\S])*?</classmate_trait_check>/gm",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": true,
+    "prompt": false
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null
+}

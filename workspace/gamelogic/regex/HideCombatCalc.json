@@ -1,0 +1,22 @@
+{
+  "id": "c8aaf8de-c540-4e78-9c5e-d7195e5c1c8b",
+  "script_name": "HideCombatCalc",
+  "enabled": true,
+  "find_regex": "/<combat_calculation>(?:(?!<combat_calculation>)[\\s\\S])*?</combat_calculation>/gm",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": true,
+    "prompt": false
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null
+}

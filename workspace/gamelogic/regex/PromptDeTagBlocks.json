@@ -1,0 +1,23 @@
+{
+  "id": "968f85b6-ce24-4b36-8b17-533a0103b234",
+  "script_name": "PromptDeTagBlocks",
+  "enabled": true,
+  "find_regex": "/<Blocks>(?:(?!<Blocks>)[\\s\\S])*?<\\/Blocks>\\n*|<(World_State|Bonds)>(?:(?!<\\1>)[\\s\\S])*?<\\/\\1>\\n*/g",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": false,
+    "prompt": true
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null,
+  "prompt_rewrite_intended": true
+}

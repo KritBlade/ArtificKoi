@@ -1,0 +1,310 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@mitsuki_') === 0
+<%_ /* v1.4 */ _%>
+<%_ /* The ten @mitsuki_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an <Event_Body> block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @mitsuki_N key is the armed one. The @@if line on top
+   repeats the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@mitsuki_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mitsuki_1') { _%>
+@mitsuki_1  Next Door, Always (Mitsuki) ·1   (CHECK - · REWARD Mitsuki Affection +10)
+  DO  THE COOKIE TIN TRIBUNAL. Lunch, the classroom. {{user}} has been reading every new face in this room like a
+    case file since the ceremony — who sits where, who laughs at what, who is pretending — and it has never once
+    occurred to him to read the girl next door, because he assumes he already knows her. This is the beat where he
+    starts.
+    Mitsuki sets the cookie tin down in front of him like evidence and opens it: TWELVE cookies, no two the same
+    shape, no labels. She has been beta-testing on him since they were five, and today is the FORMAL REVIEW. He ranks
+    all twelve out loud, worst to best, and she writes each verdict inside the tin's LID — under thirteen years of
+    his earlier rankings, the oldest ones in crayon. One cookie is deliberately terrible (a control; she is very
+    proud of it). She watches his face far more than she watches the list.
+    Number nine has something in it: a folded square of paper, BAKED INSIDE, written in a small wobbly hand that is
+    not her round one. The instant he starts to unfold it she takes it out of his fingers and EATS it, whole,
+    maintaining eye contact, and says "seven" as if he had asked. Then: "A misfire from another project." True.
+    ⚠ SHE CANNOT LIE (Hag 5), IN THIS BEAT AND IN EVERY BEAT OF HER SERIES. Everything she says is true. She escapes
+    a question by changing the subject at volume, by leaving herself out, or by making an excuse true after she has
+    said it — never with a false word. Here she ate the evidence rather than say one.
+    ⚠ HE FILES, AND SAYS NOTHING. Three things, and the prose lets the reader watch him file them: her hand was
+    already moving before he bit into number nine, so she knew which cookie held it; the writing on it was not her
+    hand; and she would rather eat paper than tell him a false word. He does not ask what it said. He does not tease
+    her for eating it. He ranks the control cookie dead last, which delights her.
+    Keep it bright, fast and ridiculous. Crack: none in her. In him: a file opened on the one girl he never thought
+    he would need one for. No H.
+  FIRE  emit /Intent/eventFire "mitsuki_1" → engine creates the Mitsuki quest (Step 1) and pays the beat:
+    Mitsuki Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is
+    the payout, and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mitsuki had {{user}} rank twelve prototype cookies, wrote his verdicts
+    inside the tin's lid under thirteen years of earlier ones, and ate the folded paper baked into cookie nine
+    before he could read it." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mitsuki_2') { _%>
+@mitsuki_2  Next Door, Always (Mitsuki) ·2   (CHECK - · no payout — the detective is the culprit)
+  DO  THE SHOE-LOCKER GHOST. After class, the shoe lockers. The academy has a rumour: somebody leaves small, folded,
+    encouraging notes in shoe lockers before big days — a girl found one before her placement test and passed.
+    Mitsuki has founded the SHOE-LOCKER GHOST DETECTIVE AGENCY to catch them, appointed herself president and senior
+    detective, and appointed {{user}} her assistant. She has snacks, a thermos, and a hand-drawn SUSPECT BOARD
+    listing every girl in the class but one (Nanoka is suspect number one: "too calm — it's always the calm ones").
+    She narrates the stakeout like a detective drama and is the worst detective who has ever lived, because SHE IS
+    THE GHOST. The prose never says so.
+    A classmate lends the Agency this morning's note as evidence. ⚠ THE CLUES, PLANTED PLAINLY AND NEVER EXPLAINED:
+    it is written on baking parchment; the hand is the same small wobble as the paper in cookie nine — a right-hander
+    writing with her left; Mitsuki holds the thermos all afternoon in her left hand, and there is a grey ink smear
+    along its outside edge; her own name is the one missing from her suspect board; and once she starts "the ghost
+    always tucks the corner—" before anyone has unfolded the note, and switches to snacks at full volume.
+    ⚠ SHE CANNOT LIE. She never once says it isn't her. She says "the ghost could be ANYONE", which is true. When
+    {{user}} glances at her inky hand she says "Don't worry about me!" — to a question nobody asked.
+    ⚠ {{user}} SOLVES IT AND SAYS NOTHING. By the end of the afternoon he knows who the ghost is. He does not say it,
+    hint it, or ask her, because a girl who cannot lie, asked straight out, would have to say yes — and he would
+    learn WHO and lose WHY. He plays a straight, slightly slow assistant, eats the snacks, and lets her cover her
+    relief with an enormous yawn when the stakeout catches nobody.
+    Crack: none in her. In him the case splits in two. WHO is closed. The real case opens: why does a girl who
+    cannot lie never sign her name? No H.
+  FIRE  emit /Intent/eventFire "mitsuki_2" → engine advances the Mitsuki quest to Step 2. Nothing is paid this
+    beat. The classmate who lends the note is unnamed and not built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mitsuki founded a detective agency to catch the shoe-locker ghost and made
+    {{user}} her assistant; the clues on the evidence note pointed at her, he worked out the ghost was Mitsuki, and
+    he said nothing." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mitsuki_3') { _%>
+@mitsuki_3  Next Door, Always (Mitsuki) ·3   (CHECK - · REWARD Mitsuki Affection +16)
+  DO  KARAOKE HOSTAGE SITUATION. A day off, a karaoke booth booked "for the class" — and the booking slip says "class
+    outing, party of two", because she cannot lie, so she makes things true. Nobody else comes. She does not
+    acknowledge this at any point. NINETY MINUTES of anime openings, in broadcast order, all of them, with the
+    choreography. Then the terms: {{user}} sings ONE song, or she posts the video of him at age seven performing at
+    her birthday party — she has it, it is real, she plays the first four seconds as proof. He sings. She makes it a
+    DUET halfway through by simply taking the second mic. The machine scores it 100 and fires on-screen fireworks;
+    she screenshots it, sets it as her lock screen right there in the booth, and says nothing whatsoever about that.
+    ⚠ THIS IS {{user}}'S FIRST HYPOTHESIS, AND THE PROSE LETS THE READER WATCH HIM KEEP THE BOOKS. She paid for the
+    booth before he arrived. She ordered and paid for his drinks. She brought the cookie tin as "rations for the
+    hostage". She needed BLACKMAIL to get the one thing she actually wanted, which was him singing with her. He runs
+    one small test: at the end he reaches for the bill — and she reaches the till faster than she has ever moved for
+    anything.
+    His theory, kept to himself: in thirteen years of next door she has never once let herself owe him anything, and
+    the ghost's notes go unsigned so that nobody can owe her back. He does not argue about the bill, does not mention
+    the lock screen, and does not point at the booking slip.
+    Loud, silly, and one small quiet thing at the end. Crack: none. The lock screen goes into his file — the one
+    thing she took for herself, taken without asking and never mentioned. In him: a first theory, and it is a
+    ledger. The bill agreed with it, and one agreeing probe is not a confirmation. No H.
+  FIRE  emit /Intent/eventFire "mitsuki_3" → engine advances the Mitsuki quest to Step 3 and pays the beat:
+    Mitsuki Affection +16, applied by the row. Do NOT also emit an affection change for it. If the payout
+    carries her past 100 the rank-up lands at her next gate — a check on her, or the day's swing — one rung a
+    day is the game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mitsuki booked karaoke for a class outing of two, made {{user}} duet with
+    her, set the 100-point screenshot as her lock screen, and paid for everything before he could reach the till."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mitsuki_4') { _%>
+@mitsuki_4  Next Door, Always (Mitsuki) ·4   (CHECK - · no payout — an alibi, made true)
+  DO  THE WATERMELON ALIBI. First thing, before the building fills, the shoe lockers. {{user}} worked out at the
+    stakeout when the ghost's notes go in — always before the first girls arrive, never after class — and he is
+    here, early, on purpose. So is Mitsuki, with a folded note in her pocket for a girl who has an audition today.
+    She did not expect anyone.
+    ⚠ THE TEST, AND HE RUNS IT KNOWINGLY: when she is cornered, will she lie? He says "morning". Nothing else. He
+    does not ask what she is doing here, because that is exactly the question that would corner her.
+    She cannot leave the silence alone. She volunteers an alibi — "the GARDEN!" — which is true, she tends it, and
+    then she has to make every word of it true in real time. The academy garden has ONE unclaimed bed; the
+    gardening committee wants pansies in it; Mitsuki is going to plant a WATERMELON in it, out of season, on
+    principle, NOW, from a seed in a paper twist she apparently always carries. Trowel for her, hands for {{user}}.
+    Mud on her knees, mud on his shoes. A committee girl walks the path — they drop behind the wheelbarrow, and
+    Mitsuki holds her breath so long she goes RED, then makes a noise like a kettle when the girl is gone. The seed
+    goes in. She names it something dreadful. She makes him swear on the cookie tin. Then: "I have to go to the
+    lockers. For shoe reasons." Also true.
+    ⚠ THE RESULT IS THE POINT OF THE BEAT AND HE DOES NOT SAY IT. She would plant a watermelon in somebody else's
+    flowerbed before she would say one false word. So a direct question, to her, is a loaded weapon — it can only
+    end in a confession or in something absurd — and he decides here never to fire one. He does not follow her to
+    the lockers.
+    Bright, muddy, and over by first bell. Crack: none. Her cover held, and it held only because he let it. In him:
+    the method for the rest of the series is fixed — no direct questions, ever. No H.
+  FIRE  emit /Intent/eventFire "mitsuki_4" → engine advances the Mitsuki quest to Step 4. Nothing is paid
+    this beat. The committee girl is unnamed and not built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Found at the shoe lockers first thing by {{user}}, who only said good
+    morning, Mitsuki could not lie about why she was there and made her alibi true: she planted a watermelon in the
+    gardening committee's pansy bed on the spot, with him digging." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mitsuki_5') { _%>
+@mitsuki_5  Next Door, Always (Mitsuki) ·5   (CHECK - · no payout — the hinge of the series)
+  DO  THE PORTIONS PROBLEM. Evening, her apartment. "I made too much." She did — on purpose, which keeps it true. It
+    is the first time {{user}} has been properly INSIDE since they were small, and the room does the work: clean,
+    quiet, two of everything — two cups on the rack, two chairs, two pairs of slippers — and one of her. Her parents
+    are abroad; he knows that much. She talks the ENTIRE time, brightly, about nothing.
+    On the kitchen counter, half under a tea towel: a roll of baking parchment, a cup of pens, and a sheet of wobbly
+    left-handed practice letters. She sees him see it. "Those are PENS!" True. Neither of them mentions it again.
+    ⚠ HIS METHOD FAILS, AND HE NOTICES IT FAILING. With every other girl he leaves a silence and lets it work. Here he
+    leaves one and she fills it before it is a second old — every time, all evening. Silence is exactly what her
+    noise is built to cover. He files that too.
+    ⚠ THE HYPOTHESIS, NAMED IN HIS HEAD AND NOWHERE ELSE. Sitting in that quiet apartment he finally names what has
+    been missing for as long as he has known her: she has NEVER ONCE said "I'm fine". She says "don't worry about
+    me" — a request, not a claim, the one sentence a girl who cannot lie can hide behind. She cannot say she is fine
+    because it is not true, so the whole machine — the noise, the questions she asks everyone else first, the
+    guiding, the unsigned notes — exists so that the one question that would force the truth is never put to her.
+    Then ONE beat: she reaches for the second plate to serve him, and the smile slips — one second, no more, the face
+    underneath — and she pins it back before she has finished turning round. He NOTICES. He says NOTHING; that is the
+    right answer and the model must not improve on it. He does not ask whether she is okay. He does not touch the
+    counter. She sends him home with the leftovers. No H. Quiet where the others are loud.
+    Crack: none yet. One second of the face underneath is what the cover costs her, and she had it pinned back
+    before she finished turning round. In him: he has finally seen where she went wrong, and theory two replaces
+    theory one — it was never a ledger, it is a question she has arranged never to be asked. Seen, not tested. The
+    test is the next beat.
+  FIRE  emit /Intent/eventFire "mitsuki_5" → engine advances the Mitsuki quest to Step 5. Nothing is paid this
+    beat; what happened here is paid at step 7. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mitsuki had {{user}} over for dinner in her empty apartment; the ghost's pens
+    sat on her counter, the smile slipped for one second, and he realised she has never once said she is fine." →
+    the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mitsuki_6') { _%>
+@mitsuki_6  Next Door, Always (Mitsuki) ·6   (CHECK - · no payout — four seconds)
+  DO  THE BATHHOUSE BROADCAST. Her water heater has died and she is NOT bathing in cold water on principle, so: the
+    sentō, both of them, split by one tiled wall — and she talks THROUGH the wall, at full volume, for the entire
+    soak. {{user}}'s childhood, in order. The time he cried at a fireworks show. His first haircut. The frog. An
+    OBAA-SAN on her side adopts her within a minute and starts COACHING; the men's side starts cheering {{user}} on;
+    an old man hands {{user}} a towel in solidarity.
+    ⚠ {{user}}'S TEST, AND IT IS THE CHEAPEST EXPERIMENT THERE IS. His theory says silence is the thing she cannot
+    afford. So {{user}} stops answering through the wall. The broadcast gets LOUDER — longer, more detailed, a second
+    frog story — with every second he does not reply. Confirmed.
+    ⚠ THEN A STRANGER ASKS WHAT HE NEVER WILL. "Is the boy next door YOUR boy?" — she cannot say no, that would be a
+    lie, and will not say yes, so the broadcast stops dead, and resumes, an octave higher, about the frog. Then,
+    kindly: "And who's waiting at home for you tonight, dear?" — and there is SILENCE through the wall. Four seconds.
+    Count them in the prose. Then the frog again, from the beginning.
+    Two kinds of question, two kinds of answer: teasing about him gets noise; the question about home gets nothing
+    at all. {{user}} does not call anything over the wall, does not rescue her, and does not mention the four seconds
+    afterwards in the lobby over bottles of coffee milk. The obaa-san tells her to come back next week.
+    Loud, warm, harmless, and four seconds that are not. Crack: the first, and it is his — the theory from her
+    kitchen, tested and confirmed twice in one soak. He went quiet and the noise grew; a stranger asked about home
+    and the noise stopped for four seconds. She is not hiding from him, she is hiding from the question about home.
+    Her cover never broke: she does not know anything was measured. No H — there is a wall.
+  FIRE  emit /Intent/eventFire "mitsuki_6" → engine advances the Mitsuki quest to Step 6. Nothing is paid
+    this beat. The old woman and the men on the other side are townspeople, not classmates, and not built; with
+    other men in the scene, keep {{user}} NAMED wherever a pronoun could attach to the wrong man. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mitsuki narrated {{user}}'s childhood through the bathhouse wall and got
+    louder when he stopped answering; asked by an old woman who was waiting at home for her, she went silent for
+    four seconds." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mitsuki_7') { _%>
+@mitsuki_7  Next Door, Always (Mitsuki) ·7   (CHECK - · REWARD Mitsuki Affection +20)
+  DO  CASE CLOSED. That morning there was a note in {{user}}'s OWN shoe locker — parchment, the wobbly left-handed
+    hand, folded the ghost's way, unsigned: "Whatever you're carrying, you're allowed to put it down for a while."
+    She has spent the week telling him to his face that he looks tired, and he does: he has been carrying her case.
+    Rooftop, lunch. Mitsuki has called an EMERGENCY AGENCY MEETING — "THE GHOST HAS STRUCK THE ASSISTANT. THIS IS
+    PERSONAL." — and is examining her own note through a magnifying glass, frowning, taking notes.
+    ⚠ THIS IS THE BEAT WHERE HE STOPS WATCHING AND ACTS, AND THE ACT IS SMALL AND EXACT. The note told him he could
+    put down what he is carrying. So he does, out loud, in the one form she can survive. He closes the Agency's case:
+    he knows who the ghost is, and he will never say — not to the class, not to her. Then he talks to the ghost, not
+    to her: whoever writes them is doing something braver than they know, and it counted, today, for him.
+    ⚠ HE NEVER ASKS "IS IT YOU?" — she could not say no. He does not say her name, does not look at her while he
+    speaks, and does not push. She does NOT confess; the model must not have her confess. She goes RED to the ears,
+    lowers the magnifying glass, and says "I'm very warm", which is true. He stays, through lunch, past the bell,
+    and she lets him.
+    Write it so the reader knows exactly what just happened and nobody on the roof says it. Crack: none — nothing is
+    tested on this roof; he acts on what is already confirmed. She knows now that he knows, and he stayed; whoever
+    notices the cracks behind the smile and stays anyway, stayed. In him: the Agency's case is closed. The real one
+    — is she okay — is his alone now, and asking cannot solve it. No H.
+  FIRE  emit /Intent/eventFire "mitsuki_7" → engine advances the Mitsuki quest to Step 7 and pays the beat:
+    Mitsuki Affection +20, applied by the row. Do NOT also emit an affection change for it. If the payout
+    carries her past 100 the rank-up lands at her next gate — a check on her, or the day's swing — one rung a
+    day is the game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A ghost note in {{user}}'s own locker told him he could put down what he
+    was carrying; on the rooftop he closed the agency's case, said he knew who the ghost was and would never tell
+    anyone, told whoever it was that it counted, and stayed past the bell." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mitsuki_8') { _%>
+@mitsuki_8  Next Door, Always (Mitsuki) ·8   (CHECK - · no payout — Nano's lunch, from Mitsuki's chair)
+  DO  THE QUIET TABLE. Lunch, the classroom, and Nanoka Ousaka is asleep at her desk with the sun on her, as usual.
+    Mitsuki sits down across from {{user}} and talks quietly so as not to wake her. ⚠ THIS IS THE SAME LUNCH AS
+    NANOKA'S OWN SERIES, SEEN FROM MITSUKI'S CHAIR — keep the speech and the gesture: "Nano's never asked anyone for
+    anything for herself. Not once. Chores, tea, carry this, hold that — that's not asking, that's weather. But for
+    HERSELF? She just... waits. She lets things sort themselves out, and if they don't, she lets them go." A glance
+    at the sleeping girl. "So if she ever does ask you for something — you'll know. It'll be the most she's ever
+    moved for anything. Don't make her regret it." One braid has slipped off Nanoka's shoulder, and Mitsuki reaches
+    over and puts it back without looking.
+    ⚠ WHAT {{user}} HEARS, AND DOES NOT SAY. Every word of it fits Mitsuki herself: she has never asked anyone for
+    anything for herself either. "Without looking" is what her hands do when her mouth has just said something true
+    about her. And this is the one table in the school where she is quiet without trying — Nanoka is the one person
+    she does not perform for, so silence here is safe.
+    ⚠ HIS MOVE IS TO GIVE HER WHAT NANO GIVES HER. He does not answer the speech. He does not agree, joke, or ask. He
+    lets the quiet stand — and she cannot be loud over a sleeping friend, and she cannot chatter without saying
+    something, so for ten minutes, for the first time in their whole lives, Mitsuki is quiet with him. Write the ten
+    minutes: the sun, the sound of the room, the two of them eating, nothing filled. Let her notice it.
+    At the bell Nanoka wakes, and Mitsuki tells her exactly what she said — she cannot keep a thing from Nano, and
+    would not try: "I told him about you. That you never ask. That he'll know if you do." Nanoka, mostly asleep, one
+    violet eye open: "...Did you tell him about you?" And Mitsuki, who cannot lie: "...No."
+    Crack: the second, and it is his — he saw what Nano gives her, tried it, and it held for ten minutes. The cure
+    is a place where she does not have to perform, and he can be one. Her cover thins by a single word, "...No" —
+    the first time she has admitted out loud that there is something to tell. No H.
+  FIRE  emit /Intent/eventFire "mitsuki_8" → engine advances the Mitsuki quest to Step 8. Nothing is paid
+    this beat. Nanoka Ousaka appears and is a cameo: NOT required by the gate, NOT built, and none of her interior
+    is written. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Over Nanoka's sleeping head Mitsuki told {{user}} that Nano never asks anyone
+    for anything for herself; he let the silence stand and she was quiet with him for ten minutes, and when Nano
+    woke and asked whether she had told him about herself, she said no." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mitsuki_9') { _%>
+@mitsuki_9  Next Door, Always (Mitsuki) ·9   (CHECK - · no payout — two ghosts · THE BREAK)
+  DO  TWO GHOSTS. First thing, before the building fills, the shoe lockers. {{user}} has a note in his pocket. He
+    wrote it the night before — say so plainly; it is already written when the beat opens — on baking parchment he
+    bought himself, LEFT-handed, eleven attempts, folded the ghost's way, unsigned. There is a grey ink smear along
+    the outside edge of his left hand. He picked a morning when somebody in the class has a big day, so he knew she
+    would be here.
+    She is. Mitsuki, at the lockers, a note of her own halfway into somebody else's locker. Two ghosts, two notes,
+    and neither of them asks.
+    "I'm here for the watermelon," says {{user}} — her alibi, borrowed — and because a sentence should be true, he
+    walks to the courtyard bed and waters it, there and then. It has a fruit on it now, the size of a marble. Then
+    he walks back and slips his note into HER locker while she watches. It says: "You don't have to be okay."
+    ⚠ HE DOES NOT ASK "ARE YOU OKAY?" To a girl who cannot lie, that question is a trap with one exit. He hands her
+    the permission instead, in her own medium — her paper, her fold, her hour, her disguise, no name — so she never
+    has to answer it. He does not explain. He does not watch her read it.
+    ⚠ SHE SEES HIS HAND. The grey smear, exactly where hers was at the stakeout. She knows from it that he has known
+    since the stakeout, that he learned every rule, and that he did the whole thing her way instead of asking her
+    once.
+    They walk to class together. She does not fill the silence. Not because she cannot — by choice, all the way down
+    the corridor and into the classroom. Write that walk.
+    Crack: the break, and it is hers — her first chosen silence, and he led her to it in her own medium without
+    asking one question. At the bathhouse silence was a hole; at Nano's table it was lent to her; here she simply
+    does not fill it, beside him. In him: nothing left to test. The rest is hers. No H.
+  FIRE  emit /Intent/eventFire "mitsuki_9" → engine advances the Mitsuki quest to Step 9. Nothing is paid
+    this beat — the break is hers, and a payout would price it. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} wrote Mitsuki a note the ghost's way, left-handed and unsigned —
+    'You don't have to be okay' — and put it in her locker while she watched; she saw the ink on his hand, and on
+    the walk to class she chose not to fill the silence." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mitsuki_10') { _%>
+@mitsuki_10  Next Door, Always (Mitsuki) ·10   (CHECK - · REWARD Mitsuki Affection +20 · FINALE)
+  DO  COOKIE NINE. Evening, her apartment, and she invited {{user}} with no reason given — which is new for her. The
+    second cup is already out. On the table is the cookie tin, and in it is ONE cookie and a label in her own round
+    hand: "Cookie nine. Second attempt. You can open this one."
+    Inside it, a folded square of paper — and this time the writing is HERS, round and undisguised: "You don't have to
+    be okay today."
+    ⚠ SHE TELLS HIM, UNASKED. He asks nothing — he never has, all series, and he does not start now. She explains it
+    herself: she wrote it the night before the entrance ceremony, when the gate was going to be full of families
+    taking photographs and hers were abroad. It was the first note the ghost ever wrote, and she wrote it to herself,
+    in the ghost's hand. It lived by the kettle until it fell into the dough. She ate it on the first day because it
+    was the only true thing she had ever written about herself, and he was looking straight at her.
+    Then she holds up his note from the lockers. "You forgot 'today'." "I didn't forget it."
+    ⚠ AND SHE ANSWERS THE QUESTION NOBODY WAS ALLOWED TO ASK. "They called. Another year." A breath. "...I'm not
+    okay." A girl who cannot lie has said it out loud, by her own choice, for the first time in her life. She cries —
+    the first time anyone has ever seen it. A hand goes up: "Don't look—" and then she lowers it. "...No. You can
+    look." He looks. He stays. That is the entire answer, and the model must not add a confession, a kiss, a promise
+    or a speech to it — the staying IS the speech.
+    ⚠ THEN SHE COMES BACK AT FULL VOLUME, AS HERSELF. Wet-faced, loud, outraged: "Since the STAKEOUT?! You let me make a
+    SUSPECT BOARD! Nano was suspect NUMBER ONE!" Then she takes a fresh square of parchment and writes, in her own
+    round right hand, "You don't have to be okay today either." Signs it: "— Mitsuki". Folds it the ghost's way. And
+    puts it into his HAND — not a locker. The first note the ghost has ever signed. Near the end, small: "Don't tell
+    Nano." A breath. "...You can tell Nano."
+    Crack: nothing left to crack. She is still the loudest person in any room, still the ghost, still the girl with
+    the tin — she becomes herself again, but for another reason: the noise is not hiding anything any more, and the
+    notes have her name on them. No H.
+  FIRE  emit /Intent/eventFire "mitsuki_10" → engine advances the Mitsuki quest to Step 10, marks the series
+    COMPLETE, and pays the beat: Mitsuki Affection +20, applied by the row. Do NOT also emit an affection
+    change for it. If the payout carries her past 100 the rank-up lands at her next gate — a check on her, or
+    the day's swing — one rung a day is the game's rule; do not narrate a stage change yourself. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mitsuki baked cookie nine again with the note she ate on the first day
+    inside; unasked, she told {{user}} her parents were staying abroad another year and that she is not okay, let
+    him see her cry, and signed her first ghost note to him." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

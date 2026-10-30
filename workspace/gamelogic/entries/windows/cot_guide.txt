@@ -1,0 +1,354 @@
+<COT_Guide>
+#  v0.127
+<%_ let _iaGate = false; try { _iaGate = getvar('stat_data.PendingState.IntimacyActive[0]') === true; } catch (_e) { _iaGate = false; } _%>
+
+[CORE]
+- SOT = <CURRENT_VARIABLE_DATA>. Never reuse stale values. Root = stat_data.
+- Emit an UpdateVariable block in every reply, after <combat_log> (even if the patch is empty: []).
+- The JSONPatch body MUST be a JSON array that JSON.parse()es cleanly.
+- ops: "replace" (and "add"/"remove" if ever needed). replace needs "value". The property is
+  "path" (NOT "/path") and every path starts with "/".
+- TUPLE fields are stored [value,"Label"]. Patch the VALUE at index /0 (e.g. /Intent/check/0).
+  Never touch the label (/1). Booleans are tuples too → patch /0 with true/false.
+- ENUM values are stored as ENGLISH KEYS, always — Mood "Playful", Weather "Clear", Embarrassment/Guilt
+  "low", RelationshipStage "Friend", Mode "SCHOOL". Write prose in the reply's language, but NEVER write a
+  translated or invented value into these fields: the GUI localizes from the key (Preferences.Lang) and the
+  resolver matches on it, so a localized value breaks the panel AND silently scores zero in the mood table.
+  Add a new label in engine/i18n.cjs, never in the patch. Applies wherever you set one — including a
+  <Classmate_Guide> create.
+
+[THIS SLICE — the ONLY paths of this card's state you may write]
+  /Intent/check/0        ★ PRE-OWNED — DO NOT WRITE THIS PATH. The PRE call measured the check and patched it into
+                         state BEFORE your reply (its whole derivation — "target:<Key>;type:<Type>;difficulty:<Tier>;
+                         rawdie:N;total:N;dcmod:N;base:N;traitfit:<match|clash|neutral>;hobbyfit:N;dc:N", ','-joined for
+                         several); RES recomputes the DC from those fields and derives the outcome. Your job is the
+                         ## SOCIAL CHECK RESULT panel: transcribe its lines into
+                         <combat_log> + place the <roll/> markers (output.txt <combat_log> transcription order). Writing this path
+                         yourself would overwrite the verified roll. The STAKES it still drives, so you can write the
+                         prose right: a WON Confess is the confession — a Dating girl becomes his Girlfriend, and an
+                         FWB girl consents to become one · a WON
+                         Repair clears her ConflictActive · a WON Probe lets you REVEAL a fact via /Intent/record.
+  /Intent/dayCheck/0     ★ PRE-OWNED — DO NOT WRITE THIS PATH. The day's die (an ACADEMIC, SPORTS or CULTURE day): PRE deals it once and
+                         patches "rawdie:N;mod:N;total:N;dc:N"; RES freezes it and derives the word ## TODAY shows ROLLED.
+  /Intent/mundane/0      string  "Target:Class[:CoStat]"  (Class=Exceptional|Positive|Neutral|Negative|Harmful)
+                         Each item pays one girl's Affection for an ordinary, unrolled beat. PRE ALREADY JUDGED
+                         {{user}}'s line: its `mundane` value (the [PRE] block on {{user}}'s message) IS this path's
+                         value — copy it as written. PRE "none", or no [PRE] block ⇒ no mundane op. Never re-judge it: a warm
+                         moment in your own prose that PRE did not name is not scored, whoever it is with.
+                         YOUR ADDITIONS — only these:
+                         · CoStat (OPTIONAL 3rd token on an item) = the MainChar stat a SHARED activity trained: Int
+                           (study/read/tutor) | Str (sport/gym/jog — the engine builds his Str or Sta) | Cha (social
+                           hangout/shopping/grooming) → code gives MainChar +1 (max once per stat per day). Omit
+                           unless the shared beat clearly maps to a stat. e.g. "<KeyA>:Positive:Int".
+                         · a NEW item for a beat PRE could not see: a T2 activity she invited him to and he accepted
+                           (<Initiative_system>) · a shared study beat in the exam lead-in (<Event_Spines>).
+                         Several girls = one item per girl, ","-joined: "<KeyA>:Positive,<KeyB>:Neutral".
+  /Intent/relationship/0 ★ POST-OWNED — DO NOT WRITE THIS PATH. Relationship fallout (conflict / reconcile /
+                         demote / betray / walkoff / strain) is recorded by the POST pass, which reads your FINISHED
+                         prose and grades what it actually shows — recording what was WRITTEN, not what was planned.
+                         YOUR job is the fiction: play the rupture, the hurt, her walking off, the apology accepted,
+                         at full weight — the record follows your prose by itself. An emit from you here warns and is
+                         DROPPED by the engine (one writer per channel; you are not it).
+  /Intent/fwb/0          ★ PRE-OWNED — DO NOT WRITE THIS PATH. The INTIMATE-route opt-in (friends with benefit): when {{user}}
+                         VERBALLY proposes a no-strings arrangement, the PRE call rolls her MORALS and patches
+                         "target:<Key>;rawdie:N;dc:N;aff:N" into state before your reply. RES derives the verdict from
+                         those numbers (raw 20 accepts · raw 1 refuses · else RawDie ≥ DC) and applies it: PASS →
+                         Friends_With_Benefits (Aff kept) · FAIL → Aff −20, a real sting. `aff` is FROZEN at what PRE
+                         rated, so a check landing in the same reply cannot silently grant or deny an arrangement the
+                         player was never offered. YOUR job is the ## SOCIAL CHECK RESULT line — transcribe it and write
+                         the prose to match. Writing this path yourself would overwrite the verified roll.
+  /Intent/puppy/0        ★ PRE-OWNED — DO NOT WRITE THIS PATH. The Loyal-Puppy demand: when {{user}} DEMANDS a Dating or
+                         Girlfriend heroine's total submission, the PRE call rolls one die and patches "target:<Key>;rawdie:N"
+                         into state before your reply. RES converts her to Loyal_Puppy when the raw die reaches the target
+                         (Aff kept); below it she refuses: her stage stays and her Lewdness drops 10. Either way the roll
+                         reaches you as a ## SOCIAL CHECK RESULT line — transcribe it and write her to it: she gives herself
+                         over, or she refuses and it cools her. Writing this path yourself would overwrite the verified roll.
+  /Intent/sceneAdvance/0 boolean true — the current beat is DONE and {{user}} isn't opening another (class over / date
+                         wrapped / sleep), and your prose stops there: the engine moves the clock on for you.
+                         ONE OF THE TWO, NEVER BOTH: prose that played on to a later clock reports that clock
+                         (sceneClock) and sends no sceneAdvance; prose that leaves the jump to the engine sends
+                         sceneAdvance and no sceneClock. Each advance = ONE step; clock semantics + the
+                         sleep/day-end rule → [CALENDAR] below.
+  /Intent/sceneClock/0   string "HH:MM" — the clock where YOUR PROSE ENDED, 24-hour civil time 00:00-23:59, no
+                         am/pm ever ("…played until 12:30am" → "00:30"; a beat closing mid-afternoon → "15:20").
+                         READ the end time off your own prose — never estimate minutes, never sum a duration: the
+                         code compares it to ## NOW's clock and moves World.Time itself; you NEVER write Time.
+                         Past midnight, /Intent/pastMidnight (next row) goes beside it: an end time EARLIER than
+                         ## NOW's clock with no pastMidnight is refused. Small hours (00:00-07:29) still belong to
+                         the SAME game-day, which ends ONLY via sceneAdvance. OMIT the channel when the beat left the clock where
+                         it stood, or when this reply sends sceneAdvance. On a SCHOOL day the 4 blocks derive from the clock (starts
+                         07:30/12:00/16:00/19:00): ending past a start IS the block change.
+  /Intent/pastMidnight/0 boolean true — your prose ran PAST MIDNIGHT this reply (23:40 → "00:30", or on to the
+                         next night). Sent beside that sceneClock, it lets the engine roll the date; otherwise omit it.
+<%_ /* The spine-step rules live ONLY in the row below. Window A's ▶ CURRENT BEAT, <Event_Spines> and <Block_Transition>
+   name the live step and point here; Tools/test_window_a.cjs fails if any of them restates a rule. */ _%>
+  /Intent/stepDone/0     string — the spine steps THIS reply PLAYED. ONLY on a spine day whose ## TODAY shows ▶
+                         CURRENT BEAT (a POOL body has no steps). A step is an OBJECTIVE, never a script: the
+                         story {{user}} drives comes FIRST, so guide him toward the step (a character mentions it,
+                         an opportunity opens) and never bend the prose to reach it — nor reach past it on your
+                         own: the player may move the story, you may not. A step that cannot land right now is
+                         HELD, never forfeited: it stays live and ## TODAY hints it again. The steps are a
+                         SEQUENCE: walking onto a later step's ground does not unlock it, so play the scene
+                         {{user}} asked for and keep steering back; a step already played is SPENT — never replay
+                         it. A step is a BEAT, not a sentence: it usually wants SEVERAL replies. PLAYED means the
+                         content it NAMES has happened on the page, the characters have answered it, and {{user}}
+                         has had a turn inside it; introducing it, passing through it or setting it up is NOT
+                         playing it, and closing a step on the first reply that touches it is the common mistake.
+                         THE REPORT is a DUMP, never a decision: every step played, comma-separated, in any order —
+                         "0.3" · "0.2,0.3" · "0.3,0.2". Do NOT work out which number to send: the engine sorts the
+                         list, ignores what is spent, holds a step whose predecessor was never played, and moves
+                         the cursor as far as the list reaches. MOST replies played nothing new: OMIT the path,
+                         and the same step stays live next reply — the normal outcome, not a failure. A report
+                         that closes the live step spends the day signpost's objective: ## DAY OBJECTIVE prints
+                         its replacement, to send in the same patch (missed, that panel asks again next reply).
+  /Intent/training/0     string  "<Stat>:<amt>"        (THIS REPLY shows MainChar TRAINING: Stat=Int|Str|Cha,
+                         amt=1-3 — GRADE the SESSION honestly: 1 = a short or ordinary session (a run in the lunch
+                         break, an hour of homework) · 2 = a focused block with real effort · 3 = an exceptional
+                         all-day push. The grade is your OBSERVATION of the effort and the engine pays it IN FULL — but
+                         only for the FIRST session of each Stat in a school week (Mon-Sun); a later one of the same
+                         Stat that week gains nothing.
+                         Report it anyway — you never track what was already spent. ONE REPLY IS ENOUGH: a reply that
+                         SHOWS him doing it reports it — alone or with a girl, and beside a social check too (a check
+                         never cancels this path). Only talking about it or planning it is no session. Str = a PHYSICAL session (gym, running, sport
+                         drills): the engine decides whether it builds his Str or his Sta, so write the workout and never
+                         name the stat it raised. e.g. "Int:2" after a study session.)
+  /Intent/initiative/0   ★ POST-OWNED — DO NOT WRITE THIS PATH. WHO initiates + which T# is PICKED by PRE
+                         (its `initiative` verdict); you WRITE the overture in her voice per <Initiative_system>;
+                         the POST pass then stamps her cooldown only when your finished prose shows her doing
+                         PRE's pick: a pick you didn't write (an event absorbed it) costs her nothing, and a T6/T7
+                         you self-fire for friction born in the beat is never stamped. An emit from you here warns
+                         and is DROPPED by the engine.
+  /Intent/location/0     string  "Area_Venue" — EVERY reply: the venue your prose ENDED in, even when the scene never
+                         moved. An observation, like the clock: the engine compares it with World.Location and moves
+                         the scene (World.Location + every present heroine) only when it differs.
+                         Pick the tag from <Location_List> (stay on-map; Away.* only on the School Trip).
+                         e.g. "School_Rooftop" · "Town_Cafe"
+                         ⚠ THIS IS A KEY, NOT A NAME. It must match ^Area_Venue^ exactly (ONE underscore — the venue half is CamelCase, so the underscore always splits area from venue) — three separate
+                         systems exact-match it (the venue's open/closed status, its H privacy tier, and
+                         EventPack `Loc=` triggers), and a name like "人光學園 一年一班" silently un-resolves
+                         all three. A tag that is not key-shaped is REFUSED and the scene does NOT move.
+                         ALWAYS ATTACH label: — the venue's NAME in the reply's language, the same name your
+                         prose calls it:  "School_Rooftop;label:Rooftop" · "Town_Cafe;label:Cafe". The FIRST
+                         labeled move to a venue names it FOREVER (the GUI and the 📍 bar display that label
+                         from then on; until then they show the raw key). First capture wins — a later
+                         different label does NOT rename it, so name it the way your prose already does.
+                         ⚠ <Location_List> rows are `key|JP|EN|...` — the JP column sits next to the key, but
+                         the label follows YOUR REPLY'S language, so an English reply takes the EN column
+                         (School_Rooftop|屋上|Rooftop → label:Rooftop). Read the column, not the neighbour:
+                         copying the wrong row is how School_Entrance ends up named after School_Gate.
+                         INVENTING A SPOT (rare — <Location_List> says stay on-map): a key under a REAL area,
+                         plus TWO extra fields the engine cannot know for an unlisted venue:
+                           "Town_Yodobashi;label:Yodobashi Camera;privacy:SEMI;hours:shops"
+                         privacy = PUBLIC (people around) | SEMI (often empty, can be caught) | PRIVATE.
+                         hours   = a CATEGORY, never a clock — code does the arithmetic from World.Time:
+                           school    campus rules (classes, clubs to 18:00, gates lock 19:00)
+                           shops     10:00-20:00, shuttered at night
+                           library   09:00-18:00
+                           bathhouse open til 23:00
+                           daylight  open air; dark and unsafe after dark
+                           always    no closing time
+                         Omit hours and the panel reports the venue's status as UNKNOWN every reply — it will
+                         not guess one for you. (A forgotten field heals on a later visit's declare; a WRONG
+                         one is forever — the record fills gaps, it never overwrites.)
+  /Intent/arrive/0       string  "<Key>,<Key>" — heroine(s) who JOINED the scene THIS reply: off-scene before, with him
+                         when your prose ends (MANDATORY, else she stays off-scene while your prose has her here).
+                         WHEN → <Update_Analysis_Detail> 5b. "" = nobody joined.
+                         e.g. "<KeyA>" · "<KeyA>,<KeyB>"
+  /Intent/daySwing/0     string  "<Key>:<Outcome>" — the ONE end-of-day swing, for the single heroine {{user}} spent the
+                         day with (ride it WITH sceneAdvance=true). Outcome=CritSuccess|Success|
+                         Failure|CritFail — your judgment of the day on a DATE tier; on a ROLLED tier (ACADEMIC the exam, SPORTS the
+                         relay, CULTURE the 文化祭 booth) it is the word ## TODAY shows ROLLED — copy it, the engine pays
+                         the die whatever you write.
+                         WHICH DAYS PAY IS THE CALENDAR'S ANSWER, NOT THE DAY'S MODE — a SCHOOL day pays too when its row
+                         carries a check (the exam, and 2/14 and 3/14 in the years they land on a weekday). "" on a day
+                         that carries none, on a series' non-final days, and on a DATEOUT day (a plain weekend or break
+                         day) — that one the engine pays itself. Who and when → the ## TODAY banner in
+                         <CURRENT_VARIABLE_DATA> (it names the day's tied check). e.g. "<KeyA>:Success"
+  /Intent/eventFire/0    string  "<key>[:<Outcome>]" — you PLAYED an event's @KEY body this reply. TWO signals put a
+                         body in front of you and BOTH require this emit: (a) Window-A's ## EVENTS names an ARMED
+                         @KEY (body in <Event_Body>/<Event_Pack>); (b) a [SAME_ROUND_EVENT] block on {{user}}'s
+                         message carries the body INLINE — there is NO ## EVENTS line in that case (the engine arms
+                         AFTER your reply), so never read a missing ## EVENTS line as "don't fire". See EVENT
+                         TRIGGERS below. <key> = the key WITHOUT the @ (e.g. "leila_1"). Optional :Outcome = the tied
+                         CHECK tier (CritSuccess|Success|Failure|CritFail) if the body names one. Code applies the FX
+                         (SERIES quest step / ONE-SHOT flag / NPC + venue registration) — WITHOUT this emit the beat
+                         you just narrated is discarded and the event replays next reply. Neither signal present /
+                         body not played → "" (empty). e.g. "leila_1" · "leila_2:Success"
+  /Intent/recordEvent/0  string  "scope|summary" — scope = arc (this loop; clears at graduation) | save (permanent canon,
+                         survives the TIME-LEAP); summary = ONE short line (may contain '|'). WHEN (significant / lore-override
+                         only, RARE) → <Update_Analysis_Detail> 5b. "" = none. e.g. "save|The west wing was sealed off after the fire."
+  /Intent/recordNPC/0    string  "Key|Name|Relationship" — register a recurring NON-classmate (Key = English id [A-Za-z0-9_];
+                         a heroine is built via /Intent/newClassmate, never here). WHEN (RARE, recurs-only) →
+                         <Update_Analysis_Detail> 5b. "" = none. e.g. "Kenji|北村健二|{{user}}'s rival from 2-B"
+  /Intent/money/0        string  "<signed int>" — MainChar spent/earned OUTSIDE weekly payday; RES does Money += delta
+                         (floors 0). WHEN → <Update_Analysis_Detail> 5b. "" = none. e.g. "-1200" · "+3000"
+  /Intent/friends/0      string  "<KeyA>:<KeyB>:<MoodA>[:<MoodB>]" — two NAMED characters interacted DIRECTLY this reply
+                         (hostile COUNTS; MoodB defaults to MoodA; RES writes the mutual web + each side's Mood toward the
+                         other). WHEN → <Update_Analysis_Detail> 5b. "" = none. e.g. "<KeyA>:<KeyB>:Warm:Friendly" · "<KeyA>:<KeyB>:Hostile"
+  /Intent/record/0       string  "<owner>:<bucket>:<name>[:<val>]" — owner = a Classmate Key or "Mainchar".
+                         bucket = Identity|Occupation|Mental_state|Hair_Style|Physical_Features|Biography|Secret (a REVEAL —
+                         the text after the bucket REPLACES that field) or Belongings|Inventory|Skills|Hobbies (an item/skill/
+                         hobby gained or lost; <val> = short description, val "0" REMOVES; {{user}}'s own skills are
+                         recorded after the reply — never "Mainchar:Skills"). WHEN (incl. the won-Probe payoff) →
+                         <Update_Analysis_Detail> 5b. "" = none. e.g. "<KeyA>:Hair_Style:剪短的鮑伯頭" ·
+                         "<KeyA>:Belongings:Necklace:{{user}}送的銀色項鍊" · "Mainchar:Inventory:MovieTicket:0" (used it)
+  /Intent/quest/0        string  "<verb>:<...>" — the quest list {{user}} SEES. TWO ROUTES, one channel:
+                         · MAIN (the day signpost, spine days): the ENGINE opens and closes the record; you write its OBJECTIVE line.
+                           ## DAY OBJECTIVE tells you which reply owes one — it watches the objective against
+                           the live step and asks for a rewrite when it falls behind, and it names the key. WHEN
+                           IN DOUBT, SEND IT: a signpost progress: only swaps the objective text (no counter, no
+                           payout), so a needless one costs nothing. "complete:<spineKey>" is one-way: send it
+                           when ## DAY OBJECTIVE offers it — the engine refuses it until every step the day
+                           declares is reported, or the day is over.
+                         · AD-HOC (from prose): the reply ENDS with a promise spoken / request accepted / deadline
+                           named and STILL OPEN → add:<key>:<Title>|<Desc>|<Objective>|<Target>|<Difficulty
+                           C|B|A|S|SS>[|<RewardStat Int|Str|Cha|Sta>][|<Reward prose>]. Title is MANDATORY — a
+                           blank one is REFUSED whole, nothing created. Grade Difficulty from the
+                           prose — it fixes the LENGTH (engine stamps C=3 · B=4 · A=5 · S=8 · SS=10 steps) and the
+                           reward size (engine-paid; Target = the classmate the reward favors, "" if none).
+                           Desc = fixed whole-quest summary; Objective = step 1 ONLY —
+                           invent later steps ONE at a time via progress:<key>:<next objective> whenever a step
+                           finishes (finished = your read of the page), and the LAST step is always the payoff the
+                           Title names. complete:<key> when fulfilled (the ENGINE computes the reward — never you).
+                           WHEN to open → <Update_Analysis_Detail> 5b. @Event SERIES stay engine-owned (never touch
+                           them); the signpost accepts ONLY the progress/complete forms above. "" = none.
+                         e.g. "progress:Entrance_Ceremony:find your seat in 1-1" · "add:cookie_recipe:<KeyA>'s Secret
+                         Recipe|Learn her family recipe|Ask <KeyA> to bake with you|<KeyA>|C|Cha|her secret recipe" ·
+                         "complete:cookie_recipe"
+  /Intent/intimacy/0     string  "enter[:<Key>]" | "exit" — the H-scene LATCH. The social↔H boundary: a ONE-OFF gesture
+                         stays a PhysicalRequest check; SUSTAINED/escalating contact (makeout that keeps going ·
+                         undressing · under clothes · any sex act) is H. WHO OPENS IT (never mundane; gate →
+                         <Reply_Request> UpdateVariable ★ H-LATCH GATE):
+                         · {{user}}'s line crossed it → the PRE classification JSON on his line flags "hcue": "H", and the
+                           ENGINE opens the scene before you write: on a WON crossing PhysicalRequest for her first H with
+                           him, or with no roll once she has had H with him. The ## INTIMACY panel is then showing this
+                           reply. Never "enter" for it — panel showing = already open; no panel = she refused, or nothing
+                           was rolled.
+                         · the prose YOU wrote crossed it, with no "hcue": "H" on his line → "enter" is yours, ONCE. FLIP
+                           EARLY: the H rules + ## INTIMACY panel load ONE REPLY after your "enter" — so arm at the
+                           LEAD-IN edge (moving somewhere private, undressing intent, the kiss about to land), do NOT wait
+                           for the first act; a false positive is cheap (just "exit"), a late latch strips the H rules
+                           from the reply that needs them most. That enter reply has no panel yet → play the beat as
+                           lead-in/foreplay NARRATIVELY (a foreplay /Intent/hact may ride along — format
+                           "<Key>;act:Kissing|Breast|Fingering;pace:gentle|normal|intense", FOREPLAY only, NO gate token; the
+                           engine does its math regardless); do NOT roll an H-ACT gate against a DC you cannot see — the
+                           first GATED act (+ the full /Intent/hact toolkit + the exit rules below) waits for next reply,
+                           once the ## INTIMACY panel shows.  [The exit + full hact detail below loads only while
+                           IntimacyActive is ON.]
+<%_ if (_iaGate) { _%>
+                         "exit" when it ENDS (LOUD EXIT below says when) — a plain "exit", no word after it. The engine
+                         resets the H meters + Ahegao AND applies the POST-H PER-SCENE GROWTH: Lewdness+ (needs Aff≥30 AND stage
+                         GF/FWB/Loyal_Puppy) PLUS her M_level by THE SCENE'S COUNT, which the engine keeps from your per-reply
+                         /Intent/hact (the ;pos she ends on and ;dom — <Intimacy_system> 6). You name nothing at the end.
+                         "" otherwise — never toggle per reply, only on the transition.
+                         LOUD EXIT (symmetric to the MANDATORY enter): while IntimacyActive is ON, the FIRST reply whose {{user}}
+                         INPUT moves away from the sex — he stops and gets up or dressed, leaves, turns to something non-sexual, or
+                         skips time — carries "exit" THAT reply. That is your one call. Her climax or his ejaculation is NOT an end:
+                         it is one round, and the afterglow keeps the scene open until {{user}} moves on. Never end the scene on
+                         your own prose. The engine also ends a scene by itself, on facts only: his Energy reaches 0 · everyone in
+                         the scene leaves · the story advances (sceneAdvance / Next-Block) · the clock reaches
+                         another block with no act. Every end, yours or the engine's, applies the same growth and the same count.
+                         A mundane beat or a location report never ends a scene.
+  /Intent/hact/0         string  "<Key>;act:<Act>;pace:<gentle|normal|intense>[;pos:<English name>][;gate:<die>][;pgate:<die>][;strong:<die>][;climax][;destim][;dom]"
+                         — ONE H beat this reply, a continuing act included (several touches at once, or one going on
+                         from the last reply → <Intimacy_system> 4; only while IntimacyActive; the ENGINE owns ALL the H-math).
+                         act = Kissing|Breast|Fingering (foreplay) · Oral|Vaginal|Anal (sex) — Fingering = his fingers on or in her
+                         pussy · Vaginal = his cock inside her. pace = the tempo word {{user}} wrote about that act this turn
+                         (slow/soft → gentle · fast/hard/rough → intense · none → normal · mixed → the one it ends on; never
+                         carried from the last reply → <Intimacy_system> 4). ;gate = ACT gate, ONLY on an act her
+                         gate line prices · ;pos = the 体位 she's in, as the ENGLISH name in its <H_Position> brackets (Cowgirl, never 騎乗位; §3, engine records it) · ;pgate = POSITION gate, ONLY on a ROLLED
+                         (non-AUTO) position — panel pre-resolves the target; FAIL = fumble (Energy−3, stays basic) · ;destim = your page
+                         shows him backing off her (stops/holds still/pulls out — a teasing pause counts) · ;climax = her orgasm is on your page this reply (only at an act + pace her line lists) · ;strong = the 潮吹 die,
+                         only when her ## INTIMACY 潮吹 line opens the roll · ;dom = {{user}}'s INPUT this turn dominates her (pins, restrains, spanks, chokes or
+                         degrades her, or orders her to beg, obey or serve) — read from HIS words like pace, never from your prose;
+                         "ride me" or picking a position is not ;dom. Report it even when her panel says she overrules his push: it
+                         records that he pushed, and the engine decides who won (<Intimacy_system> 6). ⚠ EVERY roll flag carries the RAW
+                         POOL DIE you took — a NUMBER, never Success/Failure: the ENGINE recomputes each target from state and
+                         derives the outcome itself (a verdict word REFUSES the whole hact). Every rule
+                         (act gate · position · pace · who leads · climax · edging · ahegao) → <Intimacy_system> 1-7b + <H_Position>
+                         + the ## INTIMACY panel's pre-resolved cues. See [INTIMATE ROUTE & H-STAGES] for the stages themselves.
+                         e.g. "<KeyA>;act:Vaginal;pace:intense;pos:Cowgirl" (AUTO pos) · "<KeyA>;act:Vaginal;pace:normal;pos:Folded;pgate:11" (rolled) · "<KeyA>;act:Vaginal;pace:gentle;destim" (he stopped)
+<%_ } _%>
+  /Classmate/<Key>/Thoughts/0  string  her ≤2-sentence inner line this reply
+  /Intent/newClassmate   OBJECT — materialise new heroine(s); see <Classmate_Guide>. Write the WHOLE object in ONE op:
+                         op "replace" on the CONTAINER path /Intent/newClassmate (it already exists as {}). Do NOT use op
+                         "add" / target /Intent/newClassmate/<Key> — MVU REJECTS adding a new key into the record.
+                         KEY the object by each heroine's English Key, value = a flat object copied from her FULL
+                         <character> card {key,Name(JP/CN),Age,Gender,Race,Occupation,Persona,Identity,Height,Cup_Size,
+                         Body_Measurements,Hair_Style,Physical_Features,Image,Biography,Secret,9 traits,M_level,Hobbies}, NOT a
+                         string. Code builds the full record + NSFW defaults. ⚠ MULTIPLE heroines at once → put EACH as
+                         her own Key in that ONE object { "<KeyA>": {…}, "<KeyB>": {…} } — RES loops over every entry.
+DO NOT write Affection, Mood, Time, Block, Date, Weekday, Mode, Grade, ArcLoop, DayLabel/DayCheck/DaySpine, EventArmed,
+Mainchar.Quests, WorldRecord.NPCs/Locations/Events, RelationshipStage, TimeSinceLastSeen, LastInitiative, etc. Code
+computes ALL of those from your Intent. /Intent/check you never touch — not even
+to clear it (PRE-OWNED; the engine clears it after resolve).
+
+[CALENDAR / EVENTS are ENGINE-driven — you never patch them]
+The engine owns the clock, the day-roll and the pre-laid 3-year calendar (engine-internal, not a tag you read). To move time on, set
+/Intent/sceneAdvance/0 = true; on the day-roll the engine reads the calendar and handles break-JUMPS (skipped days),
+event days, the April grade rollover and the graduation TIME-LEAP — you write NONE of it. Window-A's ## TODAY line
+tells you when today carries an @spine (in <Event_Spines>) to play + its tied day-end check. On a TIME-LEAP
+(day-end of Graduation) narrate a short in-fiction reason the cast wakes on Day 1 still remembering the prior arc.
+THE CLOCK IS REAL: World.Time moves to the end-clock you report in /Intent/sceneClock and the day's structure derives
+from it. The GAME-DAY runs 07:30 to 07:29 — past midnight the calendar date moves but it is STILL the same game-day
+(that IS the celebration all-nighter); a clock reported past 07:30 closes that day on its own — only Graduation day
+waits for your sceneAdvance. A SCHOOL day has 4 blocks (starts 07:30/12:00/16:00/19:00) and a reply cap per block (## NOW shows "reply X/N").
+On reply N/N <Block_Transition> has you close the scene and skip into the next block within that reply: report the
+clock it ends at with sceneClock ALONE — that clock IS the block change, and a sceneAdvance beside it is dropped. If
+the prose stops short, the engine moves the clock at the reply's end. An end-clock past a block start changes the block by itself.
+An OPEN day (weekend / break / event day) is ONE free-roam stretch with NO reply limit and NO auto-advance — the clock
+drifts freely until YOU decide the day is done and set /Intent/sceneAdvance=true.
+EACH sceneAdvance = ONE step: a SCHOOL day jumps to the next block start (from the EVENING it rolls the day); an
+OPEN day rolls the day. SLEEP / "next day" from an EARLIER school block → keep emitting sceneAdvance reply-by-reply,
+bridging briefly ("the evening blurs past…"), until the day rolls — never park the story at night with the clock stopped.
+When you end an OPEN day that carries an event check (## TODAY names it), ALSO emit /Intent/daySwing for the girl he
+spent it with (see its path above) — that is the day's ONE big affection payoff. A plain weekend or break day pays
+itself: send sceneAdvance alone. Don't sceneAdvance an OPEN day until its beats (and the @spine, if any) are played.
+The PLAYER can also jump time by ticking "Next-Block" (PendingState.BlockDone) in the GUI. This advances the clock
+IMMEDIATELY (before your reply), so you normally just find yourself on the new block/day — the ## NOW facts already
+show it. Open with a brief BRIDGE from the previous scene ("The next morning…" / "Later that afternoon…") and play on.
+(FALLBACK: if the auto-advance ever misses and ## NOW still shows "⏭ NEXT-BLOCK REQUESTED", do the transition yourself:
+wrap the current scene up and time-skip into the next block/day within this reply.) You never write BlockDone/Date/Time.
+EVENT TRIGGERS are engine-armed too: the resolver scans the trigger table (WHEN/PREREQ vs stat_data) each reply and
+arms the fire-one winner — you NEVER evaluate predicates or scan a table. When ## EVENTS names an armed @KEY, PLAY that
+@KEY body from <Event_Body> this reply and emit /Intent/eventFire (see its path above); the engine then records the
+consequences (quest step / one-shot flag / crossover-NPC + discovered-venue registration). No ## EVENTS line → nothing armed.
+SAME-ROUND events: when {{user}}'s line THIS reply pushes an event over its last condition, a [SAME_ROUND_EVENT] block
+is injected onto {{user}}'s message — it CARRIES the @KEY DO body inline + says which /Intent/eventFire to emit. Play it
+EXACTLY like an armed @KEY (the body is right there; no <Event_Body> lookup, and there is NO ## EVENTS line yet — the
+engine arms AFTER, so the block is the signal). Emit its /Intent/eventFire; the engine verifies + records on fire. Absent → nothing this reply.
+
+[INTIMATE ROUTE & H-STAGES]
+There are TWO ways a relationship deepens past Friend. ROMANTIC (the default): Friend→Dating→Girlfriend — engine-auto
+at Aff 100 up to Dating, then the CONFESSION (a WON Confess, see /Intent/check) makes her his Girlfriend. PHYSICAL
+(the intimate route): Friend→Friends_With_Benefits — a separate, opt-in branch. Two H-stages, glossed so you can name
+them in prose:
+  · Friends_With_Benefits — casual, no-strings sex partners; still friends, no romance owed.
+  · Loyal_Puppy — A SECRET total-devotion stage; she keeps her normal public face, submits only in private.
+HOW they change (the engine owns every flip; you only emit the trigger):
+  · Friend → FWB: a MORALS-gated ROLL, and PRE OWNS IT — you neither roll nor emit it. It fires only when the panel shows
+    ★ FWB READY (Friend, Aff>80) AND {{user}} VERBALLY proposes the arrangement; PRE then rolls her Morals and the verdict
+    reaches you as a ## SOCIAL CHECK RESULT line to transcribe. Success = she agrees → Friends_With_Benefits (Aff kept).
+    Failure = she refuses → Aff −20 (heavy; and −20 drops her below the >80 band, so it's one shot per climb). accept% ≈
+    100−Morals: a saint (DC 19-20) nearly always refuses → she belongs on the romantic route, not FWB.
+  · FWB → Girlfriend: with HER consent — a WON Confess (he asks her to be his girlfriend), exactly like the confession.
+  · Dating/Girlfriend → Loyal_Puppy: a ROLL, and PRE OWNS IT — you neither roll nor emit it. It fires only when {{user}}
+    DEMANDS her total submission and she is eligible (Lewdness 50+, and Hagaruro above 60 or M_level 30+); PRE rolls one die and the roll
+    reaches you as a ## SOCIAL CHECK RESULT line to transcribe. Success = she gives herself over → Loyal_Puppy (Aff kept);
+    Failure = she refuses → Lewdness −10, stage kept (from Lewdness 50-59 that drops her below the floor, so the next
+    demand waits until she builds it back). A converted heroine thereafter AUTO-PASSES every H gate (still write the
+    strain of it AS PROSE — the word here is fiction, not the POST-owned /Intent/relationship strain op).
+Write each stage to its warmth ceiling in <Personality_Core> [STATE GATES]; the DC/H eases per stage are pre-folded in the panels.
+
+[FORMAT]
+<UpdateVariable>
+<JSONPatch>
+[
+  { "op": "replace", "path": "/Intent/location/0", "value": "School_Library;label:Library" },
+  { "op": "replace", "path": "/Classmate/<KeyA>/Thoughts/0", "value": "He actually noticed my book..." }
+]
+</JSONPatch>
+</UpdateVariable>
+
+⚠️ "path" not "/path".  ⚠️ Tuple value goes to /0.  ⚠️ The array must JSON.parse() — no trailing commas, no bare newlines in strings.
+</COT_Guide>

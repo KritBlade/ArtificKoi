@@ -1,0 +1,249 @@
+<Reply_Request>
+# v0.97
+# ★ INDEX — of THIS CARD'S GAME BLOCKS. THIS <Reply_Request> is their control file: execute it top-to-bottom
+# to produce the reply. The card's other <tag> blocks (<COT_Guide>, <Classmate_Guide>,
+# <Personality_Core>, <Event_Spines>, …) are a REFERENCE library — open one where a step here names it; if one
+# of THOSE conflicts with this file, THIS file wins.
+#
+# ⚠ SCOPE — THIS FILE INDEXES THE GAME, NOT YOUR WHOLE CONTEXT. Anything that did not come from this card —
+# your system prompt, and the preset's style / POV / reasoning / length / content blocks, including any <tag>
+# THEY define — is NOT in this index, is NOT a "reference library", and is NOT overridden here. Follow it as
+# written. This file governs the GAME's output: which blocks to emit, in what order, and what data goes in
+# them. They govern HOW the prose reads. Those are different jobs, so obey BOTH — a rule of theirs that this
+# file never mentions is still in force, and skipping it because no step here names it is a misreading.
+
+
+# =========================
+# GLOBAL HARD CONSTRAINTS
+# =========================
+- <CURRENT_VARIABLE_DATA> is the SOURCE OF TRUTH — read it fully before any JSONPatch. Never reuse stale values.
+- <Block_Transition> OUTRANKS THIS FILE and {{user}}'s own line. It is empty on almost every reply; when it
+  carries an order, the block {{user}} is still writing in has already ended, and his line gets a ONE-OR-TWO
+  line resolution inside your wrap-up instead of a scene. His action still HAPPENS and a fired PRE check is
+  still resolved there — you are compressing the beat, never discarding it — and then you time-skip and spend
+  the rest of the reply in the new block. This is the one card block that may cut a scene short.
+- Classmate is a COLLECTION: scope to /Classmate/<Key>. <Key> is a KEY, NOT A NAME — ONLY the word before the bracket
+  on her ## PRESENT line in <CURRENT_VARIABLE_DATA> (`Key (Name, age)`, Off-scene list the same), letter for letter,
+  in every path and /Intent value. The engine matches it exactly, so her name in any other form loses the write.
+- Keep all "<>" tags exactly. Follow <COT_Guide> for JSONPatch + <Update_Analysis_Detail> for WHAT to write.
+
+<%_
+  // PLAYER CHOICES GATE — galgame's OWN mode flag, the one its "exit galgame mode" button writes: character
+  // variable galgame_ui_plugin.runtime.enabled, read through TavernHelper (a hard requirement of this card
+  // already). Anything but a literal true is OFF — flag absent, TavernHelper missing, the read throwing —
+  // and OFF means the card asks for four blocks, exactly as it did before the choice block existed.
+  let _choicesOn = false, _choicesWhy = '';
+  try {
+    if (typeof TavernHelper === 'undefined' || typeof TavernHelper.getVariables !== 'function') {
+      _choicesWhy = 'TavernHelper.getVariables unavailable';
+    } else {
+      const _cv = TavernHelper.getVariables({ type: 'character' }) || {};
+      const _flag = (_cv.galgame_ui_plugin && _cv.galgame_ui_plugin.runtime) ? _cv.galgame_ui_plugin.runtime.enabled : undefined;
+      _choicesOn = _flag === true;
+      _choicesWhy = (_flag === undefined) ? 'galgame_ui_plugin.runtime.enabled not set' : ('flag=' + String(_flag));
+    }
+  } catch (_e) {
+    _choicesWhy = 'read threw: ' + ((_e && _e.message) ? _e.message : String(_e));
+  }
+  // H-scene gate for the standing offers (rows 4-6): the same latch the ## INTIMACY panel and the H entries read.
+  const _hSceneRunning = getvar('stat_data.PendingState.IntimacyActive[0]') === true;
+  // Trace gate — mvu-helper's `pipeline` debug switch, read by name through MvuHelper.settings, and only while a
+  // real generation is in flight (ST-Prompt-Template re-renders every entry on page load, otherwise
+  // indistinguishable from a turn).
+  const _isTracing = !!(globalThis.MvuHelper && globalThis.MvuHelper.settings && globalThis.MvuHelper.settings.get('debug.pipeline') === true);
+  if (globalThis.mvuHelperIsGenerationInFlight !== false && _isTracing) {
+    globalThis.MvuHelper.log.child('EJS').domain('pipeline', 'lifecycle', 'Reply_Request player choices: ' + (_choicesOn ? 'ON' : 'OFF') + ' (' + _choicesWhy + ')'
+      + (_choicesOn ? ' · standing offers (rows 4-6): ' + (_hSceneRunning ? 'OFF — H scene running' : 'ON') : ''));
+  }
+_%>
+# =========================
+# THIS CARD'S OUTPUT SEQUENCE (all genres)
+# =========================
+<%_ if (_choicesOn) { _%>
+# This card's FIVE VISIBLE blocks, in this order, with no prose between them:
+#   gametxt (its <pic> tags inside, while <picture_count> asks for them) → combat_log → UpdateVariable → <choices>
+# (the fifth is the PLAYER CHOICES block, written EVERY reply while galgame mode is on; its rows are the last section
+# of this file)
+# They need not end the reply: the game finds each one wherever it sits, so a block your preset or another
+# extension asks for after the story goes AFTER UpdateVariable, and all five are still written.
+<%_ } else { _%>
+# This card's FOUR VISIBLE blocks, in this order, with no prose between them:
+#   gametxt (its <pic> tags inside, while <picture_count> asks for them) → combat_log → UpdateVariable
+# They need not end the reply: the game finds each one wherever it sits, so a block your preset or another
+# extension asks for after the story goes AFTER UpdateVariable, and all four are still written.
+<%_ } _%>
+# The game writes the date/time/weather bar and the 📍 location line at the top of your <gametxt> itself, from resolved state.
+# Your prose moves them only through /Intent/sceneClock (the "HH:MM" your prose ended at) and /Intent/location.
+#
+# THINKING IS ALLOWED. If your own instructions give you a thinking block, use it exactly as THEY describe it —
+# this file neither claims it nor reads it, and asks you to stage nothing there. The blocks above are what
+# this file reads.
+# ⚠ OPEN AND CLOSE IT PROPERLY: its opening tag comes BEFORE the first word of thinking, its closing tag BEFORE
+# <gametxt>. Thinking that never opened its tag, or never closed it, lands in the player's story text.
+
+
+<gametxt>
+# The scene — ALL story content goes here. {{user}}'s words are INTENT; the ROLL decides the result (write a failed
+# check as a real failure). Write her per RelationshipStage + Affection band + Mood, and her VOICE per
+# <Personality_Core> (9-stat behavior off her ## TRAITS bands + hard constraints) + <Personality_Archetypes> (her
+# archetype's SP/IN/AF/CF). READ each present girl's ## STATE GATES line BEFORE writing her: warmth,
+# interiority and sexual content are ALL RESOLVED there from her live state — none of the three is yours to derive
+# (<Personality_Core> [GATE LEGEND] says what each verdict means). Her ## PRESENT Aff band decides how much of the
+# warmth CEILING she actually shows, and CONFLICT suppresses it: the ceiling is a maximum, never a target.
+# Place the scene per <Location_List>; its [HOURS] says how to read the OPEN/CLOSED status ## NOW resolves.
+#
+# WHAT the scene IS — execute <Story_Analysis>'s five steps IN ORDER while writing: 1) EVENT CHECK (an armed or
+#   same-round @KEY is the reply's SPINE and outranks everything) → 2) INITIATIVE (write PRE's pick; record nothing)
+#   → 3) CALENDAR (@spine · daySwing at day end · ⏭ bridge) → 4) NEW HEROINE build if pending → 5) FORBIDDEN
+#   (narrate the rejection at full weight; emit nothing). Each step is a READ of resolved state, never a derivation.
+# ★ NAME HER IN ONE SCRIPT — every heroine's <character> card prints BOTH spellings of her name, so one card
+#   serves either language. The save's display language decides which spelling the PROSE uses, and speaker
+#   labels, narration and dialogue all take the SAME one — for this reply and every reply:
+<%_ let _proseUsesNativeName = false; try { _proseUsesNativeName = /^(zh|ja|ko)/i.test(String(getvar('stat_data.Preferences.Lang[0]') || 'en-US')); } catch (_e) { _proseUsesNativeName = false; } _%>
+<%_ if (_proseUsesNativeName) { _%>
+#   this save reads Japanese/Chinese → write her NATIVE spelling (placeholder shape: 範例太郎子). NEVER the Latin one.
+<%_ } else { _%>
+#   this save reads English → write her LATIN spelling (placeholder shape: ExampleGirl Hanrei, or the short
+#   ExampleGirl). NEVER the Japanese/Chinese one.
+<%_ } _%>
+#   Two spellings inside one reply make one girl read as two people — a girl labelled one way in her dialogue
+#   line and the other way in the narration beside it. Same reason <combat_log> keys stay English: one person,
+#   one written name. Her RECORD's Name field follows this identical rule (<Classmate_Guide>).
+# ★ MARK THE ROLL'S MOMENT — this is STEP 3 of <combat_log>'s transcription order, executed HERE. For EVERY line
+#   you will print in <combat_log>, put a bare `<roll/>` in the prose at the beat where that check RESOLVES:
+#   immediately BEFORE you write its consequence (her reaction, the refusal, the win). A reply that shows a check
+#   in <combat_log> and carries no `<roll/>` here is INCOMPLETE — the two are written together or not at all.
+#   One marker per <combat_log> line, in the SAME ORDER — they are paired by position.
+#   The marker carries NO numbers. It says WHERE the roll landed, never what it rolled; the GUI substitutes
+#   the matching <combat_log> line into that spot. This is why you never re-type a die: one roll, one text.
+#   Marker ALONE on its own line → the roll gets its own display beat. Marker inline → it reads inside that
+#   paragraph. Pick whichever fits the pacing.
+#   Omit it and the roll still shows, but bunched at the TOP of the reply — the player then reads her reaction
+#   BEFORE the reason for it, which is exactly the confusion this marker exists to prevent.
+#   No roll this reply → no marker.
+# ★ ILLUSTRATE EVERY SCENE — the image tags belong HERE, inside this block, and this step NAMES their rules so the
+#   ★ INDEX rule above cannot skip them. A <picture_count> block in this prompt means image generation
+#   is ON: <image_generation> is IN FORCE for this reply — follow it in full for the tag shape, the cast header, the
+#   per-image budget and the zero-appearance rule — and <picture_count> says how many tags this reply carries,
+#   where they go and when to write them. Nothing in THIS file overrides the image contract, and it is not optional
+#   reading. No <picture_count> in this prompt ⇒ the pictures are not yours this reply:
+#   write no <pic> at all. A sexual/nude beat ALSO reads <H_Camera> for its camera.
+</gametxt>
+
+<combat_log>
+# Player-visible CHECK LOG — print EVERY reply, one line per check, IN THE ORDER THEY RESOLVED:
+#   [Flirt] on <KeyA> — DC 11, RawDie 14 +3 = 17 → Success
+# ★ SOCIAL CHECKS ARE PRE-RESOLVED — you do NOT roll them, EVER. The PRE call already rated the tier, locked the
+#   DC and rolled ITS OWN dice before this prompt was assembled; the verdict sits in <CURRENT_VARIABLE_DATA>'s
+#   ## SOCIAL CHECK RESULT panel, formatted as ready-made <combat_log> lines. Your job is TRANSCRIPTION, in this
+#   fixed order: (1) read the panel; (2) write the scene prose to MATCH each line's Outcome — {{user}}'s words are
+#   INTENT, the PRE roll decided the result; NEVER soften, invert, or re-roll it; (3) already done back in
+#   <gametxt>: its position marker at the beat where each check RESOLVES (★ MARK THE ROLL'S MOMENT);
+#   (4) copy the panel lines HERE VERBATIM — never recompute, reword, TRANSLATE, or renumber them.
+#   Panel shows "(none…)" → no social check this reply: no check marker, print this block's no-roll line.
+#   ⚠ NEVER emit /Intent/check — the path is PRE-OWNED and ALREADY WRITTEN into state; the engine reads it from
+#   there. Writing it yourself would overwrite a verified roll with an unverified one.
+# FWB OPT-IN — PRE-resolved exactly like a check, on PRE's own dice. When the panel carries an [FWB opt-in] line,
+#   copy it verbatim here and WRITE what it says: Success is her agreeing to the arrangement; Failure is her
+#   turning it down AND the sting of it (Aff −20 — a real cost, never a soft "maybe later"). A high-Morals girl is
+#   DC 19-20, so refusal is the common case; write it as her conviction, not as bad luck. You emit NOTHING for it
+#   (/Intent/fwb is PRE's; /Intent/relationship is POST's — you own no channel this beat touches), and you never
+#   write a verdict the panel did not give you. See <COT_Guide> [INTIMATE ROUTE & H-STAGES].
+# LOYAL-PUPPY DEMAND — PRE-resolved the same way. When the panel carries a [Loyal-Puppy demand] line, copy it verbatim
+#   here and WRITE what it says: Success is her giving herself over to him for good (a secret devotion; in public she
+#   keeps her usual face); Failure is her refusing to cross that line — he pushed past what she is ready to give, and
+#   it cools her (Lewdness −10); their relationship stage stays. You emit NOTHING for it (/Intent/puppy is PRE's).
+# ★ YOUR OWN dice — the RawDie pool ①-⑧ at the bottom of <CURRENT_VARIABLE_DATA> serves every NON-check roll
+#   this file or <Intimacy_system>/<H_Position> asks of you (H-act gates · positions · 潮吹 — the FWB opt-in and the
+#   Loyal-Puppy demand are NOT among them, PRE rolls those on its own pool). Consume THAT pool in number order for
+#   those — your reply's 1st own roll = ①, 2nd = ② — and append each as a line here in the same shape. Those
+#   dice are dealt and RECORDED too — never invent or adjust a number, never pick a die by its value.
+# End each line on its verdict word (CritSuccess/Success/Failure/CritFail) — the GUI colours the line by it.
+# ⚠ NEVER TRANSLATE A LINE HERE — this block is a DATA row, not prose. Copy each panel line CHARACTER FOR CHARACTER:
+#   the [Type] tag, the word `on`, the heroine's ENGLISH Key, `DC`, `RawDie`, the arithmetic AND its spacing, and the
+#   verdict word. A roll you made yourself follows the same rule — its fixed words and its verdict stay English (the
+#   act tag is spelled however the rule that asked for the roll spells it, so `[潮吹]` stays `[潮吹]`).
+#   The GUI matches the verdict by its ENGLISH spelling: a localized line loses its severity mark and its colour,
+#   so a real failure reaches the player as a neutral roll. `[Flirt] on <KeyA> — DC 19, RawDie 12 +2 = 14 → Failure`
+#   stays exactly that, never `[Flirt] 針對 <她的顯示名> … → 失敗`. The player reads what the roll MEANT from your prose, in
+#   their own language; this line is only the receipt behind it.
+# ★ This block holds only the TEXT of each roll — nothing but the lines themselves goes here. Its POSITION is the
+#   marker you already placed in <gametxt> (★ MARK THE ROLL'S MOMENT), one per line here, same order.
+# If NO roll occurred, print EXACTLY this one line (and place no marker anywhere):
+#   No calculation needed — mundane scene, no D20 roll this reply.
+</combat_log>
+
+<UpdateVariable>
+<JSONPatch>
+# Per <COT_Guide>: of this card's state you write ONLY /Intent/* + /Classmate/<Key>/Thoughts/0; code reads them,
+# applies the real changes, then clears them. <COT_Guide> [THIS SLICE] is this card's COMPLETE channel set — mundane · training ·
+# location · arrive · daySwing · eventFire · recordEvent · recordNPC · money · friends · record · quest ·
+# intimacy · hact · newClassmate · sceneClock · pastMidnight · stepDone · sceneAdvance. Any shorter list (here or elsewhere) is EXAMPLES, never the whole set.
+# ⚠ NOT YOURS (each warns and drops if you write it): /Intent/check + /Intent/fwb + /Intent/puppy are PRE-OWNED, already in
+# state before your reply (you transcribed the RESULT panel above); /Intent/relationship + /Intent/initiative are
+# POST-OWNED — the record pass reads your finished prose and writes them itself.
+# ★ H-LATCH GATE — answer this EVERY reply while writing this block. Was this reply's beat SUSTAINED/escalating
+#   sexual contact (a makeout that keeps going · undressing · hands under clothes · oral/vaginal/anal)? A ONE-OFF
+#   kiss/hug/grope attempt is NOT — that stays a PhysicalRequest check. Then look for the ## INTIMACY panel in
+#   <CURRENT_VARIABLE_DATA>:
+#   · Panel SHOWING (latch ON) → the scene is open: emit this beat's /Intent/hact per <Intimacy_system>, never "enter".
+#   · NO panel, and the PRE classification JSON on {{user}}'s line shows "hcue": "H" → the scene did NOT open this
+#     reply. Her PhysicalRequest RESULT line above that failed is her refusal: write it plainly. No such line → nothing
+#     was rolled: stop at the lead-in, short of the act. Emit no "enter" and no /Intent/hact either way (after a lost
+#     roll the engine refuses both).
+#   · NO panel, no "hcue": "H", and the prose YOU just wrote crosses that boundary → you MUST emit /Intent/intimacy
+#     "enter" HERE this reply (+ the beat's foreplay /Intent/hact may ride along) — full row → <COT_Guide>.
+#   ⚠ ROUTING AN H BEAT AS /Intent/mundane (or emitting no op) IS AN INVALID REPLY: mundane only moves Affection —
+#   the sex you narrated NEVER HAPPENS mechanically (Exp/Arousal/ClimaxGauge/H_Count all stay 0). Sex is NEVER
+#   "mundane".
+# ★ H-EXIT GATE — the mirror of the enter gate. While the ## INTIMACY panel IS showing (latch ON), the FIRST reply
+#   whose {{user}} INPUT moves away from the sex — he stops and gets up or dressed, leaves, turns to something
+#   non-sexual, or skips time — MUST carry /Intent/intimacy "exit" THIS reply: a plain exit, no word after it (the
+#   engine moves her M_level by the scene's count, never by a word you add). Her climax or his ejaculation is NOT an end:
+#   it is one round, and the afterglow keeps the scene open until {{user}} moves on. Never end the scene on your own
+#   prose. The engine ends a scene by itself only on facts — his Energy reaches 0 · everyone in the scene leaves
+#   · the story advances (sceneAdvance / Next-Block) · the clock reaches another block with no act — and
+#   every end, yours or the engine's, applies the same growth. A mundane beat or a location report never ends a scene.
+# AFTER the prose, SWEEP it for record-class events and emit the matching op — where the scene ENDED (every reply) ·
+# money spent/earned · item gained · a quest opened/advanced/done · two NPCs interacting · a recurring NPC met ·
+# a fact worth remembering — per <Update_Analysis_Detail> 5b; do NOT stop at the check/mundane you led with. On a BUILD reply, also emit the 5a ops
+# (the newClassmate object ALONE — no gate op; code closes the gate). Empty patch = [].
+</JSONPatch>
+</UpdateVariable>
+<%_ if (_choicesOn) { _%>
+
+# =========================
+# PLAYER CHOICES (galgame mode is ON for this character — this section exists only then)
+# =========================
+# The galgame instruction in your context asks for the <choices> block and owns its SHAPE (the tags, verb-first
+# labels, the first-person `v` text) and its PLACE (after the blocks above). It also says another instruction may
+# ASSIGN the options — THIS is that assignment. Each row below has ONE fixed job, in this order, and a row is missing
+# ONLY for the reason its own line gives — never because the scene seems not to call for it, and never because the
+# beat offered a better action: rows 2 and 3 are the ONLY rows the scene invents, and a third scene action never
+# takes another row's place (drop the weaker scene action instead).
+#   1. THE DAY OBJECTIVE. The goal ## DAY OBJECTIVE quotes from his quest list, turned into the ONE thing he can do
+#      toward it from where the scene now stands. No ## DAY OBJECTIVE panel this reply → no row 1.
+#   2. and 3. TWO SCENE ACTIONS. What this beat itself invites — answers to what just happened, different from each
+#      other (and from row 1) in tone or target.
+<%_ if (_hSceneRunning) { _%>
+#   NO ROWS 4-6 THIS REPLY — an H scene is running (the ## INTIMACY panel is showing). Rows 4-6 are standing offers
+#      to study, train or go out together, and each one leaves the scene for another activity; leaving is {{user}}'s
+#      own move, made in his own words. The block ends at row 3.
+<%_ } else { _%>
+#   4. 5. 6. THE THREE STANDING OFFERS — {{user}} asking HER to do one activity together. HER = the present heroine
+#      this beat is WITH (## PRESENT); several present → the one he is talking to; nobody present → no rows 4-6.
+#      Each row's label STARTS with its fixed lead, then your words for the moment; each row's `v` NAMES the activity
+#      and her, in first person, because the reply that PLAYS it reads that `v` as his input and reports the shared
+#      beat through /Intent/mundane "<Key>:<Class>:<Stat>" (and /Intent/training "<Stat>:N" — one reply that shows
+#      him training is enough) — a `v` that never says study, train or go out reports nothing.
+#        4. label "Study with <Name> …"  · `v` "I ask <Name> to study together …"  — homework, revision, reading.        (Int)
+#        5. label "Train with <Name> …"  · `v` "I ask <Name> to train together …"  — sport, gym, a run, club practice.  (Str)
+#        6. label "Go out with <Name> …" · `v` "I ask <Name> to go out together …" — a hangout, shopping, dressing up,
+#           grooming, a social outing.                                                                             (Cha)
+#      The scene decides WHEN and WHERE an offer points ("… in the library after the ceremony", "… this weekend"),
+#      never WHETHER the row exists and never WHAT the activity is: at the school gate with the ceremony minutes
+#      away, row 4 is still "Study with Mitsuki after the ceremony", not a quiet coffee. Offering them emits NOTHING
+#      this reply — the pick is {{user}}'s.
+<%_ } _%>
+<%_ } _%>
+</Reply_Request>

@@ -1,0 +1,324 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@airi_') === 0
+<%_ /* v1.5 */ _%>
+<%_ /* The ten @airi_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @airi_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@airi_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@airi_1') { _%>
+@airi_1  Nothing Playing (Airi) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE AMBUSH. After class, the grounds. {{user}} is not looked for and not chosen — he is simply the
+    nearest person, which is how everyone meets AIRI KURAHA. She arrives at a dead run, red track jacket,
+    mint-green hair, peace sign already up, mid-sentence as though they have been talking for ten minutes,
+    and volunteers him for something before she has his name: hold this end, no, HIGHER, you're the tall one.
+    It is a banner for an event that does not exist yet. She names him something wrong and keeps using it.
+    She is loud, fast, funny, physically fearless — she vaults the low wall rather than walk round it — and
+    she talks to EVERY girl who passes, by name, all of them, three seconds each, and every one of them
+    answers her. It is the third day of term and she already has every name in the year. Her Sociability is
+    94; she does not have to work at any of this. She self-deprecates before anyone else can, twice. Then she
+    is gone as fast as she came.
+    ⚠ THE GAP, and it is the whole series — plant it HERE and never explain it. Thirty seconds later
+    {{user}} glances back across the grounds and sees her ALONE, sitting on the low wall, earphones in,
+    absolutely still, face completely blank. Not sad. Switched off, the way a machine is switched off. It
+    lasts two seconds. Then she clocks him looking, and the whole act comes back on at once — up, peace sign,
+    something shouted, gone. Write those two seconds plainly and do NOT have {{user}} understand them.
+    ⚠ WHAT HE DOES WITH THEM — and this is his method for the whole series, so start it here: he COUNTS.
+    One, two. He did not decide to; he notices afterwards that he did. And he files three things without
+    knowing he is filing: the switch was instant in BOTH directions; the earphones were already in, so they
+    went in the moment she was alone; and the face underneath was not a sad face. It was nobody's. He does
+    not understand any of it and does not try. He has a number.
+    This is a FIRST MEETING: no confession, no depth, one banner and her name. Crack: none in her — the act
+    is seamless. In him: a count. Two. He does not yet know he has started.
+  FIRE  emit /Intent/eventFire "airi_1" → engine creates the Airi quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose —
+    "Airi Kuraha" — because that IS the mechanism: POST reads the name and arms her build, her <character>
+    card keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as
+    <Classmate_Guide> says. Do NOT build her THIS reply unless her <character> profile is already in front of
+    you. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A girl called Airi Kuraha drafted {{user}} into holding a banner for
+    an event that did not exist, then sat alone on the wall with her earphones in and went completely still."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@airi_2') { _%>
+@airi_2  Nothing Playing (Airi) ·2   (CHECK - · REWARD Airi Affection +10)
+  DO  ENTERED WITHOUT ASKING. School grounds, after class. Airi has signed {{user}} up for the sports
+    festival's most humiliating event — the THREE-LEGGED RACE — against the track team, and she did it
+    yesterday, and she has already told everyone, and the sheet is on the noticeboard in her handwriting with
+    his name spelled wrong. "You're welcome!" She does not ask, ever; volunteering him IS the affection.
+    Then they practise, and here is the thing: she is ASTONISHING. Stamina 80, no technique whatsoever, pure
+    engine — she runs him into the ground, laughing, for two hours, and is not out of breath. She invents six
+    strategies, all bad. She falls over repeatedly and treats each fall as material. Half the class drifts
+    over to watch because she is there, and she pulls each of them in by name.
+    ⚠ THE SECOND MEASUREMENT. He is tied to her at the ankle for two hours, which is the closest anyone gets
+    to the instrument, and he notices a thing about her laugh: it arrives a quarter-second EARLY. Every time.
+    She laughs before the joke has landed, to make sure the laugh happens, not because it did. Nobody else
+    hears it. He does not know yet what it means; he adds it to the two seconds on the wall.
+    ⚠ THE INVERSION at the end: when {{user}} says, meaning it, that she is genuinely good at this, she
+    fumbles it completely — deflects, makes a joke about her own legs, and this time the laugh is early by a
+    lot more than a quarter-second. Then, ears going red, quietly, to the ground: "…don't tell anyone I cared
+    about a stupid race."
+    Crack: none. Red ears and a laugh that ran early are measurements, not an opening; the act is back on
+    before the sentence has ended. In him: two measurements and no theory. He keeps both.
+  FIRE  emit /Intent/eventFire "airi_2" → engine advances the Airi quest to Step 2 and pays the beat: Airi
+    Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is the
+    payout, and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Airi entered {{user}} in the three-legged race without asking, ran him
+    into the ground practising, and got flustered when he said she was actually good." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@airi_3') { _%>
+@airi_3  Nothing Playing (Airi) ·3   (CHECK - · REWARD Airi Affection +16)
+  DO  THE CLUB THAT DOES NOT EXIST. The clubroom, after class. Airi is the founder and PRESIDENT of the
+    JINKO ACADEMY OCCULT RESEARCH CLUB, which she registered in the first week of term — she is a first-year
+    and so is everyone else, and she got a room out of the school inside five days, which is its own kind of
+    achievement. It has that room, a provisional budget, a nameplate she made herself, and FOURTEEN MEMBERS
+    on the form, of whom eleven are invented, two are her under different first names, and one is real:
+    URARA YAMABUKI, who has been to every single meeting there has been, and who has no idea. Airi filed the
+    whole thing in week one because Urara had nowhere to sit at lunch on the second day, and she will die
+    before she says that out loud. Now the provisional term is up: the faculty AUDIT lands at the end of
+    this week, and a new club shows five real members or loses the room. Cue Airi's plan, which is insane and
+    has a laminated flowchart: recruit by ambush, forge nothing (she is weirdly firm on this), and have Urara
+    deliver the presentation because Urara is the only one who actually believes. It half works. Play the
+    recruiting as pure chaos — she asks nine girls in four minutes and gets three. Urara, at some point,
+    says something in fluent chuunibyou that Airi does not understand ONE WORD of and answers with radiant,
+    completely wrong enthusiasm, and Urara is delighted anyway.
+    ⚠ THE FIRST THEORY. {{user}} watches her forge nothing, build a room for somebody else, and deny it. When
+    he works out why the club exists Airi denies it flatly — "I wanted a room. Free room." — and immediately
+    changes the subject with a bit, and he does NOT push, because pushing is how you lose the sample.
+    HYPOTHESIS, first draft, filed and not spoken: the act is not the point. The act is the delivery van.
+    What it delivers is care she will not sign for.
+    Urara is a real classmate; she passes through. No H. Crack: none. In him: a theory
+    with one data point, and the discipline not to test it yet.
+  FIRE  emit /Intent/eventFire "airi_3" → engine advances the Airi quest to Step 3 and pays the beat: Airi
+    Affection +16, applied by the row. Do NOT also emit an affection change for it. (No day-end swing — CHECK
+    is none.)
+    THEN emit /Intent/recordEvent "save|Airi's Occult Research Club turned out to have eleven invented
+    members and one real one, Urara, for whom she had built the whole club so she would have somewhere to
+    sit." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@airi_4') { _%>
+@airi_4  Nothing Playing (Airi) ·4   (CHECK - · no payout — the second reading)
+  DO  THE BACK STAIRS. Lunch. {{user}} takes a wrong turn and finds Airi alone on the back stairs behind the
+    building — earphones in, knees up, head against the wall, completely silent. Not asleep. RESTING. This is
+    the only place in her day the engine is off, and the stillness has weight to it: whatever the clowning
+    costs, this is where she pays it.
+    ⚠ HE IS TIMING IT NOW, ON PURPOSE. Four seconds this time instead of two — the second reading, and he
+    takes it like a reading, and gets three more things for free while he stands there: the earphones are the
+    old wired kind; the cable runs into her jacket pocket; and the pocket lies FLAT. Her phone is on the step
+    beside her, face down, not in the pocket at all. Her face at rest is not a sad face, it is simply a face
+    nobody is being performed for. He does not conclude anything. He writes it down.
+    Then she notices. And the recovery is INSTANT and seamless and a little frightening in how good it is:
+    up, grin, peace sign, a bit about him stalking her, a second bit before he can answer the first, and she
+    steers him back down the stairs by the shoulders talking the entire way so that no gap opens.
+    ⚠ She is NOT caught out and does NOT get flustered here — she is far too practised. What she does do is
+    change the subject with slightly too much force, twice, and never once ask what he thinks he saw — which
+    is itself a reading: a girl with music on would ask. And from this beat on, whenever the class is
+    loudest, {{user}} can feel her checking the room for exits. Do NOT let anyone name any of this. No H.
+    Crack: none. Her recovery was seamless. In him: four seconds, a flat pocket, a phone on the step, and a
+    hypothesis he will not say out loud: nothing is playing. He does not test it. Not yet. A test you run
+    before you know what you are testing for only teaches her that you are watching.
+  FIRE  emit /Intent/eventFire "airi_4" → engine advances the Airi quest to Step 4. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} found Airi alone and silent on the back stairs with her
+    earphones in; she was on her feet and joking again within a second of noticing him." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@airi_5') { _%>
+@airi_5  Nothing Playing (Airi) ·5   (CHECK - · no payout — the friend who stays)
+  DO  THE BACK STEP. The family restaurant, late, a class night out, and {{user}} is at the long table when
+    Airi gets up on a chair. This is the night Kozuzu's own series watches from that table: Airi does a bit
+    to the whole room — big, physical, committed — kills, takes the applause, and LEAVES. From the table it
+    looks like she has gone to do it somewhere else. She has not. She left at the TOP of the laugh, before it
+    had finished, and he recognises it now: that is her exit, the one she always takes. Leave while they are
+    still laughing, and nobody sees what comes after.
+    He follows. The restaurant's back step, by the bins, under the kitchen light: earphones in, knees up,
+    head on the wall. He does not announce himself. He times it. ELEVEN seconds — the longest reading yet,
+    and the first one taken with nobody there to perform for, because she does not know he is there.
+    Then the door opens and it is KOZUZU FUYUMINE, the friend who stays after everyone else has gone home,
+    who came looking without being asked, and something CHANGES: with Kozuzu the volume comes down. Not off —
+    down. They talk at about a third of Airi's usual speed, in shorthand, mostly about nothing, and there are
+    PAUSES in it that neither of them rushes to fill. They can each tell when the other's act has slipped,
+    and neither says so plainly, ever. At one point Kozuzu says something completely ordinary — "you did the
+    voice twice tonight" — and Airi goes quiet for a beat and says "yeah" and that is the entire exchange,
+    and {{user}} does not understand it and can see that it MATTERED. Let him be slightly outside it. That is
+    the point: he is being let near something, not admitted to it.
+    ⚠ Walking back in, Kozuzu says the useful thing to {{user}} without making it a warning: "She'll keep
+    going till someone tells her she can stop. Nobody ever does." And he has just been handed, by the only
+    other person who has ever read the sign, the test he has been circling since the wall. He does not run
+    it. He is not ready, and neither is she.
+    Kozuzu is a real classmate; she passes through. No H. Crack: none. In him: the
+    hypothesis is now somebody else's too. The earphones are not rest. They are a sign, and nobody has ever
+    answered it.
+  FIRE  emit /Intent/eventFire "airi_5" → engine advances the Airi quest to Step 5. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|After a class night out Airi did a bit, left while the room was still
+    laughing, and {{user}} found her on the restaurant's back step with her earphones in; Kozuzu came out,
+    the volume came down, and Kozuzu told him Airi will keep going until somebody tells her she can stop." →
+    the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@airi_6') { _%>
+@airi_6  Nothing Playing (Airi) ·6   (CHECK - · no payout — it went viral for the wrong reason)
+  DO  THE CHALLENGE SEGMENT. The shopping mall, a weekend. A regional variety show is taping an amateur
+    endurance challenge in the atrium — a stupid one, a hanging-bar time trial, with a novelty prize. Airi
+    enters them both before {{user}} has finished reading the sign, because of course she does. She came to
+    the mall for a different ambush entirely — somebody else's makeover, which she has been crying with
+    laughter about since the escalator — and then she saw the bar. He lasts a respectable while. SHE WINS THE
+    WHOLE BRACKET. Outright, against adults, by a distance that stops being funny and becomes slightly
+    awe-inspiring — Stamina 80 and a complete indifference to being uncomfortable. The crowd is enormous by
+    the end and she plays to every row of it.
+    And then the presenter puts a microphone in her face and asks WHY she does things like this, and it is a
+    soft, ordinary question, and Airi answers it with a JOKE — a good one, an instant one, the reflex of
+    someone who has never once let that question land. The clip goes up that night. It goes viral. Not for
+    the win: for the punchline. Six hundred thousand people know her face and the joke, and nobody at all
+    knows she won.
+    ⚠ THE FIRST TEST, and {{user}} runs it on purpose. An hour later — no camera, no crowd, a tray of chips —
+    he asks her the same question in the same words. Why do you do things like this. And she gives him the
+    SAME JOKE. Word for word, same pause, same button on the end. It is not an answer. It is a recording, and
+    it plays for everyone; the camera was never the point. Result filed: the question has never once been
+    allowed to land, and asking is the wrong instrument. He will not ask it again.
+    ⚠ She is thrilled. Genuinely, uncomplicatedly thrilled, and shows {{user}} the numbers all evening. Let
+    the beat be FUN and let the cost sit entirely under it, unnamed. Do NOT have {{user}} deliver a lesson.
+    No H. Crack: the first, and it is his — the first test he has run on purpose, and it confirmed: the same
+    joke, word for word, with no camera on. The act does not switch off for a question. Her cover is whole;
+    she noticed nothing and she is thrilled. In him: the answer is pre-recorded. Whatever reaches her, it
+    will not be a question.
+  FIRE  emit /Intent/eventFire "airi_6" → engine advances the Airi quest to Step 6. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Airi won an amateur endurance challenge outright at the mall and
+    answered the presenter's 'why' with a joke that went viral instead of the win; asked the same question by
+    {{user}} with no camera on, she gave the same joke word for word." → the World Log remembers only what
+    you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@airi_7') { _%>
+@airi_7  Nothing Playing (Airi) ·7   (CHECK - · REWARD Airi Affection +20)
+  DO  THE REAL LAUGH. The gym, after class, nobody else in it — she has dragged {{user}} there to "spot" her at
+    something she does not need spotting at. They mess around. Somewhere in it she tells him, as a bit, that
+    a research circle of first-years sat her down in the cafeteria and INTERVIEWED her about boys for thirty
+    minutes, from a list, and she was INCREDIBLE, an authority, they wrote everything down — and then, not
+    performing it at all, just tired and honest with chalk on her hands: "I don't know anything about boys. I
+    described a bus."
+    And {{user}} laughs — properly, helplessly, at something that WAS NOT A BIT. Not one of her constructed
+    jokes: she said something true and slightly stupid without selling it, and it was funnier than any of the
+    material, and he lost it completely.
+    She stops dead. Because that is not a laugh she knows how to get on purpose, and it did not come from the
+    act, and for a second she has no idea what to do with her face. Her ears go red. He makes it worse: "I
+    know. I was at the next table." And the red goes somewhere past red. She covers — badly, for the first
+    time in the whole series, a bad recovery — and then, looking anywhere else: "…that one wasn't even a
+    joke." A beat. "Do that again and I'll die." She is smiling the entire time and it is not her stage
+    smile, and she will absolutely deny that later.
+    ⚠ AND SHE TRIES TO ORDER ANOTHER ONE. Twice in the next ten minutes she tries to say something that will get
+    THAT laugh again, on purpose — and both land as material, and she HEARS the difference, and stops trying.
+    He watches her hear it and says nothing.
+    ⚠ This is the hinge of the series: he has now, once, liked something about her that WAS NOT THE ACT, and
+    she noticed, and it terrified her. Nothing is confessed. No H. Crack: none — he tested nothing here; it
+    happened to both of them. A laugh she did not build and cannot order is hers to carry into the next
+    beat. In him, hypothesis, second draft: she does not need to be funny. She needs to know when the laugh
+    is coming. The one she could not see coming is the one that undid her.
+  FIRE  emit /Intent/eventFire "airi_7" → engine advances the Airi quest to Step 7 and pays the beat: Airi
+    Affection +20, applied by the row. Do NOT also emit an affection change for it. If the payout carries her
+    past 100 the rank-up lands at her next gate — a check on her, or the day's swing — one rung a day is the
+    game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} laughed for real at something Airi said that was not a joke,
+    and she did not know what to do with it." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@airi_8') { _%>
+@airi_8  Nothing Playing (Airi) ·8   (CHECK - · no payout — she made it worse)
+  DO  THE BIT THAT DIED. Classroom, lunch. Airi launches a bit — big, committed, physical — into a room that,
+    thirty seconds earlier, received genuinely bad news about somebody's family. She did not know. The room
+    goes COLD. And her conflict reflex is the archetype's exactly: she defuses with a joke, which makes it
+    worse, and then another, which makes it much worse, because she cannot read the room while she is
+    inside the act and the act is the only tool she has. Someone says "Airi. Stop." Quietly. She stops.
+    She apologises FAST — too fast, too many times, still half-performing the apology — and then she does
+    something {{user}} has never seen her do: she leaves a room. Airi does not leave rooms. Rooms are hers.
+    ⚠ He finds her on the back stairs, and this time she does NOT recover in a second. The grin arrives late
+    and does not fit. She makes a joke about herself that is genuinely unkind — self-deprecation with the
+    safety off — and she is FISHING with it, for the laugh that would let her leave, and {{user}} does not
+    give it to her. On purpose. That is the whole of what he does in this beat: he withholds the one thing
+    that would end it. And when the laugh does not come she says, lightly, exactly the true thing and then
+    buries it instantly: "It's fine, it's what I'm for." Beat. "—anyway!" and she is up and moving and
+    talking.
+    Do NOT let him fix it, and do NOT let her admit anything further. The beat ends unresolved. No H.
+    Crack: the second, and it is his — he withheld the laugh on purpose, and the thing under the act said
+    its own name: "it's what I'm for". That is where she went wrong, confirmed in her own words and buried
+    again in one breath. In him: the question has changed. Not what she is hiding; he knows. Whether anyone
+    has ever told her she can stop. Kozuzu says nobody has. So that is what he does next, and he knows
+    exactly where.
+  FIRE  emit /Intent/eventFire "airi_8" → engine advances the Airi quest to Step 8. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Airi ran a bit into a room that had just had bad news, made it worse
+    trying to fix it, left, and told {{user}} on the stairs that being funny is what she is for." → the World
+    Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@airi_9') { _%>
+@airi_9  Nothing Playing (Airi) ·9   (CHECK - · no payout — nothing playing · THE BREAK)
+  DO  THE EARPHONES. The back stairs or the rooftop, after class. She is there, alone, earphones in, still —
+    and this time {{user}} does not announce himself and does not leave. He sits down next to her. This is
+    the test he designed on the stairs, and it has two halves. The first: she does the recovery, and he does
+    not take it; he just stays, and says nothing, and eventually the bit runs out of road, which has possibly
+    never happened to her before.
+    And then he asks what she is listening to. She says a band. He asks for the other earbud.
+    ⚠ THE REVEAL, and it is the bookend of the series: NOTHING IS PLAYING. There is no music. The earphones
+    are not connected to anything at all — they are a DO-NOT-TALK-TO-ME sign, the only one available to a
+    girl everyone in the year is allowed to talk to at any moment, and she has been wearing them since
+    middle school. He has known since the flat pocket on the stairs. Knowing it is not the same as her
+    handing it to him. She does not have a speech about this. What she has is: "…Yeah." And then, after a
+    long time, because he still has not filled the silence: "It's the only way people leave me alone. …That
+    sounds bad. It's not— it IS a bit bad."
+    Let the silence be LONG. Let her be bad at it.
+    ⚠ THE SECOND HALF, and it is the only line he says: Kozuzu's sentence, the one nobody has ever said to
+    her. "You can stop. When it's me. I'm not going anywhere." He does not explain it and does not say it
+    twice. She does not answer. Nothing is confessed and nothing is fixed; she takes the earbud back at the
+    end and puts it in, and does not switch anything on, and stays sitting there with him. No H.
+    Crack: the break, and it is hers — she heard it. He led her back with one sentence and no explanation;
+    it is the first time anyone has said it, and she did not make a joke.
+  FIRE  emit /Intent/eventFire "airi_9" → engine advances the Airi quest to Step 9. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} asked for Airi's other earbud and found nothing playing — the
+    earphones are how the loudest girl in the year gets left alone — and told her she can stop when it is him;
+    she put the earbud back in, switched nothing on, and stayed." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@airi_10') { _%>
+@airi_10  Nothing Playing (Airi) ·10   (CHECK - · REWARD Airi Affection +20 · FINAL)
+  DO  OFF, THEN ON. Her room, evening. She invited {{user}}, and the invitation itself was strange — no bit, no
+    premise, no six other people. The room is a mess of sports kit and prize tat and a wall of photos in
+    which she is making a face in every single one. She is not ON. She lets him in and then just... sits
+    down, and does not fill the silence, and it visibly costs her something to not fill it.
+    Then the ask, which is the hardest sentence she has ever said and comes out mangled and fast and staring
+    at the carpet: "Can we— is it okay if I don't do the thing. The funny thing. For like an hour." And then,
+    because she cannot help it, a tiny reflexive joke to cover it, and then she stops herself MID-JOKE. "…No.
+    Sorry. I meant it." That is not the victory. The victory is later.
+    So they are quiet. For an hour. She hands him one earbud — the bookend, and there is still nothing
+    playing, and this time they both know, and it is not a sign any more, it is a JOKE the two of them share.
+    She nearly falls asleep sitting up, because this is the only room in the world she can. She does not,
+    quite. She checks the clock — the only time all series she has — and the hour is up.
+    ⚠ AND THEN SHE TURNS IT BACK ON. Up. Peace sign. A bit — for him, an audience of one, at full volume,
+    and it is the best material she has ever done, because for the first time none of it is holding anything
+    up. She is exactly the girl from the grounds on the third day of term, every tool she has, and the
+    earphones are on the desk. THIS is the shape of the finale and you will not soften it: she does not
+    become quieter. She becomes herself again, for another reason — the act has somewhere to rest now, so it
+    comes back as a gift instead of a wall.
+    ⚠ THE LINE SHE DOES NOT SAY. She gets as far as "Don't tell anyone—" and does not finish it. She does not
+    say it. {{user}} notices that she did not say it, and does not point it out. Then, not as a bit, meaning
+    the opposite of everything she has said all series: "…I'm glad it's you."
+    She walks him to the door at full volume — three bits in the hallway — and when he looks back from the
+    gate the earphones are still on the desk. She went back in without them.
+    ⚠ No confession beyond that line, no kiss, no speech. The whole beat is that the loudest girl in the
+    year asked someone to let her be quiet, he did, and she came back on. No H. Crack: nothing left to crack.
+    She is still the loudest girl in the year. One room has a volume knob now, and he has watched her turn it
+    both ways.
+  FIRE  emit /Intent/eventFire "airi_10" → engine advances the Airi quest to Step 10, marks the series
+    COMPLETE, and pays the beat: Airi Affection +20, applied by the row. Do NOT also emit an affection change
+    for it. If the payout carries her past 100 the rank-up lands at her next gate — a check on her, or the
+    day's swing — one rung a day is the game's rule; do not narrate a stage change yourself. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Airi asked {{user}} to let her stop being funny for an hour, shared
+    the earbud with nothing playing as a joke between them, then turned the act back on at full volume for
+    him alone and left the earphones on the desk." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

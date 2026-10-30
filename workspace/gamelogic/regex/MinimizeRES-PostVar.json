@@ -1,0 +1,22 @@
+{
+  "id": "59fc6a39-eaa5-4469-d26d-8d1c8a1c2a32",
+  "script_name": "MinimizeRES-PostVar",
+  "enabled": true,
+  "find_regex": "/<RES_POST_Variable>((?:(?!<RES_POST_Variable>)[\\s\\S])*?)<\\/RES_POST_Variable>/gm",
+  "replace_string": "<details class=\"uv\">\n  <summary style=\"cursor: pointer; list-style: none; background-color: #1e1e2e; color: #e0e0e0; padding: 10px 20px; border-radius: 50px; text-align: center; border: 1px solid #3e4047; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;\">✨ RES Variables (POST relay)</summary>\n  <pre style=\"background-color: #111; padding: 10px; border-radius: 8px; font-size: 0.85em; white-space: pre-wrap;\">$1</pre>\n</details>\n<style>\ndetails.uv > summary::-webkit-details-marker { display: none; }\n</style>",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": true,
+    "prompt": false
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null
+}

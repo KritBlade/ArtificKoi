@@ -1,0 +1,104 @@
+@@if getvar('stat_data.PendingState.IntimacyActive[0]') === true
+<H_Position>
+# v0.15
+<%_ if (getvar('stat_data.PendingState.IntimacyActive[0]') === true) { _%>
+# School v4 — H POSITION lookup (体位) 
+#  Loads ONLY while PendingState.IntimacyActive is on (EJS-gated → ~0 tokens
+# otherwise). Source: aicomi 体位一覧, categories 挿入 (penetrative) + 女主導 (female-led) + 口淫 (oral). This file is NAMING + FLAVOR +
+# tier-MAPPING ONLY — it adds NO new math; the engine owns it. The ## INTIMACY panel's "position:" line has ALREADY
+# PRE-RESOLVED every tier (AUTO vs a folded "RawDie≥N" target, willing, anal-lock); the resolver records her current
+# position from your /Intent/hact ";pos:<English name>". You match the tier + WRITE — never compute a DC.
+#
+# USE (during <Intimacy_system> 3):
+#   1) Identify the position the scene is doing → match it here by BASE config (+ any location/item/modifier overlay).
+#      NEVER INVENT a name: pick the closest listed config (a not-100% match is fine — that's why the set is broad). If truly
+#      NOTHING fits, OMIT ;pos entirely (the act still scores — Exp is driven by act:<Act>, not the position). A made-up
+#      name (e.g. a raw Chinese coinage not in this file) is a BUG — downstream just stores the label; it never matches a tier.
+#      ;pos IS THE ENGLISH NAME in the row's brackets, written exactly (Missionary · Cowgirl · Folded · Fellatio): the engine
+#      reads that word, and a Japanese or Chinese spelling reads as no position at all — Chinese writes 騎乗位 as 騎乘位, so a
+#      script spelling is never safe. A flavor variant (lowercase gloss) reports its BASE's name; a →Adv or anal variant
+#      reports the Capitalised name in its own brackets (Suspended missionary · Anal doggy).
+#      ORAL / non-penetrative (口淫 フェラ/クンニ/69/顔面騎乗 · 素股 frottage) are AUTO DISPLAY-ONLY: write the term + emit ;pos,
+#      but NEVER roll / add ;pgate (Exp_Oral scores off act:Oral regardless). Only PENETRATION tiers below take the roll.
+#   2) TIER comes from its BASE → find that TIER on the ## INTIMACY panel's pre-resolved "position:" line:
+#      • AUTO (Basic always · Intermediate once Exp≥50 · Advanced once Exp≥75 · Loyal_Puppy all) → just WRITE it landing, no roll, no ;pgate.
+#      • "RawDie≥N" (Exp bonus already folded; Ekiben folds MainChar STR) → take the next RawDie and REPORT THE NUMBER
+#        (;pgate:<die>); read raw≥N yourself only to WRITE the beat right — the engine derives the real outcome.
+#      ANAL variant: the panel adds +3 & shows LOCKED if Exp_Vaginal<20. LOCATION overlay (desk/wall/bath/toilet/alley/…) → the
+#      panel's +privacy DC (Pass 4.4). ITEM/restraint = flavor, no change.
+#      DECLARE: /Intent/hact/0 "<Key>;act:<Act>;pace:…;pos:<English name>" — add ";pgate:<die>" (the RAW die, never a verdict word)
+#      ONLY on a rolled (non-AUTO) attempt; the ENGINE recomputes the target and derives the outcome. Reach it / AUTO → the
+#      engine records HPosition (shown on the panel). Miss it → a FUMBLE: Energy −3, she stays
+#      in / falls back to basic (the sex act still proceeds); do NOT write the attempted position as landing. She may try a simpler one.
+#   3) ★ NAME THE 体位 IN THE STORY — MANDATORY, not optional flavor. The whole POINT of this catalog is that the PROSE
+#      says the technical term; emitting ;pos:<English name> but writing the beat in plain vernacular (坐上去…, sits down…) with no
+#      marked 体位 term in the <gametxt> is a MISS — the token alone does NOT satisfy this.
+#      HOW: the FIRST reply a listed position is ENTERED/established, weave its name into the prose, ONCE, ALWAYS as
+#      BOTH「JP (English)」inside ONE 💚【】 marker — plain text, NEVER an HTML span/font tag (the galgame GUI renders raw
+#      text: markup displays as literal tag soup) — regardless of the story's language (Chinese/Japanese/Korean/English/any):
+#         💚【騎乗位 (Cowgirl)】
+#      e.g. 「她翻身跨坐上來，擺出💚【騎乗位 (Cowgirl)】的姿勢」. Re-entering the SAME position later
+#      = plain prose (no re-mark); a position CHANGE = mark the NEW one once. The English half of the marker is the ;pos name you emit.
+#      This rule is echoed in <Intimacy_system> §3; the tier verdict you read comes from the <CURRENT_VARIABLE_DATA> ## INTIMACY
+#      "position:" line (the closed loop — panel → here → <Intimacy_system> all point at the same block, by tag + anchor).
+#   女主導 (FEMALE-LED): she takes the active/top role. The panel's 女主導 state (from her submission band, <Intimacy_system> 6)
+#      says whether she will: WILLING → she may take one herself · ON HIS ORDER → only one he puts her in · UNWILLING → she
+#      declines, pick a {{user}}-led one. Her "who moves" line says WHEN she changes position at all. Ending a reply in a 女主導
+#      position is HER beat in the scene's submission count (<Intimacy_system> 6).
+#      💫AHEGAO removes her agency entirely → only a {{user}}-led BASIC position; Loyal_Puppy → every position auto-passes.
+# OVERLAY KEY: +breast(胸もみ, foreplay) · restrained(拘束/縄/吊るし) · anal(アナル, +3 & Exp_Anal) · <place>(location → panel privacy DC) · 素股 = NON-penetrative (foreplay, NO position DC).
+
+# ── BASE CONFIGS (the ~14 real body-configs; every variant below = one of these + an overlay) ─────────────────
+# JP (;pos name) | TIER | gated-by | config
+正常位 (Missionary)              | Basic         | Exp_Vaginal | on her back, facing — default, always available
+後背位 (Doggy)                   | Basic         | Exp_Vaginal | rear-entry from behind, hands & knees — default, always available
+側位 (Side)                      | Intermediate  | Exp_Vaginal | spooning, both on their sides, gentle / low-energy
+立位 (Standing)                  | Intermediate  | Exp_Vaginal | both upright
+対面座位 (Face-to-face sitting)  | Intermediate  | Exp_Vaginal | seated, facing, embraced
+背面座位 (Reverse sitting)       | Intermediate  | Exp_Vaginal | seated, she faces away  [女主導]
+騎乗位 (Cowgirl)                 | Intermediate  | Exp_Vaginal | she on top, facing, rides  [女主導]
+背面騎乗位 (Reverse cowgirl)     | Advanced      | Exp_Vaginal | she on top, facing away  [女主導]
+屈曲位 / 屈脚位 (Folded)         | Advanced      | Exp_Vaginal | her legs folded to chest, deep angle
+マングリ正常位 (Spread-leg)      | Advanced      | Exp_Vaginal | hips raised, legs spread high overhead
+松葉崩し (Crossed-leg)           | Advanced      | Exp_Vaginal | legs interlaced sideways like a pine branch, deep angle
+駅弁 (Ekiben)                    | Ekiben DC18   | Exp_Vaginal | standing carry: he lifts & carries her — ALSO needs MainChar STR
+素股 (Sumata)                    | —             | —           | NON-penetrative thigh/grind (frottage) — treat as FOREPLAY, NO Position DC
+
+# ── 口淫 ORAL configs (AUTO DISPLAY-ONLY — no tier roll, no ;pgate; act:Oral drives Exp_Oral. Pick the term, write it, emit ;pos) ──
+# JP (;pos name) | TIER | gated-by | config
+フェラチオ (Fellatio)            | AUTO(display) | Exp_Oral | she takes him in her mouth — kneeling / seated default
+イラマチオ (Irrumatio)          | AUTO(display) | Exp_Oral | he thrusts into her mouth/throat — rougher, {{user}}-led
+クンニ (Cunnilingus)            | AUTO(display) | Exp_Oral | he mouths her — the mirror of フェラ
+シックスナイン (69)              | AUTO(display) | Exp_Oral | mutual oral; fills meter as oral
+顔面騎乗 (Face-sitting)          | AUTO(display) | Exp_Oral | she rides his face  [女主導]
+# ── 口淫 VARIANTS — grouped by base; every one reports its base's ;pos name (all AUTO display; location/item = flavor only) ──
+# Fellatio:  立ちフェラ(standing) · 正座フェラ(seiza/kneeling) · 寝フェラ(lying) · ディープスロート(deepthroat) · 手コキフェラ(+hand) ·
+#            睨みフェラ(eye-contact) · 拘束フェラ(restrained) · 机の下フェラ(under-desk) · <place>フェラ(location = flavor)
+# Irrumatio: 拘束イラマチオ(restrained) · 立ちイラマチオ(standing) · 寝かせイラマチオ(pinned-lying)
+# Cunni:     クンニ立位(standing) · 顔面騎乗クンニ(she sits on his face → Face-sitting) · シックスナインクンニ(→ 69)
+
+# ── 挿入 VARIANTS — grouped by base. A lowercase gloss is flavor: report the BASE's ;pos name. A Capitalised name in the
+#    brackets is that variant's own ;pos name (a →Adv variant is Advanced; an anal one is "Anal <base>") ────────────────
+# Missionary:  胸もみ正常位(+breast) · 手つなぎ正常位(hand-hold) · 拘束正常位(restrained) · 卓上正常位(table) · ベンチ正常位(bench) ·
+#              浮き輪正常位(floatie) · 吊るし正常位(Suspended missionary →Adv) · ブリッジピストン(Bridge →Adv) · 種付けプレス(Mating press →Adv) ·
+#              アナル正常位(Anal missionary) · アナルマングリ正常位(Anal spread-leg →Adv)
+# Doggy:       中腰バック(half-standing) · 立ちバック(standing) · 突き上げバック(upward) · しゃがみバック(squat) · 寝バック(lying) ·
+#              ギロチンバック(Guillotine →Adv) · 足掛けバック(leg-hook) · 縄拘束バック(rope) · 壁立ちバック(wall) · 壁押し付けバック(wall-press) ·
+#              机後背位(desk) · カウンターバック(counter) · 階段後背位(stairs) · バスタブ後背位(bath) · 便座かがみバック(toilet) ·
+#              手すりバック(railing) · 路地裏バック(alley) · 壁穴後背位(glory-hole) · アナル開脚バック(Anal doggy) · アナル壁立ちバック(Anal doggy) · アナル椅子後背位(Anal doggy)
+# Side:        机側位(desk) · ソファー側位(sofa)
+# Standing:    拘束立位(restrained) · カウンター対面立位(counter) · 壁Y字バランス挿入(Wall Y-balance →Adv) · 立ち松葉(Standing pine →Adv) · 立ち素股(frottage → Sumata)
+# Ekiben:      逆駅弁(reverse) · 抱き着き駅弁(clinging) · 本棚駅弁(bookshelf) · 路地裏駅弁(alley)        [all Ekiben DC18 + STR]
+# Sitting:     またがり対面座位(straddling) · 抱き着き座位(clinging) · ベンチ対面座位(bench) · 椅子背面座位(chair) · 椅子胸もみ背面座位(chair+breast) · トイレ背面座位(toilet) · 浮き輪背面座位(floatie)
+# Cowgirl [女主導]:        胸もみ騎乗位(+breast) · ソファー騎乗位(sofa) · ベンチ騎乗位(bench) · 本棚騎乗位(bookshelf) · スパイダー騎乗位(Spider cowgirl →Adv) · チングリピストン(grinding)
+# Reverse-cowgirl [女主導]: チングリ背面騎乗位(grinding) · アナル背面騎乗位(Anal reverse cowgirl)
+# Acrobatic (→Advanced; high Exp, often +STR): キャノンボール(Cannonball) · 理非知らず(Extreme) · 拘束吊るし(Suspended restraint) ·
+#              拘束台挿入(Restraint platform) · 水中バック(Underwater doggy) · しゃちほこ素股(arched frottage → Sumata)
+
+# ── 女主導 (FEMALE-LED — SHE leads; the panel's 女主導 state says whether she will) ──────────────────────────────
+# 騎乗位(Cowgirl) · 背面騎乗位(Reverse cowgirl) · チングリピストン(grinding → Cowgirl) · チングリ背面騎乗位(grinding → Reverse cowgirl) ·
+# 背面座位(Reverse sitting) · 椅子対面座位(chair → Face-to-face sitting) · 椅子側位(chair → Side) · アナル背面騎乗位(Anal reverse cowgirl, +3/Exp_Anal) ·
+# バスタブ背面座位(bathtub → Reverse sitting) · 男拘束立位(she pins him standing, he's restrained → Standing) · 男椅子拘束座位(she rides him bound to a chair → Face-to-face sitting) ·
+# 騎乗素股 · 手コキ素股 · 椅子素股 (frottage / hand — NON-penetrative, foreplay → Sumata)
+<%_ } _%>
+</H_Position>

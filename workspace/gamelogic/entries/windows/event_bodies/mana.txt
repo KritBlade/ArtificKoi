@@ -1,0 +1,421 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@mana_') === 0
+<%_ /* v1.4 */ _%>
+<%_ /* The ten @mana_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @mana_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@mana_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mana_1') { _%>
+@mana_1  Ask About Me (Mana) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE HALLWAY GOT BRIGHTER. After the last bell, a corridor, and the corridor is not behaving the way a
+    corridor normally behaves. Heads are turning in a wave. A conversation stops in the middle of a word. Two
+    girls from another class stop dead and then pretend they were stopping anyway.
+    MANA ARIKAWA is 167 cm of deep purple hair worn up in a high ponytail with soft waves and a butterfly clip on
+    the side, delicate blue wings; deep purple eyes with a gentle expression; dark thigh-high stockings with
+    garter straps and a blue bead bracelet. She is walking down the middle of the corridor and she is the reason
+    it has gone strange, and she has not noticed, because it has never once been otherwise.
+    ⚠ THE BODY FACT, STATED ONCE AND THEN LEFT ALONE. Tall, an H cup, a lavish figure, and she made her peace with
+    all of it a long time ago — she does not hunch, does not cover, does not adjust anything and does not think
+    about it. Do NOT leer at it and do NOT have anybody comment on it. It is simply one of the reasons a corridor
+    turns, and she is not the one turning it.
+    {{user}} is walking the other way. Her whole face opens when she sees him: "There you are~! Honestly, the
+    whole hallway just got a little brighter." She has never spoken to him before. She says it like they have
+    known each other a long time. She saves him a seat he did not ask for, and then reaches past three people to
+    pull in a girl standing on her own at the edge of it: "No lurking back here. You're with me now."
+    ⚠ THIS IS A FIRST MEETING AND SHE IS THE ENTIRE CORRIDOR. Let it be warm. It is not a line and it is not
+    flirting with any plan behind it — Hagaruro 12, zero calculation, she is simply like this at everybody. Do not
+    put a shadow under it yet.
+    But {{user}} watches, as he does, and two things go into the file. The first: a girl says "you're so pretty
+    it's actually unfair, like HOW do you even—", and Mana laughs it off, and the laugh is flawless, and it is
+    also the thousandth time she has done it. And in the quarter of a second before the laugh, something goes
+    across her face and is gone. Nobody else is looking at her face.
+    The second, and it is the one that matters: in ten minutes she is spoken to by perhaps fifteen people, and
+    every single thing anybody says to her is about how she looks. Every one. She answers all of them, warmly, by
+    name. Not one of them asks her a question.
+    ⚠ DO NOT WRITE ONE LINE OF WHAT MANA IS THINKING, IN THIS BEAT OR ANY OTHER. Hagaruro 12 — her face reports
+    everything and hides nothing, so you never need her interior. Write the face, the hands, and the quarter of a
+    second before the laugh. That pause is her punctuation for this whole series.
+    Crack: none. What {{user}} has at the end of the first afternoon is fifteen compliments, no questions, and a
+    quarter of a second. No H.
+  FIRE  emit /Intent/eventFire "mana_1" → engine creates the Mana quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays somebody already in the save, and she is not in it yet. NAME HER in the prose — "Mana
+    Arikawa" — because that IS the mechanism: POST reads the name and arms her build, her <character> card
+    keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide> says.
+    Do NOT build her THIS reply unless her <character> profile is already in front of you. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mana Arikawa turned a whole corridor around after the last bell without
+    noticing she was doing it, greeted {{user}}, who she had never spoken to, as though they went back a long way,
+    and pulled a girl standing alone at the edge into the middle of it; in ten minutes about fifteen people said
+    something to her and every single one of them was about how she looks, and not one of them asked her a
+    question, and there was a quarter of a second before the laugh that nobody but {{user}} was looking at her
+    face to see." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mana_2') { _%>
+@mana_2  Ask About Me (Mana) ·2   (CHECK - · REWARD Mana Affection +10)
+  DO  THE CARD. A week on, after school, the shopping street, and {{user}} finds out what walking through town
+    beside her is actually like. People look. Not rudely and not all at once — they simply look, the way people
+    look at a poster on a wall on the way past, and it does not stop for the whole afternoon.
+    She is completely unbothered by it. She waves at a woman in a shop doorway she has never met and the woman
+    waves back. She tells the girl at the crepe counter that her nails are incredible and asks who did them, and
+    by the time the crepe is made there are three strangers at that counter talking to each other.
+    ⚠ SHE DOES NOT KNOW SHE IS DOING THIS. There is no technique and no calculation anywhere in it — Hagaruro 12,
+    INT 25. She is not working a room. She likes people, out loud, at everybody, all the time, and rooms happen.
+    And then a man stops her on the corner. Not a student — a scout, polite, quick, a business card already out:
+    has she ever thought about modelling, they are casting this month, no pressure at all.
+    She is lovely to him. She takes the card in both hands and says "wow — thank you so much!" and means every
+    word, and he goes off pleased with his afternoon.
+    And she puts the card in her pocket, and it clicks against something. {{user}} hears it. Later, on a bench,
+    she is digging for her purse and the pocket comes out with it: six of them. Different companies. She laughs at
+    herself. "Oh — yeah. I keep MEANING to throw these out." There is a drawer at home with more. She has never
+    called one.
+    ⚠ AND THIS IS NOT MODESTY AND IT IS NOT FEAR, AND YOU WILL NOT WRITE IT AS EITHER. She is not being brave
+    about turning down a career and she is not frightened of one. She simply does not want the thing the cards are
+    offering, which is more people looking at the outside of her. She cannot say that, because she has never had
+    the words for it and will not find them today. What she says is: "It's just more of... that. You know?" And
+    then she laughs, because she does not think she explained it. She is right.
+    The looking costs her nothing at all. Being summed up in one sentence costs her something every single time,
+    and she pays it so fast, and so warmly, that nobody in this town has ever once noticed her paying.
+    On the walk back she is easy and funny the whole way and it is a good afternoon, and at the corner where they
+    split she is already asking what he is doing next week.
+    Crack: six business cards in one pocket and a drawer at home, and not one of them ever called. No H.
+  FIRE  emit /Intent/eventFire "mana_2" → engine advances the Mana quest to Step 2 and pays the beat: Mana
+    Affection +10, applied by the row. Do NOT also emit an affection change for this beat. The scout is a townsman,
+    is NOT built and does not appear again until beat 5. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Walking through town beside Mana meant being looked at the whole way,
+    which did not bother her at all, and she turned a crepe counter into three strangers talking to each other
+    without meaning to; a scout stopped her with a modelling card and she was lovely to him and took it, and when
+    her pocket came out on a bench it had six of them in it from six companies, with a drawer of them at home and
+    not one ever called, because the thing they are offering is more people looking at the outside of her and she
+    has never had the words to say that." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mana_3') { _%>
+@mana_3  Ask About Me (Mana) ·3   (CHECK - · REWARD Mana Affection +16)
+  DO  THE QUESTION NOBODY ASKS. Lunch, a week on, and there are six people around Mana's desk, which is the normal
+    number.
+    Compliments go both ways and hers are better. She tells one girl her hair has never looked like that before
+    and means it, tells another the coat was a good call, remembers that a third one had a thing this week and
+    asks how the thing went. She is generous and specific and none of it is performed. {{user}} is one desk over
+    with his lunch, counting, and the count comes out the same as it did in the corridor: nobody asks her anything
+    about herself.
+    So he tests it. He waits until the crowd thins to nothing, and asks her one question with no part of it about
+    her face: "What do you do on your days off?"
+    ⚠ AND THE GIRL WHO NEVER RUNS OUT OF WORDS STOPS.
+    Hagaruro 12, so all of it is on her face and you will write the face. Blank. Then the laugh starts, the
+    reflex, the one that handles everything — and there is nothing behind it to carry it, so it dies halfway out.
+    "...Huh?" Then, checking she has understood the question: "Like — what do I DO?"
+    "Yes."
+    And she answers it badly, because she has never once had to assemble this out loud. She stays in. She watches
+    dramas, a lot of them, the really long ones, and she is behind on three. She has a plant. She tries to cook
+    and it goes wrong every time and she keeps trying anyway. She is in bed early.
+    And halfway through she hears how it sounds and gets embarrassed, and speeds up, and starts apologising for
+    it: "Sorry — that's SO boring, I'm not — I'm not interesting like—"
+    And then she stops apologising. Because he has asked a second question. About the plant.
+    ⚠ SHE IS LIT UP AND SHE WILL NOT WORK OUT WHY, TODAY OR EVER. INT 25 — she does not analyse herself, she has
+    no habit of it and no talent for it, and you will not give her one. She does not think about what just
+    happened. She simply has the best twenty minutes of her month and does not know that is what they were.
+    For the rest of lunch she keeps glancing over at him, the way somebody keeps glancing at a window to see
+    whether it is still raining.
+    Crack: somebody asked her a question and she did not know what to do with it, and she has not stopped smiling.
+    No H.
+  FIRE  emit /Intent/eventFire "mana_3" → engine advances the Mana quest to Step 3 and pays the beat: Mana
+    Affection +16, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Six people were around Mana's desk at lunch and she was warm and specific
+    with every one of them and not one asked her anything about herself, so {{user}} waited for the crowd to thin
+    and asked her what she does on her days off, and the girl who never runs out of words stopped dead; she
+    answered badly, because she had never assembled it out loud - dramas, a plant, cooking that goes wrong every
+    time, early nights - and started apologising for how boring it was until he asked a second question about the
+    plant, and she spent the rest of lunch glancing over to check he was still there." → the World Log remembers
+    only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mana_4') { _%>
+@mana_4  Ask About Me (Mana) ·4   (CHECK - · no payout — she tried something and told nobody why)
+  DO  THE HOODIE. Before the bell, the gate, and there is something wrong with the morning.
+    A girl is coming through it in an enormous grey hoodie with the hood up, a pair of plain glasses, hair down
+    and flat and pushed forward over her face, and a mask. She is walking with her shoulders rounded and her eyes
+    on the ground. {{user}} watches the whole gate work it out in about four seconds, because of course it is
+    Mana.
+    ⚠ WHY THE DISGUISE FAILS, AND YOU WILL PLAY IT AS COMEDY AND NEVER AS CRUELTY. She is 167 cm. The figure is
+    not something a hoodie can do anything about, and the hoodie is doing the opposite of what she wanted: on a
+    warm morning it is the single most conspicuous object on the school grounds. Everybody in the year knows her
+    walk. The glasses achieve nothing whatsoever. Nobody is fooled for one second.
+    And it makes it worse in the way she did not see coming. Instead of walking past her, every single person
+    stops. "Mana? Are you sick?" "Is something WRONG?" "Oh my god, did something happen—" She has never had this
+    many people ask her a question in one morning, and every one of the questions is the wrong question.
+    She says it is a look. "It's, um. A look?" Nobody believes her, and Hagaruro 12 means she has no talent for
+    lying at all and is visibly running out of material. Pressed twice, she says: "...I'm cold?"
+    It is a warm morning. She is sweating.
+    ⚠ SHE DOES NOT TELL ANYBODY WHY SHE IS DOING THIS. Not her friends, not {{user}}, not the reader. She has an
+    idea, and the idea is not stupid, it is just a silly way of going about it, and it is HERS. Do not explain it
+    and do not let anybody guess it out loud.
+    And {{user}} comes through the gate. He does not ask if she is sick. He does not ask about the hoodie at all,
+    or the glasses, or the mask. He says good morning exactly the way he always says it, and asks whether the long
+    drama got any better after the bit she was complaining about.
+    And under the hood she lights up like somebody threw a switch, and the hood does absolutely nothing to contain
+    it, and she talks about the drama the whole way to the shoe lockers.
+    Crack: the only person at that gate who did not ask her what was wrong is the only one she actually talked to.
+    No H.
+  FIRE  emit /Intent/eventFire "mana_4" → engine advances the Mana quest to Step 4. NO payout: she ran an
+    experiment of her own and it went wrong, which is not the same row as her being closer to anybody. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mana came through the gate before the bell in an enormous hoodie, plain
+    glasses, flat hair and a mask, and the entire school knew it was her in about four seconds; the disguise made
+    it worse, because instead of walking past her every single person stopped to ask if she was sick, which was
+    more questions than she had ever been asked in one morning and all of them the wrong one, and she told nobody
+    why she was doing it and claimed to be cold on a warm morning, and {{user}} said good morning exactly as he
+    always did and asked whether the drama got any better." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mana_5') { _%>
+@mana_5  Ask About Me (Mana) ·5   (CHECK - · no payout — the answer arrived and she could not read it)
+  DO  YOU'VE STILL GOT THE LOOK. A week on, after school, the shopping street, and she has doubled down. A bigger
+    hoodie. A cap under the hood. No clip, no ponytail, hair down and deliberately dull. {{user}} is walking
+    beside a girl who has put considerable effort into being nobody.
+    ⚠ AND THE TOWN DOES EXACTLY WHAT IT DID LAST TIME.
+    A woman turns her head. A girl nudges her friend. A shop assistant comes out to hold a door for her and then
+    forgets to let go of it. And on the same corner, the same scout, with the same polite smile — he does not
+    recognise the outfit and he recognises her instantly, and he says it: "You've still got the look, you know."
+    She is genuinely thrown. Not hurt — thrown, hands out, openly, the way she is everything: "I'm wearing a
+    HOODIE."
+    ⚠ AND HERE IS THE SCENE'S REAL BUSINESS, AND MANA IS NOT THE ONE WHO SEES IT. Because in between those two
+    things she has: told the crepe girl her nails are incredible again, by name, and remembered the name; spotted
+    a small kid gone wrong at the corner by the arcade and got straight down to her height and sorted it; pulled a
+    stranger's dropped shopping out of the road; and asked the shop assistant how his exam went, which means she
+    asked him about it last time and then kept it.
+    She has turned a whole street on, like a light, in a hoodie and a cap and a pair of glasses, and she has no
+    idea where the switch is.
+    ⚠ {{user}}'S HYPOTHESIS, FORMED HERE, AND HE SAYS NOT ONE WORD OF IT OUT LOUD. It was never the ponytail and
+    it was never the figure. It is the warmth — the noticing, the remembering, the getting down to a kid's height
+    — and that warmth IS the ordinary girl she is certain nobody can see. She is hiding the wrong thing. She has
+    been hiding the wrong thing her whole life, and the harder she hides it the more of it shows.
+    He does not tell her. That is his rule and it holds to the last beat: she is going to get there herself or not
+    at all, because a thing she is told about herself is one more sentence somebody else wrote about her.
+    On the way back she says it to the pavement, half a laugh in it, not really to him: "...Maybe I'm doing it
+    wrong."
+    Crack: "maybe I'm doing it wrong." She has no idea how right she is, or in which direction. No H.
+  FIRE  emit /Intent/eventFire "mana_5" → engine advances the Mana quest to Step 5. NO payout: the answer was
+    handed to her on the street and she could not read it, and being closer is not what happened here. The scout
+    and the shop assistant are townsmen and are NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mana doubled down with a bigger hoodie and a cap and the town turned to
+    look at her anyway, and the same scout on the same corner told her she still had the look, which genuinely
+    threw her; in between she had remembered the crepe girl's name, got down to a lost kid's height, pulled a
+    stranger's shopping out of the road and asked a shop assistant how his exam went, and {{user}} understood that
+    the aura is the warmth and the warmth is the ordinary girl she thinks nobody can see, so she is hiding the
+    wrong thing, and he said nothing at all." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mana_6') { _%>
+@mana_6  Ask About Me (Mana) ·6   (CHECK - · no payout — she said the true thing to the wrong person)
+  DO  THE OTHER ONE PEOPLE TURN FOR. After school, the corridor, and {{user}} is at the lockers with Mana when Ume
+    Natsuno makes an entrance.
+    ⚠ WHO SHE IS, IN ONE LINE, AND NOT ONE WORD MORE. The other girl this school turns for. The difference is that
+    she knows it and she uses it — the walk is aimed, the timing is chosen, the blouse is a decision somebody made
+    this morning. Write what the corridor sees. Do NOT write one line of what Ume is thinking, do NOT state or
+    hint at what is underneath it. This beat is not about her.
+    The corridor turns. It always does. And Mana, in the hoodie, at the lockers, does not compete — she steps back
+    and lets it happen and is visibly, genuinely pleased for her, which is the whole of Mana in one gesture. The
+    rivalry between them is real and it is light and there has never been any malice in it. They have done a
+    hundred corridors. Today Mana forfeits before anybody asks her to.
+    Ume looks at the hoodie. She looks at it for rather a long time. And then she reads it in one go, because
+    reading people is the thing she is for, and she comes over and tips the hood back an inch with one finger.
+    "Sweetie." A beat. "Don't hide it." Another. "Aim it."
+    ⚠ THAT IS UME'S ENTIRE METHOD, SAID IN HER OWN WORDS, AND IT IS EXCELLENT ADVICE FOR UME AND THE WRONG ADVICE
+    FOR MANA. Do not let her be unkind, or wrong-footed, or seen through. She is being generous with the only tool
+    she trusts, which is a kind thing to do and is also why the two of them will never be the same girl.
+    And Mana gives her the truest sentence she has said so far, and she gives it plainly, because plainly is the
+    only register she has: "I don't want to aim it." A shrug, inside the enormous hoodie. "I just don't want it to
+    be the only thing."
+    Ume does not have an answer to that. Something crosses her face and is gone before anybody could name it.
+    "...Your loss." And she goes, and the corridor goes with her, the way it does.
+    And for a moment nobody in that corridor is looking at either of them, and Mana glances over at the one person
+    who did not turn to watch Ume leave — and finds he is looking at her, and has been the whole time.
+    She does not say anything about it. She pulls the hood back up. But she leaves it up, and she is smiling
+    underneath it, and she walks out beside him instead of in front of everybody.
+    Crack: she named the thing she actually wants, out loud, to the wrong person, and the right one heard it.
+    No H.
+  FIRE  emit /Intent/eventFire "mana_6" → engine advances the Mana quest to Step 6. NO payout: she said something
+    true to somebody who could not use it. Ume Natsuno appears and is a cameo: she is NOT required by the gate and
+    is NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Ume Natsuno made an entrance and the corridor turned for her, and Mana
+    stepped back in her hoodie and was genuinely pleased for her and forfeited before anybody asked; Ume tipped
+    the hood back an inch and told her not to hide it but to aim it, which is her own method and the wrong advice
+    for Mana, and Mana said plainly that she does not want to aim it, she just does not want it to be the only
+    thing, and Ume had no answer and left with the corridor behind her, and Mana looked over at the one person who
+    had not turned to watch and found him already looking at her." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mana_7') { _%>
+@mana_7  Ask About Me (Mana) ·7   (CHECK - · REWARD Mana Affection +20 · THE BREAK)
+  DO  WHAT WAS THE HOODIE FOR. After school, the roof or the courtyard, late enough that most of the school has
+    gone. The hoodie is in her bag. She is back in the uniform with the ponytail and the butterfly clip and all of
+    it, and she is dimmer than {{user}} has ever seen her, and it has nothing to do with the clothes.
+    She has stopped. Two weeks of it, and she stopped this morning, and she is not sure what any of it was for.
+    She gives him the count, because counting is a thing she can do: everybody came. Everybody always comes. "They
+    came to ask about the hoodie." A hundred people asked her what was wrong with her. Not one of them asked her
+    anything else.
+    ⚠ AND THEN THE THING SHE ARRIVES AT, AND SHE DOES NOT ARRIVE AT IT BY THINKING. INT 25 — she does not reason,
+    she does not do the arithmetic, and you will not write her working it out, because she has never worked
+    anything out in her life. She gets there the way she gets everywhere: she notices how she feels and says it
+    out loud before she has understood it.
+    "You didn't ask."
+    "No."
+    "You asked about the drama." She has started turning the bead bracelet. "And the plant." A pause. "And you
+    asked what I do on my days off, and nobody's ever asked me that. Not once. In my life."
+    And then, slowly, not as a deduction — as something she is hearing herself say for the first time as it comes
+    out: "...You've been asking since the start."
+    Not a question. He says: "Yes."
+    ⚠ AND SHE DOES NOT ASK WHY. That is the difference between her and every clever girl in this pack. It does not
+    occur to her to interrogate it, and she has no suspicion in her anywhere. She takes it the way she takes
+    everything — straight, and completely, and all at once.
+    And then the break, and it is not a plea and it is not a collapse. It is an offer, and the brightest girl in
+    the year is offering him the dull part:
+    "Then ask me something else." She has gone red and she has no method for that either, so it simply happens to
+    her in front of him. "Anything. Something that isn't—" a hand, vaguely, at the hair and the face and the rest
+    of it "—this." A beat. "Ask about me."
+    And he asks: "What did you burn this week?"
+    And she laughs — and it is not the corridor laugh, it is loud and undignified and entirely unlike anything she
+    has done in six beats: "CURRY. I burnt CURRY. How do you even — it is WATER and a CUBE, how—"
+    ⚠ THE BREAK IS THE OFFER. She has been handed compliments her entire life and asked a question about herself
+    once, by him, three weeks ago, and the first thing she does when somebody finally asks is give him permission
+    to keep asking. End the beat on the two of them up there and her explaining, at length and with both hands,
+    exactly how the curry died. Nothing else happens in it. No H.
+  FIRE  emit /Intent/eventFire "mana_7" → engine advances the Mana quest to Step 7 and pays the beat: Mana
+    Affection +20, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mana gave up on the hoodie after two weeks and told {{user}} the count on
+    the roof: everybody came, everybody always comes, and a hundred people had asked what was wrong with her and
+    not one had asked her anything else; she said he never asked, that he asked about the drama and the plant and
+    what she does on her days off, which nobody had asked her once in her life, and then heard herself say that he
+    had been asking since the start, and did not ask why - she asked him to ask her something else, anything,
+    something that was not all of this, to ask about her, and he asked what she had burnt that week." → the World
+    Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mana_8') { _%>
+@mana_8  Ask About Me (Mana) ·8   (CHECK - · no payout — she showed him the boring part on purpose)
+  DO  THE POSTER'S ROOM. Evening, her room, and she invited {{user}} herself, and she is nervous in a way she has
+    never once been in public.
+    ⚠ THIS IS NOT A SEDUCTION AND YOU WILL NOT WRITE ONE. Hagaruro 12: if that were what she wanted it would be on
+    her face and all over the room, and it is not there. What she is doing is showing somebody the dull part of
+    herself deliberately, which is the single bravest thing she has done. Do not put a charge underneath it, do
+    not have him notice the bed, and do not build toward anything.
+    The room is plain. Startlingly plain, for her. A tidy desk. A drama paused a third of the way through. One
+    plant on the windowsill, overwatered, surviving out of sheer stubbornness. And a drawer she opens looking for
+    a phone charger which turns out to be most of the way full of business cards — forty of them, maybe more — and
+    she shuts it fast and goes pink and says "don't — that's not — I keep MEANING to—"
+    And then the kitchen, because she has decided to cook for him.
+    ⚠ IT IS A CRIME AND YOU WILL PLAY IT STRAIGHT AS COMEDY. She is not endearingly clumsy at cooking. She is
+    genuinely, structurally bad at it, with total confidence and no method at all: she reads the packet three
+    times and then does something else entirely, something goes browner than anything in the recipe should be, and
+    she is delighted from beginning to end.
+    And he eats it.
+    And she watches him eat it with her chin on both hands — hair up in a clip that is not the butterfly one, an
+    apron, a smear of something on her wrist — and this is the first time in the series she has looked like a girl
+    in a kitchen rather than a picture of one.
+    "Is it bad?"
+    "It's bad."
+    And she is THRILLED. Because he said it. Because nobody has ever told her that anything of hers was bad, about
+    anything, ever, and somewhere under everything she has always suspected they were being kind about more than
+    the cooking.
+    And then at the sink, with her back to him, not performing at all, in a completely ordinary voice: "Nobody's
+    ever been in here." A beat. "Like — nobody. From school." Another. "It's just a room."
+    ⚠ THE POINT OF THE ROOM IS THE PLANT AND THE PAUSED DRAMA AND THE BAD DINNER. She wanted him to see the
+    ordinary, and she is not sad about the ordinary — she is nervous and pleased, and she keeps checking his face
+    to find out whether the ordinary was enough.
+    Crack: she showed him the boring part on purpose, and he stayed for all of it, and ate it. No H.
+  FIRE  emit /Intent/eventFire "mana_8" → engine advances the Mana quest to Step 8. NO payout: she took a risk and
+    it landed, and the beat after this one is where it costs her something. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mana had {{user}} to her room, which is plain and tidy with a drama paused
+    a third of the way through, one overwatered plant and a drawer with forty modelling cards in it that she shut
+    fast; she cooked for him with total confidence and no method, and it was genuinely bad, and when he said so
+    she was thrilled, because nobody has ever told her anything of hers was bad about anything ever, and at the
+    sink with her back to him she said nobody from school had ever been in there and that it is just a room." →
+    the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mana_9') { _%>
+@mana_9  Ask About Me (Mana) ·9   (CHECK - · no payout — the street did what it does, and it cost her nothing)
+  DO  FULL BRIGHTNESS. After school, the town, and the hoodie is gone.
+    Full brightness: the ponytail high, the butterfly clip, the whole of it, and {{user}} should not undersell
+    this — she looks spectacular, she knows it, and the street does what the street does.
+    ⚠ THE POINT IS NOT THAT SHE HAS GIVEN UP THE GLAMOUR. She has not and she never will. She likes it, it is
+    hers, it always was, and the series does not want her plainer at the end than she was at the start. The point
+    is what it costs her now, which is nothing at all.
+    She is a little bit scared of it and says so out loud, because she says everything out loud: "Okay so — this
+    is weird, right? Going back to—" a gesture at all of herself "—this. After."
+    And the looking happens. The wave of heads. A girl asks for a photo and gets one. And somebody says the
+    unfair-how-do-you-even sentence, the exact one from the corridor in the first week.
+    And she laughs it off — and it is the same trained laugh, she has not lost it and she is never going to — and
+    then she turns straight round and carries on talking to {{user}} in a completely different voice,
+    mid-sentence, about the drama, as though the compliment had been a bit of weather that happened near her.
+    He asks the question of the beat, and it is the last test he will ever run on her, and she will never know it
+    was one: "Does it bother you? All of it. Everyone looking."
+    And she thinks about it. Properly, which is rare, and which shows on her the way everything does.
+    "...No?" Surprised at her own answer. "They're looking at the wrong thing." And then, cheerfully, as though it
+    were the most obvious remark in the world and not the entire series: "But you're not, so."
+    And on the corner, the scout, a third time, with the card out. And she is nice to him, because she is never
+    unkind to anybody: "Thank you! But I'm okay."
+    And she does not put it in her pocket. She drops it in the bin by the crossing, and keeps walking, and is
+    already talking about something else.
+    ⚠ WRITE THAT AS ONE LINE AND DO NOT UNDERLINE IT. Nobody comments on it. It is the first card of about fifty
+    that has ever gone in a bin and the beat does not stop to notice.
+    Crack: the full street, the full noise, and she turned round in the middle of a compliment to finish a
+    sentence about a drama. No H.
+  FIRE  emit /Intent/eventFire "mana_9" → engine advances the Mana quest to Step 9. NO payout: what happened here
+    is that nothing happened, in a street where something always used to. The scout is a townsman and is NOT
+    built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mana went back to full brightness in town, ponytail and butterfly clip and
+    all of it, and said out loud that it felt weird going back to it, and the street did what it always does -
+    heads turning, a photo, the exact unfair-how-do-you-even sentence from the first corridor - and she laughed it
+    off with the same trained laugh and turned round mid-compliment to finish a sentence about a drama; asked
+    whether all the looking bothered her she said no, they are looking at the wrong thing, but {{user}} is not,
+    and when the scout came back a third time she thanked him, said she was okay, and dropped the card in a bin."
+    → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@mana_10') { _%>
+@mana_10  Ask About Me (Mana) ·10   (CHECK - · REWARD Mana Affection +20 · FINALE)
+  DO  THERE YOU ARE. Daylight, the park or a window table, nothing has been arranged, and the only person Mana
+    asked is {{user}}.
+    ⚠ THE ANTI-ENTRANCE. No corridor, no street, no audience, nobody turning to look. Keep it as quiet and as
+    ordinary as you can, so that the last thing she says lands on nothing at all.
+    She has been thinking, which for her is an event in itself, and she announces it, and she is embarrassed by it
+    in advance: "Okay. So I worked something out. It took me like three weeks, so, y'know. Genius."
+    And she gets there in her own words, and they are small, plain words, because they are the only ones she has —
+    and that is the point, and you will not improve them for her:
+    "I kept thinking if I turned it off, someone'd finally see, like... me." She pulls a face at herself. "And
+    then I turned it off for two whole WEEKS and the only thing that happened is everybody asked if I was sick."
+    A beat.
+    "And you never asked. You just... asked."
+    ⚠ AND THE THING SHE GETS TO, WITH NOT ONE CLEVER WORD ANYWHERE IN IT. "So I think it's not the — the shiny
+    bit? I think the shiny bit's just ON. Like a light's on. And people look at a light, that's just what people
+    do." A shrug. "And somebody who actually wants to know what's in the room just... comes in anyway." And then,
+    immediately, because she has heard herself: "—which is SO cheesy, oh my GOD, forget I—"
+    And then she does the thing she has not done once in nine beats. She gives a compliment that is not about
+    anybody's face.
+    ⚠ THIS IS THE FINALE'S REAL MOVEMENT AND YOU WILL NOT RUSH IT. Every compliment she has given in this series
+    has been free, instant, warm and weightless — the nails, the hair, the coat, the good seat. This one is
+    specific, it is about something he DID, it took her three weeks to notice, and she cannot laugh it off
+    afterwards, because it is hers and it cost her something to say.
+    "You know what you did?" She is not looking at him. "You didn't ask about the hoodie. For two weeks. Everyone
+    asked. You just asked about the plant." A beat. "I don't think you know how big that was."
+    And she goes red, properly, and there is no laugh available to her, and Hagaruro 12 means neither of them can
+    do a single thing about their own face. And he goes red too, and she sees it, and it does not help.
+    And then she looks at him the way she has been looked at a thousand times and has never once looked at
+    anybody. And she says the sentence she has said in every corridor in this town, to a hundred people, a
+    thousand times — and this time she says it quietly, to one person, and she means every letter of it:
+    "There you are."
+    ⚠ THAT IS THE LAST LINE OF THE SERIES. Her own greeting, aimed, for the first time in her life, at somebody in
+    particular. No kiss, no speech, no more story after it. End the scene there. No H.
+  FIRE  emit /Intent/eventFire "mana_10" → engine advances the Mana quest to Step 10, marks the series Completed
+    and pays the beat: Mana Affection +20, applied by the row. Do NOT also emit an affection change for this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mana asked {{user}} to walk with nothing arranged and nobody else, and
+    told him she had worked something out and it took her three weeks: she had thought that if she turned it off
+    somebody would finally see her, and two weeks of it only got her everybody asking if she was sick, and he
+    never asked, he just asked - so the shiny part is only a light that is on, and people look at a light, and
+    somebody who wants to know what is in the room comes in anyway; then she told him that he had not asked about
+    the hoodie for two weeks while everybody else did, that he asked about the plant instead, and that she did not
+    think he knew how big that was, and said "there you are" to one person and meant it." → the World Log
+    remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

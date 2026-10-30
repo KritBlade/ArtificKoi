@@ -1,0 +1,20 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@') === 0
+<%_ /* v1.0 */ _%>
+<%_ /* THIS reply's order for the armed event. Injected AT DEPTH 0, after {{user}}'s line, beside <Block_Transition>
+   and for the same reason: a model plans its reply from the tail of the prompt, and an order in the card's
+   position-0 block renders word-perfect and is left out of the plan. The armed series' <Event_Body> entry sits
+   at depth 0 right after this one, so the order and the beat it orders are read together. The event procedure
+   (Event_Schedule) stays in the cached prefix and says how any armed beat is played; this says which one, now.
+   Nothing here renders unless an event is armed, and the @@if line on top repeats that gate so ST-Prompt-Template
+   drops the entry on every other reply: an unarmed reply's prompt carries no trace of it.
+   The fire path is spelled with its /0 and never in the shape of a patch op: a model copies an op-shaped line
+   verbatim, MVU refuses an op on /Intent/eventFire without its /0, and the fire never reaches RES. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@') === 0) { _%>
+<Armed_Event>
+An EVENT is triggered THIS reply: <%- getvar('stat_data.EngineDerived.EventArmed[0]') %>. Its @KEY body is this reply's spine — an official event's is the <Event_Body> block right after this one, an EventPack event's is in <Event_Pack>. PLAY it now.
+Every plan, checklist or outline you write for this reply names this beat and the moment it plays.
+It lands where this reply starts (## NOW's Location), on the way, or wherever {{user}}'s line takes him: his move never cancels it, and it never replaces his move.
+A girl the body names plays as herself, in the save or not; a crossover / outsider NPC is NOT a classmate → do NOT build her.
+When the beat is played, write the value "<%- String(getvar('stat_data.EngineDerived.EventArmed[0]')).slice(1) %>[:Outcome]" to the path /Intent/eventFire/0 — the path ENDS IN /0 because every Intent field is a [value,"Label"] tuple, and an op on /Intent/eventFire (no /0) is REFUSED, so the beat you just narrated records nothing. The engine then applies its consequences (quest step / NPC / discovered venue / flag). Outcome (optional) = the tied CHECK tier if the body names one.
+</Armed_Event>
+<%_ } _%>

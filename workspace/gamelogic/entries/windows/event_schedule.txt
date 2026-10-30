@@ -1,0 +1,36 @@
+<Event_Schedule>
+<%_ /* v2.0 */ _%>
+[PROCEDURE — every reply]
+1. Read ## EVENTS in <CURRENT_VARIABLE_DATA>. No ## EVENTS line = nothing armed → skip this procedure entirely.
+   With one, an <Armed_Event> block follows {{user}}'s line: THIS reply's order for that @KEY.
+2. If ## EVENTS names an armed @KEY, that @KEY's body IS this reply's SPINE — not an option, not background colour.
+   ⚠ ## EVENTS IS NOT ## TODAY. They are DIFFERENT things that both say "EVENT":
+     · ## TODAY names an @spine (a CALENDAR day, e.g. @Entrance_Ceremony) whose body is in <Event_Spines>.
+     · ## EVENTS names an armed @KEY (a TRIGGERED story event) whose body is in <Event_Body> or <Event_Pack>.
+   Handling the day's @spine does NOT satisfy this procedure. On a day that HAS a spine BOTH are live: play the armed
+   @KEY beat INSIDE the day's spine (the spine is the setting; the @KEY is what happens). An armed @KEY
+   OUTRANKS both the ## TODAY spine and PRE's `initiative` pick — fold an overture or a spine beat AROUND it,
+   never INSTEAD of it. If your analysis names an "Event", state WHICH: the @spine, the armed @KEY, or both.
+3. FIND the body by its @KEY heading. An official series arrives in an <Event_Body> block, right after
+   <Armed_Event>; an EventPack event arrives in an <Event_Pack> block. Both carry the identical @KEY heading +
+   DO/FIRE shape. The armed key's body is the one present, so wherever you find it is the one to play — read it
+   and play it.
+4. PLAY its DO line THIS reply, in this reply's scene wherever it goes: where the reply starts, on the way, or
+   wherever {{user}}'s line takes him. The engine checks the fire against the state this reply BEGAN on, so his
+   walking somewhere else never cancels the beat. Fold it into his move — in the room he leaves, the corridor he
+   crosses, the door he reaches — never in place of it, and emit it per step 5 wherever the scene ends.
+   A body may NAME any classmate, and she plays AS HERSELF whether or not she is
+   in stat_data: a girl the save has never heard of can walk through a scene, say her line and leave, and
+   nothing in the save, the gate or the chain depends on her being in it — no gate may name a girl other than
+   its own, and a body writes to nobody. So a cameo is NEVER cut, de-named or reassigned for being absent.
+   A cameo is built the way any heroine is: when her <character> card's NEW HEROINE note says so — the body
+   never decides it. No heroine the beat does not name gets dragged in. A crossover / outsider NPC is NOT a
+   classmate — do NOT build one.
+5. EMIT the value "<key>[:Outcome]" to the path /Intent/eventFire/0 in UpdateVariable (Outcome = the tied CHECK
+   tier if the body names one). ⚠ THE PATH ENDS IN /0 — every Intent field is a [value,"Label"] tuple, so an op on
+   /Intent/eventFire without the /0 is REFUSED and lands nothing. A body's FIRE line writes it in shorthand
+   (`emit /Intent/eventFire "leila_1"`); that names WHICH channel to fire, it is NOT the patch path — always add /0.
+   ⚠ Narrating the beat but omitting this op — or writing it to the /0-less path — records nothing: the event
+   replays while its conditions hold, is dropped once {{user}} leaves them, and its quest / venue / flag never
+   open. The emit is what closes it.
+</Event_Schedule>

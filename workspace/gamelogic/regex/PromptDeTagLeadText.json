@@ -1,0 +1,23 @@
+{
+  "id": "0a55ffff-d3d6-4e84-a09a-9190b729fd89",
+  "script_name": "PromptDeTagLeadText",
+  "enabled": true,
+  "find_regex": "/(?:<p><LeadText>(?:(?!<LeadText>)[\\s\\S])*?<\\/LeadText><\\/p>|<LeadText>(?:(?!<LeadText>)[\\s\\S])*?<\\/LeadText>)\\n*/g",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": false,
+    "prompt": true
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null,
+  "prompt_rewrite_intended": true
+}

@@ -1,0 +1,431 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@iori_') === 0
+<%_ /* v1.3 */ _%>
+<%_ /* The ten @iori_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @iori_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@iori_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@iori_1') { _%>
+@iori_1  This One's Me (Iori) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  INTRUDER. After the last bell, the entrance hall, and {{user}} is halfway to the shoe lockers when something
+    comes down the stairwell banister at full speed, clears the last two metres in the air, and lands in a crouch
+    directly in front of him.
+    Crimson bob, tousled, a flick of hair standing up off the crown. Golden-amber eyes. Tanned, athletic, uniform
+    worn her own way — black leggings under the skirt, white sneakers, ribbon loose. She straightens up and she is
+    already too close.
+    ⚠ SHE HAS NO CONCEPT OF PERSONAL DISTANCE AND THIS IS THE FIRST DEMONSTRATION OF IT. She circles him. Once,
+    slowly, the whole way round. Then again, closer. Then leans in and actually smells him — shoulder, collar —
+    the way a dog checks a stranger, entirely matter-of-fact about it, no flirtation whatsoever in her face.
+    Then she steps back and demands: "Why are you HERE?"
+    ⚠ AND THE QUESTION IS LITERAL, NOT RHETORICAL. This is a girls' school. She has never sat through a full class
+    in her life, so she has genuinely only just registered that the building contains a boy, and it does not
+    compute. Do NOT play this as her being embarrassed by him or scandalised by him — Hag 10 and Mor 25, she would
+    change her top in front of him without a second thought and it would not occur to her to mind. The problem is
+    arithmetic. There is one of him and he does not belong in the den.
+    IORI SEKITA. She says her own name like a warning label, and then, because nothing she thinks stays inside her
+    head, she states the entire plan out loud with no malice in it at all: "I don't like you. I'm gonna make you
+    leave."
+    And then she takes the meat bun out of his hand — "snooze, you lose" — and eats it standing in front of him,
+    watching his face the whole time, waiting to see what he does about it.
+    He does not do anything about it.
+    ⚠ HER FIRST ACT OF WAR IS ALSO, IN HER WORLD, THE FRIENDLIEST THING SHE KNOWS HOW TO DO. Food taken and food
+    given are the same gesture to her and she does not know there is a difference. Beat 6 is this exact act
+    pointed the other way, and the prose should plant it here without ever remarking on it.
+    From the entrance, warm and carrying: "Iori-chan? Are you bothering—" ⚠ SUI PASSES THROUGH. Sui Mizushiro is
+    the class "Mama", a real classmate who may or may not be in the save. Do not require her. Iori is over the courtyard wall before the sentence finishes, at
+    a speed that is genuinely impressive.
+    He is left holding nothing, in an empty hall, with half a bun gone.
+    Crack: she has declared war on a boy for the crime of existing in her school, and her opening move was sharing
+    his lunch. No H.
+  FIRE  emit /Intent/eventFire "iori_1" → engine creates the Iori quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose — "Iori
+    Sekita" — because that IS the mechanism: POST reads the name and arms her build, her <character> card
+    keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide> says.
+    Do NOT build her THIS reply unless her <character> profile is already in front of you. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Iori Sekita dropped off the stairwell banister in front of {{user}},
+    circled him twice, smelled him, demanded to know why a boy is in a girls' school, announced she would make him
+    leave - then took the meat bun out of his hand and ate it in front of him." → the World Log remembers only
+    what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@iori_2') { _%>
+@iori_2  This One's Me (Iori) ·2   (CHECK - · REWARD Iori Affection +10)
+  DO  SNOOZE, YOU LOSE. A week of {{user}} being made to suffer, and it is the worst campaign ever waged.
+    The first day she takes half his lunch. By the third she takes all of it. The day after that she is sitting on
+    his desk when he arrives, so he stands. By the end of the week she is in his CHAIR, eating his lunch out of
+    his own box, feet up on his desk, while he stands beside it — and every day of it she watches his face for the
+    part where he gets angry.
+    ⚠ THIS IS TERRITORY, NOT FLIRTING, AND SHE IS DEADLY SERIOUS ABOUT IT. Sta 95 and Int 25: the plan is to make
+    the den unpleasant until the intruder leaves, and she is executing it exactly the way something that lives in
+    a cave would. No scheming, no cruelty, no words used as weapons — she has never once thought of an insult and
+    would not know what to do with one. She just takes his things and occupies his space.
+    On the last day of it he brings two lunches. Puts one down in front of her without comment and eats the other
+    standing up.
+    She stops chewing.
+    "...What is this."
+    "Lunch."
+    "You're supposed to be MAD." She says it like he has broken a rule. She says it twice. She turns the box round
+    looking for the trick in it. There is no trick in it. There is rice.
+    ⚠ HE IS NOT BEING CLEVER AND MUST NEVER READ AS CLEVER. He is not disarming her, teaching her a lesson, or
+    making a point. He brought two lunches because one of them kept getting eaten. That flatness is the only thing
+    in the building she has no answer for, and it is the engine of all ten beats.
+    ⚠ SUI PASSES THROUGH — do not require her. If she is in the save she arrives at the end of
+    lunch with a proper bento for him, a handkerchief, and a full-volume scolding for Iori about eating other
+    people's food; Iori goes out of the classroom window onto the tree branch before the second sentence, which
+    she has clearly done before.
+    From the tree, through the glass, to him, genuinely put out: "This isn't OVER."
+    Crack: hostility that gets no reaction is a game with no other player, and she has never in her life played
+    one. No H.
+  FIRE  emit /Intent/eventFire "iori_2" → engine advances the Iori quest to Step 2 and pays the beat: Iori
+    Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is the payout,
+    and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Iori spent a week taking {{user}}'s lunch, his desk and finally his chair
+    to drive him out of the school; on the last day of it he brought two lunches and put one in front of her, and
+    she demanded to know why he was not angry." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@iori_3') { _%>
+@iori_3  This One's Me (Iori) ·3   (CHECK - · REWARD Iori Affection +16)
+  DO  THE WALL. Lunchtime, the main hallway, and she has escalated to intimidation, because taking {{user}}'s food
+    did not work and the next thing an animal does is make itself large.
+    She gets him against the lockers. Forearm across his collarbone, one sneaker up on the locker beside his hip,
+    her face about four centimetres from his, breathing on him: "LEAVE. This is OUR school. Ours. Go find a boys'
+    one."
+    ⚠ AND BECAUSE SHE HAS NO CONCEPT OF DISTANCE, SHE IS PRESSED FLAT AGAINST HIM FROM THE COLLARBONE DOWN. F-cup,
+    squashed against his chest, entirely by accident and entirely without her noticing, because to her this is a
+    shoulder-to-shoulder problem and the rest of her is simply attached to her shoulders. She is not aware of it.
+    She is not using it. She would be baffled to be told about it. Play the whole scene from her angle — she
+    thinks she is being frightening.
+    The corridor stops. Every girl in it. The reading is unanimous, and it is wrong, and somebody's phone comes
+    out.
+    ⚠ THE JOKE IS THAT HER MOST HOSTILE ACT IN TEN BEATS IS INDISTINGUISHABLE FROM AN EMBRACE, AND SHE IS THE ONLY
+    PERSON PRESENT WHO DOES NOT KNOW. Do not have him point it out. Do not have him enjoy it. Do not have him
+    panic.
+    He does not move, because there is nowhere to move to, and answers the question at face value: he got enrolled
+    here. It is a school. He goes to it.
+    "...That's IT?"
+    "That's it."
+    She stares at him from four centimetres for a long moment, looking for the lie, and cannot find one, and is
+    visibly annoyed about it.
+    "...And just WHAT do you think you are doing?"
+    ⚠ SUI PASSES THROUGH — do not require her; without her the corridor's own silence ends the
+    scene and Iori leaves at speed anyway. To Iori the scolding is about the bullying. To Sui — and to the entire
+    corridor — it is very obviously about the pressing. The two of them are having completely different
+    conversations, at volume, and nobody corrects either.
+    Iori is gone through the stairwell door. He is left standing against the lockers holding Sui's spare
+    handkerchief and receiving a lecture about propriety that has nothing to do with him.
+    Crack: she pinned the intruder to a wall to scare him off, and the whole school filed it as something else
+    entirely. No H.
+  FIRE  emit /Intent/eventFire "iori_3" → engine advances the Iori quest to Step 3 and pays the beat: Iori
+    Affection +16, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Iori pinned {{user}} to the hallway lockers nose-to-nose to order him out
+    of the school, with no idea how it looked to the corridor full of girls watching; he told her he simply goes
+    here, and Sui arrived and scolded her for something entirely different." → the World Log remembers only what
+    you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@iori_4') { _%>
+@iori_4  This One's Me (Iori) ·4   (CHECK - · no payout)
+  DO  THE HUNT. After school, the grounds, and she has moved on to the last thing she knows about an intruder who
+    will not leave and will not fight: chase it. {{user}} is walking to the gate.
+    And she is extremely good at this. Sta 95, and the whole campus is her playground — she takes the roof of the
+    bike shed, drops onto the wall, runs the length of it, swings off the low branch of the courtyard tree and
+    lands in front of him, and does it again, and again, cutting him off at every turn between the classroom block
+    and the gate, shouting at him the entire time.
+    He is not running.
+    ⚠ THAT IS THE ENTIRE BEAT AND IT MUST BE PLAYED COMPLETELY STRAIGHT. He is walking to the bus, at the speed he
+    walks to the bus, because that is where he is going. He is not being brave, not being cool, not calling her
+    bluff. It has not occurred to him to run, and the prose must never once suggest it occurred to him and he
+    decided against it.
+    Cave logic collapses in real time. Prey that does not flee is not prey. Every time she cuts him off, he simply
+    walks around her and continues, and she has to sprint ahead to cut him off again, and by the third time she is
+    not gaining anything by it.
+    By the gate she has run out of vantage points and is simply walking beside him. Furious. Matching his pace,
+    which is the slowest she has moved in her life.
+    "RUN."
+    "Why?"
+    "Because I'm CHASING you!"
+    "I'm going to the bus."
+    "...RUN ANYWAY."
+    ⚠ SHIKO PASSES THROUGH — Shiko Okubo is a real classmate who may or may not be in the save; do not require her for the scene. Iori has decided Shiko is the coolest
+    person alive and invites herself along constantly. From the bike shed, not looking up: "You're walkin' him
+    home." "I'M HUNTING HIM." "Uh huh."
+    At the gate she stops, out of breath for the first time all week — not from running, from being angry while
+    walking slowly — and points at him. "Tomorrow you RUN."
+    Crack: she cannot hunt something that is not afraid of her, and in eighteen years she has never met anything
+    that wasn't. No H.
+  FIRE  emit /Intent/eventFire "iori_4" → engine advances the Iori quest to Step 4. No payout on this beat — not
+    every beat pays, and the ones that do are 2, 3, 7 and 10. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Iori spent an afternoon hunting {{user}} across the school grounds by
+    roof, wall and tree branch, and he walked to the bus at his usual speed the entire time; she ended up walking
+    beside him to the gate, furious, ordering him to run." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@iori_5') { _%>
+@iori_5  This One's Me (Iori) ·5   (CHECK - · no payout)
+  DO  RIGHT NEXT TO YOU. After school, {{user}} is crossing the grounds, and the sky has gone the colour of a
+    bruise. ⚠ THE STORM IS NARRATED, NOT GATED — the weather is yours to set in the prose; do not wait for the
+    game to supply one and do not have anyone check a forecast.
+    The first crack of thunder goes off directly overhead.
+    And the girl who is afraid of nothing is suddenly against his arm under the gym eaves with two fistfuls of his
+    sleeve, and neither of them is entirely sure how she got there.
+    ⚠ THIS IS ON HER CARD AND IT IS ABSOLUTE: thunderstorms undo her completely and she will deny it to her last
+    breath. Do not have her admit it. Do not have her cry. She is rigid, furious, flinching at every flash, and
+    denying the entire time.
+    "That was nothing." Flash. "I'm not scared." Crack, and her whole body jolts. "I'm just... standing here." A
+    pause. "Right next to you."
+    She stays for the whole storm. An hour of it, and she does not let go of his sleeve once.
+    ⚠ SHE IS SOAKED AND DOES NOT REGISTER IT AS A PROBLEM — she was in it before she reached the eaves, the sailor
+    top is stuck to her, and Hag 10 with Mor 25 means she genuinely does not think about it, does not cover up,
+    does not notice anyone could look. When he puts his blazer round her shoulders she stares at it like a tool
+    she has not been taught to use: "...What's this for?" ⚠ HE DOES NOT EXPLAIN AND DOES NOT LOOK. He says it's
+    cold. That is the whole answer he gives.
+    And he does not tease her, does not say "I thought you weren't scared", does not move, does not put an arm
+    round her either. He stands there like a wall for an hour and lets her hold on.
+    When it passes she lets go, shoves the blazer back at him, and says: "If you tell anyone, I'll end you." Then
+    takes his umbrella out of his bag and leaves with it.
+    ⚠ THE STOLEN UMBRELLA IS NOT A JOKE. Taking his things is the only way she knows to keep any of him, and every
+    beat she takes something. Do not have her return it.
+    Crack: for four beats she has been trying to remove him from the building, and the first time in her life she
+    has ever chosen to stand next to someone, it was him. No H.
+  FIRE  emit /Intent/eventFire "iori_5" → engine advances the Iori quest to Step 5. No payout on this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A thunderstorm caught Iori and {{user}} at the gym eaves and the girl who
+    is afraid of nothing spent an hour holding his sleeve, denying it the whole time - 'I'm not scared, I'm just
+    standing here, right next to you' - then threatened to end him if he told anyone, and took his umbrella." →
+    the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@iori_6') { _%>
+@iori_6  This One's Me (Iori) ·6   (CHECK - · no payout)
+  DO  MEAT BUNS. Morning, homeroom, before the bell, and {{user}} arrives to a disturbance, because Iori Sekita is
+    in a classroom.
+    ⚠ ESTABLISH HOW UNPRECEDENTED THAT IS. She has never sat through a full class. People look up. Somebody checks
+    the date. She is not sitting at a desk — she is sitting ON his, cross-legged, with a paper bag.
+    The bag lands in front of him. It is warm and there are six of them in it.
+    "Eat."
+    Then she takes three of the six and eats them herself, and when he is too slow with his, she pushes one into
+    his mouth with the flat of her hand and goes back to her own.
+    ⚠ THIS IS THE SAME ACT AS BEAT 1, POINTED THE OTHER WAY, AND NOBODY IN THE SCENE SAYS SO. She took food from
+    him to drive him out; she has brought food to him now. In her world those are one gesture with two directions
+    and she has not thought about either of them for a second. She has decided he is hers. She has not told him,
+    because to her the bag IS the telling, and it does not occur to her that a person might need it said in words.
+    ⚠ YUKI AND HARUKA PASS THROUGH — Yuki Tsukino and Haruka Kurusu are real classmates who may or may not be in
+    the save; do not require them. Yuki, from two
+    desks away, delighted: "Bro. She's FEEDING you." Haruka, without looking up from her homework: "She has never
+    brought me anything." Yuki: "That's 'cause you'd race her for it." If neither is in the save, the room simply
+    watches and says nothing, which works just as well.
+    He asks where she got them. She says the place by the station, and then, casually, that she ran there, which
+    is four kilometres, before school.
+    The bell goes. She does not leave. She sits on his desk through the entire first period with her back to the
+    teacher, and gets sent out, and comes back through the window at break.
+    Crack: the whole room can read what she is doing except the two people on the desk. No H.
+  FIRE  emit /Intent/eventFire "iori_6" → engine advances the Iori quest to Step 6. No payout on this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Iori turned up in homeroom - unheard of - sat on {{user}}'s desk and
+    dropped a warm bag of meat buns in front of him that she had run four kilometres to the station for, then ate
+    half of them herself and pushed one into his mouth when he was slow." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@iori_7') { _%>
+@iori_7  This One's Me (Iori) ·7   (CHECK - · REWARD Iori Affection +20)
+  DO  A DAY AS A LADY. The shopping mall, an afternoon off, and Iori Sekita is in a dress. {{user}} has not been
+    told why.
+    Sui saw the desk-sitting, and the window, and the first period she was thrown out of, and named Mama's price
+    for not telephoning anyone's parents: one afternoon, properly turned out, supervised. ⚠ SUI PASSES THROUGH —
+    do not require her. Sui is not being cruel and must never be written as cruel. She thinks
+    she is giving a girl something lovely.
+    The full works: a pale dress, shoes with a heel she cannot balance in, a small handbag she holds the way you
+    hold something that might still be alive, hair pinned, and the flick on top of her head pinned flat, which is
+    the part that looks the most wrong.
+    And the rules, delivered kindly, one at a time, all afternoon. Small steps. Don't shout. Sit with your knees
+    together. A lady does not eat while walking. Say it again, but properly this time.
+    ⚠ AND SHE IS IN GENUINE TERROR, WHICH IS THE ONE THING ON HER CARD THAT FRIGHTENS HER. Not embarrassment. Not
+    sulking. In the fitting room her hands are shaking and she cannot make them stop, and Hag 10 hides absolutely
+    none of it from anyone who bothers to look. Sui does not look. Sui is doing up the buttons and telling her she
+    looks lovely, and means every word, and sees nothing.
+    ⚠ SHIKO, YUKI AND HARUKA PASS THROUGH — do not require any of them. Shiko has been
+    brought as muscle to stop her bolting and is deeply unhappy about the assignment ("I'm not her keeper." "You
+    are today.") and stands by the exit with her arms folded. Yuki and Haruka came for the spectacle and are not
+    hiding it.
+    Yuki texts him: you gotta see this bro.
+    So he comes, and he looks at her.
+    ⚠ AND NOTHING IN HIS FACE CHANGES. This is the hinge of the entire series and it must be underplayed to the
+    floor. He looks at her in a dress exactly the way he looks at her in leggings on his desk with her feet up: no
+    double take, no whistle, no blush, no joke, no compliment, no visible reaction whatsoever. He says hello. He
+    asks if she has eaten.
+    Sui, delighted, presenting her: "Doesn't she look lovely?"
+    And Iori ignores Sui completely and walks straight at him in shoes she cannot walk in, fists closed, and
+    demands it:
+    "SAY IT. Lady or animal. Which one. Say it."
+    "Either way."
+    ⚠ THAT IS THE WHOLE LINE AND HE DOES NOT ELABORATE ON IT. He does not say "you look nice either way", does not
+    explain himself, does not follow it with anything kind. Two words, flat, the way he said "lunch" in beat 2.
+    Then he asks again whether she has eaten.
+    She stands there in the middle of a shopping mall with her mouth open. Then she kicks the shoes off — both of
+    them, straight up, across the concourse, and Shiko catches one out of the air without moving her feet — grabs
+    his wrist, and runs, dragging him out through the doors barefoot with the dress hitched up in her other fist,
+    at a speed he cannot actually match.
+    ⚠ SHE HAS NEVER TAKEN HIM WITH HER BEFORE. Four beats of chasing him and this is the first time she has
+    grabbed hold and brought him along, and neither of them remarks on it.
+    Sui, left holding a handbag, to nobody: "...My."
+    Crack: every person she has ever known wanted one version of her or the other, and the only one who did not is
+    the only one she has spent a month trying to drive out of the building. No H.
+  FIRE  emit /Intent/eventFire "iori_7" → engine advances the Iori quest to Step 7 and pays the beat: Iori
+    Affection +20, applied by the row. Do NOT also emit an affection change for this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Sui made Iori spend a supervised afternoon at the mall dressed as a lady,
+    shaking in the fitting room the whole time; {{user}} arrived and looked at her exactly the way he looks at her
+    on his desk, and when she demanded 'lady or animal, which one', he said 'either way' - so she kicked the shoes
+    across the concourse and dragged him out barefoot." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@iori_8') { _%>
+@iori_8  This One's Me (Iori) ·8   (CHECK - · no payout)
+  DO  VERSIONS. Lunchtime, the classroom, and {{user}} sits down to eat opposite a sports bag that was not on that
+    desk this morning.
+    She has worked the problem and reached a conclusion: he must want SOMETHING, because everyone wants something,
+    and if she finds out what before he gets bored of her, he stays. She has one lunch break to find it, and she
+    has come equipped.
+    ⚠ THIS ENTIRE BEAT IS ONE LUNCH BREAK, AND NOTHING IN IT MAY CROSS A DAY. She does not try one version a day —
+    she cycles them at one table, a few minutes each, switching the moment one fails to land. The comedy IS the
+    switching: each arrives before the last has finished, and she never once explains what she is doing. Do NOT
+    stage it as a montage across a week, and do NOT put a clock time on any of it — the beat plays whenever the
+    player walks into it.
+    ⚠ THE REASON UNDER IT IS THE OTHER HALF OF HER CARD AND IS NEVER SAID UNTIL THE ROOF. People get tired of her
+    and leave. They always have. Being somebody else is simply the price, and she has never once thought of it as
+    a sad thing to do — it is just what you pay.
+    ⚠ THE FOUR GIRLS SHE IMITATES PASS THROUGH AND NONE NEEDS TO BE IN THE SAVE. She can perform an absent girl perfectly well.
+    FIRST, SHIKO. Hands jammed in her pockets, collar up, sitting backwards on the chair beside him refusing to
+    look at anyone, drawling "Haaah? The hell do you want" at a girl who asked her the time. It lasts about four
+    minutes, because Sta 95 cannot hold still that long and she is up and pacing before she notices she has
+    stopped doing it.
+    THEN, WITHOUT ANY TRANSITION, YUKI. Fist-bump, shoulder-slap, "yo, bro," rating passing girls out of ten and
+    getting the numbers wrong, betting she will get a phone number before he does and then visibly not wanting
+    one. If Yuki is in the room she is watching her own act performed at her from three feet away: "...is that
+    what I sound like?" Haruka, flatly: "Yes."
+    THEN HARUKA. Nine challenges before the bell, score kept on her own forearm in pen. She wins all nine, because
+    Sta 95 against a boy eating lunch is not a contest, and at the end of it she feels absolutely nothing and
+    looks at her arm like it belongs to somebody else.
+    THEN QUIET. She sits at an actual desk, in an actual chair, hands folded, saying nothing, looking straight
+    ahead. ⚠ PLAY THIS ONE FOR EVERYTHING IT IS WORTH — it is the funniest thing anyone in that room has ever
+    seen, the whole class is watching her out of the corners of their eyes, and she lasts four minutes and eleven
+    seconds before her leg starts going and she is out of the door.
+    AND THEN THE BAG. She comes back IN THE DRESS — the one from the mall, brought from home, in a sports bag,
+    which means she planned this before lunch started. ⚠ AND THAT IS WHERE IT STOPS BEING FUNNY, AND THE PROSE
+    MUST LET THE TEMPERATURE DROP THE MOMENT SHE WALKS BACK IN. Nobody made her. She is doing it to herself, in a
+    classroom, on her own lunch break.
+    And he has been eating his lunch through all five of them. ⚠ HE TREATS EVERY VERSION EXACTLY THE SAME and the
+    prose must not vary by one word: he says hello to each one, shares his lunch with each one, laughs at none of
+    them, compliments none of them, never asks what she is doing, and never once picks.
+    Then she takes him up to the roof, still in the dress, and rounds on him:
+    "Just TELL me which one. Everyone gets tired. They laugh, and then they get tired, and then they go. Everyone.
+    So tell me which one doesn't and I'll BE it. I'm GOOD at it. I can do it every day."
+    ⚠ AND HE DOES NOT ANSWER, AND DOES NOT REASSURE HER EITHER. No speech about how she is fine as she is. No "I'd
+    never get tired of you." He says they have had lunch together every day this week and it was fine, and asks
+    whether she wants the last meat bun. She screams at the sky. She takes the meat bun.
+    Crack: she auditioned five times in one lunch break for a part nobody is casting, and the one thing all five
+    auditions had in common is that she was not in any of them. No H.
+  FIRE  emit /Intent/eventFire "iori_8" → engine advances the Iori quest to Step 8. No payout on this beat. (No
+    day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Over one lunch break Iori cycled through being other people at {{user}} -
+    Shiko, then Yuki, then Haruka, then four minutes of silence, then the dress out of a sports bag she had packed
+    that morning - because everyone gets tired and leaves and she wanted to know which version would keep him; he
+    ate his lunch through all five and offered her the last meat bun." → the World Log remembers only what you
+    report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@iori_9') { _%>
+@iori_9  This One's Me (Iori) ·9   (CHECK - · no payout · THE BREAK)
+  DO  WHICHEVER ONE. Lunchtime, the hallway, and she is going to make the biggest offer she has. She has brought
+    {{user}} with her, by the wrist, and she walks him straight up to the one person in the building she has been
+    running away from since the entrance ceremony.
+    ⚠ SUI PASSES THROUGH — do not require her. But
+    understand what is being spent here: Iori bolts the instant Sui starts on her, every single time, and she has
+    walked up to her on purpose.
+    And she performs it. The bow, held a beat too long. "Good afternoon, Mizushiro-san." Hands folded in front.
+    Small steps, knees together, not shouting. A full thirty seconds of it, flawless, because she practised.
+    ⚠ AND SHE IS SHAKING THE ENTIRE TIME AND SUI DOES NOT SEE IT. Sui is overjoyed — genuinely, warmly, both hands
+    to her mouth — and she is looking at the posture and not at the hands. Hag 10 is hiding nothing. Nobody is
+    looking.
+    Then Iori turns to him, fists closed, and puts the whole thing on the table:
+    "Is this the one? I can do this one. Every day. I practised. Just SAY it."
+    And he says: "Whichever one's you, Iori."
+    ⚠ THAT IS HARDER THAN THE DRESS AND THE PROSE MUST KNOW IT. She came braced to be told which one to be — that
+    is a transaction she understands and has been running all week and it costs her nothing except herself. What
+    she is handed instead is a question about her, and Int 25 has never once been asked one, by anybody, including
+    herself. She stands there in the corridor with her mouth open and no answer in her at all.
+    ⚠ AND HE HAS DONE THIS DELIBERATELY EVERY TIME AND NEVER EXPLAINS THAT HE HAS. "Either way" in the mall, five
+    identical weeks of lunches, and now this: the choice has been in her hands the whole time and he has never
+    once reached for it. He does not tell her that. He does not tell her now.
+    And then it arrives, out loud, in the worst grammar of her life:
+    "...It's not the dress." Quieter, and slower, because she is working it out while she says it. "It's not the
+    dress. The bro thing. The quiet thing. Shiko's thing. They all felt like the dress. Every single one of them
+    felt exactly like the dress and I thought it was just the DRESS—"
+    ⚠ THIS IS THE DISCOVERY AND IT IS NOT A SPEECH. She is not articulate and must not become articulate for one
+    line of it. It comes out in fragments, doubling back, and she looks genuinely frightened for the second time
+    in the series — because the thing she is scared of has just turned out to be much bigger than an outfit and to
+    have been following her around for her whole life.
+    Then she does what she does with everything: flips the nearest empty desk over from pure overload, roars
+    something that is not a word, and grabs his arm.
+    "...And just WHAT do you think you are doing?"
+    And she does not bolt.
+    ⚠ FIRST TIME IN HER LIFE, AND THE PROSE SHOULD LET IT LAND WITHOUT DECORATION. She turns round, still holding
+    his arm, and stands there in front of the thing she has been running from since her first day here, and claims
+    it:
+    "Mama. This one. THIS one's me."
+    ⚠ SUI IS NOT A VILLAIN AND THIS IS NOT A VICTORY OVER HER. Sui blinks — because "Mama" is what Iori has never
+    once called her, not once — and something in her face rearranges, and what she says is only that she will
+    still expect her indoors during a storm. Iori says fine. It is the first peace the two of them have ever made,
+    and neither of them acknowledges that it happened.
+    Crack: she offered to become the thing that terrifies her and he handed the question back, and a girl who has
+    never had an opinion about herself in her life had to go and get one in a corridor at lunchtime. No H.
+  FIRE  emit /Intent/eventFire "iori_9" → engine advances the Iori quest to Step 9. No payout on this beat — the
+    discovery costs her everything she had and a payout would price it. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Iori walked up to Sui on purpose and performed thirty flawless seconds of
+    ladylike, shaking the whole time, then asked {{user}} if that was the one he wanted; he said 'whichever one's
+    you, Iori', and she worked out in the middle of the corridor that every version she had tried had felt exactly
+    like the dress - then told Sui to her face, without bolting, 'this one's me'." → the World Log remembers only
+    what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@iori_10') { _%>
+@iori_10  This One's Me (Iori) ·10   (CHECK - · REWARD Iori Affection +20 · FINALE)
+  DO  OUT LOUD. After school, the grounds, and the gate is full of girls going home, {{user}} among them.
+    Iori is on top of the gate.
+    ⚠ SHE IS DOING THIS THE ONLY WAY SHE HAS, AND THE PROSE MUST NOT TIDY IT UP. No note, no confession behind the
+    gym, no going red and trailing off. She has something to say and she has never in her life said anything at a
+    volume lower than the one she has. She waits until the courtyard is at its fullest, and then she does it to
+    all of them at once:
+    "OI! LISTEN UP!" The courtyard turns. "I LIKE HIM. THAT ONE. A LOT." She points, from the top of a gate, at
+    one boy standing in the middle of a hundred girls. "EVERYBODY HEAR THAT? GOOD."
+    ⚠ THERE IS NO CONFESSION SCENE AFTER THIS AND THERE MUST NOT BE ONE. That was it. That was the whole thing.
+    She said it to the entire school before she said it to him, because it did not occur to her that those were
+    different events.
+    ⚠ THE CAMEOS PASS THROUGH — do not require any of them. Sui sits
+    down on a bench. Shiko, hands in pockets, to nobody: "Called it." Yuki, hands cupped, yelling back: "WE KNEW,
+    BRO." Haruka: "Everyone knew." Somebody starts clapping and Iori tells them to shut up.
+    Then she drops off the gate, lands next to him, and the weather does what it has been threatening to do all
+    afternoon — the light goes, and there is thunder, a long way off.
+    ⚠ THE STORM IS NARRATED, NOT GATED. Set it in the prose. Do not have anyone check a forecast.
+    And she does not move closer, because she is already standing next to him, and she does not grab his sleeve,
+    because she is already holding his arm. She says the beat 5 line again, and this time the whole thing is true:
+    "I'm not scared." A flash, and she does not flinch this time, or she does and it does not matter. "I'm just
+    standing here. Right next to you."
+    ⚠ WHAT CLOSES HERE: she declared herself in a corridor and she has just declared him in a courtyard, in that
+    order, and both at full volume, because they are the same act. Everyone she has ever let close wanted her to
+    be somebody else first. He never asked, not once, and never told her he was not asking. That is what he was
+    doing the whole time and he still does not say so.
+    Then, because she is not going to end on anything soft: she takes his umbrella out of his bag again, opens it
+    over the two of them, and puts it in his hand so he has to hold it.
+    Closing: "You're mine now. Snooze, you lose."
+    No H.
+  FIRE  emit /Intent/eventFire "iori_10" → engine advances the Iori quest to Step 10, marks the series COMPLETE,
+    and pays the beat: Iori Affection +20, applied by the row. Do NOT also emit an affection change for it. If the
+    payout carries her past 100 the rank-up lands at her next gate — a check on her, or the day's swing — one rung
+    a day is the game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Iori climbed the school gate at home time and shouted 'I LIKE HIM, THAT
+    ONE, A LOT, EVERYBODY HEAR THAT' at the entire school before she had ever said it to {{user}}; then she
+    dropped down next to him as the thunder started and said she was not scared, she was just standing here, right
+    next to you - and meant all of it this time." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

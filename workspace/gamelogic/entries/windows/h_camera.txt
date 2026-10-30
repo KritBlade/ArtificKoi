@@ -1,0 +1,58 @@
+@@if getvar('stat_data.PendingState.IntimacyActive[0]') === true
+<H_Camera>
+# v0.10
+<%_ if (getvar('stat_data.PendingState.IntimacyActive[0]') === true) { _%>
+# School v4 — H IMAGE camera recipe (体位→camera) · Loads ONLY while PendingState.IntimacyActive is on (EJS-gated →
+# ~0 tokens otherwise). The CARD-SIDE half of the image contract: mvu-helper's <image_generation> + <explicit_rules>
+# already teach the GENERIC composition + body-geometry / exposure / anatomy / finish for every card. THIS file adds
+# ONLY what needs GAME STATE and School's 体位 taxonomy — the tested CAMERA per position, the MATCH lock, and the state
+# framings. It does NOT re-teach how many pictures this reply carries (<picture_count> owns that), body arrangement /
+# contact / insertion (<explicit_rules> owns that), identity or clothing (<outfit_rules> and <reply_cast> own that), or
+# the scene (your [Composition] owns that). It supplies three things: which CAMERA, which 体位 to match, and which
+# state framing.
+#
+# WHEN: only when you write a <pic> [Composition] for a SEXUAL/NUDE beat this reply.
+#
+# ── THE TWO RULES ─────────────────────────────────────────────────────────────────────────────────────────────────
+# 1) MATCH-THE-SCENE — the image of a beat in a 体位 shows the SAME 体位 the <Intimacy_system>/<H_Position> check
+#    established THIS reply (the ";pos:<English name>" you emitted + greened 「JP (English)」in <gametxt> = the
+#    ## INTIMACY panel "position:" line). Never a different position than the prose just named. A beat with no 体位
+#    yet (kissing, undressing, foreplay) is drawn as the prose shows it, with a camera from <camera>.
+#    ★ WHO IS IN FRAME: up to TWO girls and ONE man, per the extension's [CAST] rules — a threesome beat draws as the
+#    threesome it is. Both girls must actually be in the beat you are illustrating; never add a girl the prose left
+#    elsewhere in the room, and never drop the man out of a join he is part of.
+# 2) CAMERA PRIORITY — use the camera listed below for that 体位; it OVERRIDES <camera>. You MAY mirror left↔right for
+#    variety, but never swap to an angle that hides the join. Two images of the SAME 体位 in one reply still both use
+#    its camera — vary the mirror or the framing distance, not the angle.
+#
+# ── CAMERA by 体位 (names = <H_Position> bases; the body arrangement itself comes from <explicit_rules>) ─────────────
+# PENETRATIVE:
+# · 正常位 (Missionary) — low-angle pov up from between her spread legs, penetration point centred · OR side view along the reclined body line.
+# · 屈曲位/屈脚位 (Folded) · マングリ正常位 (Spread-leg, hips up) — from above / front, looking down the raised hips at the join.
+# · 松葉崩し (Crossed-leg / pine) — side-oblique, showing the crossed-leg join and half-turned hip line.
+# · 後背位 (Doggy) · 立ちバック (Standing-from-behind) — medium side-angle on the rear-entry join · OR rear three-quarter over her back.
+# · 騎乗位 (Cowgirl) — low-angle pov up at her front.
+# · 背面騎乗位 (Reverse cowgirl) — low-angle rear pov up at her back and buttocks (she looks back over her shoulder).
+# · 対面座位 (Face-to-face sitting) — side or three-quarter at eye level.
+# · 背面座位 (Reverse/back sitting) — front three-quarter (her front to camera, his torso behind).
+# · 立位 (Standing) · 駅弁 (Ekiben) — side full-body.
+# · 側位 (Side / spooning) — side view along the bodies.
+# · 素股 (Sumata, non-penetrative) — close side view of the thigh / vulva grind.
+# ORAL:
+# · フェラチオ (Fellatio) · イラマチオ (Irrumatio) — close side profile of the mouth-join · OR pov down at her upturned face.
+# · クンニ (Cunnilingus) — over-her-body pov down · OR side.
+# · 69 — side.
+# · 顔面騎乗 (Face-sitting) — low pov up at her from his position · OR side.
+# OVERLAY:
+# · ANAL (any base) — keep the base position's camera; frame the join at the anus (vulva visible above it).
+#
+# ── STATE framings — ADD only when the drawn girl's REAL state shows it (read the ## INTIMACY panel, not your whim) ──
+# · アヘ顔 / AHEGAO — ONLY when the panel flags 💫AHEGAO on the girl you draw (a sex act on her at Energy 0): tongue lolling out, eyes
+#     crossed / rolled back / heavy-lidded, head tipped back, face slack, drooling. No flag → no ahegao.
+# · 潮吹 / Squirting — ONLY when THIS reply's climax squirts by her ## INTIMACY 潮吹 line (it squirts by itself, or its roll
+#     opened and your die reached its RawDie≥N): the vagina gushing, intense squirting at the moment of climax.
+# · Cum-on-body — ONLY on an EXTERNAL finish this beat (facial / on-body): white semen on her face / breasts / body,
+#     dripping, flushed post-orgasm afterglow; she may face the viewer cupping her own breasts.
+# (Exposure, fluids at the join, sweat, and act geometry all come from <explicit_rules> — do not restate them here.)
+<%_ } _%>
+</H_Camera>

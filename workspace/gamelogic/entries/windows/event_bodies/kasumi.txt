@@ -1,0 +1,431 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@kasumi_') === 0
+<%_ /* v1.3 */ _%>
+<%_ /* The ten @kasumi_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @kasumi_N key is the armed one. The @@if line on top
+   repeats the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@kasumi_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kasumi_1') { _%>
+@kasumi_1  Either Is Fine (Kasumi) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE SHELF. After the last bell, handout duty, and the girl doing it is carrying forty sheets of paper
+    against her chest — and on her, the stack does not get held. It RESTS. There is a shelf there, and the shelf
+    is at everybody's eye height, and the class stopped noticing in April.
+    KASUMI OKUDERA is 150 cm of soft grey bob and a small ahoge, a cardigan somehow still hugged across herself
+    with both arms full, and a face already going pink because the room has three people left in it and one of
+    them is {{user}}, at the last desk.
+    ⚠ THE BODY FACT, STATED ONCE, PLAINLY, AND THEN PLAYED RATHER THAN REPEATED. She has the same H cup as Ume and
+    Mana, who are seventeen centimetres taller and carry it like a figure. On her it is a headline: the first
+    thing that enters any room, before her face, before anything else about her. And every single thing she does
+    to hide it — the cardigan, the hunch, the stack held out in front — lifts it, frames it, or points at it. She
+    has never once worked that out. Do NOT have anybody in the scene stare; the class is used to it. The comedy is
+    that she is not.
+    ⚠ SHE IS NOT NENE, AND THIS IS WHERE THE LINE IS DRAWN FOR THE WHOLE SERIES. Nene goes still and says plainly
+    that she won't. Kasumi is visibly, audibly TRYING — too much, in three directions at once — and freezes at the
+    fork. Bashful is external: fidgeting, scarlet, hem-twisting, three sentences started and none finished. Play
+    the trying, never the silence.
+    She reaches his desk with the last sheet. Hand it to him, or put it on the desk. Two options. "U-um— here—
+    n-no, I'll just— sorry, do you want— either is fine—" She has started four sentences. The sheet is hovering.
+    ⚠ AND {{user}} DOES THE ONE THING NOBODY IN HER LIFE DOES, WHICH IS NOTHING. He does not reach for it. He does
+    not say "just put it there". He does not say "take your time", which is the same thing said kindly. He waits,
+    hands on the desk, looking at her face, and lets the silence be as long as it needs to be.
+    It needs to be quite long.
+    Eventually the sheet arrives in his hand. "Th-thank you. For waiting." A pause, and then, so quietly it barely
+    makes it across the desk: "...N-nobody waits."
+    She tells him her name in two goes, bows, and leaves with the empty tray held out in front of her like a
+    shield — which, on her, is not what a shield does.
+    Crack: none. She is not a girl with a wall; she is a girl standing at a fork. What he has learned in ten
+    minutes is that she CAN finish — she only needs the fork left open long enough — and he is going to spend a
+    while working out why it keeps closing. Decided today: nothing. He picked neither, and she noticed that he
+    picked neither. No H.
+  FIRE  emit /Intent/eventFire "kasumi_1" → engine creates the Kasumi quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose — "Kasumi
+    Okudera" — because that IS the mechanism: POST reads the name and arms her build, her <character> card
+    keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as <Classmate_Guide> says.
+    Do NOT build her THIS reply unless her <character> profile is already in front of you. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kasumi Okudera was on handout duty after the bell, carrying the stack
+    against her chest the way she carries everything, and could not decide whether to hand {{user}} his sheet or
+    leave it on the desk; he did not reach for it and did not tell her to take her time, he waited, and she said
+    thank you for waiting and that nobody waits." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kasumi_2') { _%>
+@kasumi_2  Either Is Fine (Kasumi) ·2   (CHECK - · REWARD Kasumi Affection +10)
+  DO  MELON OR HONEY. A week on, after school, the bakery on the shopping street, and {{user}} has just bought two
+    breads — one melon, one honey — walked them to the bench at the side of the street, sat Kasumi Okudera down,
+    and put the bag between them.
+    "Pick one."
+    ⚠ THIS IS A TEST, HE KNOWS IT IS A TEST, AND THE PROSE SHOULD LET THE READER WATCH HIM RUN IT. It is the
+    beginning of the series and he does not yet know what her problem IS. So he has removed every variable he can
+    think of: no queue, no clock, no kiosk lady, nobody behind her sighing, nobody watching but him, and two
+    breads that cost the same and that he has ALREADY PAID FOR, so that there is no wrong answer anywhere in the
+    world. If pressure is the cause, this takes five seconds.
+    It takes four minutes.
+    ⚠ PLAY THE FOUR MINUTES. She looks at the melon bread. She looks at the honey bread. She picks up the melon
+    bread and puts it down. "Th-the— um— which one do you—" "Either." "Th-then— the— n-no, you should have the—
+    either is fine—" She has said "either is fine" three times to a person who has said "either" back three times,
+    and the bag is still full.
+    ⚠ {{user}} GIVES NO OPINION. NOT ONE. NOT A HINT. NOT A KIND NUDGE. Any opinion contaminates the result — and
+    worse, any opinion is one more person deciding for her, which he suspects is what everyone does and is
+    beginning to suspect is the whole disease. He eats nothing, says nothing, and watches her face, not the bag.
+    The body comedy, because there is always body comedy: she hunches over the bag to look into it, and hunching
+    does what it always does, and a man walking a dog past the bench looks and looks away and she does not notice,
+    because she is looking at bread.
+    Melon. Finally. Held in both hands like something that might be taken back.
+    And then, at once, before the first bite: "...Sh-should I have— was honey the—"
+    ⚠ {{user}} DOES NOT SAY "MELON WAS RIGHT". That would be an opinion. He takes the honey bread and eats it and
+    says it is good, and that is all. She waits for the verdict on her choice and there is not one, because there
+    never was a wrong one, and she has never in her life been in a situation with no wrong answer and does not
+    know what to do with it.
+    She eats the melon bread. It is also good.
+    Crack: hairline, and it is not in her — it is in his model of her. Pressure was not the cause. Nobody was
+    waiting, and she waited anyway. Decided today: the melon bread. Four minutes, on a bench, with nobody behind
+    her. Which was the point of the test. No H.
+  FIRE  emit /Intent/eventFire "kasumi_2" → engine advances the Kasumi quest to Step 2 and pays the beat: Kasumi
+    Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is the payout,
+    and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} bought a melon bread and a honey bread, walked Kasumi to the
+    bench at the side of the shopping street with nobody waiting and nothing to lose, and asked her to pick; it
+    took four minutes, and he gave no opinion at any point, before or after, and ate the honey one." → the World
+    Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kasumi_3') { _%>
+@kasumi_3  Either Is Fine (Kasumi) ·3   (CHECK - · REWARD Kasumi Affection +16)
+  DO  THE POSTURE LESSON. Lunch, a week on, the courtyard, and Mei Hanamori has asked Kasumi Okudera to teach her
+    The Posture, in front of {{user}}, whom Mei invited because Mei invites people.
+    ⚠ THE PREMISE OF THE COMEDY, STATED SO THE NARRATOR CANNOT MISS IT. Mei believes Kasumi's figure is the result
+    of a POSTURE, and wants to learn it. Kasumi's posture is a HUNCH — shoulders in, arms crossed, chin down —
+    engineered over six years to hide exactly the thing Mei wants to grow. Kasumi is about to teach her best
+    friend to hunch, and Mei is going to do it with total dedication.
+    Mei hunches. Mei asks whether she is doing it right. Mei hunches harder.
+    Kasumi is dying. She knows what the posture is for. She cannot decide whether to tell Mei — "M-Mei-chan,
+    that's— um— it's not for— I mean it is, but— n-never mind, you're doing it well—" — three starts, and Mei, who
+    takes every sentence at face value, hears "you're doing it well" and hunches with enormous satisfaction.
+    ⚠ AND {{user}} ASKS THE QUESTION THAT MOVES HIS INVESTIGATION ONE STEP, AND HE ASKS IT OF KASUMI, NOT MEI.
+    "Which one's the real posture?"
+    Not "tell her the truth". Not "she's got it wrong". Just: which one. And then he waits, the way he waited at
+    the desk.
+    And Kasumi Okudera — in the courtyard, at lunch, with people about, in front of the one boy in the school —
+    straightens up. Shoulders back, chin level, arms at her sides, to show Mei what standing actually looks like.
+    It lasts about one second. It is the first time in six years that anybody has seen it. Then the arms come back
+    across and the shoulders come back in and she is scarlet to the hairline.
+    ⚠ WHAT HE LEARNED IS THE POINT OF THE BEAT AND MUST NOT BE SAID ALOUD. She did that in one second. For Mei. No
+    stall, no "either", no fork — she saw her friend doing it wrong and corrected it instantly, with her whole
+    body, in public. The girl who took four minutes over bread for herself took one second over posture for
+    somebody else. He files it. He says nothing.
+    Mei, delighted: "Like THAT?" — and straightens up too, and now there are two of them standing up straight in a
+    courtyard, one of them 150 cm of not very much and the other 150 cm of a great deal, and Kasumi hunches again
+    immediately and Mei does not, and Mei is the one who got the lesson.
+    Crack: hairline number two, in his model. She can decide. She just cannot decide for HERSELF, and he does not
+    know why yet. Decided today: to show Mei the real one. For a second, and for Mei. No H.
+  FIRE  emit /Intent/eventFire "kasumi_3" → engine advances the Kasumi quest to Step 3 and pays the beat: Kasumi
+    Affection +16, applied by the row. Do NOT also emit an affection change for this beat. Mei Hanamori appears
+    here and is NOT required and NOT built by this beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Mei asked Kasumi to teach her 'the posture' in the courtyard in front of
+    {{user}}, not knowing the posture is a hunch built to hide; Kasumi could not decide whether to tell her, and
+    when he asked which one was the real posture she stood up straight to show Mei, in one second, for one second,
+    and folded again scarlet." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kasumi_4') { _%>
+@kasumi_4  Either Is Fine (Kasumi) ·4   (CHECK - · no payout)
+  DO  THE FOURTH BLOUSE. A week on, after school, the haberdashery counter in the shopping mall, and Kasumi
+    Okudera is choosing thread, and has been for nineteen minutes.
+    ⚠ WHY THREAD. Nothing off the rack fits her — nothing has since she was twelve — so she alters every piece of
+    her own uniform by hand, and the blouse in her bag is on its FOURTH re-sew, each one an attempt to make it
+    hide more, each one making it fit worse, which is a sentence that describes her entire approach to her own
+    body. {{user}} carried the fabric. He is now leaning on the counter watching a girl fail to choose between two
+    blues that are, to any eye but hers, the same blue.
+    "Th-this one's— but that one might— under the light it— either is— sorry— either is fine—"
+    ⚠ THIS IS THE TEST, AND IT IS A FOLLOW-UP TO THE BREAD. On the bench he removed the pressure and the stall
+    stayed, so pressure is not the cause. In the courtyard she corrected Mei in one second, so it is not that she
+    cannot decide. He has a hypothesis now, and this is the beat where he checks it — gently, in a way she will
+    not notice being checked.
+    He does not pick a blue. He asks: "If the blouse were for somebody else. Which?"
+    "That one." Instant. Finger on the left-hand reel before the sentence is finished. No stall, no restart, no
+    "either".
+    Then she hears herself, and the finger comes back, and the scarlet arrives.
+    ⚠ HYPOTHESIS CONFIRMED, AND HE SAYS NOTHING WHATSOEVER ABOUT IT. Not "see?", not "you can do it", not any of
+    the things a person says when they have just caught somebody out. He buys the left-hand blue. She does not ask
+    why that one. He does not tell her. It is, for the record, the right blue, and she chose it, and she chose it
+    in one second the moment it was not hers.
+    On the way out she asks — three starts — whether he thinks the blouse will be all right this time. He says he
+    thinks it will fit exactly as well as she decides it should, which she takes for a joke, and which was not
+    one.
+    Crack: none in her yet. In him: the problem has a shape. She can decide for anybody alive, in a second, with
+    total confidence — except herself. Whatever is wrong is not in her judgment. It is in what she believes
+    happens to her when she uses it. Decided today: the blue thread. For somebody else, one second. For herself,
+    nineteen minutes and still counting when he paid. No H.
+  FIRE  emit /Intent/eventFire "kasumi_4" → engine advances the Kasumi quest to Step 4. No payout on this beat —
+    not every beat pays, and the ones that do are 2, 3, 7 and 10. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kasumi spent nineteen minutes at the haberdashery counter unable to choose
+    between two blues for the fourth re-sew of her blouse, and when {{user}} asked which she would pick if the
+    blouse were for somebody else she answered in one second; he bought that blue and said nothing about it." →
+    the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kasumi_5') { _%>
+@kasumi_5  Either Is Fine (Kasumi) ·5   (CHECK - · no payout)
+  DO  THE FRONT ROW. Morning, a week on, before the bell, and the class is drawing lots for new seats — and Kasumi
+    Okudera has just drawn the front row, window side. The most visible desk in the room: the one every handout
+    gets set on, every teacher stands over, every latecomer walks past.
+    ⚠ THE ROOM DOES WHAT THE ROOM ALWAYS DOES, AND IT DOES IT KINDLY, WHICH IS THE PROBLEM. Six girls offer to
+    swap before she has stood up. Not one of them asks whether she wants to. They have all known her since April
+    and they all know what she wants, obviously, so they are already sorting it out among themselves — who has a
+    back-row seat, who takes her slip, whether the teacher will mind — while Kasumi stands in the middle of it
+    holding a piece of paper and going redder and redder and saying "n-no, it's— you don't have to— either is—" to
+    nobody in particular, because nobody in particular is listening.
+    ⚠ {{user}} IS STILL WATCHING, NOT ACTING. THIS IS NOT YET THE BEAT WHERE HE PUSHES. What he does is the thing
+    he has now done four times: nothing. He does not offer to swap. He is the only person in the room who does
+    not, and he does not because he has noticed that six people deciding what she wants is precisely the machine
+    that keeps her from ever finding out.
+    And Kasumi notices that he has not offered.
+    It is a small thing to notice, in a room full of people offering. She notices it anyway. She looks at him —
+    holding his own slip, not moving, not sorting her out — and something in the middle of all the swapping and
+    the kindness goes very quiet.
+    "...I-I'll keep it."
+    The room stops. "You— what? Kasumi, it's the FRONT—" "I— I know. I'll— I'll try it." Four words with two
+    restarts, which for her is a speech.
+    ⚠ AND THEN THE COMEDY, WHICH ARRIVES AT ONCE AND STAYS FOR THE REST OF THE TERM. The front row, window side,
+    is the teacher's eye-line. It is where the stack of handouts gets set down. It is where every late girl walks
+    past and looks down, because that is where the shelf is. She has chosen the one desk in the building where the
+    thing she hides sits at the exact height of everybody standing up. She has not thought about this. She thinks
+    about it around twenty minutes later, when the first stack of handouts lands on her.
+    She does not swap. She goes scarlet when that stack lands, and again at the next one, and again at the one
+    after that, and she does not swap.
+    Crack: not in her, exactly — in the machine around her. One person declined to run it, and the gap that left
+    was just wide enough for a choice to fall into. He still does not know why she cannot do this for herself. He
+    knows now that she CAN do it when nobody does it for her. Decided today: the front row. Nobody decided it for
+    her, because one person didn't. No H.
+  FIRE  emit /Intent/eventFire "kasumi_5" → engine advances the Kasumi quest to Step 5. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kasumi drew the front row, window side, in the seat lottery and six girls
+    offered to swap before she had stood up, none of them asking whether she wanted to; {{user}} was the only
+    person in the room who did not offer, she noticed, and she kept the seat." → the World Log remembers only what
+    you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kasumi_6') { _%>
+@kasumi_6  Either Is Fine (Kasumi) ·6   (CHECK - · no payout)
+  DO  THE OTHER TWO. Lunch, a week on, the courtyard, and Ume Natsuno and Mana Arikawa have decided to help.
+    ⚠ WHO THEY ARE, FOR THE COMEDY TO WORK. The other two of the class's big three: the same H cup as Kasumi, and
+    166 and 167 cm tall. On them it is a figure. On her it is a headline. They know this, they are fond of her,
+    and they have decided — in public, at lunch, with the summer uniform change coming — to pass on everything
+    they know. Bra brands. The top-button trick. Which shops alter properly. "Welcome to the club, honestly, it's
+    about time." They are being kind. It is a catastrophe.
+    They flank her on the bench. She disappears between them entirely — 150 cm between 166 and 167 — and the joke
+    the whole courtyard can see and nobody says is that hers are STILL the most visible of the three, because
+    theirs are at their own eye height and hers are at everybody's.
+    Kasumi has folded into the cardigan so far that only the ahoge shows over the top of it. "I-it's fine— you
+    don't— thank you but— either— I mean—"
+    {{user}} is on the next bench.
+    ⚠ THIS IS THE BEAT WHERE HE STOPS WATCHING AND ACTS, FOR THE FIRST TIME, AND THE ACTION IS SMALL AND EXACT. He
+    has his model now: she can decide for anyone but herself; she can decide for herself only when nobody decides
+    first; six people deciding for her is the disease. So he does the one thing that has not been done to her in
+    six years of kindness — he makes the decision HERS, out loud, in front of the people making it for her.
+    "Kasumi. Do you want their help, or not?"
+    The bench goes quiet. Ume and Mana both look at him, and then at her, and both of them — because they are kind
+    and not stupid — realise at the same moment that they never asked.
+    Kasumi surfaces from the cardigan. Scarlet. Three starts. And then, to the ground between her shoes:
+    "...Y-yes. But— n-not here. P-please."
+    "Okay," says Ume, at once. "Not here. After school, my place, nobody looking." And Mana: "And you're bringing
+    the blouse. We've heard about the blouse." And that is that — her decision, taken, acted on, standing, by two
+    girls who would have made it for her ten seconds earlier and did not know the difference until somebody made
+    them see it.
+    ⚠ HE SAYS NOTHING FURTHER. The question was the whole intervention. He goes back to his lunch.
+    Kasumi looks at him across the gap between the benches, and the look lasts slightly longer than a thank-you.
+    Crack: the first one that is hers. Her decision — a real one, about her own body, with two people waiting to
+    override it — was asked for, made, and STOOD. That has not happened before. She does not know yet that it
+    matters. She knows it felt strange. Decided today: yes, but not here. And it stood. No H.
+  FIRE  emit /Intent/eventFire "kasumi_6" → engine advances the Kasumi quest to Step 6. No payout on this beat.
+    Ume Natsuno and Mana Arikawa both appear and NEITHER is required or built by this beat. (No day-end swing —
+    CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Ume and Mana flanked Kasumi on a courtyard bench to pass on everything
+    they know about carrying an H cup, kindly and in public, until {{user}} asked her whether she wanted their
+    help or not; she said yes, but not here, and for once the decision was asked for, made, and stood." → the
+    World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kasumi_7') { _%>
+@kasumi_7  Either Is Fine (Kasumi) ·7   (CHECK - · REWARD Kasumi Affection +20 · THE TURN)
+  DO  STRAIGHT. A week on, lunch, and Kasumi Okudera's back has gone — carrying the class register and forty
+    handouts out in front of her the way she carries everything, which it has been doing for six years and today
+    did — and {{user}} walked her to the infirmary, at her pace, carrying the register.
+    The nurse says the thing nobody has said. Not the weight. The HUNCH. Six years of shoulders-in, chin-down,
+    arms-across to hide the one thing that cannot be hidden, and the hiding is the injury. Stand up straight, the
+    nurse says, and half of this goes away in a month.
+    Kasumi, on the infirmary bed, says nothing, because standing up straight is the one thing she cannot do, and
+    she has just been told it is the one thing she has to.
+    ⚠ THE CORRIDOR AFTERWARDS IS THE TURN. IT IS A GENTLE PUSH, IT IS THE FIRST TIME HE HAS SAID ONE WORD ABOUT
+    HER BODY, AND HE HAS EARNED IT BY SIX BEATS OF NEVER ONCE LOOKING. That is what lets the line land as a fact
+    and not as a stare. Play it plain, play it kind, play it as a boy stating something true to somebody who has
+    never once been told it to her face.
+    "You know it looks good, right?"
+    She stops walking.
+    "Straight or hunched. It looks the same. Everyone's been seeing the same thing since April — you standing up
+    doesn't change what they see, it only changes whether your back hurts. There's no version of this where you
+    decide wrong."
+    ⚠ HIS REAL INTENTION IS THE LAST SENTENCE, AND SHE DOES NOT HEAR IT, BECAUSE SHE IS TOO BUSY HEARING THE FIRST
+    ONE. He is telling her that a decision cannot hurt her — that this is a fork with no wrong branch, like the
+    bread, like the thread, and she can simply pick. What she has heard is that the one boy in the school has just
+    told her, to her face, in a corridor, that her chest looks good. Nobody has ever said it TO her. People say it
+    about her, near her, over her; Ume and Mana say it with love and it still goes past like weather. He said it
+    to her face while looking at her face.
+    She goes scarlet from the collar up. The cardigan gets pulled so tight it creaks.
+    And then — because her Affection finally allows it, and because the nurse said what the nurse said, and
+    because he said what he said — she lets go of the cardigan. And stands up. Properly. Shoulders back, chin
+    level, in a school corridor at lunch with people walking past, for the first time since she was twelve.
+    ⚠ AND NOTHING HAPPENS. THAT IS THE BEAT. A girl walks past and does not look. Another one does. Nobody's
+    expression changes, because it is exactly the same thing they saw yesterday, at exactly the same height. It
+    was always this visible. It was never the hunch that was hiding it.
+    "...N-nobody's looking any differently."
+    "They never were."
+    She does not hunch again for the rest of the corridor. Her back, for the first time in a long time, is not the
+    thing she is thinking about.
+    Crack: the real one. She has been told two things in one sentence and heard only the first, and the second one
+    is going to arrive about an hour later, on the walk home, all at once: there was no wrong answer. There has
+    never been a wrong answer. Decided today: to stand up. He said it looked good either way, and she heard the
+    half about her body immediately and the half about deciding somewhat later. No H.
+  FIRE  emit /Intent/eventFire "kasumi_7" → engine advances the Kasumi quest to Step 7 and pays the beat: Kasumi
+    Affection +20, applied by the row. Do NOT also emit an affection change for this beat. The nurse is school
+    staff, not a classmate, and is not built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Kasumi's back gave out and the nurse said the hunch was the injury, not
+    the weight; in the corridor {{user}} told her to her face that it looks good straight or hunched, that
+    everyone has been seeing the same thing since April, and that there was no version where she decides wrong,
+    and she went scarlet and stood up straight for the first time since she was twelve, and nobody looked any
+    differently." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kasumi_8') { _%>
+@kasumi_8  Either Is Fine (Kasumi) ·8   (CHECK - · no payout)
+  DO  FOR THIRTY PEOPLE. A week on, after the last bell, the classroom, and the class rep has handed Kasumi
+    Okudera the back-wall display to design — the whole thing, layout and colour and what goes where — because
+    Kasumi has the best eye in the room and everybody knows it from the blouses.
+    Kasumi has been sitting in front of the blank wall for an hour.
+    ⚠ THIS IS THE LARGEST DECISION SHE HAS EVER BEEN HANDED AND IT HAS FROZEN HER SOLID. Not one fork — a hundred.
+    Colour, order, size, which corner, what goes at the top. Thirty people will look at it every day. Thirty
+    people will know she picked. She has three sketches on the desk, has crossed out all three, and is starting a
+    fourth with her hands shaking slightly, and {{user}} has been sitting two desks over for most of the hour,
+    saying nothing, because saying nothing is what he does.
+    ⚠ AND THEN HE DOES NOT HELP HER CHOOSE. He does the callback. He has been carrying it since the haberdashery
+    counter.
+    "Kasumi. Who's the wall for?"
+    "...Wh— the— the class? Everyone?"
+    "Not you, then."
+    "...N-no?"
+    "You picked the thread in one second when it was for somebody else. This is for somebody else. Thirty of
+    them."
+    ⚠ AND SHE DOES IT. PLAY THE SPEED. The fourth sketch does not get crossed out. The pencil moves. Blue there,
+    the timetable at eye height, the notices lower, the birthday board in the corner where the light is — the
+    whole wall, laid out, in about ninety seconds, with no restarts and no "either" and no looking up to check, by
+    a girl who has just spent an hour unable to put one line on paper. It is good. It is obviously good. She looks
+    at it and does not know what just happened.
+    ⚠ HIS FINAL LINE IS THE BEAT, AND THE BEAT STOPS ON IT. Do NOT resolve it. Do NOT have her answer. Do NOT have
+    him explain. He says it quietly, looking at the wall and not at her:
+    "Do you realise your hesitation just disappeared? ...I wonder why."
+    And then he picks up his bag and goes, and leaves her sitting in front of a finished wall with a pencil in her
+    hand and a question she has never once thought to ask herself.
+    Crack: not a crack — a door left open on purpose. She has been handed the one fact about herself she has never
+    had: that the stall is not her, because it goes away. What it goes away FOR is the question, and he has left
+    her alone with it, and she is going to be turning it over for a week. Decided today: for thirty people, in
+    ninety seconds. And then a question, which she has not decided anything about yet. No H.
+  FIRE  emit /Intent/eventFire "kasumi_8" → engine advances the Kasumi quest to Step 8. No payout on this beat.
+    The class rep is an unnamed classmate, not built. END THE SCENE ON HIS QUESTION — the beat is the question, and the
+    answer belongs to her, later. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Handed the back-wall display for the whole class, Kasumi sat frozen for an
+    hour; {{user}} did not help her choose, he asked who the wall was for, reminded her she had picked the thread
+    in one second when it was for somebody else, and she laid the whole wall out in ninety seconds, and he said
+    'do you realise your hesitation just disappeared - I wonder why' and left." → the World Log remembers only
+    what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kasumi_9') { _%>
+@kasumi_9  Either Is Fine (Kasumi) ·9   (CHECK - · no payout · THE BREAK)
+  DO  FRONT AND CENTRE. A week on, the lunch band, the grounds, the class photograph — and the photographer, a man
+    from a studio in town, is arranging the class by height, and Kasumi Okudera, at 150 cm, is going in the front
+    row. Centre. The most visible place in the most permanent record the class will ever make.
+    ⚠ EVERYBODY WAITS FOR IT. The whole class knows what happens next: Kasumi goes red, Kasumi says "either is
+    fine", three girls offer to swap, the photographer sighs, it gets sorted out. It has happened for every
+    photograph she has ever stood in. The girls at the ends of the front row are already half-turning to offer.
+    {{user}} is in the back row, where the photographer put him, and does not offer either. {{user}} never has.
+    And Kasumi walks to the centre of the front row and stands there. Straight. Chin level. Arms at her sides, no
+    cardigan — it is the summer uniform now and she stopped bringing the cardigan a fortnight ago and nobody has
+    said a word about it, because nobody noticed, because it was always exactly this visible.
+    The photographer says "lovely, hold that", and does not sigh, because there is nothing to sort out.
+    Click.
+    ⚠ THE BREAK IS NOT THE PHOTOGRAPH. IT IS THE THIRTY SECONDS AFTER IT. The rows break up. She is still standing
+    where she stood. And she says, to nobody, with her hand halfway to her mouth: "...I didn't— I didn't even
+    think."
+    She did not think. There was no fork. She saw where she was supposed to stand and stood there, in the one
+    place she has spent six years arranging never to be put, and it took no time at all, and she only noticed
+    afterwards.
+    ⚠ AND THEN SHE WORKS IT OUT, OUT LOUD, TO {{user}}, BECAUSE HE IS THE ONE SHE HAS BEEN CARRYING THE QUESTION
+    TO FOR A WEEK. She finds {{user}} at the edge of the grounds. It comes out in pieces, with restarts, because
+    she is still herself — but it comes out.
+    "You said— last week— 'I wonder why'. I've been— I couldn't stop— and I think— I think it's because—" She
+    stops. Starts again. "You never told me to hurry up. Not once. Since the— since the handout. Everyone tells me
+    to hurry up, or they— they just pick, they pick for me, and they're being NICE— but you never— you just
+    waited, and then when I picked, you— you did it. Whatever I picked. The bread. The thread. The seat. You just—
+    did what I said. Even when it was— even when I thought it was wrong."
+    "It was never wrong."
+    "...That's what I— that's what I mean. I thought you were being patient. You weren't— it wasn't patience, was
+    it. You were letting them— letting my choices— stand."
+    ⚠ HE DOES NOT CONFIRM IT AND HE DOES NOT DENY IT. He has never once told her what he was doing, and he is not
+    going to start now, because the moment it is explained it becomes one more thing somebody decided for her. He
+    says something small, and true, and beside the point, and lets her keep the thing she worked out herself.
+    Crack: the break. Not the photograph — the girl standing after it saying "I didn't even think", and then
+    finding out, on her own, in her own restarting sentences, why. She thought the hesitation was her personality.
+    It was a result. She has just met the cause, and the cause was a boy declining, forty-one times, to be one
+    more person who chose for her. Decided today: front and centre, in no time at all. She noticed afterwards. And
+    then she noticed everything else. No H.
+  FIRE  emit /Intent/eventFire "kasumi_9" → engine advances the Kasumi quest to Step 9. No payout on this beat —
+    the break is hers, and a payout would price it. The photographer is a townsman, not a classmate, not built;
+    with a second male in the scene, keep {{user}} NAMED where a pronoun could float. (No day-end swing — CHECK is
+    none.)
+    THEN emit /Intent/recordEvent "save|Placed front and centre for the class photograph, Kasumi stood there
+    straight without asking to swap and only noticed afterwards that she had not even thought about it; then she
+    found {{user}} and worked it out aloud - he never once told her to hurry, and every choice she made he did,
+    even when she thought it was wrong - and he neither confirmed nor denied it." → the World Log remembers only
+    what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@kasumi_10') { _%>
+@kasumi_10  Either Is Fine (Kasumi) ·10   (CHECK - · REWARD Kasumi Affection +20 · FINALE)
+  DO  YOUR TURN. A week on, after school, the bench at the side of the shopping street outside the bakery — the
+    same bench — and this time it is Kasumi Okudera who has been into the bakery, and Kasumi Okudera who comes out
+    with the paper bag, and Kasumi Okudera who sits {{user}} down and puts it between them.
+    Two breads. One melon. One honey.
+    ⚠ SHE IS RESTAGING BEAT TWO ON PURPOSE, AND SHE HAS PLANNED IT, WHICH FOR HER IS AN ACT OF CONSIDERABLE
+    COURAGE. Same bench, same bag, same two breads, bought with her own money — carried out at her hip, not
+    against her chest, because she stands straight now and the shelf is not where she puts things any more. No
+    cardigan. Summer blouse, the fourth re-sew, and it fits, because she finally sewed it to fit instead of to
+    hide.
+    "...Y-your turn."
+    "My turn?"
+    "To choose. I'll— I'll take the other one."
+    ⚠ HE TEASES HER, GENTLY, BECAUSE THE SERIES HAS EARNED EXACTLY ONE TEASE. "So you still can't decide, and now
+    you've found a way to make me do it for you?"
+    And Kasumi Okudera — scarlet, of course, but not hiding, not folding, not starting the sentence three times —
+    smiles at him, and says the whole thing in one go:
+    "I've already made my choice. I decided you're the one who gets to choose for me."
+    ⚠ DO NOT UNPACK THAT LINE, AND DO NOT LET HIM. It is the entire series in one sentence, and it inverts the
+    whole thing: the girl who could not choose has chosen, and what she chose is not a bread — it is WHO. Not "I
+    can't pick, so you pick." "I picked. I picked you." Every other person in her life decided for her because she
+    could not; she has just decided, for herself, in one sentence with no restart, that this one person may. That
+    is not the disease. That is the cure, choosing.
+    He takes the melon bread. She takes the honey. Neither of them says which one was right, because there was
+    never a wrong one, and she knows that now, and she knows who showed her, and she has just told him so in the
+    only way she has ever managed to say anything — sideways, and sweetly, and once.
+    "...E-either would have been fine," she says, into the honey bread, and it is the first time in her life the
+    sentence has been true.
+    Crack: nothing left to crack. She hesitated at forks because she believed every branch was wrong, and she has
+    spent nine beats being shown — never told — that with one person, none of them are. So she picked the person.
+    Decided today: him. The bread was never the question. No H.
+  FIRE  emit /Intent/eventFire "kasumi_10" → engine advances the Kasumi quest to Step 10, marks the series
+    COMPLETE, and pays the beat: Kasumi Affection +20, applied by the row. Do NOT also emit an affection change
+    for it. If the payout carries her past 100 the rank-up lands at her next gate — a check on her, or the day's
+    swing — one rung a day is the game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK
+    is none.)
+    THEN emit /Intent/recordEvent "save|Kasumi bought a melon bread and a honey bread herself, sat {{user}} down
+    on the same bench as before and told him it was his turn to choose; when he teased that she had found a way to
+    make him decide for her, she smiled and said she had already made her choice - she had decided he was the one
+    who gets to choose for her." → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

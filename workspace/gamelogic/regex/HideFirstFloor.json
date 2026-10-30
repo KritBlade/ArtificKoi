@@ -1,0 +1,22 @@
+{
+  "id": "999d9fd2-b120-4f56-ace8-b638f58562bc",
+  "script_name": "HideFirstFloor",
+  "enabled": true,
+  "find_regex": "/^[\\s\\S]*?<GameStartMenu\\/>[\\s\\S]*/g",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": true,
+    "prompt": false
+  },
+  "run_on_edit": true,
+  "min_depth": 1,
+  "max_depth": null
+}

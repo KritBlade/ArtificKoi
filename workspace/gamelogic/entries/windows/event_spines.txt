@@ -1,0 +1,582 @@
+@@if getvar('stat_data.EngineDerived.DaySpine[0]')
+<Event_Spines>
+<%_ /* v0.45 — GATED reference: renders ONLY the spine the engine fired for TODAY (EngineDerived.DaySpine, written by
+   the day-roll), and a spine day injects just its ONE body — never all of them. On a day with no spine the @@if
+   line on top drops the whole entry before SillyTavern activates it, so it is never scanned or sent.
+   Flat per-spine gates (no nesting) per the EJS-cutoff rule. NARRATE-only (PRE/POST never read set-piece prose).
+   TWO BODY SHAPES:
+     SET PIECE — bands split into NUMBERED STEPS (BAND 0.1, 0.2 …). ⚠ ONE STEP PER ROW, AND EVERY STEP LEADS
+       IN ENGLISH WITH A VERB — Window A orders the narrator to say the live step back "in YOUR OWN WORDS" as
+       the quest OBJECTIVE {{user}} reads, so a step that leads with 盆踊り hands the player a word he cannot
+       read. Japanese belongs in parentheses AFTER the English, as the vocabulary the PROSE should use.
+       Tools/verify_calendar_mirror.cjs fails the build on a row carrying two steps or leading non-English.
+       Window A's ▶ CURRENT BEAT names the ONE
+       live step: the stored cursor EngineDerived.LastStepDone + 1, which moves ONLY when narrate's
+       /Intent/stepDone dump reports the live step played (the engine walks the dump while it is contiguous and
+       holds the rest). So a step may span several replies without the pointer drifting, and the day still walks
+       forward step by step (a reply counter cannot do any of this: it marches while the story stands still).
+       The step rules live in the /Intent/stepDone row of <COT_Guide>; the header below points there.
+       The day-signpost quest's Objective = the live step summarized in YOUR OWN WORDS. ## DAY OBJECTIVE owns
+       that rule: it asks for the replacement in the patch that reports the live step, and orders a rewrite off
+       the engine-stamped cursor when one is missed.
+     POOL — a break day is 1 of N interchangeable days: a MENU, not a sequence. Pool bodies declare no steps and
+       say so; the step number in the banner does not apply to them.
+   Bands = the game-day's 5 segments: 0 morning 07:30-11:59 · 1 midday 12:00-15:59 · 2 late afternoon 16:00-18:59 ·
+   3 evening 19:00-23:59 · 4 small hours 00:00-07:29 (winding down, no beats).
+   The ## CALENDAR section at the bottom is the HUMAN copy of the engine's calendar — EJS-gated OFF the prompt;
+   Tools/verify_calendar_mirror.cjs holds it byte-identical to globalLogic CALENDAR_ROWS. */ _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]')) { _%>
+# TODAY carries a spine. Below is the ONE body Window-A's ## TODAY named.
+# A SET-PIECE spine is a numbered STEP LIST: ## TODAY's ▶ CURRENT BEAT names the step that is live RIGHT NOW. How
+# to play a step and when to report it: the /Intent/stepDone row of <COT_Guide>. Report /Intent/sceneClock as the
+# scene moves, so the clock walks toward the band's end; if the band lists fewer steps than the banner names, its
+# steps are all played — close the band. A POOL body has no steps: pick what fits today and ignore the step number.
+# HOOKS = romance levers to weave in per each PRESENT heroine's traits/Affection (only heroines in scene; never
+# force-spawn the cast). The tied CHECK named on ## TODAY = the engine-resolved day-end swing.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Entrance_Ceremony') { _%>
+@Entrance_Ceremony  入学式 Entrance Ceremony   (CHECK - · SET PIECE · GAME-START & post-TIME-LEAP re-entry)
+  BAND 0 (morning 07:30-11:59)
+    0.1  Arrive at the school gate (School_Gate) — cherry blossom over the entrance, the entrance-ceremony
+         signboard, families taking photographs. First impressions of the crowd; a bump-into beat is natural here.
+    0.2  Find his name on the posted class lists by the entrance — the crush of students hunting for theirs, and
+         the confirmation that {{user}} is in class 1-1.
+    0.3  Change into indoor slippers at the entrance shoe lockers (昇降口) — finding whose locker sits beside whose.
+    0.4  Sit through the ceremony in the gym or auditorium — the principal's address (校長), start to finish.
+    0.5  Walk with the class from the ceremony hall to the homeroom classroom (教室) once the principal's
+         address is over — the ceremony ends here.
+    0.6  Meet the homeroom teacher (担任) in the classroom and take an assigned seat — the seat-neighbour
+         reveal is a lasting proximity perk, so make it land.
+    0.7  Hear the class introduce itself (自己紹介) — ONE scene, not a roll call: a few girls stand for a name and
+         a line, and the rest of the class passes in summary. THIS is where the class becomes people: the PRESENT
+         heroines' lines SHOW their traits, never describe them.
+  BAND 1 (midday 12:00-15:59)
+    1.1  Walk out through the gates, dismissed early — the first exit of the year.
+    1.2  Take the way home with whoever he falls in step with — the year's first free beat.
+  HOOKS: self-intros surface the present heroines' personality traits; the SEAT-NEIGHBOR reveal is a lasting
+    proximity perk; a gate or crowd bump-into is a first-impression beat.
+  LOOP: Loop 1 → genuine FIRST meetings. Loop >1 → the cast REMEMBERS — play it as charged déjà-vu / reunion
+    (secret glances during self-intros, "we've done this before"), NOT fresh introductions.
+  USE: a SETUP day — establish the class and the present heroines; no day-end swing.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@First_Lessons') { _%>
+@First_Lessons  授業開始 First Day of Lessons   (NO CHECK · SET PIECE · the ORDINARY SCHOOL DAY after 入学式)
+  YESTERDAY WAS THE ENTRANCE CEREMONY. The class lists, the shoe lockers, the homeroom teacher, the seats and the
+  self-introductions are all DONE: {{user}} already knows his classroom, his seat and the faces around him. Never
+  replay a first arrival, a ceremony or a round of introductions. What IS new today is the timetable — the year's
+  first real lessons.
+  BAND 0 (morning 07:30-11:59)
+    0.1  Walk in on an ordinary school morning — no ceremony signboard, no families, straight to his own shoe
+         locker and the seat he was given yesterday, a few faces from yesterday saying good morning.
+    0.2  Sit through the year's first real lessons (授業) — the timetable handed out, each teacher introducing
+         their subject, textbooks opened for the first time.
+  BAND 1 (midday 12:00-15:59)
+    1.1  Eat the first ordinary school lunch (昼休み) — where the class scatters to eat, and who ends up beside whom.
+  HOOKS: yesterday's seat neighbour is now someone he sits beside every day; a heroine who remembers his
+    self-introduction; a present heroine shining in her best subject or lost in her worst.
+  NO SWING: this row carries no check — an ordinary school day that knows it is the second day of the year.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Exams_Prep') { _%>
+@Exams_Prep  試験一週間前 Exams in One Week   (NO CHECK · SET PIECE · an ORDINARY SCHOOL DAY, a week before
+  試験 · ## TODAY's label names which exam: Term Finals 期末試験 or Year-End 学年末試験)
+  Lessons run as normal. The day exists for ONE beat at the start of the school day, and Mitsuki is the one who
+  gives it. After it, play ordinary school hours: no later band declares a step.
+  BAND 0 (morning 07:30-11:59)
+    0.1  Hear Mitsuki remind {{user}} in the classroom at 07:30, before homeroom, that the exams start in one
+         week (試験一週間前) — clubs stop for the week, and she asks whether he has started studying.
+  HOOKS: Mitsuki offering to study with him, or teasing him about his last scores; a heroine who panics at the
+    news; a study session planned for the week (a shared study beat raises his INT, the exam roll's mod).
+  NO SWING: this row carries no check. The exam's ACADEMIC swing fires on the exam day itself.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Exams') { _%>
+@Exams  試験 Term Exams   (CHECK ACADEMIC · SET PIECE · 2/year: Term Finals 期末試験 ~early July + Year-End
+  学年末試験 ~late Feb)
+  BEFORE (the days leading in): study-session beats — a bookish heroine tutors {{user}}, or {{user}} tutors a
+    struggling one, group cram sessions, library study-dates. Ordinary study/BONDING beats (no special swing) that
+    also raise MainChar INT (a shared study beat → /Intent/mundane "<Key>:<Class>:Int") — and INT is the exam roll's
+    mod. The exam day is the payoff.
+  BAND 0 (morning 07:30-11:59)
+    0.1  Cram in the corridor before the bell — last-minute revision, nerves, who slept and who did not.
+    0.2  Sit the exam. ## TODAY shows the ACADEMIC verdict, ROLLED before the first paper (d20 + his INT fold vs
+         DC 12, the class average): write the papers to that word.
+  BAND 1 (midday 12:00-15:59)
+    1.1  Compare answers once the papers are down and the class is dismissed early — the post-mortem.
+    1.2  Read the results and the class ranking, to the ROLLED word: SUCCESS = the study partner and the brainy
+         heroines are IMPRESSED (the ACADEMIC swing; CritSuccess = top of the year). FAIL = a let-down plus
+         remedial classes (補習), and a heroine who cares shows it (CritFail = the worst paper in the room).
+         SOLO study → narrate the result, no swing.
+  HOOKS: pre-exam tutoring as a date; rivalry over class rank; comforting a heroine anxious about her own scores.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Obon') { _%>
+@Obon  お盆 Obon   (CHECK BONDING each · SET PIECE · 2-day event · mid-August, inside Summer break)
+  Obon honours ancestors' spirits, who briefly return for a few days; families gather, and people travel back to
+  their home towns for it (帰省). TWO tonal halves: the welcome, then the farewell.
+  d1 — the welcome fire and the dance (August 13)
+    BAND 0 (morning 07:30-11:59)
+      0.1  Visit and clean the family grave — scrubbing the stone, fresh water, flowers, incense (墓参り).
+      0.2  Set out the offerings at the home altar — fruit and incense on the spirit shelf laid for the returning
+           dead (仏壇 / 精霊棚).
+    BAND 1 (midday 12:00-15:59)
+      1.1  Light the welcome fire at the gate — the small fire that guides the ancestors home (迎え火).
+    BAND 3 (evening 19:00-23:59)
+      3.1  Change into a summer yukata and walk to the festival together (浴衣).
+      3.2  Join the dance circle at the festival — the ring of dancers round the drum tower, food stalls,
+           goldfish scooping, taiko drums (盆踊り · 屋台 · 金魚すくい · 太鼓).
+      3.3  Watch the fireworks — the FESTIVE, flirty peak of the night (花火).
+  d2 — the farewell fire and the floating lanterns (August 15)
+    BAND 0 (morning 07:30-11:59)
+      0.1  Spend a quiet family morning — the house winding down after the festival.
+    BAND 1 (midday 12:00-15:59)
+      1.1  Prepare the lanterns together — writing on them, fixing the frames, deciding what to wish for.
+    BAND 3 (evening 19:00-23:59)
+      3.1  Light the farewell fire that sends the spirits back (送り火).
+      3.2  Float the lanterns down the river or out to sea, a wish made side by side (灯籠流し) — quiet, warm and
+           a little melancholy: the deep-bonding beat of the two days.
+  HOOKS: the yukata reveal and a full festival date (stalls, the fireworks finale, getting separated in the crowd
+    and reunited); a heroine may be AWAY in her home town (absent) OR invite {{user}} to hers and introduce family;
+    Obon's remembering-the-dead theme is a natural place to surface a heroine's lost relative for a deep bond.
+  SWING: BONDING each day → that day's day-end swing to the heroine he shared it with.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Sports_Festival_Prep') { _%>
+@Sports_Festival_Prep  体育祭一週間前 Sports Festival in One Week   (NO CHECK · SET PIECE · an ORDINARY SCHOOL
+  DAY, the Friday of the week before 体育祭)
+  Lessons run as normal. The day exists for ONE beat at the start of the school day, and Mitsuki is the one who
+  gives it. After it, play ordinary school hours: no later band declares a step.
+  BAND 0 (morning 07:30-11:59)
+    0.1  Hear Mitsuki remind {{user}} in the classroom at 07:30, before homeroom, that the Sports Festival is one
+         week away (体育祭) — and she asks which events he will enter.
+  HOOKS: Mitsuki angling to share his pair event (the three-legged race, 二人三脚); practising the relay after
+    school this week (a shared training beat raises his STR, the festival roll's mod).
+  NO SWING: this row carries no check. The festival's SPORTS swing fires on 体育祭 itself.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Sports_Festival') { _%>
+@Sports_Festival  体育祭 Sports Festival   (CHECK SPORTS · SET PIECE · all-day)
+  BAND 0 (morning 07:30-11:59)
+    0.1  Line up for the opening assembly and the red-team / white-team split (紅組 / 白組) — who lands on whose
+         team decides the day's pairings.
+    0.2  Run the opening track events — the sprint and the obstacle course (徒競走 · 障害物競走).
+    0.3  Take (or give) the cheer squad's noise (応援団) — her cheering for {{user}}, or him for her.
+  BAND 1 (midday 12:00-15:59)
+    1.1  Eat lunch together on the field — a packed bento, and a heroine who made far too much of it (お弁当).
+    1.2  Compete in the team events — cavalry battle, tug-of-war, three-legged race (騎馬戦 · 綱引き · 二人三脚).
+         Forced teamwork and proximity; the three-legged race is the pair event to aim him at.
+  BAND 2 (late afternoon 16:00-18:59)
+    2.1  Run the inter-class relay — the day's climax and {{user}}'s athletic showing (クラス対抗リレー). ## TODAY
+         shows the SPORTS verdict, ROLLED at the start of the day (d20 + his STR fold vs DC 11, the class-average
+         STA): write the relay, and every earlier event that shows how he did, to that word and no other.
+    2.2  Close out: results, then cleanup — the tired, honest talk while folding the tents.
+  HOOKS: pair events (the three-legged race especially); a minor injury/rescue beat; sharing a bento; the school
+    sportswear (体操着) played for fanservice to taste.
+  SWING: SPORTS → the day-end swing to the heroine he competed with or for. The Outcome is the ROLLED word — the
+    daySwing token only names her; the engine pays the die whatever word is written.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Cultural_Festival_Prep') { _%>
+@Cultural_Festival_Prep  文化祭準備 Cultural Festival Prep   (NO CHECK · SET PIECE · an ORDINARY SCHOOL DAY,
+  the Friday of the week before 文化祭 · whole-class)
+  Lessons run as normal: this day's own content begins only AFTER the last bell, when the class stays
+  behind to decide what it will run. BANDS 0 AND 1 DECLARE NO STEPS ON PURPOSE — play ordinary school
+  hours and let the clock reach 16:00.
+  ★ THE ONE EMIT THIS DAY EXISTS FOR — on WHICHEVER reply the class settles on its 出し物, whatever step is
+    live by then, emit /Intent/recordEvent "arc|文化祭: the class is running <what won>". That record is
+    the ONLY place the choice survives the week: 文化祭 d1 reads it back off ## WORLD LOG to build that
+    booth, and without it the festival opens with a booth nobody chose. A vote that runs over two or
+    three replies records on the reply the tally is CALLED, never the one it opens on.
+  BAND 2 (late afternoon 16:00-18:59)
+    2.1  Run the after-school vote on what the class will do (出し物決め) — a maid cafe, a haunted house, a
+         play, or a food stall (メイド喫茶 / お化け屋敷 / 演劇 / 模擬店). Someone campaigns, someone
+         objects, the room settles on ONE — and the ★ record above fires on the reply the tally is called.
+    2.2  Split the work — who builds, who paints, who sews the costumes, and who is quietly left out.
+  BAND 3 (evening 19:00-23:59)
+    3.1  Stay behind in the classroom working on it — two or three people left, the corridors empty and
+         the windows dark.
+  HOOKS: a heroine whose idea lost; volunteering for the same job as her; walking home late together.
+  NO SWING: this row carries no check. The festival's own swings fire on 文化祭 d1 (CULTURE, the booth) and d2
+    (SCHOOL-FESTIVAL, the day) — and d2's weighs the heroine who featured across the whole run, this day included.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Cultural_Festival') { _%>
+@Cultural_Festival  文化祭 Cultural Festival   (CHECK CULTURE on d1, SCHOOL-FESTIVAL on d2 · SET PIECE · 2-day
+  SERIES · whole-class · WHAT THE CLASS RUNS WAS DECIDED AT 文化祭準備 a week earlier and is recorded in
+  ## WORLD LOG — read it, never re-decide it)
+  HOW THE BOOTH DID IS THE DIE'S, NOT YOURS — a d20 is dealt for it on d1 and the engine writes the result to
+    ## WORLD LOG when the day rolls, so d2 always has it. NEVER record it yourself and never re-decide it.
+    What d1 owes is prose that matches the rolled word (step 2.1); what d2 owes is a whole day written to the
+    record it finds there — a booth that packed out gives the second day a victory lap, a washout gives it a
+    salvage job.
+  d1 — build and open   (CULTURE — the booth's own showing, ROLLED)
+    BAND 0 (morning 07:30-11:59)
+      0.1  Build the booth the class already chose — what it is was settled at 文化祭準備 the week before,
+           so READ IT OFF ## WORLD LOG and build THAT. It is not re-decided today. NOTHING there to read
+           (文化祭準備 was skipped, or the emit never landed)? Then the class never formally decided: it throws
+           together the cheapest thing a class can, a food stall (模擬店), and one line admits nobody quite
+           remembers agreeing to it. EITHER WAY a booth opens this morning — never stall on the missing
+           record and never ask {{user}} what the class chose. Paint still wet, a sign going up crooked,
+           everyone in each other's way.
+      0.2  Get into costume and run the last check before the doors open.
+    BAND 1 (midday 12:00-15:59)
+      1.1  Work the first shift together once the doors open.
+    BAND 2 (late afternoon 16:00-18:59)
+      2.1  Roam the other classes' booths and the stage acts — the light-music club's band (軽音), dance. By
+           now the day's takings are counted. ## TODAY shows the CULTURE verdict, ROLLED at the start of the
+           day (d20 + his CHA fold vs DC 9, the class-average ELE): write the queue, the takings and whether
+           the class's idea landed to that word and no other. The engine writes that result down at the day
+           roll — do not record it yourself.
+  d2 — climax   (SCHOOL-FESTIVAL — the day itself, your own judgment)
+    READ the booth's d1 showing off ## WORLD LOG before writing a line of this day — the engine wrote it there
+    off d1's die, so it is the class's actual result, not one reading among several. It sets the class's mood
+    from the morning bell on, not only at the ceremony. Nothing recorded there (d1 was jumped over, or no die
+    was ever dealt for it)? Play the day flat and neutral and let 2.1 place the class at the bottom; never
+    invent a result d1 never produced.
+    BAND 0 (morning 07:30-11:59)
+      0.1  Work the peak-crowd morning shift.
+    BAND 1 (midday 12:00-15:59)
+      1.1  Watch, or take part in, the main-stage event.
+    BAND 2 (late afternoon 16:00-18:59)
+      2.1  Work the last shift, then the closing ceremony reads out the placements — which class drew the
+           biggest crowd and took the most. Where THIS class lands FOLLOWS the d1 booth record on ## WORLD
+           LOG: packed out takes the top of the board, a washout is read out near the bottom. NO booth
+           record there (d1 was skipped, or no die was ever dealt for it)? Then this class DID NOT PLACE —
+           read it out at the bottom of the board and move on. RESOLVE THIS BEAT EITHER WAY: never stall, never ask
+           {{user}} how the booth did, and never invent a placing the log cannot support. Then take the
+           booth down.
+    BAND 3 (evening 19:00-23:59)
+      3.1  Dance at the after-festival bonfire and fireworks (後夜祭) — the romantic capstone. Local folklore says
+           a couple who dance here stay together, which makes this a CONFESSION-prime beat.
+  HOOKS: a heroine in costume; a shift worked TOGETHER; getting separated in the crowd and reunited.
+  SERIES SWING (whole-class event — NOT an exclusive date): this series pays on BOTH days, and they pay for
+    different things. d1 CULTURE = how the BOOTH did, to the heroine he worked it with; the Outcome is the
+    ROLLED word, the daySwing token only names her. d2 SCHOOL-FESTIVAL = the DAY, your own judgment, to the
+    SINGLE heroine who featured most across both days. The two may name different girls.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@School_Trip_Prep') { _%>
+@School_Trip_Prep  修学旅行事前指導 School Trip Prep   (NO CHECK · SET PIECE · an ORDINARY SCHOOL DAY,
+  the week before 修学旅行 · whole-class · GRADE 2-3)
+  Lessons run as normal: this day's own content begins only AFTER the last bell, when the year is held
+  back for the pre-trip briefing. BANDS 0 AND 1 DECLARE NO STEPS ON PURPOSE — play ordinary school hours
+  and let the clock reach 16:00. All this day does is tell the class it is going, and where.
+  ★ THE ONE EMIT THIS DAY EXISTS FOR — the school_trip quest is ALREADY OPEN on ## QUESTS (the engine opened
+    it when this day landed) and its objective is blank, waiting for one thing: WHERE. On whichever reply
+    the destination is named, whatever step is live by then, emit
+      /Intent/quest "progress:school_trip:<the destination, plainly — e.g. Hokkaido>"
+    and no other op on this quest: you do not open that quest, title it, grade it or close it. That one word is the ONLY
+    thing about this trip the engine cannot work out for itself, and it is the ONLY place the destination
+    survives the week — the engine keeps it from here and prints it on ## TODAY for all four trip days.
+    Without it the trip leaves for somewhere the class was never told about.
+  BAND 2 (late afternoon 16:00-18:59)
+    2.1  Hold the pre-trip briefing (事前指導) — a teacher names the destination and hands out the itinerary,
+         the packing list and the rules. YOU pick where: anywhere IN JAPAN a school year could plausibly be
+         taken. Kyoto and Okinawa are the two everyone names first, NOT a menu — Hokkaido, Hiroshima,
+         Nagasaki, Nara, Tōhoku and plenty more fit as well. Name it plainly in one line, then fire the ★
+         emit above on that same reply.
+    2.2  Sort the travel groups and the room assignments (班決め) — who ends up with whom decides half the
+         trip, and somebody is quietly left over.
+  BAND 3 (evening 19:00-23:59)
+    3.1  Talk it over after school — what to pack, what it costs, and who is quietly hoping to be in whose
+         group.
+  HOOKS: angling to share her group; a heroine who cannot afford the trip; someone dreading the rooming list.
+  NO SWING: this row carries no check. The trip's own BONDING swing fires ONCE on 修学旅行 d4 and weighs the
+    whole run — this day included.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@School_Trip') { _%>
+@School_Trip  修学旅行 School Trip   (CHECK BONDING on d4 ONLY · SET PIECE · 4-day SERIES · whole-class ·
+  GRADE 2-3 · Away.*)
+  DEST: WHERE THE CLASS IS GOING WAS NAMED AT 修学旅行事前指導 the week before and ## TODAY prints it as
+    DESTINATION — travel THERE, all four days. It is not re-decided today. NO destination printed there
+    (the briefing was skipped, or the emit never landed)? Then name one in the first few lines and hold
+    it for all four days — anywhere in Japan, and not only the Kyoto/Okinawa pair. EITHER WAY the class
+    leaves this morning: never stall, and never ask {{user}} where the year is going. Adapt every
+    sightseeing and activity beat to fit the place.
+  d1 — travel out
+    BAND 0 (morning 07:30-11:59)
+      0.1  Travel out by bullet train, bus or flight (新幹線) — who sits next to whom decides the day.
+    BAND 1 (midday 12:00-15:59)
+      1.1  Arrive and take in the first sightseeing stop.
+    BAND 2 (late afternoon 16:00-18:59)
+      2.1  Check in to the inn or hotel (旅館), sort out the group rooms, settle into the first evening.
+  d2 — sightseeing and the free day
+    BAND 0 (morning 07:30-11:59)
+      0.1  Begin the full sightseeing day — temples and shrines (寺社), landmarks.
+    BAND 1 (midday 12:00-15:59)
+      1.1  Split into free groups for the afternoon (自由行動) — pick ONE heroine to pair off with; this is a
+           full date inside the trip.
+    BAND 2 (late afternoon 16:00-18:59)
+      2.1  Hunt for souvenirs together (お土産).
+  d3 — the signature day and the night in
+    BAND 0 (morning 07:30-11:59)
+      0.1  Do the destination's signature activity — the beach, the landmark, the hike.
+    BAND 3 (evening 19:00-23:59)
+      3.1  Join whatever the room gets into after lights-out — a CLASSMATE starts it, never {{user}}: a pillow
+           fight (枕投げ), a card game (UNO is the usual one), ping pong in the hotel games room, a raid on
+           another room, a whispered game of truth. Pick the one that suits the girls actually in there and
+           play THAT; the pillow fight is the famous one, not the required one.
+      3.2  Soak in the hot spring (温泉) — baths are split by sex; a risky night-corridor tease.
+      3.3  Have the late feelings talk once the room finally goes quiet.
+  d4 — the way back
+    BAND 0 (morning 07:30-11:59)
+      0.1  Pack up on the last morning and take one final look at the place.
+    BAND 1 (midday 12:00-15:59)
+      1.1  Travel home — tired, candid bonding on the way back.
+    The school_trip quest is the engine's own — it is removed when the trip starts and its destination
+      rides ## TODAY from there. Never emit an add: or a complete: for it.
+  HOOKS: away-from-home freedom and intimacy; sneaking between rooms at night; strongly confession-friendly.
+    STAY off-map = Away.* (the one off-map exception).
+  SERIES SWING (whole-class trip): NO day-end swing on d1-d3. The BONDING swing fires ONCE on d4, to the SINGLE
+    heroine who featured most across the trip (especially his free-group partner on d2).
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Valentines_Day') { _%>
+@Valentines_Day  バレンタインデー Valentine's Day   (CHECK BONDING · SET PIECE · a SCHOOL DAY most years)
+  The day girls give chocolate, and WHICH chocolate says everything: true-feelings chocolate (本命チョコ) vs
+  obligation chocolate for classmates and colleagues (義理チョコ) vs friend chocolate (友チョコ).
+  LESSONS RUN AS NORMAL — 2/14 is an ordinary school day in every year it lands on a weekday, and the
+    chocolate moves around the timetable instead of replacing it. In a year it falls on a WEEKEND, ## TODAY
+    prints OPEN beside the date: there is no shoe locker and no homeroom that morning, so keep the same
+    givers in the same order and let each one come to him — in town, at his door, wherever he goes.
+  WHO GIVES WHAT IS NOT YOURS TO PICK — ## TODAY prints it under GIFTS, ranked by the engine off each girl's
+    stage and affection the moment the day opened, and fixed for the whole day. Read it and play THAT: do not
+    add a giver, drop one, change her chocolate, or reshuffle who gets which beat as the day goes on. What is
+    yours is HOW each one does it — nerve, timing, where she corners him, what she cannot say out loud.
+    An ABSENT girl can still give: a note and a box in his shoe locker is the classic.
+  BAND 0 (morning 07:30-11:59)
+    0.1  Take the first gift of the day from the giver ## TODAY names — caught early and alone, at the shoe
+         lockers (靴箱) or in a corridor, hurried and nervous because she could not carry it around all day.
+         No such giver named? Then play the morning as rumour and other people's chocolate, and move on.
+    0.2  Walk into the first crowd of the day — homeroom, or wherever the day gathers him — already thick
+         with it, and see who is visibly carrying what.
+  BAND 1 (midday 12:00-15:59)
+    1.1  Receive the lunchtime gifts as they arrive, staggered, in the tiers ## TODAY lists. 本命 is handmade,
+         sincere and costly to hand over · 友チョコ is warm and easy · 義理 is a crowd, worth one line and never
+         a scene each.
+    1.2  Handle the crossfire if several give and their paths cross — jealousy and tension, played honestly.
+  BAND 2 (late afternoon 16:00-18:59)
+    2.1  Meet the closer ## TODAY names — the day's biggest gift, held back until there is nobody left to
+         watch. Give it the quiet last beat. No closer named? Then let the day end small and unremarked.
+  HOOKS: a true-feelings gift works as a confession proxy; handmade-vs-bought signals depth; who gives, who does
+    not, and who watches.
+  SWING: BONDING = how {{user}} receives and responds → swing to the giver he engages. The ENGINE decided who
+    gives; the swing names who the DAY was about, and that is the player's doing, not the ranking's.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@White_Day') { _%>
+@White_Day  ホワイトデー White Day   (CHECK BONDING · SET PIECE · the RETURN to Valentine's)
+  One month on, the RETURN day — {{user}} gives return gifts (お返し) to those who showed feelings on 2/14,
+  traditionally about three times the value (三倍返し). WHO he returns to and WHAT he picks is a statement of
+  interest. (Keep it light — "the girls who gave him chocolate"; do not rely on exact long-term memory.)
+  LESSONS RUN AS NORMAL — 3/14 is an ordinary school day in every year it lands on a weekday. In a year it
+    falls on a WEEKEND, ## TODAY prints OPEN beside the date: he goes to them instead, and each return is
+    handed over wherever he finds her.
+  BAND 0 (morning 07:30-11:59)
+    0.1  Hand over the first returns — the ones he can manage before the day gets going.
+  BAND 1 (midday 12:00-15:59)
+    1.1  Give out the rest, staggered — each reaction scales to the thought behind the gift.
+  BAND 2 (late afternoon 16:00-18:59)
+    2.1  Give the one return he made PERSONAL its own last beat — held back until the two of them are alone.
+  HOOKS: a thoughtful or handmade return = big swing; returning to a specific heroine signals intent; forgetting
+    a giver is an Affection hit and a hurt reaction.
+  SWING: BONDING = the return-gift gesture → swing to the chosen heroine.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Winter_Holidays') { _%>
+@Winter_Holidays  クリスマス・年末年始 Christmas and New Year   (CHECK BONDING each · SET PIECE · EVENING-OPEN
+  all-nighter)
+  CLOCK: the season's hang-all-night days — OPEN days, no reply cap. The night may cross midnight as ONE
+    continuous celebration: keep reporting /Intent/sceneClock (past midnight, a civil "HH:MM" earlier than the current
+    clock with /Intent/pastMidnight/0 true beside it — the calendar date moves but it is STILL the same game-day, its small hours; the first
+    shrine visit right after the countdown is playable at 01:30). /Intent/sceneAdvance ends the night.
+  Christmas Eve (12/24) — in Japan THE couples' night, strongly CONFESSION-prime
+    BAND 0 (morning 07:30-11:59)
+      0.1  Shop for the gift and prepare in secret.
+    BAND 1 (midday 12:00-15:59)
+      1.1  Meet up and set the plan for the evening.
+    BAND 3 (evening 19:00-23:59, running into the small hours)
+      3.1  Walk the winter illuminations together (イルミネーション).
+      3.2  Have dinner and exchange gifts.
+      3.3  Walk home through the snow — the night's closing beat. Single or friend heroines throw a party instead.
+  Christmas (12/25) — a party, family time, or a cosy follow-up day; lighter than the Eve.
+  New Year's Eve (12/31)
+    BAND 0 (morning 07:30-11:59)
+      0.1  Do the year-end deep clean of the house (年末の大掃除).
+    BAND 2 (late afternoon 16:00-18:59)
+      2.1  Spend the afternoon under the heated table, going nowhere (こたつ).
+    BAND 3 (evening 19:00-23:59, running past midnight)
+      3.1  Eat year-crossing buckwheat noodles (年越しそば).
+      3.2  Hear the temple bells ring the year out and count down together (除夜の鐘).
+  New Year's Day (1/1) — the first shrine visit of the year (初詣): a paper fortune (おみくじ), a luck charm
+    (お守り), a wish made side by side, New Year money (お年玉) and the New Year feast (おせち). A calm, hopeful date.
+  HOOKS: the illuminations date and the gift; a midnight kiss at the countdown; a wish made side-by-side at the
+    shrine; WHO he chooses to spend each night with (the others notice).
+  SWING: BONDING each day → that night's day-end swing to the heroine he spent it with.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Graduation') { _%>
+@Graduation  卒業式 Graduation   (CHECK CLIMAX · SET PIECE · day-end = TIME-LEAP)
+  BAND 0 (morning 07:30-11:59)
+    0.1  Walk in on the last morning and see the classroom for the final time.
+    0.2  Sit through the ceremony — diplomas handed out one by one (卒業証書授与), the principal's farewell, the
+         graduating class's representative speech (卒業生代表), and the two traditional farewell songs the whole
+         hall sings (仰げば尊し / 蛍の光).
+  BAND 1 (midday 12:00-15:59)
+    1.1  Field the second-button tradition (第二ボタン) — a girl asking for the second button of his uniform IS a
+         confession. A climactic confession slot; let the strongest bond of the arc claim it.
+    1.2  Take the photographs and hear the things people finally say out loud.
+  BAND 2 (late afternoon 16:00-18:59)
+    2.1  Take a last walk through the school — the places that meant something.
+  BAND 3 (evening 19:00-23:59)
+    3.1  Give the send-off and make the promise. THEN the DAY-END runs the TIME-LEAP.
+  HOOKS: "what we became"; last confessions; frame the leap through the arc's strongest bond.
+  SWING: CLIMAX = the arc's capstone roll → the biggest swing, reflecting the route. THEN the engine runs the
+    TIME-LEAP: everyone wakes on Day 1 (2026-04-08) still carrying every bond, stat and memory; ArcLoop +1.
+    NARRATE a short in-fiction reason they remember the prior arc (graduation wish / shared dream / déjà-vu /
+    supernatural pull — your call). The cast REMEMBERS.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Summer') { _%>
+@Summer  夏休み Summer Break   (POOL · CHECK DATEOUT · 1 of 5 sampled summer days — ending it JUMPS to the next
+  anchor; the ⏭ banner bridges)
+  POOL, NOT A SEQUENCE — ignore the banner's step number. PICK 1-2 beats that fit today's girl and weather;
+  never repeat yesterday's pick. Let a beat breathe and report the clock it ends at.
+  DAYTIME picks (bands 0-2): a trip to the beach (海) · the swimming pool (プール) · a homework panic, homework
+    as the excuse for a date (宿題) · a lazy heat day at someone's place over shaved ice and watermelon
+    (かき氷 · スイカ) · the club practice she drags him to · the library as an air-conditioned refuge.
+  EVENING picks (band 3): the summer festival, stalls and yukata (夏祭り · 屋台 · 浴衣) · fireworks on the
+    riverbank (花火) · a test-of-courage dare through somewhere dark (肝試し) · stargazing, or a cicada-loud
+    night walk.
+  TONE: cicadas, heat shimmer, barley tea, long unstructured days — boredom is a feature.
+  HOOKS: the swimsuit reveal; her un-air-conditioned room; a heroine AWAY in her home town for a stretch (absence
+    is content); the "summer went too fast" melancholy near the late anchors.
+  SWING: DATEOUT — the engine shares the date-out at day-end among the girls he spent the day with; send no daySwing.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Golden_Week') { _%>
+@Golden_Week  ゴールデンウィーク Golden Week   (POOL · CHECK DATEOUT · 1 of 2 sampled days of the long holiday)
+  POOL, NOT A SEQUENCE — ignore the banner's step number. PICK 1-2 beats; never repeat yesterday's pick.
+  DAYTIME picks (bands 0-2): a real day-trip — the amusement park (遊園地), the zoo, the aquarium, a spring hike ·
+    a shopping-street crawl · a picnic under the late cherry blossom and new green · a movie marathon at
+    someone's place.
+  EVENING picks (band 3): a family-restaurant debrief · the crowded holiday town at dusk.
+  TONE: the year's first long exhale — everything crowded, everyone out; the calendar's first real DATE window.
+  HOOKS: a first properly PLANNED date; parents away for the holiday; the newness of the school year still on them.
+  SWING: DATEOUT — the engine shares the date-out at day-end among the girls he spent the day with; send no daySwing.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Winter_Break') { _%>
+@Winter_Break  冬休み Winter Break   (POOL · CHECK DATEOUT · the quiet days after New Year, before the third term)
+  POOL, NOT A SEQUENCE — ignore the banner's step number. PICK 1-2 beats; never repeat yesterday's pick.
+  DAYTIME picks (bands 0-2): the New Year sales and their sealed lucky bags (初売り · 福袋) · a snow day
+    (snowball fight, a snowman, shovelling her walk) · ice skating · a lazy day under the heated table with
+    mandarins (こたつ) · the winter-homework panic.
+  EVENING picks (band 3): a ramen or hot-pot stall in the cold (おでん) · an early dark walk under breath-fog ·
+    the public bath house (銭湯).
+  TONE: short days, the pull of the heated table, the year newly reset; cold outside makes every indoor beat closer.
+  HOOKS: sharing one heated table; her scarf or mittens lent over; New Year's resolutions traded as
+    half-confessions.
+  SWING: DATEOUT — the engine shares the date-out at day-end among the girls he spent the day with; send no daySwing.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.DaySpine[0]') === '@Spring_Break') { _%>
+@Spring_Break  春休み Spring Break   (POOL · CHECK DATEOUT · the limbo between school years — the grade rolls
+  over April 1)
+  POOL, NOT A SEQUENCE — ignore the banner's step number. PICK 1-2 beats; never repeat yesterday's pick.
+  DAYTIME picks (bands 0-2): a cherry-blossom preview walk, the buds opening day by day (桜) · new-term prep
+    shopping (uniform fitting, supplies) · a spring picnic · the arcade or karaoke afternoon · helping someone
+    clean or move house.
+  EVENING picks (band 3): the riverbank at hazy dusk · a long talk about the year ahead.
+  TONE: in-between time — no homework pressure, mild air, everything about to change.
+  HOOKS: "next year we'll be…" promises; a heroine anxious about the new class split; the first cherry petals.
+  SWING: DATEOUT — the engine shares the date-out at day-end among the girls he spent the day with; send no daySwing.
+<%_ } _%>
+<%_ if (false) { _%>
+## CALENDAR — the HUMAN copy of the engine's 3-year table (globalLogic CALENDAR_ROWS). NEVER rendered into the
+## prompt (narrate learns "today" from Window A alone). Tools/verify_calendar_mirror.cjs FAILS the build when the
+## rows here and the engine's disagree — edit BOTH or neither.
+## Columns: DATE|MODE|LABEL|CHECK|ROLLTO(+1 or a dated jump — the NEXT PLAYED day; days inside a gap are
+## unplayable by design)|SPINE(@key of the body above, or -). Unlisted days: Mon-Fri SCHOOL, Sat/Sun OPEN+DATEOUT.
+## Row MODE values FREE/EVENT are legacy spellings the parser collapses to OPEN; a FREE row's implicit CHECK is DATEOUT.
+2026-04-08|EVENT|Entrance Ceremony 入学式|-|+1|@Entrance_Ceremony
+2026-04-09|SCHOOL|First lessons 授業開始|-|+1|@First_Lessons
+2026-04-29|FREE|Golden Week|-|2026-05-05|@Golden_Week
+2026-05-05|FREE|Golden Week|-|2026-05-06|@Golden_Week
+2026-07-02|SCHOOL|Term Finals prep 期末試験一週間前|-|+1|@Exams_Prep
+2026-07-09|SCHOOL|Term Finals 期末試験|ACADEMIC|+1|@Exams
+2026-07-20|FREE|Summer|-|2026-07-28|@Summer
+2026-07-28|FREE|Summer|-|2026-08-05|@Summer
+2026-08-05|FREE|Summer|-|2026-08-13|@Summer
+2026-08-13|EVENT|Obon お盆 d1 迎え火・盆踊り|BONDING|2026-08-15|@Obon
+2026-08-15|EVENT|Obon お盆 d2 送り火・灯籠流し|BONDING|2026-08-23|@Obon
+2026-08-23|FREE|Summer|-|2026-08-31|@Summer
+2026-08-31|FREE|Summer|-|2026-09-01|@Summer
+2026-10-02|SCHOOL|Sports Festival prep 体育祭一週間前|-|+1|@Sports_Festival_Prep
+2026-10-10|EVENT|Sports Festival 体育祭|SPORTS|+1|@Sports_Festival
+2026-10-30|SCHOOL|Cultural Festival prep 文化祭準備|-|+1|@Cultural_Festival_Prep
+2026-11-07|EVENT|Cultural Festival 文化祭 d1|CULTURE|+1|@Cultural_Festival
+2026-11-08|EVENT|Cultural Festival 文化祭 d2|SCHOOL-FESTIVAL|+1|@Cultural_Festival
+2026-12-24|EVENT|Christmas Eve クリスマスイブ|BONDING|2026-12-25|@Winter_Holidays
+2026-12-25|EVENT|Christmas クリスマス|BONDING|2026-12-31|@Winter_Holidays
+2026-12-31|EVENT|New Year's Eve 大晦日|BONDING|2027-01-01|@Winter_Holidays
+2027-01-01|EVENT|New Year 正月・初詣|BONDING|2027-01-04|@Winter_Holidays
+2027-01-04|FREE|Winter break 冬休み|-|2027-01-08|@Winter_Break
+2027-02-14|EVENT|Valentine's Day バレンタインデー|BONDING|+1|@Valentines_Day
+2027-02-17|SCHOOL|Year-End Exams prep 学年末試験一週間前|-|+1|@Exams_Prep
+2027-02-24|SCHOOL|Year-End Exams 学年末試験|ACADEMIC|+1|@Exams
+2027-03-14|EVENT|White Day ホワイトデー|BONDING|+1|@White_Day
+2027-03-25|FREE|Spring Break|-|2027-03-29|@Spring_Break
+2027-03-29|FREE|Spring Break|-|2027-04-02|@Spring_Break
+2027-04-02|FREE|Spring Break|-|2027-04-07|@Spring_Break
+2027-04-07|FREE|Spring Break|-|2027-04-08|@Spring_Break
+2027-04-29|FREE|Golden Week|-|2027-05-05|@Golden_Week
+2027-05-05|FREE|Golden Week|-|2027-05-06|@Golden_Week
+2027-07-02|SCHOOL|Term Finals prep 期末試験一週間前|-|+1|@Exams_Prep
+2027-07-09|SCHOOL|Term Finals 期末試験|ACADEMIC|+1|@Exams
+2027-07-20|FREE|Summer|-|2027-07-28|@Summer
+2027-07-28|FREE|Summer|-|2027-08-05|@Summer
+2027-08-05|FREE|Summer|-|2027-08-13|@Summer
+2027-08-13|EVENT|Obon お盆 d1 迎え火・盆踊り|BONDING|2027-08-15|@Obon
+2027-08-15|EVENT|Obon お盆 d2 送り火・灯籠流し|BONDING|2027-08-23|@Obon
+2027-08-23|FREE|Summer|-|2027-08-31|@Summer
+2027-08-31|FREE|Summer|-|2027-09-01|@Summer
+2027-10-01|SCHOOL|Sports Festival prep 体育祭一週間前|-|+1|@Sports_Festival_Prep
+2027-10-09|EVENT|Sports Festival 体育祭|SPORTS|+1|@Sports_Festival
+2027-10-12|SCHOOL|School Trip prep 修学旅行事前指導|-|+1|@School_Trip_Prep
+2027-10-19|EVENT|School Trip 修学旅行 d1|-|+1|@School_Trip
+2027-10-20|EVENT|School Trip 修学旅行 d2|-|+1|@School_Trip
+2027-10-21|EVENT|School Trip 修学旅行 d3|-|+1|@School_Trip
+2027-10-22|EVENT|School Trip 修学旅行 d4|BONDING|+1|@School_Trip
+2027-10-29|SCHOOL|Cultural Festival prep 文化祭準備|-|+1|@Cultural_Festival_Prep
+2027-11-06|EVENT|Cultural Festival 文化祭 d1|CULTURE|+1|@Cultural_Festival
+2027-11-07|EVENT|Cultural Festival 文化祭 d2|SCHOOL-FESTIVAL|+1|@Cultural_Festival
+2027-12-24|EVENT|Christmas Eve クリスマスイブ|BONDING|2027-12-25|@Winter_Holidays
+2027-12-25|EVENT|Christmas クリスマス|BONDING|2027-12-31|@Winter_Holidays
+2027-12-31|EVENT|New Year's Eve 大晦日|BONDING|2028-01-01|@Winter_Holidays
+2028-01-01|EVENT|New Year 正月・初詣|BONDING|2028-01-04|@Winter_Holidays
+2028-01-04|FREE|Winter break 冬休み|-|2028-01-08|@Winter_Break
+2028-02-14|SCHOOL|Valentine's Day バレンタインデー|BONDING|+1|@Valentines_Day
+2028-02-17|SCHOOL|Year-End Exams prep 学年末試験一週間前|-|+1|@Exams_Prep
+2028-02-24|SCHOOL|Year-End Exams 学年末試験|ACADEMIC|+1|@Exams
+2028-03-14|SCHOOL|White Day ホワイトデー|BONDING|+1|@White_Day
+2028-03-25|FREE|Spring Break|-|2028-03-29|@Spring_Break
+2028-03-29|FREE|Spring Break|-|2028-04-02|@Spring_Break
+2028-04-02|FREE|Spring Break|-|2028-04-07|@Spring_Break
+2028-04-07|FREE|Spring Break|-|2028-04-08|@Spring_Break
+2028-04-29|FREE|Golden Week|-|2028-05-05|@Golden_Week
+2028-05-05|FREE|Golden Week|-|2028-05-06|@Golden_Week
+2028-07-03|SCHOOL|Term Finals prep 期末試験一週間前|-|+1|@Exams_Prep
+2028-07-10|SCHOOL|Term Finals 期末試験|ACADEMIC|+1|@Exams
+2028-07-20|FREE|Summer|-|2028-07-28|@Summer
+2028-07-28|FREE|Summer|-|2028-08-05|@Summer
+2028-08-05|FREE|Summer|-|2028-08-13|@Summer
+2028-08-13|EVENT|Obon お盆 d1 迎え火・盆踊り|BONDING|2028-08-15|@Obon
+2028-08-15|EVENT|Obon お盆 d2 送り火・灯籠流し|BONDING|2028-08-23|@Obon
+2028-08-23|FREE|Summer|-|2028-08-31|@Summer
+2028-08-31|FREE|Summer|-|2028-09-01|@Summer
+2028-10-06|SCHOOL|Sports Festival prep 体育祭一週間前|-|+1|@Sports_Festival_Prep
+2028-10-14|EVENT|Sports Festival 体育祭|SPORTS|+1|@Sports_Festival
+2028-10-10|SCHOOL|School Trip prep 修学旅行事前指導|-|+1|@School_Trip_Prep
+2028-10-17|EVENT|School Trip 修学旅行 d1|-|+1|@School_Trip
+2028-10-18|EVENT|School Trip 修学旅行 d2|-|+1|@School_Trip
+2028-10-19|EVENT|School Trip 修学旅行 d3|-|+1|@School_Trip
+2028-10-20|EVENT|School Trip 修学旅行 d4|BONDING|+1|@School_Trip
+2028-10-27|SCHOOL|Cultural Festival prep 文化祭準備|-|+1|@Cultural_Festival_Prep
+2028-11-04|EVENT|Cultural Festival 文化祭 d1|CULTURE|+1|@Cultural_Festival
+2028-11-05|EVENT|Cultural Festival 文化祭 d2|SCHOOL-FESTIVAL|+1|@Cultural_Festival
+2028-12-24|EVENT|Christmas Eve クリスマスイブ|BONDING|2028-12-25|@Winter_Holidays
+2028-12-25|EVENT|Christmas クリスマス|BONDING|2028-12-31|@Winter_Holidays
+2028-12-31|EVENT|New Year's Eve 大晦日|BONDING|2029-01-01|@Winter_Holidays
+2029-01-01|EVENT|New Year 正月・初詣|BONDING|2029-01-04|@Winter_Holidays
+2029-01-04|FREE|Winter break 冬休み|-|2029-01-08|@Winter_Break
+2029-02-13|SCHOOL|Year-End Exams prep 学年末試験一週間前|-|+1|@Exams_Prep
+2029-02-14|SCHOOL|Valentine's Day バレンタインデー|BONDING|+1|@Valentines_Day
+2029-02-21|SCHOOL|Year-End Exams 学年末試験|ACADEMIC|+1|@Exams
+2029-03-01|EVENT|Graduation 卒業式 → TIME-LEAP|CLIMAX|2026-04-08|@Graduation
+<%_ } _%>
+</Event_Spines>

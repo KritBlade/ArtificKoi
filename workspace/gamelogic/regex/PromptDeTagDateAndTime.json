@@ -1,0 +1,23 @@
+{
+  "id": "6268e1c3-7161-4afe-8b50-fb5bab10e2bc",
+  "script_name": "PromptDeTagDateAndTime",
+  "enabled": true,
+  "find_regex": "/^(?:<p>)?\\[ 🗓️ .* \\]$/gm",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": false,
+    "prompt": true
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null,
+  "prompt_rewrite_intended": true
+}

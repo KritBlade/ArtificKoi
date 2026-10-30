@@ -1,0 +1,69 @@
+<Location_List>
+# v0.15
+#WORLD NAMES (canon): School = 人光学園 "Jinko Academy" (人光 is a homophone of 人工 "artificial" → ArtificKoi). Town = 人光市 "Jinko City". Use these names whenever the school or town is referred to by name.
+#SCENE LOCATION: EVERY reply, emit /Intent/location = "Area_Venue" — the venue your prose ENDED in (per <COT_Guide>; ONE underscore — venue half is
+# CamelCase). Code compares it with World.Location and, when it differs, writes World.Location AND moves every present heroine with the
+# scene. Do NOT patch Location fields yourself.
+#STAY ON-MAP (School/Town/Outskirts/Home); the ONLY sanctioned off-map case = 修学旅行 School Trip → Away. Soft rule: a rare scene MAY add a spot if truly needed, else default on-map.
+#privacy cue: PUBLIC (people around) · SEMI (often empty / can be caught) · PRIVATE (alone, safe). H-ACT gate + position DC add (Pass 4.4, folded by the ## INTIMACY panel): PRIVATE −2 · SEMI +2 · PUBLIC +5. Homeroom = PUBLIC in class hours / SEMI after; the trip inn = PRIVATE at night.
+#cols: Area_Venue | JP | EN | privacy | use / who
+
+[SCHOOL]  campus — default area
+ School_Classroom|教室|Homeroom|PUBLIC(class)/SEMI(after hours)|homeroom base; room# tracks Grade (Yr1=1-1, Yr2=2-1, Yr3=3-1 via EngineDerived.Grade)
+ School_Hallway|廊下|Corridor|PUBLIC|transitions, passing encounters
+ School_Gate|校門|Main gate|PUBLIC|arrivals, 入学式 signboard, families photographing
+ School_Entrance|昇降口|Entrance / shoe lockers|PUBLIC|shoe lockers just INSIDE the building — swap to indoor slippers; notes left. Arriving AT school is School_Gate
+ School_Courtyard|中庭|Courtyard|PUBLIC|breaks, outdoor lunch, festival stages
+ School_Rooftop|屋上|Rooftop|SEMI|lunch, confessions, quiet talks
+ School_Library|図書室|Library|SEMI|study, quiet, bookworm beats
+ School_Infirmary|保健室|Nurse's office|SEMI|rest, injury; nurse may return
+ School_Cafeteria|食堂|Cafeteria|PUBLIC|lunch, group scenes
+ School_Gym|体育館|Gymnasium|PUBLIC|PE, assemblies, ceremonies, festival
+ School_GymStorage|体育倉庫|Sports storage|SEMI|equipment; quiet hideaway
+ School_Grounds|グラウンド|Athletic field|PUBLIC|PE, club, sports festival
+ School_Pool|プール|Pool|PUBLIC|summer PE/club, swimsuit beats
+ School_LockerRoom|更衣室/ロッカー|Changing room|SEMI|before/after PE; changing
+ School_ShowerRoom|シャワー室|Shower room|SEMI|after pool / PE
+ School_Restroom|トイレ|Restroom|SEMI|quick private beats
+ School_ClubRoom|部室|Club room|SEMI|after-class club activity
+ School_JapaneseRoom|和室|Japanese-style room|SEMI|tea ceremony / traditional club
+ School_StaffRoom|職員室|Staff room|PUBLIC|teachers; being called in
+ School_BackYard|裏庭/校舎裏|Behind school|SEMI|secluded talks, confrontations
+
+[HOME]  residences
+ Home_MaincharRoom|主人公の部屋|MainChar's room|PRIVATE|private; OPEN-day dates indoors
+ Home_ClassmateRoom|彼女の部屋|Heroine's room|PRIVATE|visiting her home
+
+[TOWN]  off-campus WEEKEND/OPEN-day map (MainChar roams; default OPEN-day date area)
+ Town_BusStop|バス停|Bus stop (by school)|PUBLIC|transit hub: school ↔ town
+ Town_Station|駅|Station|PUBLIC|transit; meet up / heading out
+ Town_ShoppingStreet|商店街|Shopping street|PUBLIC|shopping; summer/winter festival stalls
+ Town_ShoppingMall|ショッピングモール|Shopping mall|PUBLIC|big shopping date, cinema, food court
+ Town_Cafe|カフェ|Cafe|PUBLIC|date, talk
+ Town_FamilyRestaurant|ファミレス|Family restaurant|PUBLIC|casual meal, group hangout
+ Town_CandyShop|駄菓子屋|Penny-candy shop|PUBLIC|nostalgic after-school / weekend hangout
+ Town_Karaoke|カラオケ|Karaoke|SEMI|group/date; private booth
+ Town_Arcade|ゲーセン|Arcade / game center|PUBLIC|casual date
+ Town_Library|図書館/公民館|Public library / hall|SEMI|study, quiet date (off-campus)
+ Town_Bathhouse|銭湯|Public bathhouse|SEMI|relax; gender-split; steamy mix-up potential
+ Town_Park|公園|Park|SEMI|walk, talk, evening
+ Town_LoveHotel|ラブホテル|Love hotel|PRIVATE|off-campus private intimacy (H venue)
+
+[OUTSKIRTS]  nature & secluded — weekend outings, quiet / secret beats
+ Outskirts_River|川|Riverside|SEMI|summer, fireworks, heart-to-hearts
+ Outskirts_Waterfall|滝|Waterfall|SEMI|secluded nature; date / training
+ Outskirts_AncientRuins|遺跡|Ancient ruins|SEMI|exploration / mystery spot; test-of-courage, secluded beats
+
+[AWAY]  修学旅行 School Trip ONLY — the single sanctioned off-map exception
+ Away_TripDest|修学旅行先|Trip destination|PUBLIC|School Trip sightseeing — wherever 修学旅行事前指導 named a week earlier, read off the school_trip quest on ## QUESTS — anywhere in Japan (Kyoto / Okinawa / Hokkaido / Hiroshima / Nara … are samples, not a menu); not restricted
+ Away_TripInn|旅館|Trip inn / room|SEMI/PRIVATE|School Trip lodging; night beats
+
+[EVENT → DEFAULT LOCATION]  (each calendar EVENT's place — the event engine itself lands with the calendar subsystem)
+ 入学式 Entrance Ceremony → School_Gym
+ 体育祭 Sports Festival → School_Grounds
+ 文化祭 Cultural Festival → School_Classroom (stalls) + School_Courtyard (stages) + School_Gym (performances)
+ 修学旅行 School Trip → Away_TripDest / Away_TripInn (destination named at 修学旅行事前指導, carried by the school_trip quest)
+ 卒業式 Graduation → School_Gym
+
+[HOURS — RESOLVED, do not re-derive. ## NOW brackets after Location the status of the CURRENT venue and of every venue in its category (all of School, all shops); its ELSEWHERE line names every OTHER category that is closed or constrained right now, and anything neither names is open. Write the world to those: a venue called closed / empty / locked is written closed, never quietly open. Being shut at this hour is a real (sometimes spicy) constraint, not a free pass.]
+</Location_List>

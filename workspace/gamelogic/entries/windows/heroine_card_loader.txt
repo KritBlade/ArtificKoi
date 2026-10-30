@@ -1,0 +1,33 @@
+@@preprocessing
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@') === 0
+<%_ /* v0.1 */ _%>
+<%_ /* Puts the armed beat's heroine card in front of the narrator. A heroine's [Character] card loads only when
+   one of its keywords is in the messages SillyTavern scans, and nothing promises that on the reply her beat plays:
+   an introduction beat is the first time anyone meets her, so no earlier message named her, and in Chinese play
+   the prose names her in a spelling her keywords do not list. Without the card the narrator plays her from the
+   beat body alone and makes up what the card would have told it — her name in its own characters, her year.
+   On a reply with a beat armed, this finds the [Character] entry whose Name line carries the beat's series Key and
+   has ST-Prompt-Template activate it for this build. A series with no card (Leila) loads nothing.
+   @@preprocessing runs this when SillyTavern loads the lorebook, before the keyword scan: the one point where a
+   forced activation still counts for the same build. ST-Prompt-Template forgets it once the prompt is built, and
+   it drops a card the scan also matched, so she is never sent twice. The @@if drops this entry on every reply
+   with nothing armed. The entry itself never reaches the prompt: no keywords, and it prints nothing.
+   A beat played same-reply needs none of this: its body rides the player's message, which the scan reads, and
+   the body names her.
+   Tools/test_heroine_card_loader.cjs renders it for every trigger in the seed. */ _%>
+<%_ try {
+    const _beat = String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').slice(1);
+    const _series = String(getvar('stat_data.EventPack.triggers.' + _beat + '.series') || '');
+    const _nameLine = (e) => String(e.content || '').split('\n').find((l) => l.indexOf('Name:') === 0) || '';
+    const _card = !_series ? null : (await getWorldInfoData()).find((e) =>
+        String(e.comment || '').indexOf('[Character]') === 0 && _nameLine(e).indexOf('(' + _series + ')') >= 0);
+    if (_card) {
+        if (await activewi(_card.world, _card.uid, true)) {
+            globalThis.MvuHelper.log.child('EJS').verbose('Heroine_Card_Loader: @' + _beat + ' is armed, so ' + _card.comment + ' is in this prompt');
+        } else {
+            globalThis.MvuHelper.log.child('EJS').warn('Heroine_Card_Loader: @' + _beat + ' is armed but ' + _card.comment + ' could not be activated — the narrator plays her without her card');
+        }
+    }
+} catch (_e) {
+    globalThis.MvuHelper.log.child('EJS').error('Heroine_Card_Loader failed — the armed heroine plays without her card:', _e);
+} _%>

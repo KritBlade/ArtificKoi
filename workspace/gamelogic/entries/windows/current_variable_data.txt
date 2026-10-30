@@ -1,0 +1,1178 @@
+<%_
+//  v0.192
+  // ============================================================================
+  // Window A (pre-prompt EJS2). Runs at prompt assembly, reads live stat_data.
+  // Emits: (1) COMPACT state (one line per present heroine + absent roster),
+  //        (2) DERIVED FACTS the model would otherwise recompute (today/block),
+  //        (3) the SOCIAL CHECK RESULT panel (the PRE call's resolved roll,
+  //            rendered from /Intent/check as ready-made combat_log lines),
+  //        (4) a d20 POOL for the narrator's OWN rolls (the H system only —
+  //            the FWB opt-in moved to PRE's pool with its roll, P3), surfaced below.
+  // The narrator never rolls a social check — the PRE call rates, DC-locks and
+  // rolls it pre-turn (check_dc_dice-pre.txt owns the ladder); this window
+  // renders the verdict for transcription. See PRE_Call_Revisit §4.1.
+  //
+  // NOR does it render the INITIATIVE gate any more (P2). PRE picks who initiates
+  // off <Initiative_Menu>, which calls the SAME initiativeMenu(); rendering the
+  // gate table here too made narrate a second decider of a decision already made.
+  // Narrate needs the PICK (PRE's `initiative` verdict, on {{user}}'s message) and
+  // the T# legend (<Initiative_system>) — never the table that produced the pick.
+  // ============================================================================
+  // ⚠ EVERY name a render tag prints MUST be declared HERE, outside the try below — a const inside
+  // the try is scoped to it, and the render line then throws ReferenceError for the whole entry
+  // (live 2026-08-12: _hoursDigest was declared inside and killed Window A on import). NB: never
+  // write EJS delimiters inside this comment — a close-tag here ends the scriptlet early.
+  let _ok = true, _armKey = '', _state = '', _facts = '', _clock = '', _dayEnd = '', _arrivals = '', _wallet = '', _skills = '', _rolls = '', _hoursDigest = '', _chk = '', _chkN = 0, _hSceneOpen = '', _arm = '', _traits = '', _gates = '', _cal = '', _signpost = '', _evt = '', _quests = '', _npc = '', _wlog = '', _intim = '';
+  try {
+    const V = (t) => (Array.isArray(t) ? t[0] : t);
+    const skip = (k) => (k === '$meta' || k === '$key' || k === 'template');
+    const sd = getvar('stat_data') || {};
+    const W = sd.World || {}, MC = sd.Mainchar || {}, CM = sd.Classmate || {};
+    const EngineDerived = sd.EngineDerived || {}, PendingState = sd.PendingState || {}, WorldRecord = sd.WorldRecord || {};
+
+    // ---- (5) ARMING (the §1f pattern): a heroine was armed last reply → run the 5a GATE (prove-then-build) ----
+    // AddClassmate carries the pending cast member's KEY, not a bare true. POST armed her because it saw her
+    // on stage; this banner is the nudge that repeats until she is built or the arm times out. Narrate has no
+    // roster (it is llmshare-routed to PRE and POST), so a Key reaches narrate here, in her own card's NEW
+    // HEROINE note (stamp_heroine_notes.cjs), or in a check that targets her. See Doc/cast-registry-design.md.
+    // WHICH SPELLING OF HER NAME THE RECORD TAKES IS NOT DECIDED HERE. This banner renders only while a
+    // heroine is armed, and most builds are unarmed (the card's note, or the player's [ooc: add classmate]) —
+    // so a field rule kept here is a field rule those builds never see. It lives in <Classmate_Guide>, which
+    // is present for every build and reads Preferences.Lang itself.
+    _armKey = String(V(PendingState.AddClassmate) || '').trim();
+    if (_armKey) {
+      _arm = _armKey + ' was armed last reply and is NOT yet recorded. Her Key is EXACTLY "' + _armKey +
+        '" — use it verbatim, never re-spelled and never translated. Before building, PROVE her <character> ' +
+        'profile is loaded by QUOTING her TRAITS line (STA|INT|CHA|...) verbatim in <classmate_trait_check>. ' +
+        'If you CAN quote it -> "Profile loaded: YES" -> BUILD per <Update_Analysis_Detail> 5a: emit ' +
+        '/Intent/newClassmate per <Classmate_Guide>, keyed "' + _armKey + '", carrying her FullName in LATIN ' +
+        'letters given-name-first and her Name in the half <Classmate_Guide> names for this save. NEVER write ' +
+        'PendingState.AddClassmate — code closes the gate, and a clear emitted with the build cancels it. ' +
+        'If you CANNOT find her TRAITS line -> "Profile loaded: NO" -> DISARM: clear BOTH ' +
+        '/PendingState/AddClassmate/0 = "" AND /PendingState/AddClassmateArmedAt/0 = -1 (the pair IS the ' +
+        'closed state); do NOT build, do NOT invent from the scene, her appearance, or the roster one-liner.';
+    }
+
+    // SCENE ARRIVALS — a girl joins the scene only through this op, and the roster cannot notice her joining on its
+    // own. It is its own panel, not a clause in ## PRESENT's header: that header is a ROSTER READOUT (who is here, her
+    // meters, her bands), and an op inside it reads as one more attribute of the roster rather than a duty owed this
+    // reply. It renders only when someone is off-scene. Who LEFT needs no op: POST reads the finished reply, and the
+    // relay takes out of the scene every girl it did not see with him at the end.
+    {
+      const _away = Object.keys(CM).filter((k) => !skip(k) && CM[k] && V(CM[k].Is_present) !== true);
+      if (_away.length) {
+        _arrivals = '\u25b6 IF ANYONE JOINS THIS REPLY: /Intent/arrive/0 "<Key>" — for each girl who is off-scene now and with him'
+          + ' when your prose ends: she comes to him, he goes to her, or they meet. Several → one op, ","-joined: "<KeyA>,<KeyB>".'
+          + ' Off-scene right now: ' + _away.join(', ') + '.'
+          + ' Until you report it she keeps counting as OFF-SCENE: the engine moves her on her own schedule, and the'
+          + ' scene move and the H scene leave her out. Nobody joins → send nothing.';
+      }
+    }
+
+    // Name any IN-SCENE blank shell (empty Name) that RES promoted, so narrate fills the RIGHT key instead of
+    // guessing. (Absent stray shells are deleted by RES, not surfaced here.)
+    {
+      const _orphans = Object.keys(CM).filter((k) => !skip(k) && CM[k] && V(CM[k].Is_present) === true && !String(V(CM[k].Name) || '').trim());
+      if (_orphans.length) {
+        _arm = (_arm ? _arm + ' ' : '') + 'PENDING BLANK SHELL(S) in scene — FINISH building: ' + _orphans.join(', ') +
+          '. Each was auto-created by a stray patch; emit /Intent/newClassmate/<Key> to fill from her loaded profile (her existing Thoughts/Affection carry over).';
+      }
+    }
+
+    // ---- (2) DERIVED TIME FACTS -------------------------------------------------
+    const sta = Number(V(MC.Sta)) || 30;
+    const blockCap = Math.max(3, Math.floor(sta / 10));   // the resolver's cap: the reply that reaches it is the block's last
+    const time = String(V(W.Time) || '07:30');
+    const SCHOOL_BLOCKS = ['07:30', '12:00', '16:00', '19:00'];
+    // World.Time is the scene's plain CIVIL clock, moved by /Intent/sceneClock. The game steers in GAME
+    // TIME = civil − 7:30 (a game-day = civil 07:30 -> next 07:29): the BAND is derived numerically from
+    // the game minute — a plain 5-segment ladder, no wrap, mirrors globalLogic band(). Band 4 (civil
+    // 00:00-07:29) = the small hours of the game-day whose DATE is yesterday's.
+    const _tMin = (() => { const m = /^(\d{1,2}):(\d{2})$/.exec(time); return m ? (+m[1] * 60 + +m[2]) : 450; })();
+    const _gMin = (_tMin - 450 + 1440) % 1440;
+    const dayBand = _gMin >= 990 ? 4 : _gMin >= 690 ? 3 : _gMin >= 510 ? 2 : _gMin >= 270 ? 1 : 0;
+    // the GAME-DAY the scene is inside + how many game-days the prose is AHEAD of the settled DayDate
+    const _addIso = (iso, n) => { const d = new Date(String(iso).slice(0, 10) + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+    const _sceneGameDate = _tMin < 450 ? _addIso(V(W.Date), -1) : String(V(W.Date) || '').slice(0, 10);
+    const _dayDate = String(V(EngineDerived.DayDate) || '').slice(0, 10);
+    const _daysOwed = _dayDate ? Math.round((new Date(_sceneGameDate + 'T00:00:00Z') - new Date(_dayDate + 'T00:00:00Z')) / 86400000) : 0;
+    const mode = String(V(EngineDerived.Mode) || 'SCHOOL');
+    const sess = Number(V(EngineDerived.BlockReplyCount)) || 0;
+    // time-of-day label (civil) + Grade/Loop facts (homeroom room# tracks Grade: Yr1=1-1)
+    const hh = parseInt(time.slice(0, 2), 10) || 0;
+    const tod = hh >= 5 && hh < 11 ? 'MORNING' : hh >= 11 && hh < 16 ? 'DAY' : hh >= 16 && hh < 19 ? 'AFTERCLASS-EVE' : 'NIGHT';
+    const grade = Math.max(1, Math.min(3, Number(V(EngineDerived.Grade)) || 1));
+    // ---- VENUE HOURS — RESOLVED here, so the narrator never compares a clock with opening hours --------
+    // Every venue maps to an hours CATEGORY, and the category's status comes off the civil clock. ## NOW
+    // brackets the current venue's status, which every venue in its category shares; the ELSEWHERE digest
+    // names each OTHER category that is closed or constrained. <Location_List> [HOURS] tells the narrator
+    // how to read the two. BusStop and Karaoke have no closing time, Town_Library runs 09:00-18:00, and the
+    // Away pair is always open: <Location_List> calls the trip destination "not restricted".
+    const _nowMin = hh * 60 + (Number(time.slice(3, 5)) || 0);
+    const SHOP_VENUES = { 'Town_ShoppingStreet': 1, 'Town_ShoppingMall': 1, 'Town_Cafe': 1,
+      'Town_FamilyRestaurant': 1, 'Town_CandyShop': 1, 'Town_Arcade': 1 };
+    const OUTDOOR_VENUES = { 'Town_Park': 1, 'Outskirts_River': 1, 'Outskirts_Waterfall': 1, 'Outskirts_AncientRuins': 1 };
+    const ALWAYS_VENUES = { 'Town_BusStop': 1, 'Town_Karaoke': 1, 'Town_LoveHotel': 1 };
+    // Returns { category, text, constrained }. `category` also drives the digest below, so the two can
+    // never key off different predicates. `constrained` = anything other than plainly open, and it is
+    // what keeps the digest short: OPEN is the reader's default assumption, so only the exceptions are
+    // worth printing. An unknown venue returns category '' (see the NO FALLBACK note).
+    const venueStatus = (loc) => {
+      const key = String(loc || ''), area = key.split('_')[0];
+      if (area === 'School') {
+        return { category: 'School', constrained: _nowMin >= 1080, text:
+          _nowMin >= 1140 ? 'gates LOCKED since 19:00 — campus empty; sneaking in is transgressive, a real risk of being caught'
+          : _nowMin >= 1080 ? 'OPEN but emptying — clubs ended 18:00, gates lock 19:00'
+          : _nowMin >= 960 ? 'OPEN — after class, clubs running til 18:00'
+          : _nowMin >= 510 ? 'OPEN — class hours til 16:00'
+          : 'OPEN — before class; early arrivals only' };
+      }
+      if (area === 'Home' || area === 'Away' || ALWAYS_VENUES[key]) return { category: 'always', constrained: false, text: 'OPEN — no closing time' };
+      if (SHOP_VENUES[key]) {
+        return { category: 'shops', constrained: _nowMin < 600 || _nowMin >= 1080, text:
+          _nowMin < 600 ? 'CLOSED — shops open at 10:00'
+          : _nowMin >= 1200 ? 'SHUTTERED for the night — shops closed at 20:00'
+          : _nowMin >= 1080 ? 'OPEN til 20:00 — the evening is winding down'
+          : 'OPEN til 20:00' };
+      }
+      if (key === 'Town_Station') return { category: 'station', constrained: false, text: 'OPEN — last train ~00:00 (miss it and he is stranded overnight)' };
+      if (key === 'Town_Bathhouse') return { category: 'bathhouse', constrained: _nowMin >= 1380, text: _nowMin >= 1380 ? 'CLOSED — the bathhouse shut at 23:00' : 'OPEN til 23:00' };
+      if (key === 'Town_Library') {
+        return { category: 'public library', constrained: _nowMin < 540 || _nowMin >= 1080, text:
+          _nowMin < 540 ? 'CLOSED — opens at 09:00'
+          : _nowMin >= 1080 ? 'CLOSED — the public library shut at 18:00'
+          : 'OPEN til 18:00' };
+      }
+      if (OUTDOOR_VENUES[key]) return { category: 'park/outskirts', constrained: tod === 'NIGHT', text: tod === 'NIGHT' ? 'open air, but DARK and empty after dark — a little unsafe' : 'open air, fine by day' };
+      // Not in the built-in map — but the narrator may have INVENTED it and registered its category, in which
+      // case WorldRecord.Locations is the runtime extension of <Location_List> and we resolve it exactly like a
+      // listed venue. Re-entering by CATEGORY (not by key) is what makes that work with no per-venue table.
+      const reg = (WorldRecord.Locations && WorldRecord.Locations[key]) || null;
+      const regHours = reg ? String(V(reg.Hours) || '').trim().toLowerCase() : '';
+      if (regHours) {
+        // Each proxy is a LISTED venue, so the recursive call lands in a built-in branch above and can never
+        // re-enter this one — no cycle is possible even if a listed key were registered with its own category.
+        const proxy = { school: 'School_Classroom', shops: 'Town_Cafe', always: 'Home_MaincharRoom',
+          daylight: 'Town_Park', library: 'Town_Library', bathhouse: 'Town_Bathhouse' }[regHours];
+        if (proxy) return venueStatus(proxy);
+        // Registered with a category nobody defined — say so rather than picking one for it.
+        return { category: '', constrained: true, text: 'hours UNKNOWN — registered with an unrecognised hours category "' + regHours + '"' };
+      }
+      // No category on record, registered or not. Printed, never left blank: a blank bracket is an absence the
+      // narrator has to notice, and one it misses reads as open.
+      return { category: '', constrained: true, text: 'hours UNKNOWN — no hours category declared for this venue: add hours: to its /Intent/location (<COT_Guide>)' };
+    };
+    const _locNow = String(V(W.Location) || '');
+    const _locHere = venueStatus(_locNow);
+    if (_locNow && !_locHere.category) {
+      // NO FALLBACK: inventing hours for a venue nobody mapped would let the narrator write a shuttered place
+      // open — exactly the failure [HOURS] exists to prevent. The bracket says hours UNKNOWN instead.
+      globalThis.MvuHelper.log.child('EJS').warn('VENUE HOURS: World.Location "' + _locNow + '" has no hours category, so the narrator is shown "' +
+        _locHere.text + '". A venue <Location_List> lists needs a row in these tables; an invented one, hours: on its /Intent/location report');
+    }
+    // The digest covers wherever the scene MOVES — a destination {{user}} names or the narrator invents —
+    // which the ## NOW bracket cannot. It reads the SAME venueStatus, so the two can never disagree, and it
+    // SKIPS the category he is already standing in: the bracket's status holds for every venue in that category.
+    const _shut = [['School', 'School_Classroom'], ['shops', 'Town_Cafe'], ['public library', 'Town_Library'],
+        ['bathhouse', 'Town_Bathhouse'], ['park/outskirts', 'Town_Park']]
+      .filter((row) => row[0] !== _locHere.category)
+      .map((row) => [row[0], venueStatus(row[1])])
+      .filter((row) => row[1].constrained)
+      .map((row) => row[0] + ': ' + row[1].text);
+    _hoursDigest = 'ELSEWHERE right now — ' + (_shut.length ? _shut.join(' · ') + '. ' : '') +
+      'everything else is open (home · love hotel · karaoke · bus stop · station, last train ~00:00).';
+    // SCHOOL = 4 daytime bands + reply cap (auto-advances). OPEN = uncapped — the day ends only via
+    // /Intent/sceneAdvance / Next-Block. BOTH: the clock moves to /Intent/sceneClock — the civil "HH:MM"
+    // THIS reply's prose ended at (earlier than now beside /Intent/pastMidnight = crossed midnight; the engine rolls the date).
+    const freeClock = (mode === 'OPEN');
+    // FACTS ONLY. The ORDER that moves the clock lives in its own ## SCENE CLOCK section below — it
+    // spent this whole chat buried mid-sentence in this run-on line and was never once obeyed (live:
+    // ClocklessStreak 5, World.Time frozen at 07:30 while the prose walked the school). Same lesson the
+    // day signpost taught: an op named inside a facts sentence reads as description, not as a duty.
+    const clockStr = freeClock
+      ? 'OPEN day, clock @' + time + ' (' + tod + ') — NO reply cap'
+      : 'Block ' + Math.min(dayBand + 1, 4) + '/4 @' + time + ' (' + tod + ') · reply ' + (sess + 1) + '/' + blockCap + ' of this block';
+    // SMALL-HOURS banner (band 4): past midnight, the game-day has NOT ended — its date is still
+    // yesterday's. Keep the night going (sceneClock) or close it (sceneAdvance).
+    const lateNight = dayBand === 4 && _daysOwed <= 0
+      ? ' ⚠ SMALL HOURS — past midnight, still ' + (_dayDate || _sceneGameDate) + '\'s day (the game-day runs to 07:29, and at 07:30 it closes on its own). Night continues → keep reporting /Intent/sceneClock; night over → /Intent/sceneAdvance ends the day.'
+      : '';
+    // ---- SCENE CLOCK + PLACE (their own section, op-first) --------------------------------------
+    // THREE facts about where your prose STOPPED, and every one of them is an OBSERVATION — read off the
+    // page you just wrote, never a plan and never a verdict. The engine owns all of the consequences:
+    // the band, the block change, the calendar date, the day-roll. Narrate reports the end time and the
+    // end venue; RES does the rest.
+    //   DATE is deliberately NOT an ask. There is no /Intent/date and there must not be one: the civil
+    //   date is DERIVED — a clock earlier than the current one, sent with /Intent/pastMidnight, means midnight was
+    //   crossed and the engine rolls the date itself, and a finished day is closed with /Intent/sceneAdvance. Asking narrate for
+    //   a date would hand it a calculation, which is the engine's half.
+    const _clockStreak = Number(V(EngineDerived.ClocklessStreak)) || 0;
+    const _nextBlockAt = (!freeClock && dayBand < 3) ? SCHOOL_BLOCKS[dayBand + 1] : '';
+    _clock =
+      '\u25b6 EMIT THIS REPLY: /Intent/sceneClock/0 "HH:MM" — the 24-hour civil clock your prose ENDED at.'
+      + ' Read it off your own last paragraph: it is an OBSERVATION of where you left the scene, not a plan for it.'
+      + ' World.Time is frozen at ' + time + ' until you report. The one other op that moves it is /Intent/sceneAdvance, and it REPLACES this one: a reply sends sceneClock or sceneAdvance, never both.'
+      + (_nextBlockAt
+        ? ' Ending at or past ' + _nextBlockAt + ' IS the block change — report the real end time and the engine moves the block; you never announce a block yourself.'
+        : freeClock
+          ? ' This is an OPEN day with no reply cap, so nothing advances on its own — the day ends only when you send /Intent/sceneAdvance.'
+          : ' This is the last block of the day — keep reporting the clock; /Intent/sceneAdvance is what ends the day.')
+      + '\n\u25b6 PAST MIDNIGHT: your prose ran past midnight this reply (23:40 → "00:30", or on to the next night) ⇒ ALSO emit /Intent/pastMidnight/0 true beside that clock; otherwise leave it out.'
+      + ' A clock earlier than ' + time + ' with no pastMidnight is refused and the world stays at ' + time + '. There is no date op: the engine rolls the date, and you never write World.Date.'
+      + (_clockStreak >= 2
+        ? ' ⚠ ' + _clockStreak + ' replies in a row have reported no clock, so the world has stood at ' + time + ' through all of them while the story moved. Break that this reply.'
+        : '')
+      + '\n\u25b6 EMIT THIS REPLY TOO: /Intent/location/0 "Area_Venue;label:<the name your prose used>" — the venue your prose ENDED in,'
+      + ' key from <Location_List> (a walk through several venues reports only the last one).'
+      + ' Report it EVERY reply, like the clock — even when it is still ' + V(W.Location) + ', where the scene stands now:'
+      + ' it is an OBSERVATION of where you left the scene, and the engine works out whether the scene moved.';
+
+    // DAY OVERDUE — GRADUATION ONLY. Every other owed day the engine closes itself on the reply that leaves
+    // it behind, so there is nothing to tell narrate. Graduation stays open until the prose ends it (the arc
+    // reset is prose's), and its imperative ORDER ships at depth 0 (<Block_Transition>) — one copy only.
+    // This names the state so the scene text can acknowledge it.
+    const dayOwedBanner = _daysOwed >= 1 && String(V(EngineDerived.DaySpine) || '').trim() === '@Graduation'
+      ? '\n⚠ DAY OVERDUE — the prose has reached ' + _sceneGameDate + ' while GRADUATION day (' + (_dayDate || '(unset)') + ') is still open; the order arrives in <Block_Transition>.'
+      : '';
+    _facts =
+      'Date ' + V(W.Date) + ' (' + V(W.Weekday) + ') · ' + mode +
+      ' · Grade ' + grade + ' (homeroom ' + grade + '-1) · Loop ' + (Number(V(EngineDerived.ArcLoop)) || 1) +
+      ' · ' + clockStr + lateNight + dayOwedBanner +
+      ' · Weather ' + V(W.Weather) + ' · Location ' + V(W.Location) + ' [' + _locHere.text + ']' +
+      ' (where the scene STANDS right now)' +
+      ' · Wallet ¥' + (Number(V(MC.Money)) || 0) + ' (his real balance — reference it in the prose)';
+    // The SPEND is an op, so it gets a landmark of its own rather than a parenthesis on the balance.
+    _wallet = '\u25b6 IF MONEY CHANGED HANDS: /Intent/money/0 "<signed int>" — the yen this reply actually moved,'
+      + ' + for earned and - for spent (a ¥480 lunch is "-480"). The engine applies it to the ¥'
+      + (Number(V(MC.Money)) || 0) + ' above; you never write Mainchar.Money. Nothing bought or earned → send nothing.';
+    // HIS SKILLS — the recorded list, printed so the prose knows what he can do. Recording a NEW one is not narrate's
+    // job: the POST bookkeeper reads the finished page for a skill of his that was named, and records it.
+    const _held = Object.keys(MC.Skills || {}).filter((k) => !skip(k));
+    _skills = 'Held: ' + (_held.length ? _held.join(', ') : 'none');
+    // MANUAL Next-Block (v4 v1-style FLAG PREVIEW): the player ticked the GUI toggle (PendingState.BlockDone) to move
+    // time on. Nothing advanced at click time — the flag just sits. Here we PREVIEW where the advance lands (via the
+    // LogicEngine, live) and tell the narrator the EXACT new time/day so they WRITE this reply in the new slot; RES
+    // commits the real Date/Time at reply-end (so preview + commit always agree). The narrator does the WHOLE
+    // transition in THIS reply: brief wrap-up → time-skip → open the new scene there. Not a dead wind-down.
+    if (V(PendingState.BlockDone) === true) {
+      const _LE = (typeof globalThis !== 'undefined') && globalThis.LogicEngine;
+      let _pv = null;
+      // AWAITED (v0.64) — mvu-helper 0.3.44+ hosts the engine in a Worker, so every LogicEngine export
+      // returns a Promise. An un-awaited Promise is TRUTHY, so `if (_pv)` would take the engine branch
+      // and then read _pv.dayRoll / _pv.time as undefined — printing "advancing to the next time block
+      // @undefined" instead of falling back. Loud only in hindsight; silent at render time.
+      try { if (_LE && typeof _LE.previewNextBlock === 'function') _pv = await _LE.previewNextBlock(sd); } catch (_pe) { _pv = null; globalThis.MvuHelper.log.child('EJS').error('next-block preview failed:', _pe); }
+      if (_pv) {
+        const _where = _pv.dayRoll
+          ? ('the NEXT DAY — ' + _pv.date + ' (' + _pv.weekday + '), ' + _pv.mode + (_pv.label ? ' · ' + _pv.label : '') + ', opening at ' + _pv.time)
+          : ('the next time block @' + _pv.time + ' (same day)');
+        _facts += '\n⏭ NEXT-BLOCK REQUESTED (player) → advancing to ' + _where + '. In THIS reply: briefly wrap the current ' +
+          'scene, TIME-SKIP into that slot, and open the new scene THERE — write the reply IN the new time (the engine ' +
+          'commits Date/Time at reply-end; you write the prose, never the variables).' +
+          (_pv.timeLeap ? ' ⚠ GRADUATION → a new school year begins (a larger leap, not just a day).' : '') +
+          ((_pv.dayRoll && (_pv.mode === 'OPEN' || freeClock)) ? ' If he spent this OPEN day with ONE girl, also emit her /Intent/daySwing per ## TODAY.' : '');
+      } else {
+        // FALLBACK — LogicEngine not hosting (baked-only card / feature off): the soft narrative-time transition.
+        const _toDay = (freeClock || dayBand >= SCHOOL_BLOCKS.length - 1);
+        _facts += '\n⏭ NEXT-BLOCK REQUESTED (player): in THIS reply, give a brief wrap-up of the current scene, then ' +
+          'TIME-SKIP straight into ' + (_toDay ? 'the NEXT DAY' : 'the next time block') + ' and open the new scene there ' +
+          '(use narrative time — "later that afternoon" / "the next morning"; the engine syncs Date/Time at reply-end, you never write them).' +
+          (freeClock ? ' If he spent this OPEN day with ONE girl, also emit her /Intent/daySwing per ## TODAY.' : '');
+      }
+    }
+    // AUTO-ADVANCE — the block cap (or a narrator sceneAdvance) moved the game on at the END of the last
+    // reply. The order that makes the narrator ACT on it is NOT here: it ships as <Block_Transition>, its own
+    // entry at DEPTH 0, because that instruction lost on POSITION. Everything this file renders lands at
+    // position 0, mid-system-block, ~95 KB before the prompt ends — behind the scene it is telling the
+    // narrator to abandon and behind the PRE check rolled for {{user}}'s line. Do NOT restore a second copy
+    // of it here: two wordings of one order is the failure globalLogic v0.43.1 names.
+    // TIME-JUMP cue (Cluster 6) — RES stamped EngineDerived.JumpedFrom on a break/holiday JUMP last reply (the calendar
+    // skipped days). Surface it ONCE so the narrator BRIDGES the gap, rather than opening cold on a far-off ## NOW date.
+    const _jumpedFrom = String(V(EngineDerived.JumpedFrom) || '').trim();
+    if (_jumpedFrom) {
+      _facts += '\n⏭ TIME JUMPED: ' + _jumpedFrom + ' → ' + V(W.Date) + ' — the calendar skipped the days between (a break / holiday). OPEN the story by bridging the passed time (a brief "some days later…" beat: what changed over the gap), THEN play the landed day.';
+    }
+
+    // ---- (2b) CALENDAR TODAY (yearschedule · Cluster 6) — RES wrote the resolved day facts to EngineDerived on the
+    // last day-roll (Mode/DayDate/DayLabel/DayCheck/DaySpine); surface the actionable one. A spine is
+    // surfaced whenever PRESENT, whatever the mode — Mode carries pacing only.
+    const daySpine = String(V(EngineDerived.DaySpine) || '').trim();
+    const dayLabel = String(V(EngineDerived.DayLabel) || '').trim();
+    const dayCheck = String(V(EngineDerived.DayCheck) || '').trim();
+    // ▶ CURRENT BEAT (spine days). TWO cursors:
+    //   BAND  = where the clock is in the game-day (derived; follows the prose: report 12:10 and it moves).
+    //   STEP  = the STORED cursor EngineDerived.LastStepDone + 1. It moves only when narrate's /Intent/stepDone
+    //           dump reports the live step played (the engine walks the dump while it is contiguous and holds
+    //           the rest). Deliberately NOT a reply counter: a beat may span many replies, and a counter marches
+    //           the pointer while the story stands still. A step that cannot land is held, never forfeited; the
+    //           clock leaving the band is what moves the day past it.
+    //   A stored step from another band does not move this band's pointer (closed bands are done;
+    //   a future band can never be stored — the resolver's ahead-guard drops it).
+    // The banner names the step and points to the /Intent/stepDone row of <COT_Guide>, the one home of the step
+    // rules: a second copy here is how the two drift apart.
+    // The step number is a POSITION, not a promise the band has that many. How many a band declares comes
+    // from the engine (_ss below); when it is unavailable the wording stays conditional rather than inventing
+    // a beat. Pool spines (breaks) declare no steps at all and say so in their own body.
+    const _bandEnd = ['11:59', '15:59', '18:59', '23:59', '07:29'][dayBand];
+    const _lastStep = String(V(EngineDerived.LastStepDone) || '');
+    const _lsm = /^(\d+)\.(\d+)$/.exec(_lastStep);
+    const _step = (_lsm && +_lsm[1] === dayBand) ? (+_lsm[2] + 1) : 1;
+    const _stepId = dayBand + '.' + _step;
+    const _stepNextId = dayBand + '.' + (_step + 1);
+    // THE DAY'S DECLARED STEPS, from the engine (LogicEngine.spineStatus — its SPINE_STEPS, which
+    // verify_calendar_mirror holds equal to <Event_Spines>): how many steps each band declares, which bands are
+    // finished, which are still open. null when the day declares no steps or the engine is not hosting; every
+    // line below then keeps its conditional "if the band declares no step …" wording.
+    let _ss = null;
+    if (daySpine) {
+      const _LES = (typeof globalThis !== 'undefined') && globalThis.LogicEngine;
+      try { if (_LES && typeof _LES.spineStatus === 'function') _ss = await _LES.spineStatus(sd); }
+      catch (_se) { _ss = null; globalThis.MvuHelper.log.child('EJS').error('day steps (LogicEngine.spineStatus) failed:', _se); }
+    }
+    const _bandCount = _ss ? (Number(_ss.counts[dayBand]) || 0) : 0;
+    const _bandPlayed = Boolean(_ss) && (_bandCount === 0 || _ss.done.includes(dayBand));   // nothing left in this band
+    const _nextBand = _ss ? [dayBand + 1, dayBand + 2, dayBand + 3].find((b) => b <= 3 && Number(_ss.counts[b]) > 0) : undefined;
+    const _nextBeat = _nextBand != null ? 'step ' + _nextBand + '.1, which opens once the clock reaches ' + ['07:30', '12:00', '16:00', '19:00'][_nextBand] : '';
+    // the live step is the LAST declared step of the day, and every other band is finished
+    const _lastOfDay = Boolean(_ss) && _nextBand == null && _bandCount > 0 && _step === _bandCount && _ss.open.length === 1 && _ss.open[0] === dayBand;
+    const _spineKey = String(daySpine || '').replace(/^@/, '').replace(/[^A-Za-z0-9_]/g, '_');   // addQuest keys are [A-Za-z0-9_]+
+    // DAY SIGNPOST (quest-revisit C1) — the ENGINE opens this record and deletes it at settle; there is
+    // NO add order anywhere (five prompt rounds proved an initiate-from-judgment order is ignored —
+    // Plans/quest-revisit.md section 0). STATE picks which of THREE asks to make, and the what is always
+    // a copy-edit of a step narrate is reading in <Event_Spines>, never an invention.
+    //   objective blank   -> WRITE IT THIS REPLY off the signpost receipt (below). Covers the reply that
+    //     seeds the record too: the resolver seeds BEFORE applying the quest op, so narrate's write always
+    //     has a record to land on. Not tied to stepDone — stepDone is rare by design, and waiting for one
+    //     would leave the signpost blank while narrate had the text in hand.
+    //   objective stale   -> REWRITE IT THIS REPLY: the stamped step (below) is not the receipt, so the
+    //     player is reading a goal he has already met.
+    //   objective current -> nothing owed while the receipt stands. On the reply whose /Intent/stepDone reports
+    //     the live step it asks for the NEXT receipt's objective in that same patch, so the player reads his
+    //     next goal the moment the reply lands. A miss is caught by the stale branch on the next reply — one
+    //     reply late, never lost.
+    // THE SIGNPOST RECEIPT — the step the objective describes, from the engine (spineStatus.signpost, the one
+    // it checks narrate's echo against): the live step while the band still declares one; the next band's
+    // first step once this band is played out (the beat {{user}} is heading for); "end" when no later band
+    // declares a step (the objective words the day winding down). Never a step the day does not declare: a
+    // number this panel names is one narrate will play. Without the engine it is the live step, and the
+    // wording stays conditional (_spineNoStep / _spineNoNext).
+    const _spineRec = (_spineKey && (MC.Quests || {})[_spineKey]) || null;
+    const _spineObjective = String(V((_spineRec || {}).Objective) || '').trim();
+    const _sig = _ss ? String(_ss.signpost || _stepId) : _stepId;
+    const _sigNext = _ss ? String(_ss.signpostNext || _stepNextId) : _stepNextId;
+    const _sigBand = (r) => { const m = /^(\d+)\.\d+$/.exec(r); return m ? +m[1] : null; };
+    const _opensAt = (r) => ['07:30', '12:00', '16:00', '19:00'][_sigBand(r)];
+    // THE OBJECTIVE CURSOR — which step the objective on the record describes, stamped by RES when it
+    // landed: the step echo when it fit, otherwise the receipt narrate was shown. Comparing it to the
+    // receipt is what lets this panel ORDER a rewrite when the two part. Unstamped (a record from before
+    // this field, or one seeded blank) reads as NOT stale: ordering a rewrite of an objective that may
+    // already be right would spend a reply and could replace a good line with a worse one.
+    const _objStep = String(V(EngineDerived.ObjectiveStep) || '');
+    const _objStale = Boolean(_spineObjective) && Boolean(_objStep) && _objStep !== _sig;
+    // STEP ECHO — the objective opens with the receipt narrate READ to write it. Not a reason and not
+    // a justification: a plain fact about which spine line it copied, which the engine then checks
+    // (SIGNPOST STEP MISMATCH) and stamps as the objective cursor. Same shape as the H-act die report —
+    // state the input, never the conclusion; narrate stays a pure observer and RES owns the verdict.
+    // Optional in the parser, so a model that omits it still writes a valid objective.
+    // Each branch prints exactly ONE receipt in its literal — the current one for blank and stale, the next
+    // one for the played-out ask — because a rule in prose and a literal in quotes that disagree is a
+    // wrong literal: the literal is what gets copied. The engine accepts the next receipt only when the
+    // same patch reports the live step played.
+    const _ap = String.fromCharCode(39);
+    const _spineEcho = ' OPEN THE LINE WITH ' + _sig + ' AND A COLON: "progress:' + _spineKey + ':' + _sig + ':<the objective>". That ' + (_sig === 'end' ? 'word is a RECEIPT that the objective words the day' + _ap + 's close' : 'number is a RECEIPT for which spine line you copied') + ', never a reason — the engine checks it and says so when it disagrees, and it is stripped before the player ever sees the objective.';
+    const _spineDoubt = ' WHEN IN DOUBT, SEND IT: a progress: line the record did not need only rewrites the objective it already had, so a needless one costs nothing and a missing one leaves {{user}} reading a stale goal. The one to hold back is "complete:" — that closes the record for the day.';
+    // "complete:" is offered only when it can land: the engine refuses it until every declared step of the day
+    // is reported (or the day is over), so asking for it earlier is asking for a refusal.
+    const _completeAsk = ' send /Intent/quest/0 "complete:' + _spineKey + '" when the day' + _ap + 's story is done — beats of your own may come first.';
+    // WHAT A RECEIPT ASKS FOR: the live step is read off <Event_Spines> as it stands (after `lead`); a later
+    // band's first step is worded as the goal he is heading for; "end" has no spine line and words the day
+    // winding down.
+    const _sigRead = (r, lead) => r === 'end'
+      ? (_ss && !_ss.unfinished
+        ? ' Today' + _ap + 's declared steps are all played, so there is no spine line left to copy: word the objective as the day winding down, and' + _completeAsk
+        : ' No later band declares a step, so there is no spine line to copy: word the objective as the day winding down.')
+      : (_sigBand(r) !== dayBand ? ' Band ' + dayBand + ' has no step left to play, so the objective describes step ' + r + ' — the next beat, which opens once the clock reaches ' + _opensAt(r) + ': word it as the goal he is heading for.' : lead)
+        + ' Read step ' + r + ' off <Event_Spines> and say it back in YOUR OWN WORDS as a goal he can act on: the spine line is stage direction written for you, so put it in YOUR words rather than pasting the line or writing the bare number.';
+    // Without the engine's counts the band's end is unknown, so the panel says what to do IF it has run out.
+    const _spineNoNext = _ss ? ''
+      : ' If <Event_Spines> declares no step ' + _stepNextId + ', this band is finished once ' + _stepId + ' is played: word the replacement as him waiting on the clock to move the day along, and send /Intent/quest/0 "complete:' + _spineKey + '" once the day' + _ap + 's last step is behind him.';
+    const _spineNoStep = _ss ? ''
+      : ' If the band declares no step ' + _stepId + ', its steps are all played: word the objective as him waiting on the clock to move the day along, and send /Intent/quest/0 "complete:' + _spineKey + '" once the day' + _ap + 's last step is behind him.';
+    _signpost = daySpine
+      ? (dayBand === 4
+        ? 'Quest "' + _spineKey + '" is the day signpost {{user}} sees in his quest list. The day is winding down — leave the objective as it stands and send /Intent/quest/0 "complete:' + _spineKey + '" on the reply you END the day (/Intent/sceneAdvance).'
+        : !_spineObjective
+        ? '\u25b6 EMIT THIS REPLY: /Intent/quest/0 "progress:' + _spineKey + ':' + _sig + ':<one short line, IN YOUR OWN WORDS>" — the day signpost {{user}} reads in his quest list has a BLANK objective and you are the only one who can fill it.'
+          + ' (The ENGINE ' + (_spineRec ? 'opened' : 'opens it at this turn' + _ap + 's resolve and') + ' will close it: the OBJECTIVE line is your half of this record.)'
+          + _sigRead(_sig, ' The step to describe is ' + _sig + ', the one live right now.')
+          + _spineEcho + _spineDoubt + _spineNoStep
+        : _objStale
+        ? '\u25b6 EMIT THIS REPLY: /Intent/quest/0 "progress:' + _spineKey + ':' + _sig + ':<one short line, IN YOUR OWN WORDS>" — the day signpost {{user}} reads in his quest list still describes ' + (_objStep === 'end' ? 'the day winding down' : 'step ' + _objStep) + ', which is behind him: it says "' + _spineObjective + '", and he has already done that.'
+          + _sigRead(_sig, '')
+          + (_sig === 'end' ? _spineEcho : '')
+          + ' (The ENGINE opened this quest and will close it: the OBJECTIVE line is your half of this record.)'
+        : _sig !== _stepId
+        ? '\u25b6 The day signpost {{user}} reads in his quest list says: "' + _spineObjective + '", which ' + (_sig === 'end' ? 'words the day winding down — nothing is owed on it.' : 'describes step ' + _sig + ', the next beat, which opens once the clock reaches ' + _opensAt(_sig) + ' — nothing is owed until then.') + ' The ENGINE opened this record and will close it.'
+          + (_sig === 'end' && !_ss.unfinished ? ' Today' + _ap + 's declared steps are all played:' + _completeAsk : '')
+        : '\u25b6 The day signpost {{user}} reads in his quest list says: "' + _spineObjective + '", which IS step ' + _stepId + ' — the step live right now, so nothing is owed WHILE it stays live. The ENGINE opened this record and will close it.'
+          + '\n\u25b6 WHEN YOUR /Intent/stepDone/0 REPORTS STEP ' + _stepId + ', that objective is spent the moment your reply lands, so send its replacement in the SAME patch: /Intent/quest/0 "progress:' + _spineKey + ':' + _sigNext + ':<the NEXT ' + (_sigNext === 'end' ? 'objective' : 'step') + ', IN YOUR OWN WORDS>".'
+          + (_sigNext === 'end'
+            ? (_lastOfDay ? ' ' + _stepId + ' is the LAST step today declares: word the replacement as the day winding down, and' + _completeAsk : ' No later band declares a step: word the replacement as the day winding down.')
+              + ' The leading end is the RECEIPT that it words the day' + _ap + 's close, and the engine strips it before {{user}} sees the objective.'
+            : (_sigBand(_sigNext) !== dayBand ? ' Band ' + dayBand + ' ends with ' + _stepId + ', so the replacement describes step ' + _sigNext + ' — the next beat, which opens once the clock reaches ' + _opensAt(_sigNext) + ': word it as the goal he is heading for.' : '')
+              + ' Read step ' + _sigNext + ' off <Event_Spines> and say it back as a goal he can act on; the leading ' + _sigNext + ' is the RECEIPT for which spine line you copied, and the engine strips it before {{user}} sees the objective.')
+          + ' The engine also archives the finished objective on its own — you write only the new one.'
+          + ' Miss it and this panel asks again next reply — one reply late, never lost.'
+          + (_ss ? '' : ' When the day' + _ap + 's LAST step closes, send /Intent/quest/0 "complete:' + _spineKey + '" instead — that verb IS one-way.')
+          + _spineNoNext)
+      : '';
+    const _beatLine = daySpine
+      ? (dayBand === 4
+        ? '\n▶ CURRENT BEAT: the day is winding down; END it (/Intent/sceneAdvance) when the scene closes.'
+        : _bandPlayed
+        ? '\n▶ CURRENT BEAT: BAND ' + dayBand + ' — ' + (_bandCount ? 'all ' + _bandCount + ' of its steps are played' : 'this band declares no steps')
+          + '. Follow the scene {{user}} is driving; no step is owed until '
+          + (_nextBand != null ? _nextBeat + ' — /Intent/sceneClock is what moves the clock there.' : 'the day ends: no later band declares steps.')
+        : '\n▶ CURRENT BEAT: BAND ' + dayBand + ' · STEP ' + _stepId
+          + ' — the live OBJECTIVE for today, not a script. How to play a step and when to report it: the'
+          + ' /Intent/stepDone row of <COT_Guide>.'
+          + (_ss ? '' : ' If the band declares fewer steps than ' + _stepId + ', its steps are all played: close the band'
+          + ' and let the clock reach ' + _bandEnd + ' — /Intent/sceneClock is what moves the band on.'))
+      : '';
+    // ▶ THE DAY'S ROLL (globalLogic DAY_CHECK — ACADEMIC = the exam, SPORTS = the sports festival). PRE deals die ⑤
+    // once on the day and patches
+    // /Intent/dayCheck; RES freezes it on EngineDerived.DayCheckRoll. Read BOTH: the intent is the same-reply case
+    // (RES has not run yet), the frozen field every reply after. The verdict is DERIVED here from the numbers —
+    // byte-identical to globalLogic deriveOutcome(), total = rawdie + mod, dc = the tier's constant — so the word
+    // the narrator writes the exam to and the word the day-end swing pays are one fact (same-reply protection).
+    // ⚠ MIRROR of globalLogic.cjs DAY_CHECK (the dc) and check_dc_dice-pre.txt — change one, change all three.
+    const _DAY_DC = { ACADEMIC: 12, SPORTS: 11, CULTURE: 9 };
+    let _dayRoll = '', _rolledWord = '';
+    if (_DAY_DC[dayCheck] !== undefined) {
+      const _raw = String(V(EngineDerived.DayCheckRoll) || '').trim() || String(V((sd.Intent || {}).dayCheck) || '').trim();
+      if (!_raw) {
+        _dayRoll = ' ⚠ ' + dayCheck + ' NOT YET ROLLED — the PRE call deals it on this day; until it lands, write the run-up and never a result.';
+      } else {
+        const _f = {};
+        for (const _p of _raw.split(';')) { const _at = _p.indexOf(':'); if (_at > 0) _f[_p.slice(0, _at).trim().toLowerCase()] = _p.slice(_at + 1).trim(); }
+        const _die = Number(_f.rawdie), _m = Number(_f.mod);
+        if (!isFinite(_die) || !isFinite(_m)) {
+          globalThis.MvuHelper.log.child('EJS').warn('DAY CHECK: the roll is missing rawdie/mod, no verdict can be derived:', _raw);
+          _dayRoll = ' (the ' + dayCheck + ' roll was recorded without its numbers — it is unresolved; do not narrate a result for it)';
+        } else {
+          const _tot = _die + _m, _dc = _DAY_DC[dayCheck];
+          _rolledWord = _die === 20 ? 'CritSuccess' : _die === 1 ? 'CritFail' : _tot >= _dc ? 'Success' : 'Failure';
+          _dayRoll = ' — ROLLED: DC ' + _dc + ', RawDie ' + _die + (_m >= 0 ? ' +' : ' ') + _m + ' = ' + _tot + ' → ' + _rolledWord +
+            '. That IS the day\'s result: every beat that shows how he did is written to this word and no other.';
+        }
+      }
+    }
+    // A DATEOUT day (a weekend or break day) pays its day-end swing by itself (globalLogic payDateOut): the engine reads
+    // which girls POST saw with him today and how their day went, so narrate has nothing to name or judge here.
+    const _dateOutLine = ' THE DATE-OUT PAYS ITSELF: the engine shares the day-end swing among the girls he spent the day with'
+      + ' and grades the day from how it went — send NO /Intent/daySwing, only sceneAdvance.';
+    if (daySpine) {
+      // 修学旅行 carries WHERE with it. The briefing named it a week ago and the engine has held it since,
+      // so the trip never has to remember or re-decide: it is a fact of the day, printed like the day's own
+      // label. Blank only when no briefing ever named one, and the spine says what to do then.
+      // Gated on the TRIP spine, not merely on the field being set: the field is live for the whole week
+      // before the trip, and in 2028 体育祭 falls inside that window — a destination printed on the sports
+      // festival is nonsense to whoever is reading the day.
+      const _tripDest = (daySpine === '@School_Trip') ? String(V(EngineDerived.TripDestination) || '').trim() : '';
+      const _destLine = _tripDest ? ' DESTINATION: ' + _tripDest + ' — the class is there; never re-decide it.' : '';
+      // バレンタイン — WHO gives and WHAT, decided by the engine when the day landed and fixed for the whole day.
+      // Printed, never derived here: re-ranking per reply would move the closing beat as gifts raise Affection
+      // during the very day they are given. Gated on the spine, so no other day can read a stale line.
+      let _giftLine = '';
+      if (daySpine === '@Valentines_Day') {
+        const _g = String(V(EngineDerived.ValentineGifts) || '');
+        const _gf = (n) => { const m = new RegExp('(?:^|;)' + n + ':([^;]*)').exec(_g); return m ? m[1].trim() : ''; };
+        const _honmei = _gf('honmei'), _tomo = _gf('tomo'), _giri = _gf('giri'), _early = _gf('early'), _close = _gf('close');
+        if (_honmei || _tomo || (_giri && _giri !== '0')) {
+          _giftLine = ' GIFTS — the engine ranked the class as the day opened and this is FIXED for today; do not'
+            + ' add a giver, drop one, or change what she brings.'
+            + (_honmei ? ' 本命 (true feelings, handmade, a confession in all but words): ' + _honmei + '.' : ' NOBODY gives 本命 this year — play the day warm but unromantic, and do not invent one.')
+            + (_tomo ? ' 友チョコ (friend chocolate, warm and easy): ' + _tomo + '.' : '')
+            + (_giri && _giri !== '0' ? ' 義理 (obligation): ' + _giri + ' more across the class — ONE line of texture, never a scene each.' : '')
+            + (_early ? ' The first gift of the day comes from ' + _early + ' (step 0.1) — she is the nervous one, getting it over with.' : '')
+            + (_close ? ' The day\'s closing gift is ' + _close + ' (step 2.1) — hers is the biggest, so give it the quiet last beat.' : '');
+        }
+      }
+      _cal = (dayLabel || daySpine) + '. Play the ' + daySpine + ' spine from <Event_Spines>: drive its ' +
+        'beat order with free slack, weaving in ONLY the present heroines. Tied day-end check: ' + (dayCheck || 'none') +
+        _destLine + _giftLine + _dayRoll + _beatLine;
+      // The day-END ops move OUT of this panel. ## TODAY opens "you never patch the calendar" — a
+      // read-only claim that owns everything printed under it, which is exactly what killed three
+      // rounds of the quest add order. sceneAdvance and daySwing are writes; they get their own block.
+      // ⚠ THE CAP CLAUSE. "The day ends when your prose ends it" is true on an OPEN day and FALSE in the
+      // LAST band of a SCHOOL one: the block cap (Sta÷10, min 3) rolls the day on its own count, whatever
+      // the scene is doing. On a day that PAYS, the swing must ride the reply the cap lands on or the
+      // payout is forfeited — the engine warns DAY ENDED ON THE BLOCK CAP afterwards, and this is the half
+      // that can still PREVENT it. Reachable since @Exams became a SCHOOL day (2026-09-20), and on every
+      // 2/14 and 3/14 that lands on a weekday — the three capped days whose calendar rows carry a CHECK.
+      // sess = replies ALREADY played in this band; the resolver counts THIS one as sess+1 and caps at
+      // sess+1 >= cap. So stored sess === cap-1 means the reply being written now is the one that rolls.
+      const _capLeft = (mode === 'OPEN') ? -1 : Math.max(0, blockCap - 1 - sess);
+      const _capBites = _capLeft >= 0 && dayBand >= 3;
+      _dayEnd = '\u25b6 WHEN YOUR PROSE ENDS THE DAY: /Intent/sceneAdvance/0 = true — the op that closes it, sent INSTEAD of sceneClock that reply.'
+        + (_capBites
+          ? ' ⚠ AND THIS DAY CAN END WITHOUT YOU: it is a SCHOOL day already in its LAST band, so the block cap rolls it after '
+            + (_capLeft === 0 ? 'THIS reply' : _capLeft + ' more repl' + (_capLeft === 1 ? 'y' : 'ies'))
+            + ', whatever the prose is doing.'
+            + (dayCheck ? ' So send the daySwing below on EVERY reply from here — not only on the one you mean as the last. A cap roll that arrives without it FORFEITS the day\'s whole payout.' : '')
+          : ' The day does not end because the clock is late; it ends because your prose put him to bed or shut the scene.')
+        + (dayCheck === 'DATEOUT'
+          ? _dateOutLine
+          : dayCheck
+          ? ' PAIRED WITH IT: this day carries the ' + dayCheck + ' day-check, so the same patch reports how it went for the ONE girl he spent it with — /Intent/daySwing/0 "<Key>:<Outcome>", Outcome = '
+            + (_rolledWord
+              ? _rolledWord + ' (ROLLED — the die decided it; copy the word ## TODAY shows, the engine pays the die whatever you write)'
+              : 'CritSuccess|Success|Failure|CritFail' + (_DAY_DC[dayCheck] !== undefined ? ' — but this tier is ROLLED and no roll landed today, so the engine pays nothing for it' : ''))
+            + '. That is the day\'s big payoff and the engine owns every number in it. ' + dayCheck + ' is the day-SWING tier, NOT a social check Type — never also emit /Intent/check. Solo day, or no single girl → leave daySwing "".'
+          : ' This day pays NO daySwing — its calendar row carries no check (a SETUP day, or a series\' non-final day whose one swing fires on the final day). Send sceneAdvance alone.');
+    } else if (mode === 'OPEN') {
+      _cal = 'OPEN day' + (dayLabel ? ' — ' + dayLabel : ' (weekend / break)') + '. Free-roam pacing, no school grid.';
+      _dayEnd = '\u25b6 WHEN YOUR PROSE ENDS THE DAY: /Intent/sceneAdvance/0 = true — the op that closes it, sent INSTEAD of sceneClock that reply.'
+        + ' An OPEN day has no reply cap and nothing closes it for you.'
+        + (dayCheck === 'DATEOUT' ? _dateOutLine : '');
+    }
+
+    // ---- (2c) EVENT ARMED (event_schedule · Cluster 6C) — the engine (RES) evaluated the trigger table against
+    // stat_data and armed the fire-one winner into EngineDerived.EventArmed. This panel only NAMES it, so the state
+    // view says what is armed; the order to play it is armed_event.txt, injected at depth 0 after {{user}}'s line,
+    // where the narrator plans from (this block sits mid-prompt). Empty = no event this reply.
+    const evtArmed = String(V(EngineDerived.EventArmed) || '').trim();
+    if (evtArmed) {
+      _evt = evtArmed + ' is ARMED this reply — its order follows {{user}}\'s line, in <Armed_Event>, which says where its beat is.';
+    }
+
+    // ---- (2c2) AD-HOC QUESTS (quest-revisit C4) — {{user}}'s ledger (Type=PlayerQuest, not Completed).
+    // Rendered EVEN AT ZERO quests: the channel was invisible exactly when it most needed to fire (the
+    // first ever quest), so the empty state names the observable triggers. Rows carry Step/StepMax + the
+    // LIVE Objective so the narrator progresses from STATE, not chat memory. Fields are BARE (non-tuple).
+    // Engine-owned @event SERIES quests (Type=GameEvent) are driven by ## EVENTS above, NOT shown here.
+    {
+      const Q = MC.Quests || {};
+      for (const k of Object.keys(Q)) {
+        const q = Q[k]; if (!q || typeof q !== 'object') continue;
+        if (String(V(q.Type)) === 'GameEvent' || String(V(q.Status)) === 'Completed') continue;
+        const _st = Number(V(q.Step)) || 1, _sm = Number(V(q.StepMax)) || 0;
+        const _nextRung = _sm ? Math.min(_st + 1, _sm) : _st + 1;
+        _quests += '· ' + k + ': ' + (V(q.Title) || '?') + (_sm ? ' — step ' + _st + '/' + _sm + ' (next rung: ' + _nextRung + ')' : '') + ': ' + (V(q.Objective) || '?') +
+          ' [' + (V(q.Difficulty) || 'C') + (V(q.RewardStat) ? ' →+' + V(q.RewardStat) : '') + (V(q.Target) ? ' · favors ' + V(q.Target) : '') + ']' +
+          (V(q.ProgressSummary) ? ' (done so far: ' + V(q.ProgressSummary) + ')' : '') + '\n';
+      }
+      if (!_quests) _quests = '(none open — a reply that ENDS with a promise spoken, a request accepted, or a deadline named STILL OPEN → /Intent/quest/0 "add:…" per <Update_Analysis_Detail> 5b)\n';
+    }
+
+    // ---- (2e) WORLD MEMORY (WorldRecord.NPCs + .Events World Log · 7c) — persistent continuity the narrator needs.
+    // NPCS = non-classmate characters (crossover Leila / recorded background NPCs) — surface ALL. WORLD LOG =
+    // significant events & lore OVERRIDES, each a short summary — surface ALL (an old override can still govern the
+    // scene; the player prunes via the GUI). Fields are BARE (registry objects, not tuples). Locations = GUI-only.
+    {
+      const NP = WorldRecord.NPCs || {};
+      for (const k of Object.keys(NP)) { if (skip(k)) continue; const n = NP[k]; if (!n || typeof n !== 'object') continue;
+        _npc += '· ' + (n.Name || k) + (n.Rel ? ' — ' + n.Rel : '') + '\n'; }
+      const EV = WorldRecord.Events || {}, _rows = [];
+      for (const k of Object.keys(EV)) { if (skip(k)) continue; const e = EV[k]; if (!e || typeof e !== 'object') continue;
+        const s = String(e.summary || '').trim(); if (!s) continue; _rows.push({ t: String(e.time || ''), s }); }
+      _rows.sort((a, b) => (a.t < b.t ? -1 : a.t > b.t ? 1 : 0));   // chronological (oldest → newest) = reads as history
+      for (const r of _rows) _wlog += '· ' + (r.t ? r.t + ' — ' : '') + r.s + '\n';
+    }
+
+    // ---- present / absent split ------------------------------------------------
+    const present = [], absent = [];
+    for (const k of Object.keys(CM)) { if (skip(k)) continue; (V(CM[k] && CM[k].Is_present) === true ? present : absent).push(k); }
+
+    // ---- band helpers ----------------------------------------------------------
+    const affBand = (a) => a >= 100 ? 'GATE' : a >= 81 ? 'Deeply Attached' : a >= 61 ? 'Close' : a >= 41 ? 'Friendly' : a >= 21 ? 'Warming Up' : 'Cold';
+    // ONE definition of "her drive is genuinely live RIGHT NOW". Two panels read it — the ## PRESENT
+    // drive footer (which surfaces the numbers) and the ## STATE GATES sexual verdict (which resolves
+    // them) — and they describe the SAME girl in the same prompt, so a second copy of the thresholds
+    // would eventually contradict itself on screen. Not consent, and not the H latch: a receptive body.
+    const isDriveLive = (c) => (Number(V(c.Lewdness)) || 0) >= 40 || (Number(V(c.Arousal)) || 0) >= 20;
+    // Venue DISPLAY name — the label the first /Intent/location move captured (registry fields are BARE
+    // strings, not tuples). No capture yet → the raw key, which is also the narrator's cue to attach label:
+    // on its next move there. ## NOW deliberately does NOT use this: it prints the KEY, because the key is
+    // what /Intent/location must emit and what the hours bracket resolved against.
+    const _venueLabel = (key) => {
+      const rec = (WorldRecord.Locations || {})[key];
+      return (rec && typeof rec.Label === 'string' && rec.Label) ? rec.Label : key;
+    };
+    // CANONICAL trait bands — 5 bands on EVEN 20-pt buckets, one label set per trait (the table below is the canon).
+    // Affection has its OWN bands (affBand, 100-gate split).
+    // Hag's band is REAL, but her EXPRESSED manner may diverge (write the performance — see personality). 2-band voice
+    // trigger derives from the same buckets: Hi = idx>=3 (>60) · Lo = idx<=1 (<=40).
+    const TRAIT_BANDS = {
+      Sta: ['Depleted', 'Low', 'Avg', 'Enduring', 'Tireless'],
+      Int: ['Struggling', 'BelowAvg', 'Avg', 'Smart', 'Genius'],
+      Cha: ['Repellent', 'Awkward', 'Pleasant', 'Charming', 'Magnetic'],
+      Pride: ['Broken', 'Low', 'Normal', 'Proud', 'Haughty'],
+      Morals: ['None', 'Loose', 'Moderate', 'Principled', 'Strict'],
+      Elegance: ['Rough', 'Plain', 'Neat', 'Refined', 'Exquisite'],
+      Sociability: ['Reclusive', 'Reserved', 'Friendly', 'Social', 'Magnetic'],
+      Kindness: ['Cold', 'Detached', 'Ordinary', 'Warm', 'Selfless'],
+      Hagaruro: ['Transparent', 'Subtle', 'Calculated', 'Two-faced', 'Scheming'],
+    };
+    const traitBandIdx = (v) => { const n = Number(V(v)) || 0; return n <= 20 ? 0 : n <= 40 ? 1 : n <= 60 ? 2 : n <= 80 ? 3 : 4; };
+    const bandOf = (trait, v) => (TRAIT_BANDS[trait] ? TRAIT_BANDS[trait][traitBandIdx(v)] : String(V(v)));
+    const tierMark = (v) => { const i = traitBandIdx(v); return i >= 3 ? '(Hi)' : i <= 1 ? '(Lo)' : ''; };   // decode label→tier at print (mid = unmarked ≈ neutral); <Personality_Core> [STAT->BEHAVIOR] keys off Hi/Lo
+    const bt = (trait, v) => bandOf(trait, v) + tierMark(v);
+
+    // ---- (1) COMPACT present state (with affection band) -----------------------
+    for (const k of present) {
+      const c = CM[k] || {};
+      const a = Number(V(c.Affection)) || 0;
+      // FRESHLY ADVANCED banner (STATELESS — no new field / no decay clock): an advance-reset stamps Aff = -1, a
+      // SENTINEL below any reachable value (no gameplay action goes below 0 — a strain/neglect fall clamps at 0). So
+      // Aff < 0 UNIQUELY means "just advanced": a strained-to-0 girl can NEVER false-fire it. Self-clears the instant
+      // her first Aff gain lifts her into 0-100 (the rebuild IS the decay). (Today →Acquaintance/→Friend/→Dating/→GF
+      // reset; a stage that keeps its Affection across the step never shows it.)
+      const _fresh = (a < 0 && ['Acquaintance', 'Friend', 'Dating', 'Girlfriend'].indexOf(String(V(c.RelationshipStage))) >= 0);
+      // ★ FWB READY — the INTIMATE route opt-in. A Friend at Aff>80 MAY become FWB, but ONLY when
+      // {{user}} VERBALLY proposes a no-strings physical arrangement AND a MORALS roll lands (never auto; the romantic
+      // route is the default). WHO ROLLS IT MOVED (P3): the DC and the die are PRE's now (check_dc_dice-pre.txt ★ FWB
+      // OPT-IN), and the verdict reaches the narrator through the ## SOCIAL CHECK RESULT panel like every other roll.
+      // The flag stays HERE because it is writing context — it tells the narrator she is a plausible target for the
+      // proposal, so {{user}} raising it is in-character rather than out of nowhere. The DC does NOT stay: printing a
+      // number the narrator must not act on is an invitation to act on it.
+      const _fwbReady = (String(V(c.RelationshipStage)) === 'Friend' && a > 80 && V(c.ConflictActive) !== true);
+      const aDisp = Math.max(0, a);   // hide the -1 sentinel from the reader — show 0 (the ↑ FRESHLY ADVANCED banner explains it)
+      // recent route milestone (Cluster 7 E3) — the NEWEST ImportantEvents entry, so the narrator can call back to it
+      // ("since we started dating…") instead of that history living only in stat_data / the GUI. Newest = highest e<n>.
+      let _recIE = ''; { const ie = c.ImportantEvents; if (ie && typeof ie === 'object') { let best = -1; for (const ik of Object.keys(ie)) { const n = parseInt(String(ik).replace(/^e/, ''), 10) || 0; if (n > best && ie[ik] && ie[ik].Desc) { best = n; _recIE = String(ie[ik].Desc); } } } }
+      // SEXUAL-CONTENT STATE-GATE input (Cluster 8 D6/D10) — Lewd/Arousal live only in the H-latch ## INTIMACY block, so a
+      // MUNDANE scene can't read "is her drive genuinely high right now?". Surface it HERE, but ONLY when the latch is off AND
+      // the drive is non-trivial: silent at the low pre-H baseline (absence = gate resolves to no sexual content), visible the
+      // moment a girl carries real drive into an SFW beat. When the latch is ON the full ## INTIMACY block already shows these.
+      const _lewd = Number(V(c.Lewdness)) || 0, _ar = Number(V(c.Arousal)) || 0;
+      const _drive = (V(PendingState.IntimacyActive) !== true && isDriveLive(c))
+        ? ' · drive Lewd ' + _lewd + (_ar > 0 ? '/Ar ' + _ar : '') + ' (sexual-content STATE GATE input — receptive body; still gated by Stage/Aff/consent)'
+        : '';
+      const _age = V(c.Age);
+      _state += '· ' + k + ' (' + V(c.Name) + (_age ? ', ' + _age : '') + ')' + (V(c.Persona) ? ' [' + V(c.Persona) + ']' : '') + ' | ' + V(c.RelationshipStage) +
+        ' | Aff ' + aDisp + ' (' + affBand(aDisp) + ' warmth)' +
+        (_fresh ? ' ↑ FRESHLY ADVANCED → ' + V(c.RelationshipStage) + ' (Aff reset by the level-up — write her flustered/shy at the new stage, NOT cold)' : '') +
+        (_fwbReady ? ' ★ FWB READY — she is at the point where a no-strings FWB arrangement is a THINKABLE thing for {{user}} to raise (Friend, Aff>80, no conflict). You do NOT roll it and do NOT emit it: if he proposes it, PRE rolls her Morals and the verdict arrives in ## SOCIAL CHECK RESULT for you to transcribe. High Morals almost always refuses, and a refusal costs her Affection' : '') +
+        ' | Mood ' + V(c.Mood) +
+        ' | Embarrass ' + V(c.Embarrassment) + (V(c.ConflictActive) === true ? ' | CONFLICT' : '') +
+        ' | @' + _venueLabel(V(c.Location)) + (_recIE ? ' | ↩ ' + _recIE : '') + _drive + '\n';
+    }
+
+    // ---- (1b) TRAIT BANDS per present heroine (the canonical TRAIT_BANDS → her voice LEVEL this reply) ----
+    for (const k of present) {
+      const c = CM[k] || {};
+      _traits += k + ': STA ' + bt('Sta', c.Sta) + '·INT ' + bt('Int', c.Int) + '·CHA ' + bt('Cha', c.Cha) +
+        '·Pride ' + bt('Pride', c.Pride) + '·Mor ' + bt('Morals', c.Morals) + '·Ele ' + bt('Elegance', c.Elegance) +
+        '·Soc ' + bt('Sociability', c.Sociability) + '·Kind ' + bt('Kindness', c.Kindness) + '·Hag ' + bt('Hagaruro', c.Hagaruro) + '\n';
+    }
+
+    // ---- (1c) STATE GATES — RESOLVED (bucket D item 3, PRE_Call_Revisit §5.3a) -------------------
+    // <Personality_Core> [STATE GATES] used to ship the THRESHOLDS and have the narrator re-derive
+    // these per girl, per reply, inside <think>. Every INPUT was already on the page — her Hag band
+    // in ## TRAITS, the latch and the drive footer in ## PRESENT — so the derivation was the only
+    // thing a model was adding, and the only part of it a model could get wrong. Its failure is also
+    // the quiet kind: a wrongly-interior or too-sexual girl reads as flavor, never as an error, so
+    // nothing ever reported it. Resolve it here; personality_core keeps the LEGEND (what each verdict
+    // MEANS to write), because that is semantics, and semantics is the half a model must still do.
+    // Stage → the warmth CEILING she has earned, one per stage; <Personality_Core> [GATE LEGEND] says what each
+    // ceiling permits. The two branch stages read their ceilings off <COT_Guide>'s glosses ("still friends, no
+    // romance owed" · "keeps her normal public face, submits only in private"). These seven names ARE the
+    // authoritative list: statdata_schema types RelationshipStage as a free string, so globalLogic's
+    // INITIATIVE_ORD map is the only enumeration that exists — keep the two in step.
+    const WARMTH_CEILING = {
+      Stranger: 'STRANGER', Acquaintance: 'ACQUAINTANCE', Friend: 'FRIEND', Dating: 'DATING', Girlfriend: 'GIRLFRIEND',
+      Friends_With_Benefits: 'NO-STRINGS', Loyal_Puppy: 'SECRET-DEVOTION',
+    };
+    for (const k of present) {
+      const c = CM[k] || {};
+      // Hag band → interiority, the same 5-band split ## TRAITS already prints (Transparent/Subtle |
+      // Calculated | Two-faced/Scheming). Read off traitBandIdx so the panel and the band can never drift.
+      const _hagIdx = traitBandIdx(c.Hagaruro);
+      const _interiority = _hagIdx <= 1 ? 'MATCHES' : _hagIdx === 2 ? 'FRONT' : 'DIVERGES';
+      // Latch beats drive beats default. RECEPTIVE is deliberately NOT a synonym for "sexual content
+      // allowed" — it says her body is live, and the legend says the rest is still earned.
+      const _sexual = (V(PendingState.IntimacyActive) === true) ? 'ON' : isDriveLive(c) ? 'RECEPTIVE' : 'OFF';
+      const _stage = String(V(c.RelationshipStage) || '');
+      const _warmth = WARMTH_CEILING[_stage];
+      if (!_warmth) {
+        // NO FALLBACK: picking a ceiling for a stage nobody mapped would write her at a warmth no one
+        // chose, and this failure is the silent kind — too-warm reads as flavor forever. Name it, print
+        // the two verdicts that ARE resolved, and let personality_core's "no ceiling printed" clause
+        // (write her reserved, report it) carry the reply.
+        globalThis.MvuHelper.log.child('EJS').warn('STATE GATES: no warmth ceiling for RelationshipStage "' + _stage +
+                     '" (' + k + ') — the ladder grew and WARMTH_CEILING did not; warmth is UNRESOLVED for her this reply');
+      }
+      _gates += k + ': ' + (_warmth ? 'warmth ' + _warmth + ' · ' : '') +
+                'interiority ' + _interiority + ' · sexual ' + _sexual + '\n';
+    }
+
+    // ---- (3) SOCIAL CHECK RESULT (PRE_Call_Revisit §4.1) ------
+    // The check was rated, DC-locked and ROLLED by the PRE call BEFORE this prompt was assembled; its patch
+    // already landed on /Intent/check (the DC ladder now lives ONLY in the PRE window, check_dc_dice-pre.txt).
+    // ⚠ The transcription contract covers LANGUAGE too: these lines are emitted in English and must reach
+    // <combat_log> in English (live 2026-08-11 the narrator rendered "→ Failure" as "→ 失敗" in a Chinese reply,
+    // and the GUI — which matches the verdict word by its English spelling — dropped the line's severity mark).
+    // This block renders it as ready-made <combat_log> lines — the narrator TRANSCRIBES them and never rolls
+    // a social check. Empty /Intent/check = PRE rolled nothing (mundane/idle/H/forbidden reply).
+    // The OUTCOME is not read from state — it is DERIVED here from the die/total/DC, exactly as RES derives
+    // it. PRE stopped declaring a verdict in v0.49.0 because the old format demanded that verdict at token 3,
+    // ahead of the numbers supporting it, and a small model duly answered first and back-filled: 9 live checks,
+    // 9 "Success", 4 of them arithmetically impossible. Nothing can now disagree with the dice.
+    {
+      // KEYED FORMAT (grammar A): ',' separates checks · ';' separates fields · ':' splits key from value.
+      // Tolerant in exactly the same way RES is — case-folded keys, whitespace ignored, unknown keys
+      // skipped, an unkeyed first field read as the target.
+      const _rawChk = String(V((sd.Intent || {}).check) || '').trim();
+      for (const _seg of _rawChk.split(',')) {
+        const s = _seg.trim(); if (!s) continue;
+        const f = {};
+        const _parts = s.split(';').map((x) => x.trim()).filter(Boolean);
+        for (let i = 0; i < _parts.length; i++) {
+          const at = _parts[i].indexOf(':');
+          if (at < 0) { if (i === 0) f.target = _parts[i]; continue; }
+          f[_parts[i].slice(0, at).trim().toLowerCase()] = _parts[i].slice(at + 1).trim();
+        }
+        const die = Number(f.rawdie), tot = Number(f.total);
+        if (!isFinite(die) || !isFinite(tot) || !isFinite(Number(f.dc))) {
+          // The three numbers ARE the verdict's only source — without them nothing can be shown OR applied.
+          // RES will skip this same check with CHECK UNRESOLVABLE, so say so here rather than printing a
+          // half-line the narrator would dutifully transcribe as though it had resolved.
+          globalThis.MvuHelper.log.child('EJS').warn('SOCIAL CHECK RESULT: entry is missing rawdie/total/dc, cannot resolve:', s);
+          _chk += '(a check was recorded but is missing its numbers — it could not be resolved; do not narrate a result for it)\n';
+          _chkN++;
+          continue;
+        }
+        // ⚠ THE DC RULE — byte-identical to globalLogic.cjs resolveCheckDc(). Change one, change both.
+        // Pure arithmetic on PRE's FROZEN fields plus two constant tables: no stat_data is read, so the
+        // DC printed here and the DC RES resolves against are one fact (CLAUDE.md same-reply protection).
+        // Duplicated rather than called for the same reason deriveOutcome() below is — this panel must
+        // still render with no engine hosted. The derivation fields are MANDATORY here too: RES will skip
+        // a check that lacks them, so printing a line for one would hand the narrator a roll to narrate
+        // that scores nothing. Correcting HERE is the whole point — the prose transcribes the fixed
+        // number, instead of a later correction contradicting text the player has already read.
+        const _TIER_BASE_DC = { Trivial: 8, Easy: 11, Moderate: 14, Hard: 17, Extreme: 20 };
+        const _DC_FLOOR = 3;                            // engine-equal: resolveCheckDc floors here too
+        const _TRAIT_FIT_DELTA = { match: -2, clash: 2, neutral: 0 };
+        // Case-folded exactly as RES folds it: the tier picks the TIER_BASE_DC row `base` is checked
+        // against, so a lowercase "hard" degrading to Moderate would rewrite a correct DC and blame PRE.
+        const _tier = Object.keys(_TIER_BASE_DC).find((d) => d.toLowerCase() === String(f.difficulty || '').trim().toLowerCase()) || 'Moderate';
+        const _traitFit = String(f.traitfit || '').trim().toLowerCase();
+        const _traitDelta = _TRAIT_FIT_DELTA[_traitFit];
+        const _dcMod = Number(f.dcmod), _claimedBase = Number(f.base), _hobbyFit = Number(f.hobbyfit);
+        if (!isFinite(_dcMod) || !isFinite(_claimedBase) || !isFinite(_hobbyFit) || _traitDelta === undefined) {
+          globalThis.MvuHelper.log.child('EJS').warn('SOCIAL CHECK RESULT: the DC derivation is missing ' +
+                       '(need dcmod:N;base:N;traitfit:match|clash|neutral;hobbyfit:N), cannot verify:', s);
+          _chk += '(a check was recorded but its DC could not be verified — it was not resolved; do not narrate a result for it)\n';
+          _chkN++;
+          continue;
+        }
+        const _base = _TIER_BASE_DC[_tier] + _dcMod;
+        if (_claimedBase !== _base) {
+          globalThis.MvuHelper.log.child('EJS').warn('CHECK DC CORRECTED: PRE read base ' + _claimedBase + ' but ' + _tier +
+                       ' at [dcmod ' + (_dcMod >= 0 ? '+' : '') + _dcMod + '] is ' + _base + ' (wrong column?):', s);
+        }
+        if (_hobbyFit !== 0 && _hobbyFit !== -2 && _hobbyFit !== -3) {
+          globalThis.MvuHelper.log.child('EJS').warn('CHECK DC: hobbyfit ' + _hobbyFit + ' is not one of 0 / -2 / -3 (used as written):', s);
+        }
+        const dc = Math.max(_DC_FLOOR, _base + _traitDelta + _hobbyFit);
+        if (Number(f.dc) !== dc) {
+          globalThis.MvuHelper.log.child('EJS').warn('CHECK DC CORRECTED: PRE wrote dc ' + Number(f.dc) + ' but ' + _base + ' ' +
+                       (_traitDelta >= 0 ? '+' : '') + _traitDelta + ' (traitfit ' + _traitFit + ') ' +
+                       (_hobbyFit >= 0 ? '+' : '') + _hobbyFit + ' (hobbyfit) = ' + dc + ' — printing ' + dc + ':', s);
+        }
+        // ⚠ THE OUTCOME RULE — byte-identical to globalLogic.cjs deriveOutcome(). Both sides derive from the
+        // SAME three frozen numbers and read no mutable state, which is what makes the line printed here and
+        // the swing RES applies the same fact (CLAUDE.md "Same reply calculation protection"). Change one,
+        // change both. It is duplicated rather than called so this panel still renders with no engine hosted.
+        const outcome = die === 20 ? 'CritSuccess' : die === 1 ? 'CritFail' : tot >= dc ? 'Success' : 'Failure';
+        const m = tot - die;
+        _chk += '[' + (f.type || '?') + '] on ' + (f.target || '?') + ' — DC ' + dc + ', RawDie ' + die + ' ' +
+                (m >= 0 ? '+' : '') + m + ' = ' + tot + ' → ' + outcome + '\n';
+        _chkN++;
+      }
+      // ---- FWB OPT-IN (P3) — PRE's OTHER roll, rendered into the SAME panel on purpose. It is not a check
+      // (no tier, no MainChar mod — a flat Morals DC), but it reaches the narrator by the identical route:
+      // PRE rolled it, the engine owns the verdict, the narrator TRANSCRIBES. Giving it its own panel would
+      // invite it to be treated as a different KIND of thing and re-decided in prose.
+      // /Intent/fwb = "target:<Key>;rawdie:N;dc:N;aff:N" — `aff` is the Affection PRE rated against and is
+      // deliberately NOT re-read here: a check earlier in this very panel may already have moved her real
+      // Affection, and RES gates on the frozen number, so re-reading would print a verdict RES will not apply.
+      const _rawFwb = String(V((sd.Intent || {}).fwb) || '').trim();
+      for (const _seg of _rawFwb.split(',')) {
+        const s = _seg.trim(); if (!s) continue;
+        const f = {};
+        const _parts = s.split(';').map((x) => x.trim()).filter(Boolean);
+        for (let i = 0; i < _parts.length; i++) {
+          const at = _parts[i].indexOf(':');
+          if (at < 0) { if (i === 0) f.target = _parts[i]; continue; }
+          f[_parts[i].slice(0, at).trim().toLowerCase()] = _parts[i].slice(at + 1).trim();
+        }
+        const die = Number(f.rawdie), dc = Number(f.dc);
+        if (!isFinite(die) || !isFinite(dc)) {
+          globalThis.MvuHelper.log.child('EJS').warn('SOCIAL CHECK RESULT: FWB entry is missing rawdie/dc, cannot resolve:', s);
+          _chk += '(an FWB proposal was recorded but is missing its numbers — it could not be resolved; do not narrate a result for it)\n';
+          _chkN++;
+          continue;
+        }
+        // ⚠ Byte-identical to globalLogic.cjs (2j): raw 20 accepts, raw 1 refuses, else die >= dc. Same
+        // duplication rule as the check outcome above — change one, change both.
+        const agreed = die === 20 ? true : die === 1 ? false : die >= dc;
+        // ⚠ ENDS ON Success/Failure, like every check line above — the narrator copies this line into
+        // <combat_log> VERBATIM, and galgame-companion marks a roll line by its LAST word and knows only the
+        // check outcomes. A trailing gloss ("she turns it down — Affection −20") would either break that mark or
+        // force the narrator to choose between two rules. What the verdict MEANS for the prose belongs where it
+        // already is: her ★ FWB READY line in the state block, and <Reply_Request>'s FWB OPT-IN paragraph.
+        _chk += '[FWB opt-in] on ' + (f.target || '?') + ' — Morals DC ' + dc + ', RawDie ' + die + ' → ' +
+                (agreed ? 'Success' : 'Failure') + '\n';
+        _chkN++;
+      }
+      // ---- LOYAL-PUPPY DEMAND — PRE's third roll, the same route as the FWB line above: PRE rolled die ⑥, the engine
+      // owns the verdict (2l), the narrator TRANSCRIBES. Printed win or lose, so the player sees the demand was rolled.
+      // /Intent/puppy = "target:<Key>;rawdie:N". Her eligibility is read here exactly as (2l) reads it, before this
+      // reply's H beat, so a line is printed only for a demand the engine will actually roll.
+      // ⚠ MIRROR of globalLogic.cjs PUPPY_DEMAND — change one, change all three (Tools/test_resolver.cjs holds them).
+      const _PUPPY = { target: 16, stages: ['Dating', 'Girlfriend'], minHagaruro: 61, minMLevel: 30, minLewdness: 50 };
+      const _rawPuppy = String(V((sd.Intent || {}).puppy) || '').trim();
+      for (const _seg of _rawPuppy.split(',')) {
+        const s = _seg.trim(); if (!s) continue;
+        const f = {};
+        const _parts = s.split(';').map((x) => x.trim()).filter(Boolean);
+        for (let i = 0; i < _parts.length; i++) {
+          const at = _parts[i].indexOf(':');
+          if (at < 0) { if (i === 0) f.target = _parts[i]; continue; }
+          f[_parts[i].slice(0, at).trim().toLowerCase()] = _parts[i].slice(at + 1).trim();
+        }
+        const die = Number(f.rawdie);
+        if (!Number.isInteger(die) || die < 1 || die > 20) {
+          globalThis.MvuHelper.log.child('EJS').warn('SOCIAL CHECK RESULT: Loyal-Puppy demand is missing its die, cannot resolve:', s);
+          _chk += '(a Loyal-Puppy demand was recorded but is missing its die — it could not be resolved; do not narrate a result for it)\n';
+          _chkN++;
+          continue;
+        }
+        const _pc = (sd.Classmate || {})[f.target] || {};
+        const _pStage = String(V(_pc.RelationshipStage) || ''), _pHag = Number(V(_pc.Hagaruro)) || 0, _pLewd = Number(V(_pc.Lewdness)) || 0, _pM = Number(V(_pc.M_level)) || 0;
+        if (_PUPPY.stages.indexOf(_pStage) < 0 || _pLewd < _PUPPY.minLewdness || (_pHag < _PUPPY.minHagaruro && _pM < _PUPPY.minMLevel)) {
+          globalThis.MvuHelper.log.child('EJS').warn('SOCIAL CHECK RESULT: PRE rolled a Loyal-Puppy demand for ' + (f.target || '?') +
+                       ', who is not eligible (stage ' + _pStage + ' Hag ' + _pHag + ' M ' + _pM + ' Lewd ' + _pLewd + ') — the engine ignores it, so no line:', s);
+          continue;
+        }
+        // ⚠ Ends on Success/Failure: galgame-companion marks a roll line by its last word, and knows only those.
+        _chk += '[Loyal-Puppy demand] on ' + (f.target || '?') + ' — RawDie ' + die + ' vs ' + _PUPPY.target + ' → ' +
+                (die >= _PUPPY.target ? 'Success' : 'Failure') + '\n';
+        _chkN++;
+      }
+    }
+    // ROLL MARKERS — the confirmed live failure this whole audit started from: six replies, two of them
+    // with a check that fired and printed its combat_log line, and ZERO <roll/> placed. It was never a
+    // judgment and never buried in a facts run-on; it was a bare continuation line hanging under a header
+    // whose own 752 characters are transcription rules. By the time the marker rule arrived, the section
+    // had already said what the job was. So it becomes a section, and it says the ONE thing that makes it
+    // different from everything else on this list: this output goes in the PROSE, not in a patch.
+    if (_chkN > 0) {
+      _rolls = '▶ PUT ' + _chkN + ' BARE `<roll/>` IN THE STORY PROSE — not in a patch, not in <combat_log>, not in any tag.'
+        + ' One at the exact beat where each check above resolves, immediately BEFORE its consequence lands,'
+        + ' in the SAME ORDER as the lines printed above.'
+        + ' The marker is what moves the roll from the top of the reply to its moment: a reply that prints a'
+        + ' <combat_log> line and no `<roll/>` shows {{user}} the dice before the scene that earned them.'
+        + (_chkN === 1 ? ' Exactly one this reply.' : ' Exactly ' + _chkN + ' this reply, one per line above.');
+    }
+
+    // ---- (7) INTIMACY panel (Cluster 5) — ONLY while the H latch is on. Per present heroine: her live meters + the
+    // gate per act (its LOCKED DC on her first time, AUTO on every other — the engine's call), the position targets and
+    // her H submission band. Every number comes from the engine (LogicEngine.hactPanel), which judges the reported dice
+    // with the same functions, so this panel computes none of them and decides no roll. Loyal_Puppy → every act
+    // auto-passes. Per-reply meters land when the narrator emits /Intent/hact.
+    if (V(PendingState.IntimacyActive) === true) {
+      const _LEH = (typeof globalThis !== 'undefined') && globalThis.LogicEngine;
+      let _hp = null;
+      try { if (_LEH && typeof _LEH.hactPanel === 'function') _hp = await _LEH.hactPanel(sd); }
+      catch (_he) { _hp = null; globalThis.MvuHelper.log.child('EJS').error('H gate numbers (LogicEngine.hactPanel) failed:', _he); }
+      if (!_hp) globalThis.MvuHelper.log.child('EJS').warn('H gate numbers unavailable — the logic engine is not hosting; the ## INTIMACY panel prints no DC this reply');
+      const mcE = Number(V(MC.Energy_curr)) || 0, mcEmax = Number(V(MC.Energy_max)) || 100;   // his stamina budget — sex acts drain BOTH sides
+      _intim += 'MainChar Energy ' + mcE + '/' + mcEmax + (mcE <= 25 ? ' (flagging — write the fatigue; the act that empties it is the scene\'s last)' : '') + (_hp ? ' · CHA mod +' + _hp.chaMod + ' (the ENGINE adds it to your reported gate die — never add it yourself)' : '') + '\n';
+      _intim += '⚠ SCENE END → /Intent/intimacy/0 "exit" (a plain exit, no word after it) the FIRST reply whose {{user}} INPUT moves away from the sex (he stops and gets up or dressed, leaves, turns to something non-sexual, skips time) — your one call here. Her climax or his ejaculation is NOT an end: it is one round, and the afterglow keeps the scene open until {{user}} moves on. Never end the scene on your own prose. The engine ends a scene by itself only on facts — his Energy reaches 0 · everyone in the scene leaves · the story advances (sceneAdvance / Next-Block) · the clock reaches another block with no act. A mundane beat or a location report never ends a scene. Every end, yours or the engine\'s, applies the POST-H growth: Lewd+ (Aff≥30 + stage GF/FWB/Loyal_Puppy) + M_level by the scene\'s count — each reply she ends on top (a 女主導 ;pos) is hers, each ;dom is his, and the larger side moves her 10 (hers toward S · his toward M · a tie nothing).\n';
+      if (!_hp) _intim += '⚠ H GATE NUMBERS UNAVAILABLE this reply (the logic engine is not hosting) — no act or position DC can be printed, so write NO H roll and emit NO ;gate / ;pgate / ;climax.\n';
+      const _priv = _hp ? _hp.priv : '', _privDC = _hp ? _hp.privDC : 0;
+      // HER SUBMISSION BAND — the engine names it (submissionBand); this table is what each band means on the page, printed on
+      // her own line so the narrator writes it without a lookup: `acts` = how she answers his lead, `moves` = who changes the
+      // position and how she takes one he gives. The dice never change with the band (<Intimacy_system> 6).
+      const _BAND_RULES = {
+        IamQueen: { acts: 'she is the queen and he is her toy: she teases him without mercy, uses him for her own pleasure and gives him harsh orders every reply',
+          moves: 'EVERY sex reply she switches to a different position from her Pos — her pick, whatever pleasures HER most, a 女主導 one first; when his input dominates her, her "his push" line says whether she overrules him or yields' },
+        Dominant: { acts: 'she runs the scene and gives him orders; what she wants comes before what he wants',
+          moves: 'she picks the positions: while her Pos is not a 女主導 one she moves them into one, and the reply her line shows CLIMAX she switches to a new one; when his input dominates her, her "his push" line says whether she overrules him or yields' },
+        Assertive: { acts: 'she often takes control and says plainly what she wants',
+          moves: 'when his input names no position she moves them into one she wants (a 女主導 one first) and stays in it; when he moves her she goes along, saying what she would rather do' },
+        Leading: { acts: 'she likes to steer and suggests what comes next',
+          moves: 'she never changes the position herself: when his input names none she suggests one aloud or guides his hands, and it changes only when he takes it up; when he moves her she goes along' },
+        Neutral: { acts: 'her own H personality decides: her <Personality_HScene> CHAR line',
+          moves: 'her CHAR line decides whether she ever starts a position change; when it says nothing, he picks and she goes along' },
+        Yielding: { acts: 'she lets him lead and gives in after a token protest',
+          moves: 'she never changes the position herself; when he moves her she goes along after a token protest (a word, a flush, a half-hearted "wait")' },
+        Submissive: { acts: 'she follows his orders readily and rarely protests',
+          moves: 'she never changes the position herself and waits for him to pick; when he moves her she goes at once, without protest' },
+        Devoted: { acts: 'she craves being controlled: she asks for his orders, obeys eagerly and offers herself',
+          moves: 'she never changes the position herself; when his input names none she asks how he wants her and offers herself, and when he moves her she obeys eagerly' },
+        IamYours: { acts: 'she is completely his and loves it: extremely submissive, she begs him for instructions and tries to carry out every one at once',
+          moves: 'she never moves on her own: when his input gives no instruction she holds still and begs for one; every position or act he orders she tries at once — the dice still decide, and on a failed die she tries and cannot, and apologises (she never refuses)' },
+      };
+      const _FEMALE_LED = { WILLING: 'WILLING (she may take one herself)',
+        ON_ORDER: 'ON HIS ORDER (she never starts one; she takes one he puts her in)',
+        UNWILLING: 'UNWILLING (she won\'t lead — pick a {{user}}-led one)' };
+      // ## H SCENE OPEN — while no act has landed on anyone in the scene (every present girl's HScene still empty), this
+      // reply is the one that can lose its act: on the reply a scene opens the narrator is drawn to "enter" and to leave
+      // the act unreported (live: staging msg 548). The section prints beside the RESULT the narrator reads.
+      if (present.every((k) => !String(V((CM[k] || {}).HScene) || ''))) _hSceneOpen += 'No act has landed in this scene yet. Report the act your prose shows as /Intent/hact/0 ("<Key>;act:<Act>;pace:<gentle|normal|intense>"); never "enter": the scene is open.\n';
+      for (const k of present) {
+        const c = CM[k] || {};
+        const hcount = Number(V(c.H_Count)) || 0, eV = Number(V(c.Exp_Vaginal)) || 0;
+        const arousal = Number(V(c.Arousal)) || 0, meter = Number(V(c.ClimaxGauge)) || 0;
+        const edge = Number(V(c.EdgeStreak)) || 0, ahegao = V(c.Ahegao) === true;         // §7b hidden streak (narrator-only, scales the release) · §7 Ahegao state
+        const vl = (arousal >= 60 && meter >= 40) || arousal >= 80 || meter >= 70;        // §5 VOICE LEAK cue (thresholds, not a formula)
+        _intim += k + ': Arousal ' + arousal + ' · Energy ' + (Number(V(c.Energy)) || 0) + ' · Meter ' + meter +
+          ' · Lewd ' + (Number(V(c.Lewdness)) || 0) + ' · M ' + (Number(V(c.M_level)) || 0) + ' · Emb ' + V(c.Embarrassment) + ' · Guilt ' + V(c.Guilt) +
+          ' · Exp[C' + (Number(V(c.Exp_Caress)) || 0) + '/O' + (Number(V(c.Exp_Oral)) || 0) + '/V' + eV + '/A' + (Number(V(c.Exp_Anal)) || 0) + '] · H#' + hcount +
+          (edge ? ' · EDGE×' + edge : '') + (ahegao ? ' · 💫AHEGAO (glassy, involuntary, no agency — {{user}}-led only)' : '') +
+          (V(c.AhegaoPenalty) === true ? ' · 💢COMPLAINT-DUE (pushed past ready — write her hurt/anger per <Personality_Archetypes>)' : '') +
+          (String(V(c.HPosition) || '') ? ' · Pos: ' + V(c.HPosition) : '') +
+          (vl ? ' · ⚠VOICE-LEAK (write unfiltered moans)' : '') + '\n';
+        // DISCOVERY cue (Pass 4.4 · v1 §6) — voice-leak in a non-private venue = a real risk of being overheard. Narrative-only:
+        // WRITE the close call (a passer-by, a voice outside, her hand clamped over her mouth); if Morals>50 she feels the shame after.
+        // Loyal_Puppy is past caring (v1: discovery resistance auto-passes for her), so skip it there.
+        if (vl && _hp && _priv !== 'PRIVATE' && String(V(c.RelationshipStage)) !== 'Loyal_Puppy')
+          _intim += '  ⚠ DISCOVERY RISK (' + _priv + ' venue, she\'s too loud) — write a CLOSE CALL: someone nearly catches you; she panics/muffles herself; if Morals>50 the shame lands after. Not a stat roll, a narrative beat.\n';
+        // §4b KINK cue — her specific turn-on lives in <Personality_HScene> KINK(tag) (loaded for present heroines). When a beat TRULY
+        // lands it, the narrator declares ;kink + a green in-prose span; the engine then boosts it. Reminder only (the match is narrator-judged).
+        _intim += '  KINK: match her <Personality_HScene> KINK(tag) — when THIS beat truly lands it, add ";kink" to /Intent/hact/0 + mark it once in prose 💚【…】 plain text (engine: Arousal ×1.5 · SEX Meter ×1.2 & Energy−2 · Lewd +1 when Arousal≥40 & committed stage → she learns to crave it)\n';
+        const hMarker = String(V(c.HView) || '');                                         // last reply's H result: CLIMAX (she came) · EDGED (she was denied)
+        if (/^CLIMAX/.test(hMarker)) _intim += '  ' + hMarker + '\n';                      // §7 she came last reply — the afterglow now
+        else if (/^EDGED/.test(hMarker)) _intim += '  ' + hMarker + '\n';                  // §7b she was denied on the brink — build her back, the release now scales up
+        // §7 CAN SHE COME THIS REPLY — the engine lists, per sex act, the paces whose fill takes her meter to 100 this reply
+        // (hactPanel().girls[k].finish); the narrator matches the act + pace it already reports, so it never forecasts.
+        if (_hp) {
+          const _fin = ((_hp.girls || {})[k] || {}).finish || {};
+          const _finText = ['Oral', 'Vaginal', 'Anal'].filter((a) => (_fin[a] || []).length).map((a) => a + ' ' + _fin[a].join('/')).join(' · ');
+          if (meter >= _hp.brink) _intim += '  ⚡AT THE BRINK (Meter ' + meter + ') — she can come THIS reply only at: ' + _finText + ' (the act + the pace you report); a slower pace fills her to 99 and she comes the reply after. /Intent/hact/0 reports your page: she comes on it → add ;climax · he stops, holds still, slows right down or pulls out before she comes (a teasing pause counts) → add ;destim, e.g. "' + k + ';act:Vaginal;pace:gentle;destim" = ONE EDGE (meter ×0.7, EdgeStreak+, Energy−5 → a bigger scaled release when she finally comes) + mark it once in prose 💚【寸止め (Edging)】 plain text · he keeps going and she has not come yet → neither\n';
+          else _intim += '  NOT AT THE BRINK (Meter ' + meter + ', the brink is ' + _hp.brink + ') — she CANNOT come this reply, whatever the pace: write her building toward it, never her orgasm (the engine refuses a ;climax)\n';
+          // 潮吹 — the engine's answer for her climax this reply (hactPanel().girls[k].squirt, squirtRule): the narrator
+          // writes what this line says and never judges her stage. Printed only at the brink, where she can come.
+          const _sq = meter >= _hp.brink ? ((_hp.girls || {})[k] || {}).squirt : null;
+          if (_sq && _sq.mode === 'auto') _intim += '  潮吹 (squirting): her climax this reply squirts by itself — an edged release, no die and no ;strong. Write the squirt when she comes.\n';
+          else if (_sq && _sq.mode === 'roll') _intim += '  潮吹 (squirting) roll open: when she comes, take the NEXT unused RawDie and add ;strong:<die> — RawDie≥' + _sq.target + ' → she squirts (write it) · lower → a normal climax, no squirt. Her Affection is already in that number: compare the raw die.\n';
+          else if (_sq) _intim += '  潮吹 (squirting): no — at ' + V(c.RelationshipStage) + ' her climax this reply is a normal one: write no squirt, add no ;strong.\n';
+        }
+        const _hg = _hp && _hp.girls[k];
+        // The engine says her won PhysicalRequest this reply was the roll on her acts (isCrossingWon): it opened the scene.
+        if (_hg && _hg.isCrossingWon) _hSceneOpen += k + '\'s won PhysicalRequest above was her yes and the roll on her acts this reply, so her gate line prints AUTO.\n';
+        if (_hg) {
+          const _band = _BAND_RULES[_hg.submission];
+          if (ahegao && String(V(c.RelationshipStage)) !== 'Loyal_Puppy') _intim += '  submission: ' + _hg.submission + ' — on hold: 💫AHEGAO leaves her no agency, {{user}}-led only\n';   // a Loyal_Puppy keeps her agency in Ahegao (<Intimacy_system> 7)
+          else if (_band) {
+            _intim += '  submission: ' + _hg.submission + ' — ' + _band.acts + '\n  who moves: ' + _band.moves + '\n';
+            // DOMINANT AND IAMQUEEN PUSH BACK — the engine decides it from her Arousal at the start of this reply (pushBack).
+            if (_hg.pushBack) _intim += _hg.pushBack.overrules
+              ? '  his push (;dom): she OVERRULES it this reply (Arousal ' + _hg.pushBack.arousal + ' > ' + _hg.pushBack.line + ') — write her taking control back; still report ;dom (the beat is hers, and she spends 15 Arousal doing it)\n'
+              : '  his push (;dom): she YIELDS to it this reply (Arousal ' + _hg.pushBack.arousal + ', she overrules only above ' + _hg.pushBack.line + ') — write her giving way for this beat\n';
+          }
+          else {
+            globalThis.MvuHelper.log.child('EJS').warn('INTIMACY panel: the engine named submission band "' + _hg.submission + '", which has no rule in _BAND_RULES — printed without one');
+            _intim += '  submission: ' + _hg.submission + '\n';
+          }
+        }
+        if (String(V(c.RelationshipStage)) === 'Loyal_Puppy') { _intim += '  gate: Loyal_Puppy → ALL acts & positions AUTO-PASS (no roll); still WRITE the strain\n'; continue; }
+        if (!_hg) continue;
+        let line = '  gate:';
+        for (const act of Object.keys(_hg.gate)) line += ' ' + act + ' ' + _hg.gate[act];
+        _intim += line + '  [' + _priv + ' venue ' + (_privDC >= 0 ? '+' : '') + _privDC + ' folded in]' + '\n';
+        // §3 POSITION — PRE-RESOLVE per tier from her live Exp (like the act-gate DCs above): auto-pass folds the roll away;
+        // else Exp bonus (Exp_V 30-49 +2 · 50-74 +4) folds into a flat RawDie target. Narrator reads the tier off <H_Position>,
+        // matches this line, and if not AUTO takes the next RawDie (pool below) — no arithmetic, one comparison, written in-sync.
+        // The 女主導 state is the engine's too (femaleLedWillingness: her band, and her Lewdness while she is Neutral).
+        const evP = Number(V(c.Exp_Vaginal)) || 0;
+        const _femaleLed = _FEMALE_LED[_hg.femaleLed];
+        if (!_femaleLed) globalThis.MvuHelper.log.child('EJS').warn('INTIMACY panel: the engine named female-led state "' + _hg.femaleLed + '", which has no wording in _FEMALE_LED — printed raw');
+        if (ahegao) {
+          _intim += '  position: 💫 BASIC only, {{user}}-led — she has no agency to lead/attempt one\n';
+        } else {
+          const _posText = (t) => (t === 'AUTO' ? 'AUTO' : 'RawDie≥' + t);
+          const intP = _posText(_hg.positions.Intermediate), advP = _posText(_hg.positions.Advanced), ekiP = _posText(_hg.positions.Ekiben);
+          _intim += '  position (tier off <H_Position>): Basic AUTO · Intermediate ' + intP +
+            ' · Advanced ' + advP + ' · Ekiben ' + ekiP + ' · anal ' + (evP < 20 ? 'LOCKED (need Exp_V≥20)' : '+3 to target, Exp_Anal') +
+            ' · 女主導/female-led ' + (_femaleLed || _hg.femaleLed) + '\n' +
+            '  ORAL positions (フェラ/イラマチオ/クンニ/69/顔面騎乗, tier off <H_Position>) = AUTO display-only: write the term + emit ;pos, NO roll, NO ;pgate (act:Oral scores Exp_Oral)\n' +
+            '  HOW TO READ: ;pos takes the ENGLISH name in the <H_Position> row\'s brackets (Cowgirl, never 騎乗位). AUTO = no roll, write her moving into it, emit ;pos:<English name> and NO ;pgate. RawDie≥N = take the NEXT unused die from the RawDie pool (bottom) and emit ;pos:<English name>;pgate:<die> — the raw NUMBER, never a verdict word (the ENGINE recomputes N and derives the outcome). To WRITE the beat right, read it yourself: raw≥N → she lands it · raw<N → FUMBLE (write her failing the attempt, stay/fall back to basic).\n' +
+            '  ★ NAME IT IN THE PROSE (mandatory, not token-only): on the reply a position is first established, weave the 体位 into <gametxt>, once, as BOTH「JP (English)」inside ONE 💚【】 marker (plain text, NEVER an HTML span/font tag) — e.g. 💚【騎乗位 (Cowgirl)】 — regardless of story language. ;pos with no marked 体位 term in the prose = a MISS (full rule → <H_Position> §3 · <Intimacy_system> §3)\n';
+        }
+      }
+    }
+
+    // absent roster (compact)
+    _state += '\n# Off-scene: ';
+    _state += absent.map((k) => { const c = CM[k] || {}; const a = Math.max(0, Number(V(c.Affection)) || 0); return k + ' (' + V(c.RelationshipStage) + ' Aff' + a + ' (' + affBand(a) + ') @' + _venueLabel(V(c.Location)) + ')'; }).join(' · ') || '(none)';
+    // NEGLECT RETALIATION cue (story_analysis 4c) — the day-roll sweep fired for this key; write the fallout THIS reply
+    const _negK = String(V(EngineDerived.NeglectFired) || '');
+    if (_negK) _state += '\n⚠ NEGLECT RETALIATION fired: ' + _negK + ' (scorned schemer — 5 classmates −20 Aff, her conflict set). WRITE the rumor fallout this reply: overheard whispers, cooled greetings, a friend warning {{user}}, classmates suddenly distant — a consequence of ghosting her. Her hand stays subtle/deniable per her Hagaruro (she never admits it); no open confrontation unless it fits.';
+
+    // ---- PIPELINE TRACE (gated) — what Window-A (EJS) passes to the narrator this prompt-assembly.
+    // Gate = mvu-helper's `pipeline` debug switch, read by name through MvuHelper.settings. OFF (silent) when
+    // the extension is absent or older than MvuHelper.settings, or the switch is off → a standalone card never
+    // logs and never breaks (the read is guarded and sits inside the outer try). NB: the narrator's RawDie POOL is dealt BELOW (after the SOCIAL CHECK RESULT section, before ## INTIMACY) — MvuHelper.rollPool(8) — the platform door, always present under mvu-helper; inline crypto only without the extension (§9c) — so it isn't logged here.
+    const _isTracing = !!(globalThis.MvuHelper && globalThis.MvuHelper.settings && globalThis.MvuHelper.settings.get('debug.pipeline') === true);
+    // Second gate — trace ONLY while a real generation is in flight. ST-Prompt-Template re-renders every
+    // lorebook entry on page load ("*** PRELOADING WORLD INFO ***"), which is otherwise indistinguishable
+    // from a turn. mvu-helper publishes this marker at load and flips it on GENERATION_STARTED /
+    // ENDED / STOPPED; ST emits STARTED before world-info assembly, so it is already true when this
+    // template renders for a turn. Absent marker (no mvu-helper) leaves it true — the `_isTracing` gate is
+    // false in that case anyway. Page globals are copied into the isolation sandbox, so this read
+    // works in both template modes.
+    const _inFlight = globalThis.mvuHelperIsGenerationInFlight !== false;
+    if (_inFlight && _isTracing) {
+      globalThis.MvuHelper.log.child('EJS').domain('pipeline', 'lifecycle', '→ narrate | present=' + (present.join(',') || '(none)') + ' | buildMode=' + (_arm ? 'YES' : 'no') +
+        '\n[EJS] facts: ' + _facts +
+        (_clock ? '\n[EJS] clock: ' + _clock : '') +
+        (_dayEnd ? '\n[EJS] dayEnd: ' + _dayEnd : '') +
+        (_wallet ? '\n[EJS] wallet: ' + _wallet : '') +
+        (_skills ? '\n[EJS] skills: ' + _skills : '') +
+        (_arrivals ? '\n[EJS] arrivals: ' + _arrivals : '') +
+        (_rolls ? '\n[EJS] rolls: ' + _rolls : '') +
+        (_signpost ? '\n[EJS] signpost: ' + _signpost : '') +
+        (_cal ? '\n[EJS] today: ' + _cal : '') +
+        (_evt ? '\n[EJS] event: ' + _evt : '') +
+        (_quests ? '\n[EJS] quests:\n' + _quests : '') +
+        (_npc ? '\n[EJS] npcs:\n' + _npc : '') +
+        (_wlog ? '\n[EJS] worldlog:\n' + _wlog : '') +
+        '\n[EJS] state:\n' + _state +
+        '\n[EJS] traits:\n' + _traits +
+        '\n[EJS] checkResult:\n' + (_chk || '(none)\n') +
+        (_intim ? '\n[EJS] intimacy:\n' + _intim : '') +
+        (_arm ? '[EJS] BUILD-MODE arm block active\n' : ''));
+    }
+  } catch (_e) { _ok = false; globalThis.MvuHelper.log.child('EJS').error('Window-A render failed — falling back to raw stat_data:', _e); }
+_%>
+<CURRENT_VARIABLE_DATA>
+# Window-A LIVE VIEW — the narrator's token-compacted picture of the current state + the derived facts
+# for THIS reply (clock/mode, present cast, meters, the pre-resolved gates, the RawDie pool). The stored MVU
+# variable is complete; this is a prompt-only projection of it.
+# Patch state via /Classmate/<Key>/... or /Intent/... — never by writing here.
+<%_ if (_ok) { _%>
+<%_ if (_arm) { _%>
+## ⚠ BUILD MODE — NEW HEROINE PENDING: <%- _armKey %>
+<%- _arm %>
+
+<%_ } _%>
+## NOW
+<%- _facts %>
+<%- _hoursDigest %>
+<%_ if (_clock) { _%>
+
+## SCENE CLOCK (where your prose STOPPED — the engine derives the band, the block and the date from it)
+<%- _clock %>
+<%_ } _%>
+<%_ if (_cal) { _%>
+
+## TODAY (calendar — the engine's pre-laid 3-year schedule, resolved on the day-roll; you never patch the calendar)
+<%- _cal %>
+<%_ } _%>
+<%_ if (_signpost) { _%>
+
+## DAY OBJECTIVE (the day signpost {{user}} reads in his quest list — an ENGINE-owned record whose OBJECTIVE line is YOURS to write. This panel says which reply owes one)
+<%- _signpost %>
+<%_ } _%>
+<%_ if (_dayEnd) { _%>
+
+## DAY END (the two ops that close a day — yours to send when your PROSE ends it, not when the clock says so)
+<%- _dayEnd %>
+<%_ } _%>
+<%_ if (_evt) { _%>
+
+## EVENTS (engine-armed trigger — play it per <Armed_Event>, then /Intent/eventFire)
+<%- _evt %>
+<%_ } _%>
+<%_ if (_quests) { _%>
+
+## QUESTS ({{user}}'s AD-HOC ledger — quests HIS prose opened; they exist so HE can see what he has to do. Advance one ONLY when his actions advance it: /Intent/quest/0 "progress:<key>:<next rung>:<the NEXT step's objective, your words>" when a step visibly finished (finished = your read of the page — "take Nana home" is met by walking her to her train). OPEN the objective with the number the row prints as "next rung", then a colon: a RECEIPT for which rung you wrote it for, never a reason — the engine strips it before {{user}} ever sees the objective and says so when it disagrees with the ladder. Copy the printed number; never work it out yourself. Send "complete:<key>" when the whole quest is fulfilled. NEVER steer the story toward one, never remind him in prose — this list is not a script. The ENGINE owns the step counter and every reward number. A new commitment left OPEN at this reply's end → "add:" per <Update_Analysis_Detail> 5b. @Event series quests live in ## EVENTS, not here)
+<%- _quests %>
+<%_ } _%>
+<%_ if (_npc) { _%>
+
+## NPCS (persistent non-classmate characters — remember them across the scene; NOT heroines. A new recurring one → /Intent/recordNPC)
+<%- _npc %>
+<%_ } _%>
+<%_ if (_wlog) { _%>
+
+## WORLD LOG (significant events & lore overrides — persistent memory; a fact here OVERRIDES the base lorebook. A new one → /Intent/recordEvent)
+<%- _wlog %>
+<%_ } _%>
+<%_ if (_wallet) { _%>
+
+## WALLET (the balance is printed in ## NOW — this is the op that CHANGES it)
+<%- _wallet %>
+<%_ } _%>
+<%_ if (_skills) { _%>
+
+## SKILLS ({{user}}'s recorded skills — the status panel shows exactly this list)
+<%- _skills %>
+<%_ } _%>
+
+## PRESENT (compact — `Key (Name, age) [Persona] | Stage | Aff N (band warmth) | Mood | Embarrass | @spot | ↩ recent milestone`. Every character in this world is an ADULT — the age shown is her real age and she is written as an adult woman in every scene. ↩ (if shown) = her newest route milestone from history — call back to it for continuity, don't re-trigger it. [Persona] = her archetype tag → its voice loads in <Personality_Archetypes>, its stat cluster in <Personality_Core> [ARCHETYPE INDEX]. Off-scene girls' @spots are engine-placed. Aff (band warmth) = her AFFECTION level (distinct from the Soc trait band): Cold → Warming Up → Friendly → Close → Deeply Attached; (GATE) = Aff CAPPED at this stage's ceiling — at Dating the CONFESSION is pending (one WON Confess makes her a Girlfriend — the /Intent/check row in <COT_Guide>); at Girlfriend and on the branches it is simply maxed. Warmth stalls at a cap until the gate opens — write her that way)
+<%- _state %>
+<%_ if (_arrivals) { _%>
+
+## SCENE ARRIVALS (who STARTS being present — the roster above cannot notice her joining on its own)
+<%- _arrivals %>
+<%_ } _%>
+
+## TRAITS (current bands — write her voice to THESE levels; they shift as stats change. Abbrevs: STA=Stamina·INT·CHA·Pride·Mor=Morals·Ele=Elegance·Soc=Sociability·Kind·Hag=Hagaruro(surface-vs-true). (Hi)=top band idx3-4 (>60) · (Lo)=bottom idx0-1 (≤40) · unmarked=mid≈neutral — apply the (Hi)/(Lo) behavior from <Personality_Core> [STAT->BEHAVIOR]. Hag band is REAL but her shown manner may diverge. Her archetype's voice → <Personality_Archetypes>)
+<%- _traits %>
+<%_ if (_gates) { _%>
+## STATE GATES (RESOLVED from her LIVE state — already applied for you. Do NOT re-derive them from her stats; WRITE them. What each verdict means → <Personality_Core> [STATE GATES])
+<%- _gates %>
+<%_ } _%>
+<%_ if (_chk) { _%>
+## SOCIAL CHECK RESULT (the PRE call already rated, DC-locked and ROLLED this reply's social check(s) — these numbers are FINAL. You NEVER roll a social check and NEVER write /Intent/check (PRE-OWNED, already in state). TRANSCRIBE: copy each line below into <combat_log> VERBATIM, same order — CHARACTER FOR CHARACTER, and NEVER TRANSLATED. These lines are a DATA row, not prose: the [Type] tag, the word `on`, the ENGLISH Key, `DC`, `RawDie`, the arithmetic with its exact spacing and the verdict word all stay as printed here, whatever language you write the story in — the GUI matches the verdict by its ENGLISH spelling, so a localized line loses its severity mark and its colour. Write the prose to MATCH each Outcome: a Failure is a real failure)
+<%- _chk %>
+
+## ROLL MARKERS (<%= _chkN %> this reply — the one thing above that goes in the PROSE, not in a patch)
+<%- _rolls %>
+<%_ } else { _%>
+## SOCIAL CHECK RESULT
+(none — PRE rolled no social check this reply → <combat_log> prints its no-roll line; no check <roll/> markers)
+<%_ } _%>
+<%_ if (_hSceneOpen) { _%>
+
+## H SCENE OPEN (the H latch is ON — the ## INTIMACY panel below is live this reply)
+<%- _hSceneOpen %>
+<%_ } _%>
+<%_
+  // In-scene d20s — DEALT BY MVU-HELPER (LOGIC_ENGINE_PLAN §9c rollPool, door: globalThis.MvuHelper). It rolls a
+  // reject-sampled crypto d20 and caches the deal PER GENERATION (stable across prompt re-renders/dry-runs/continue;
+  // fresh on regenerate/swipe), keeping the RECEIPT so RES can verify the die a check claims (:RawDie: token vs the
+  // dealt pool — "CHECK DIE NOT FROM POOL", globalLogic v0.44.0; the receipt spans the UNION of pools, so PRE's
+  // named-pool dice verify through the same line).
+  // These 8 are the narrator's OWN dice — social checks moved to PRE's named pool (PRE_Call_Revisit Phase 3), so
+  // this pool serves the H rolls ONLY (act gate + position + 潮吹 — worst case 3-4
+  // in one H reply). Only the narrator reads these; Window-B sees only the receipt.
+  // NO FALLBACK, deliberately (rollPool-revisit R5b): globalThis.MvuHelper is assigned at extension load and never
+  // deleted, so the dealer is there whenever mvu-helper is — including mid-engine-reload, where globalThis.LogicEngine
+  // is not. The old inline roller guarded "engine not hosted", a case this door does not have; what remained was
+  // "no mvu-helper at all", and a v4 card ships zero engine, so nothing would resolve those dice anyway. A silent
+  // receipt-less deal is worse than a loud absence — this THROWS instead, naming the cause.
+  // Synchronous, no await: rollPool is mvu-helper's OWN dealer (§9c), it never crossed into the Worker.
+  if (typeof globalThis === 'undefined' || !globalThis.MvuHelper || typeof globalThis.MvuHelper.rollPool !== 'function') {
+    throw new Error('Window A: globalThis.MvuHelper.rollPool is unavailable — mvu-helper is not loaded, so no dice can be dealt and nothing would resolve them.');
+  }
+  const _dice = globalThis.MvuHelper.rollPool(8);
+_%>
+## YOUR DICE (the pool YOUR OWN rolls draw from, in number order — a social check never touches it)
+RawDie pool — <%- _dice.map((d, i) => ['①','②','③','④','⑤','⑥','⑦','⑧'][i] + d).join('   ') %>
+HOW TO PICK (exactly): this pool serves YOUR OWN rolls ONLY — every H roll (<Intimacy_system>/<H_Position>); a SOCIAL CHECK never touches it, nor do the FWB opt-in and the Loyal-Puppy demand (PRE rolled all of them on its own pool — ## SOCIAL CHECK RESULT above). Consume IN NUMBER ORDER: your reply's 1st own roll = ①, 2nd = ② … NEVER skip ahead; NEVER pick a die by its value. In your <combat_log> line write "RawDie: <the ①/②/… you consumed>".
+<%_ if (_intim) { _%>
+
+## INTIMACY (H latch ON — live meters + LOCKED H-ACT gate DCs. YOU REPORT DICE, NEVER VERDICTS — every roll flag carries the RAW pool die and the ENGINE does all math and derives every outcome (raw 20 crits · a raw 1 is compared like any die · CHA mod added engine-side). An act her gate line prices → take the NEXT unused RawDie, declare /Intent/hact/0 "<Key>;act:<Act>;gate:<die>"; an AUTO act takes none. Position → read its tier off <H_Position>, match the pre-resolved "position:" line below (AUTO = just write it, no ;pgate; else take the next RawDie), add ;pos:<Name>;pgate:<die>. Her climax: she can come THIS reply only at an act + pace her line below lists (⚡AT THE BRINK) — then write her orgasm on the page and add ;climax. Any other pace, or NOT AT THE BRINK = she cannot come this reply (a fill stops at 99, on the brink, and any pace finishes her the reply after). Your page shows him stopping, holding still or pulling out while she is at the brink → add ;destim (an EDGE → a bigger release). Whether her climax squirts (潮吹), and whether it takes a die (;strong:<die>), is on her 潮吹 line below. The printed DCs are for YOUR PROSE — write a miss as a miss — but the engine's derivation is what counts, so a wrong read costs one beat of prose, never state. Beat hits her <Personality_HScene> KINK → add ;kink + a 💚【…】 turn-on marker in plain text (Arousal ×1.5 · SEX Meter ×1.2 · Lewd +1 warmed). Procedure/writing → <Intimacy_system> 3/4b/7/7b)
+<%- _intim %>
+<%_ } _%>
+<%_ } else { _%>
+{{format_message_variable::stat_data}}
+<%_ } _%>
+</CURRENT_VARIABLE_DATA>

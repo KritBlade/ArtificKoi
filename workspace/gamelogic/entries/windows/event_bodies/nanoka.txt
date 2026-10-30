@@ -1,0 +1,426 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@nanoka_') === 0
+<%_ /* v1.4 */ _%>
+<%_ /* The ten @nanoka_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @nanoka_N key is the armed one. The @@if line on top
+   repeats the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@nanoka_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nanoka_1') { _%>
+@nanoka_1  Somehow (Nanoka) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE SUNBEAM. After class, the building emptying, and in the one patch of late sun — the courtyard
+    planters, the classroom's window bay, the library's west table, the warm strip of floor by the shoe
+    lockers, the bench just inside the gate, wherever the light lands at this hour — there is a girl asleep
+    in it. NANOKA OUSAKA: olive-green bob, two neat braids resting on her chest, knee socks with a clover on
+    them, a wristwatch she is not so much wearing as carrying. Beside her, exactly as far as the sun and not
+    one step further, a small pot with a seedling in it — a morning glory, the classroom plant rota's first
+    victim; her name is on this week. {{user}} nearly steps on the pot, or on her. One violet eye opens.
+    "Mmh~... you're standing in my sun." She does not sit up. He mentions the time — the gates lock at
+    19:00. She considers this with the whole of her attention, which takes a while. "It'll sort itself out.
+    Somehow." The eye closes. Then, because KIN 80 is the other half of her and it wakes before she does,
+    the eye opens again and she shifts over — a hand's width, which for her is a great distance. "There's
+    room. You look like you need it more than me~." He gets half a sunbeam, and she does not take it back.
+    ⚠ PLANT THE HAND'S WIDTH. It is the unit this whole series measures in, and it returns in the finale.
+    When the light finally goes she rises at the speed of a season and hands him the pot. "It's had enough.
+    So have I. You're going that way, aren't you~." He is not. "Nanoka. It goes on the windowsill. The left
+    one. ...Or the right." She drifts off homeward. He is holding her plant, and he is now, apparently, on
+    plant duty. Hag 8: nothing she said was a manoeuvre; she meant every word and has not noticed what she
+    just did. No H.
+    Crack: none. Her cover is whole because she does not know it is one — "it'll sort itself out" is the
+    truest thing she has ever said. In him: a plant he did not ask for.
+  FIRE  emit /Intent/eventFire "nanoka_1" → engine creates the Nanoka quest (Step 1). NO payout on this beat,
+    on purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose —
+    "Nanoka Ousaka" — because that IS the mechanism: POST reads the name and arms her build, her <character>
+    card keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as
+    <Classmate_Guide> says. Do NOT build her THIS reply unless her <character> profile is already in front of
+    you. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Nanoka Ousaka was asleep in the one patch of sun after class, gave
+    {{user}} half of it, and then handed him her plant because he was going that way; he was not." → the
+    World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nanoka_2') { _%>
+@nanoka_2  Somehow (Nanoka) ·2   (CHECK - · REWARD Nanoka Affection +10)
+  DO  THE LOCK-IN. First thing, and the building is wearing a plant. A morning glory has left its pot on the
+    classroom sill, gone out of the window and climbed the outside wall: three storeys of it, to the roof,
+    in bloom, badly out of season, which morning glories do not do. Teachers are baffled, the groundskeeper
+    wants it down before homeroom, and somebody has been sent to find the girl on plant duty. {{user}} knows
+    whose pot that is. He has been doing her plant duty for a week.
+    Inside, on the floor under that windowsill, Nanoka is asleep on her school bag with her blazer over her,
+    a thermos beside her, entirely at peace. The class arrives around her in stages. She wakes to the extent
+    of one eye, as before, and explains, unhurried, to whoever is nearest — it happens to be {{user}}: he
+    had looked tired yesterday, so she thought she would do the watering herself for once. It took her three
+    hours. "Plants like it slow~. I asked it to grow, and then I had a nap." By then the gates had locked,
+    so she made tea and went to sleep, and here the sun is again, so it sorted itself out, didn't it. She is
+    shown the window. Pure, unhurried delight: "Oh~. It wanted to see the roof." No fear, no surprise, no
+    embarrassment — Hag 8 has no room for it. Nothing fazes her, and this is not an exception, it is the
+    rule at scale.
+    She is told to deal with it. She turns to {{user}} and asks HIM to deal with it — sweetly, as the
+    obvious solution — and then, because he is doing her a kindness, she is entirely present for it: she
+    holds the ladder. For eleven minutes. Then she sits down beside the ladder, because STA 28 was not built
+    for holding ladders. Then she is asleep beside the ladder with ONE cutting of the vine across her lap,
+    taken for the window box at home, and he is on the second storey with the shears, alone. Give the vine
+    ONE uncanny detail he notices and she does not: its leaves turn toward her, not the sun. Do not explain
+    it.
+    When he comes down she produces, from the bag she slept on, a cushion. Her own, from her own sunny
+    spot. For him. "You should rest more~." The kindness is real, it is aimed at the exact tiredness she
+    caused, and she will never connect the two. Play the lazy and the kind as ONE gesture, never two — that
+    is the whole joke of her. Homeroom starts around them.
+    ⚠ THE ROTA SHEET. The plant rota is pinned by the sill with her name on this week. He takes it down and
+    starts a list on the back, two columns: WHAT SORTED ITSELF OUT, and WHO SORTED IT. The plant: him, for a
+    week. The vine: him, on a ladder. The locked gates: the sunrise. He never shows it to her, in this beat
+    or any other. It is the object his half of the series runs on. No H.
+    Crack: none. In him: a list, and one lazy guess — that "somehow" is her word for whoever is standing
+    nearest. The three hours she spent on his job do not fit it.
+  FIRE  emit /Intent/eventFire "nanoka_2" → engine advances the Nanoka quest to Step 2 and pays the beat:
+    Nanoka Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is
+    the payout, and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Nanoka did {{user}}'s watering for one night because he looked tired,
+    took three hours over it and slept on the classroom floor when the gates locked, and by morning the plant
+    had climbed three storeys of the school; he cut it down while she held the ladder and then slept beside
+    it, and she gave him her own cushion." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nanoka_3') { _%>
+@nanoka_3  Somehow (Nanoka) ·3   (CHECK - · REWARD Nanoka Affection +16)
+  DO  THE HOMEWORK. The library, after class, and a worksheet she has been looking at for forty minutes the
+    way she looks at weather. {{user}} — who is by now watering her plant and has spent a morning on a ladder
+    for her — offers, reasonably, to just do it. Nanoka is SHOCKED. It is the most awake anyone has seen
+    her: she sits up, the braids swing. "That's cheating~. ...The plant doesn't mind who waters it. The
+    homework would know." MOR 80, and it is not a pose. So she does it herself. At her pace. Which is three
+    hours — she drifts off at anything pleasant, and a great many things are pleasant: the light moving on
+    the desk, a bird, the sound of his pen — and every time she drifts she surfaces with "mmh, where was I~"
+    and he tells her, and this is, somehow, far more work for him than doing the sheet would have been.
+    Somewhere in the second hour she slides the plate she brought across to him — one sweet left on it —
+    without looking up from the page: "You look like you need it more than me~." It is what she said about
+    the sunbeam. Her eyes rest on the empty plate one second longer than they have rested on anything all
+    afternoon, and she does not know they did.
+    She falls asleep on the last question with the pencil still in her hand. He does NOT write the answer.
+    When she wakes she finishes it, slowly, and looks at the page, and then at him, and Hag 8 puts the whole
+    thing on her face at once: "You didn't do it for me. ...Thank you." Play the integrity as exhausting for
+    everyone around her and precious for exactly that reason. No H.
+    Crack: none. In him: "lazy" is dead — nobody lazy spends three hours refusing help. And the rota sheet
+    gains a third column with no heading yet: half a sunbeam, her cushion, the last sweet. Everything she
+    has ends up with whoever is nearest.
+  FIRE  emit /Intent/eventFire "nanoka_3" → engine advances the Nanoka quest to Step 3 and pays the beat:
+    Nanoka Affection +16, applied by the row. Do NOT also emit an affection change for this beat. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|{{user}} offered to do Nanoka's homework and she was shocked — the
+    plant does not mind who waters it, but the homework would know — so she did it herself over three hours,
+    fell asleep on the last question, and thanked him for not writing it." → the World Log remembers only
+    what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nanoka_4') { _%>
+@nanoka_4  Somehow (Nanoka) ·4   (CHECK - · no payout — Nene's cats, from Nanoka's stretch of wall)
+  DO  ELEVEN CATS. Lunch, outside. The quiet circle — Nene Arisu, Suzu Yukishiro, Urara Yamabuki, Nanoka — has
+    taken its tea to the low wall, and the strays have arrived. All of them. Eleven cats have chosen Nene,
+    who is sitting with her book: on the wall, on her bag, along her legs, one over her shoulder like a
+    stole, one asleep on her chest. Nene is scarlet and motionless. Urara is documenting it at close range:
+    "Nene. NENE. You have a cat HAT."
+    ⚠ THIS IS THE SAME LUNCH AS NENE'S OWN SERIES, SEEN FROM NANOKA'S STRETCH OF WALL — keep what is said,
+    and watch a different girl. Nanoka has lain down on the wall beside Nene on the theory that the cats
+    might extend to her. Suzu, turning a page: "They will not. You move too much." Nanoka: "...I'm asleep."
+    Suzu: "You are talking."
+    ⚠ WHAT {{user}} SEES, AND NOBODY ELSE IS LOOKING AT. Suzu is right, and it is the strangest thing he has
+    seen Nanoka do: she is not still. Every time a cat passes, her head turns after it. The girl who slept
+    through a vine being cut off the building is WATCHING something, for minutes at a time, without drifting
+    once. She wants a cat. It is the first thing he has ever seen her want. And her entire method for
+    getting one is to lie there and let it sort itself out.
+    It does not. The cats know. Every stray in Jinko has voted for the one person on the grounds who wants
+    nothing from them, and they can tell a girl who is still from a girl who is waiting. Not one comes.
+    The bell goes for fifth period. Nene cannot stand without disturbing a cat, and what comes out of her,
+    barely audible, is for the circle and not for herself: "...Go. ...Please." Nanoka says: "No." And lies
+    back down. ⚠ PLAY THAT "NO" FLAT AND INSTANT — no "mmh~", no drift, the firmest syllable she has spoken
+    in the series, and it took her no time at all, because it was for somebody else. Urara sits on the grass
+    with her phone. Suzu takes the next section of wall and turns a page. {{user}} sits down too, on
+    Nanoka's other side, and acquires cats within ninety seconds, because he is now also a stationary
+    object.
+    One of his settles on his knee, a hand's width from Nanoka's fingers, and sleeps there for the whole of
+    the missed period. A hand's width — the distance she moved for him on the first day. She looks at it.
+    She does not reach. She does not ask. ⚠ AND HE DOES NOT HAND IT TO HER. He is watching, not fixing.
+    When the cats finally leave, all at once, the way cats do, she watches the last one go and says, with
+    complete serenity: "Mmh~. It sorted itself out. Nene got them all." She is not sad about it in any way
+    she knows of. Hag 8: there is something on her face for one second that she does not know is there.
+    ⚠ THE ROTA SHEET, afterwards. Under WHAT SORTED ITSELF OUT he writes: a cat. Under WHO SORTED IT, for
+    the first time, he has nothing to write. Then the guess, in one line: she will move for anyone, and
+    never for herself — and "it sorted itself out" is what she says when the thing is gone. Under it: TEST.
+    Ask her for something she wants. No H.
+    Crack: none. He tested nothing; the cats did the observing for him. Her cover is whole, because she has
+    just called getting nothing a happy ending and meant it. In him: a hypothesis, written down, untested.
+  FIRE  emit /Intent/eventFire "nanoka_4" → engine advances the Nanoka quest to Step 4. No payout on this
+    beat — not every beat pays, and the ones that do are 2, 3, 7 and 10. Nene Arisu, Suzu Yukishiro and Urara
+    Yamabuki appear and are cameos: NOT required by the gate, NOT built, and none of their interior is
+    written. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Eleven strays chose Nene at the courtyard wall and Nanoka lay down
+    beside her wanting one; none came, a cat slept a hand's width from her fingers all through the missed
+    period and she never reached for it, and when they left she said it had sorted itself out — Nene got
+    them all." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nanoka_5') { _%>
+@nanoka_5  Somehow (Nanoka) ·5   (CHECK - · no payout — a test, and it comes back as written)
+  DO  THE BENCH. A free afternoon, the park, and the one bench that gets the sun at this hour — Nanoka knows
+    which; she knows where the sun falls in every place she has ever been — and on it, already, a cat. A
+    large, orange, deeply lazy cat. She stops. She looks at the cat. The cat looks at her. Two masters. And
+    she does the kind thing without a flicker of calculation: she leaves it the sun, sits down on the next
+    bench in the shade, and folds her hands. "It'll sort itself out~."
+    ⚠ {{user}} HAS COME WITH A PREDICTION, AND IT IS WRITTEN DOWN. On the back of the plant rota, before they
+    left, two lines. ONE: asked for help, she will be on her feet at once. TWO: for herself she will not ask
+    for a hand's width, and when the thing is gone she will say it sorted itself out. This beat is him
+    running both halves, on one bench, in one afternoon. She must never learn a test was run.
+    HALF ONE. He says he would like to sit in the sun, and asks whether she could have a word with the cat.
+    "Sure, sure~ let's take it nice and easy, hm?" — and she is UP. No drift. She sets everything down, as
+    her card says she does the moment somebody actually asks, crosses to the cat, sits on her heels, and
+    negotiates: eleven minutes of murmuring, a slow hand, an apology for the inconvenience. The cat, charmed
+    against its principles, shifts over. There is now room on the sunny bench for exactly one person. She
+    gives it to him. "There~." And she goes back to the shade.
+    HALF TWO, AND IT IS THE HARDEST THING HE HAS DONE IN THE SERIES. He sits in her sun. If he shifted a
+    hand's width there would be room for her. ⚠ HE DOES NOT SHIFT, AND HE DOES NOT OFFER. He waits to be
+    asked. Play what it costs him: the warmth on his neck, the cat regarding him with open contempt, forty
+    minutes of it. She watches the sun on the two of them from the shade, hands folded, content — and with
+    the look from the wall, the one she does not know she has. She does not ask. Not him, not the cat. It
+    does not cross her mind as a thing a person could do.
+    Then the sun leaves the bench — she says "there it goes~" at the exact minute, without a glance at the
+    wristwatch she never checks. The cat, insulted by the shade, leaves. Nobody has the sun now. And she
+    says, pleased: "See~? It sorted itself out."
+    He asks ONE question, lightly: "What did?" She gives it the whole of her attention, which takes a while.
+    "...The bench~. Nobody needs it now." ⚠ THAT IS THE RESULT. "Sorted" and "gone" are the same word to
+    her, and she has just said so in her own voice and heard nothing in it. He does not point it out. He
+    does not drag the bench after the sun, buy her a tea, or make it up to her. She is asleep on the shady
+    bench within a minute, perfectly happy. No H.
+    Crack: the first, and it is his — a test with a prediction, and both halves came back as written: for
+    him she moved a cat in eleven minutes; for herself she would not ask for a hand's width, and she called
+    the loss a solution. Her cover is whole. She does not know anything happened.
+  FIRE  emit /Intent/eventFire "nanoka_5" → engine advances the Nanoka quest to Step 5. No payout on this
+    beat. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A cat had Nanoka's sunny bench and she took the shade; asked to get
+    {{user}} the sun she talked the cat over in eleven minutes and gave him the place, then sat in the shade
+    and never asked him to make room, and when the sun had gone she said it had sorted itself out — 'nobody
+    needs it now.'" → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nanoka_6') { _%>
+@nanoka_6  Somehow (Nanoka) ·6   (CHECK - · no payout — Nene's lunch, from Nanoka's desk)
+  DO  THE STAND. Lunch, the classroom. Urara Yamabuki's contest photograph of Nene Arisu has been round the
+    whole school, and four girls from another class have come in to LOOK at her. Not to talk — to check
+    whether the picture was real. They stand over Nene's desk and discuss her in the third person. "So
+    that's her without the cardigan." "The mute thing's an act, then." "Say something, then. Go on." Nene
+    cannot, and her stillness convicts her, and it sours in about fifteen seconds.
+    ⚠ THIS IS THE SAME LUNCH AS NENE'S OWN SERIES, SEEN FROM NANOKA'S DESK — keep what is said and done, and
+    watch a different girl. Nanoka is at her desk with the sun on her and her tea at her elbow, and
+    {{user}} watches the thing arrive in her. It takes the whole fifteen seconds: she is slow to register
+    that a conflict is a conflict at all. Then it lands.
+    NANOKA STANDS UP. ⚠ Give this its full weight. Nobody asked her. She has not stood up unasked once since
+    the entrance ceremony; the four girls do not know that, and everyone in the class who does goes quiet at
+    once. She does not shout — she has never raised her voice and does not now. She just stands there in
+    front of Nene's desk being extremely awake. Then Urara takes them apart out loud, at speed, with
+    specifics, and Suzu Yukishiro closes it without rising an inch: "She doesn't owe you a reaction." A page
+    turns. "Leave." They leave. The classroom exhales.
+    Nanoka sits down. Her knees are shaking; STA 28 has spent a week's standing in one minute. Her tea,
+    pushed to the edge of the desk in all of it, is put straight into her hand by Nene, without a word, so
+    that her fingers close on it without her having to look. "Mmh~. Thank you." And she is calm again, all
+    the way down, as if she had never moved.
+    ⚠ THE QUESTION. {{user}} HAS IT READY, AND THE ANSWER IS WRITTEN DOWN BEFORE HE ASKS. On the rota sheet:
+    "She will say there has never been anything." He waits until the room has gone back to its lunch, and
+    asks it lightly, the way one asks about weather: when did she last get up like that for something of
+    her own?
+    She gives it her whole attention. It takes a long time. She is honestly looking — Hag 8 cannot do
+    otherwise — and he can see her going back through all of it, unhurried. "...Mmh~. I don't think there's
+    been anything." A sip of tea. No sadness in it, none, and that is the point: she says it the way a
+    person says she has never broken a bone. "Things of mine sort themselves out~."
+    ⚠ SHE HAS JUST SAID THE WHOLE OF IT AND HEARD NOTHING. He does not repeat it back to her. He does not
+    list the sun, the cat, the bench. He says "Mm," and drinks his own tea. Before the bell he asks one
+    more thing, an ordinary one: would she show him what a proper temae looks like. "Sure, sure~. After
+    class, in the tatami room." No H.
+    Crack: the second, and it is his — she can move faster than anyone in the room, she proved it in front
+    of the class, and by her own account she has never once done it for herself. Predicted, written,
+    confirmed. Her cover is whole: she thinks she has described good luck.
+  FIRE  emit /Intent/eventFire "nanoka_6" → engine advances the Nanoka quest to Step 6. No payout on this
+    beat. Nene Arisu, Suzu Yukishiro and Urara Yamabuki appear and are cameos: NOT required by the gate, NOT
+    built, and none of their interior is written. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Four girls from another class came to look at Nene after the
+    photograph, and Nanoka stood up unasked for the first time since the entrance ceremony and stood in
+    front of Nene's desk until Urara and Suzu sent them away; asked afterwards when she had last got up like
+    that for something of her own, she thought for a long time and said there had never been anything." →
+    the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nanoka_7') { _%>
+@nanoka_7  Somehow (Nanoka) ·7   (CHECK - · REWARD Nanoka Affection +20 · THE BREAK)
+  DO  THE TEA. The Japanese-style room after class. {{user}} asked what a proper temae looks like, and the
+    moment somebody actually asks her for something she sets everything down and sees it through — so here
+    she is, the tea one of the quiet circle, and he is the guest. And for the first time in this whole
+    series she does not drift. ELE 68: every movement exact, the fold of the cloth, the turn of the bowl,
+    the sound of the whisk — slow, still, but PRECISE, no "mmh~", no trailing off, the girl who takes three
+    hours over a worksheet holding a tempo like a metronome. She sets the bowl in front of him. It is
+    perfect, and he says so.
+    ⚠ {{user}} SAYS ONE THING IN THIS BEAT, AND IT IS A LINE FROM THE FORM, NOT A SPEECH. A guest may invite
+    the host to drink: "Please — make one for yourself." That is all he does. He does not explain why he
+    said it, does not produce the rota sheet, does not help. From here he sits where a guest sits and
+    watches. If she looks at him he says nothing.
+    She inclines her head — it is correct, she knows the form — and begins a second bowl. Hers.
+    AND THE TEMPO GOES. The moment the bowl is for her, the drift comes back: the cloth is folded nearly
+    right, the whisk slows, she watches the light move across the tatami, "mmh~... where was I." What she
+    sets down in front of herself is thin, half-whisked and going cold. And she knows tea. ELE 68 cannot
+    look at those two bowls and fail to see it: his exact, hers an afterthought. Same tea. Same water. Same
+    hands, a minute apart.
+    ⚠ THE BREAK IS HERS, AND IT COMES AT HER SPEED — slowly, and then she is simply looking at it. No tears,
+    no raised voice; this is the one time her calm WAVERS, and what comes through is a slow, wide-eyed
+    amazement with something under it she has no name for. She looks at her hands. "...That's strange~. My
+    hands know how to do it for you." A long while. "I don't think they've ever done it for me."
+    AND SHE DOES THE SUM HERSELF, OUT LOUD, UNHURRIED, BECAUSE SHE HAS NEVER HIDDEN A THOUGHT IN HER LIFE.
+    The sun, the first day — she moved over and never moved back. Her cushion. The cat on the wall. The
+    bench. Each one, she remembers, sorted itself out. Then the question nobody asked her: "...Where did
+    they go?" She looks at the wristwatch she never checks, as if it might have kept count. "They didn't
+    sort themselves out, did they~. They just went. I never checked." It is his list, item for item, in her
+    voice — ⚠ AND HE NEVER SHOWED IT TO HER. Do not let him say so. Do not let him comfort her, name the
+    feeling, or tell her what to do next.
+    AND THEN SHE MOVES, BY HERSELF. She empties the bad bowl. She begins again — for herself — and this
+    time she does not let it drift: the fold exact, the turn exact, the whisk like a metronome, every scrap
+    of the attention she has only ever spent on other people, spent once on Nanoka. It visibly costs her
+    more than the first bowl did. She drinks it. Her eyes go wide. "...Oh~. It's good. I make good tea."
+    She has made tea for other people since she was small, and this is the first proper bowl of her own
+    she has ever tasted.
+    Then the calm comes back, because it always does, and she is entirely herself: she asks him to carry
+    the tea things to the sink, because "temae is tiring~. Twice." No H.
+    Crack: the break, the only one, and it is hers — her own two bowls told her, and she counted what she
+    had let go without being handed the list. He led by saying one line of the form and then sitting
+    still. In him: nothing left to test. The rota sheet stays in his bag.
+  FIRE  emit /Intent/eventFire "nanoka_7" → engine advances the Nanoka quest to Step 7 and pays the beat:
+    Nanoka Affection +20, applied by the row. Do NOT also emit an affection change for this beat. If the
+    payout carries her past 100 the rank-up lands at her next gate — a check on her, or the day's swing — one
+    rung a day is the game's rule; do not narrate a stage change yourself. (No day-end swing — CHECK is
+    none.)
+    THEN emit /Intent/recordEvent "save|Nanoka performed a perfect temae for {{user}}, and when he gave the
+    guest's line and invited her to make a bowl for herself her hands lost the tempo; she saw the difference,
+    counted for herself the things she had let go — 'they didn't sort themselves out, they just went' — then
+    made the bowl again, exactly, and drank the first proper tea she had ever made for herself." → the World
+    Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nanoka_8') { _%>
+@nanoka_8  Somehow (Nanoka) ·8   (CHECK - · no payout — Mitsuki's lunch, from Nanoka's desk)
+  DO  MITSUKI. Lunch, the classroom, and Nanoka at her desk with her head on her arms and the sun on her, as
+    usual — and Mitsuki Tachibana, who has known her since before either of them can remember, sits down
+    across from {{user}} and talks quietly so as not to wake her. ⚠ THIS IS THE SAME LUNCH AS MITSUKI'S OWN
+    SERIES, SEEN FROM NANOKA'S DESK — keep the speech and the gesture. It is not a threat. It is worse: it
+    is information. "Nano's never asked anyone for anything for herself. Not once. Chores, tea, carry this,
+    hold that — that's not asking, that's weather. But for HERSELF? She just... waits. She lets things sort
+    themselves out, and if they don't, she lets them go." A glance at the sleeping girl. "So if she ever
+    does ask you for something — you'll know. It'll be the most she's ever moved for anything. Don't make
+    her regret it." One braid has slipped off Nanoka's shoulder, and Mitsuki reaches over and puts it back
+    without looking. Play Mitsuki as the girl next door who pulls Nanoka into the world: no jealousy in it,
+    only care, and the care is old.
+    ⚠ WHAT {{user}} KNOWS, AND DOES NOT SAY. Every word of it is already on the back of a plant rota in his
+    bag, and it is out of date by one bowl of tea. He does not tell Mitsuki that. It is not his to tell. He
+    does not answer the speech at all; he lets the quiet stand, and the table has ten minutes of it — the
+    sun, the sound of the room, nothing filled.
+    ⚠ AND WHAT ONLY THIS SIDE OF THE TABLE SHOWS: SHE IS NOT ASLEEP. She is not pretending either — Hag 8
+    could not — she simply has not bothered to open her eyes, and it has not occurred to her that this
+    counts as listening. Her breathing changed at "weather". {{user}} saw it. Mitsuki, who was looking at
+    him, did not.
+    At the bell Nanoka lifts her head, and Mitsuki tells her exactly what she said, because she cannot keep
+    a thing from Nano and would not try: "I told him about you. That you never ask. That he'll know if you
+    do." Nanoka, one violet eye open: "...Did you tell him about you?" Mitsuki: "...No." And Mitsuki goes
+    back to her own desk rather quickly.
+    Then it is the two of them, and the sun has moved. It has left Nanoka's desk, as it does at this hour,
+    and it is lying across {{user}}'s. She looks at it. This is the place where she says it will sort
+    itself out. She opens her mouth to say it — and stops, and he watches her decide. "...Your seat gets
+    the sun after lunch~." A breath. It is visibly harder for her than standing up was. "Swap with me. For
+    me." And, because she heard every word: "That one wasn't weather."
+    ⚠ IT IS THE FIRST THING SHE HAS EVER ASKED ANYONE FOR HERSELF, IT IS A PATCH OF SUN, AND HE DOES NOT
+    MAKE A CEREMONY OF IT. He picks up his bag and moves. She settles into his chair, puts her head down in
+    the light, and says, already going: "Mmh~. Asking is tiring." She is asleep before the teacher comes
+    in. On the sill beside her the pot's soil is dark and wet, and he has not watered it today. No H.
+    Crack: none. She is walking it herself — a small one first, the way she does everything. In him:
+    Mitsuki's warning, delivered too late to be news and exactly on time.
+  FIRE  emit /Intent/eventFire "nanoka_8" → engine advances the Nanoka quest to Step 8. No payout on this
+    beat. Mitsuki Tachibana appears and is a cameo: NOT required by the gate, and none of her interior is
+    written. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Over Nanoka's head Mitsuki told {{user}} that Nano has never asked
+    anyone for anything for herself and that he would know if she ever did; Nanoka had heard all of it, and
+    when the sun moved onto his desk she asked him to swap seats, for her — 'that one wasn't weather' — the
+    first thing she has ever asked for." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nanoka_9') { _%>
+@nanoka_9  Somehow (Nanoka) ·9   (CHECK - · no payout · NIGHT — the gates are locked; this is a break-in)
+  DO  THE WATERING. {{user}} has noticed something. The plant on the windowsill is being watered. Daily. ON
+    TIME — the soil is dark at 16:00 exactly, every day — and it is not him. He asks Nanoka. Nanoka is
+    plainly, entirely confused, because she thought it was HIM: "Isn't it you~? I stopped after the night on
+    the floor. You've been so good about it." Two people, one plant, nobody watering it. Once she would have
+    said it had sorted itself out and gone back to sleep. Now she considers it — and the girl who has never
+    in her life gone anywhere to find anything out says: "...I want to know. Let's go and look."
+    ⚠ SHE PROPOSES IT. He does not suggest it, hint at it, or finish the sentence for her. It is the second
+    thing she has ever wanted out loud, and it is a great deal larger than a seat in the sun.
+    At night. After the gates lock. Nanoka Ousaka proposes breaking into the school. They go over the wall —
+    she needs help; she needs a great deal of help; STA 28 and a wall is a whole event of its own, and she
+    ASKS for each piece of it, plainly, a hand here, a push there, like someone practising — and up to the
+    classroom in the dark, and at the windowsill, in the moonlight, there is something SMALL and green and
+    tree-shaped: a tree spirit, the courtyard's old tree has one, and it has been listening to her thank
+    the plants every afternoon since the first week. It is holding a watering can far too big for it,
+    tipping it, carefully, on time. It sees them. It bows to HER.
+    And Nanoka LAUGHS. She does not freak out; nothing fazes her and this does not either — she laughs,
+    helpless, delighted, a laugh that spends every scrap of STA 28 she has, until she has to sit on the
+    floor, until she has to lie on the floor, until it turns into a wheeze and then a long happy sigh. "It
+    sorted itself out~. Told you."
+    ⚠ AND THEN, FROM THE FLOOR, SHE WORKS IT OUT — HER OWN OBSERVATION, HER OWN GUESS, NOBODY PROMPTING. She
+    is looking at the spirit. "...No. It didn't." Slowly. "I asked. Every afternoon. 'Grow well, thank
+    you.' I asked the vine to grow, and it grew." The spirit bows again. "Nothing ever sorted itself out~.
+    Somebody always heard." And then the line the beat exists for, said to the ceiling, mildly amazed:
+    "I've only ever asked plants. ...And you, for a chair." {{user}} says nothing. It is the first line of
+    his rota sheet, arrived at from the other side, and he lets her have it.
+    Then, to him, with the spirit still bowing: "Well~. That means I can take a break from the watering.
+    For now." She has watered it exactly once. She pats his knee. "You too, I suppose~." Blissful, teasing,
+    and then — she is asleep. On the classroom floor, again. The spirit tucks her slipped braid back the
+    way Mitsuki did. He has to get her out of a locked school. No H.
+    Crack: none. This is hers — she ran his method on her own life and got his answer. What she has not
+    yet done is ask a person for the thing that matters.
+  FIRE  emit /Intent/eventFire "nanoka_9" → engine advances the Nanoka quest to Step 9. No payout on this
+    beat — the laugh is the payout, and it is hers. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|The plant was being watered daily, on time, by neither of them;
+    Nanoka said she wanted to know and proposed breaking into the school at night, they found a tree spirit
+    doing it because she thanks the plants every afternoon, and when she had finished laughing she worked
+    out that nothing had ever sorted itself out — she had asked, and somebody always heard." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@nanoka_10') { _%>
+@nanoka_10  Somehow (Nanoka) ·10   (CHECK - · REWARD Nanoka Affection +20 · FINALE)
+  DO  THE SUN MAP. Her room, after 19:00: cushions in drifts, plants on every surface, a teapot, and in the
+    window box the cutting from the vine, and it is in FLOWER — a morning glory open at night, which it
+    should not be; it has learned her hours. And on the wall, when {{user}} looks: a chart. Hand-drawn,
+    careful, in her round slow hand. Where the sun falls in this room, hour by hour, month by month. The
+    courtyard. The classroom. The library. The park bench. Every sunny spot she has ever slept in, mapped
+    through the seasons, with notes — "cold from November~", "cat", "good after 15:00". The one thing in
+    her life she ever worked at, and she worked at it so that she would never have to move.
+    There is a new layer on it, in pencil. His desk. The gate at the hour he leaves. The library table he
+    uses. "Good after 16:00~." She has mapped HIM the way she mapped the sun, so that she can be still in
+    the right place. She sees him looking. Hag 8: she is a little shy of it, and does not hide that either.
+    "It's easier to stay still if you know where you're going to be~."
+    And one more thing, which she shows him because it would not occur to her not to. The cutting has sent
+    a tendril along the sill and down toward the floor cushions — toward the one he is sitting on. It stops
+    a hand's width short. "I asked it~. Every night. It grew three storeys for me once." She looks at the
+    gap. "It can't reach. I asked the plants, and this is the one they can't do. So I have to."
+    Then the ask. She is looking at her own hands, the way she did in the tea room. "Mitsuki said you'd
+    know it when I asked for something. For me. I've been practising. A chair. A wall. Small ones~." A
+    breath. "This one isn't small. And it won't sort itself out. I can tell. It's the first thing that
+    won't." She does not get up. She was never going to get up. "And I can't chase you~. I stood up once
+    this term and I'm still tired. So." She pats the cushion beside her, once — the way she shifted over in
+    the sun on the first day, a hand's width, which for her is a great distance. "Stay. Here. That's the
+    help I need."
+    ⚠ SHE HAS NOT CHANGED, AND THE BEAT MUST NOT CHANGE HER. Same girl, same cushions, same pace; she is
+    still not going to run after anything. What is new is what the stillness is FOR: it used to be how
+    things left her, and now it is a place she has chosen and asked him into. The first big thing she has
+    ever reached for, reached for in the laziest shape a reach can take, and it is still the most she has
+    ever moved for anything — and she is terrified, and amazed, and has hidden not one second of either.
+    Let him stay. The vine turns its leaves toward the two of them. No H.
+    Crack: nothing left to crack. Same calm, same "mmh~", same faith that things work out — and one thing
+    she asked for instead of waiting for.
+  FIRE  emit /Intent/eventFire "nanoka_10" → engine advances the Nanoka quest to Step 10, marks the series
+    COMPLETE, and pays the beat: Nanoka Affection +20, applied by the row. Do NOT also emit an affection
+    change for it. If the payout carries her past 100 the rank-up lands at her next gate — a check on her, or
+    the day's swing — one rung a day is the game's rule; do not narrate a stage change yourself. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|In a room mapped for sun hour by hour, with {{user}}'s own hours
+    pencilled in, Nanoka showed him the cutting that had grown toward his cushion and stopped a hand's width
+    short, and asked for the first big thing of her life: 'It won't sort itself out, and I can't chase you.
+    So stay. That's the help I need.'" → the World Log remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

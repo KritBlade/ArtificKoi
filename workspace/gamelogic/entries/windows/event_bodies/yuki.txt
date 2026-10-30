@@ -1,0 +1,470 @@
+@@if String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@yuki_') === 0
+<%_ /* v1.3 */ _%>
+<%_ /* The ten @yuki_N beat bodies. <Event_Schedule> holds the PROCEDURE that plays whichever body is armed;
+   every body lives in an Event_Body block like this one, one entry per series, so a series is edited without
+   opening any other. Nothing here renders unless an @yuki_N key is the armed one. The @@if line on top repeats
+   the outer gate below, so on every other reply ST-Prompt-Template drops this entry before SillyTavern
+   activates it: it is never scanned, sent or kept in the reply's prompt record. mvu-helper's same-reply play
+   reads the body from the lorebook itself, so the @@if never hides a body it needs.
+   Tools/test_activation_gates.cjs holds the two conditions equal. */ _%>
+<%_ if (String(getvar('stat_data.EngineDerived.EventArmed[0]') || '').indexOf('@yuki_') === 0) { _%>
+<Event_Body>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuki_1') { _%>
+@yuki_1  One of the Guys (Yuki) ·1   (CHECK - · no payout — she is not in the save yet · INTRODUCTION)
+  DO  THE RIVAL, APPOINTED. After class, and the corridor has a knot in it: five or six girls around one
+    person, who is holding court. YUKI TSUKINO — short navy bob with clean layers and teal-blue gradient
+    tips, green eyes, the uniform worn sporty and practical, a dark training wristwatch she never takes off.
+    She is mid-performance when {{user}} comes past: one arm braced on the wall over a cute girl from the next
+    class, saying something that makes the girl laugh into her hand, and then taking a biro to the back of
+    her own hand, where a phone number goes down in blue ink next to two others.
+    She spots {{user}} and abandons the girl mid-sentence. The girl does not mind. ⚠ PLAY THAT PLAINLY, BECAUSE
+    IT IS HIS FIRST NUMBER: the knot of girls does not watch her go. They turn back to each other inside two
+    seconds and the corridor is a corridor again. Nobody minds. Nobody is watching her nearly as hard as she
+    performs for. He notices, and he does not say so.
+    Yuki crosses the corridor and slaps his shoulder hard enough to move him.
+    "Yo! Bro." She holds up the back of her hand like a scorecard. "Three this week. Boku's on fire. What's
+    your count?" Zero. "...Zero?!" And it is delight, real delight, no mockery anywhere in it. "Okay. Okay,
+    that settles it — you're boku's rival now. Starting now. Someone's gotta drag you up."
+    He did not agree to this. It was not on offer.
+    Then she wants his number, "for rival business, obviously, gotta be able to call a challenge" — and she
+    does not step back to take it. She leans in ACROSS his arm, one hand braced on his shoulder, biro in
+    her teeth, using his forearm as the desk while she writes on the back of her own hand, and her chest is
+    flat against his upper arm for the entire length of it and she does not notice. Not for a second. Soc 70
+    and no body-distance wiring of any kind. One of the girls behind her covers her mouth with both hands.
+    Another looks hard at the ceiling.
+    ⚠ THE SECOND THING HE SEES, AND HE SAYS NOTHING ABOUT IT: her hand is right under his face while she
+    writes, and the nail of her ring finger has a rim of pale pink round the cuticle — polish, scrubbed off
+    badly, at home, by someone who did not know you need remover. One nail. The rest are bare and bitten
+    short. He files it. The prose does not explain it.
+    Yuki straightens up, blows on the ink, and says: "Gym. Tomorrow, after class. Bring shoes, bro."
+    ⚠ THE DETAIL, PLANTED AND NEVER EXPLAINED: the girls' numbers sit in a row across the back of her hand.
+    His goes on the end of the row — and she draws a small box around it. She does not say why. Neither does
+    the prose. It matters in ten beats' time and not before.
+    Hag 25 — there is no hidden layer she is managing and nothing she is concealing on purpose. The act is
+    simply total, and every other person in that corridor can see it is an act. She cannot. No H.
+    Crack: none. In him: two counts started, and he keeps both from here on — how many people actually turn
+    when she does something (today: none, inside two seconds), and how many times she says "bro" in a
+    scene (today: he loses count past ten). One scrubbed nail, filed.
+  FIRE  emit /Intent/eventFire "yuki_1" → engine creates the Yuki quest (Step 1). NO payout on this beat, on
+    purpose: a reward pays someone already in the save, and she is not in it yet. NAME HER in the prose —
+    "Yuki Tsukino" — because that IS the mechanism: POST reads the name and arms her build, her <character>
+    card keyword-loads on it, and NEXT reply you build her via /Intent/newClassmate exactly as
+    <Classmate_Guide> says. Do NOT build her THIS reply unless her <character> profile is already in front
+    of you. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuki Tsukino collected a girl's phone number on the back of her hand
+    in front of {{user}}, appointed him her rival without asking, and wrote his number on the end of the row
+    with a box drawn around it; one of her nails had pink polish scrubbed off badly." → the World Log
+    remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuki_2') { _%>
+@yuki_2  One of the Guys (Yuki) ·2   (CHECK - · REWARD Yuki Affection +10)
+  DO  ONE ON ONE. The gym after class. She is already on court and has been for an hour, shooting alone,
+    and Sta 83 means the ball goes in a lot. Basketball is hers the way the field is Haruka's, and it is
+    indoors, and it has an audience, and both of those are the point.
+    Because the bleachers are not empty. Six girls, and they have a banner — hand-painted, on a bedsheet —
+    that says THE YUKI TSUKINO FAN CLUB. They have laminated membership cards. They have a president, who
+    is extremely serious about the role. When Yuki lands a three from the corner they scream like it is a
+    final. Yuki waves without looking. ⚠ Nobody in the scene treats the fan club as a joke except {{user}},
+    and he is the only one permitted to find it strange — the girls mean it, and Yuki has never once
+    wondered about it. Girls like her the way a year likes a good-looking boy, and she reads it as fans.
+    Then the game, and she dismantles him, and every second of it is contact. Boxing out with her back
+    against his chest. A forearm across him on the drive. A hand flat on his hip to feel which way he is
+    about to go. Turning to check the ball with her shoulder under his arm. Every one of them is legitimate
+    basketball. Every one of them is ruinous. And she is COACHING through all of it, entirely oblivious,
+    faintly annoyed at him: "Boku said stay on boku's hip — come on, feel where I'm going, you're readin'
+    it off my eyes and my eyes lie—" He is dying. The fan club has worked out precisely what he is dying of.
+    The president has both hands over her mouth.
+    ⚠ HIS READING, NOT STATED IN THE PROSE: this is not flirting and it is not a bit. Nobody ever taught her
+    where a girl's body stops and a boy's begins, because nobody ever told her she had the first kind. The
+    contact is the most honest thing in the gym — it is how she was raised to play.
+    She wins by a distance and headlocks him about it. Then hauls him over to the bleachers and presents
+    him: "This is boku's rival. Be nice, he's got zero numbers." The president gravely issues him a
+    membership card. Number seven. She writes his name on it in silver pen and he is not allowed to refuse it.
+    Then Yuki drops onto the bench beside him, shoulder against shoulder with no gap at all, drinks out of
+    his bottle without asking, and says the most unguarded thing in the beat: "Same time tomorrow, yeah?"
+    There is no wager in it. No terms, no event, no score. She does not hear the difference. ⚠ RHYME, do not
+    state: Haruka would have laminated a bracket for this. Yuki just wants tomorrow. No H.
+    Crack: none. In him: the image she keeps is loved — by six girls with a banner, as "Yuki-kun", as a boy.
+    That is the thing she would be giving up, and he writes it down as the cost, not yet the cause.
+  FIRE  emit /Intent/eventFire "yuki_2" → engine advances the Yuki quest to Step 2 and pays the beat:
+    Yuki Affection +10, applied by the row. Do NOT also emit an affection change for this beat — the row is
+    the payout, and reporting it twice pays it twice. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuki beat {{user}} one-on-one in the gym in front of a fan club with
+    a hand-painted banner, spent the whole game leaning on him without noticing, and had him issued
+    membership card number seven." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuki_3') { _%>
+@yuki_3  One of the Guys (Yuki) ·3   (CHECK - · REWARD Yuki Affection +16)
+  DO  THE NUMBERS GAME. A free day in town, and her terms are announced with total confidence: first one to
+    get a girl's number wins, loser buys the drinks. "Boku'll spot you a head start, bro. Boku's generous."
+    And she is GOOD at it. That is what has to land first — this is not a bit that fails. She is smooth and
+    warm and funny and boyish in a way that genuinely works, and the girl she picks is charmed inside two
+    minutes and is getting a pen out of her bag.
+    And Yuki checks over her shoulder that {{user}} is watching. Every time. ⚠ PLAY IT THREE TIMES, AND HE IS
+    COUNTING: mid-approach, glance back — one. Mid-joke, glance back — two. Hand out for the pen, glance
+    back — three.
+    The third time he has turned away to look at a shop window and does not see it. ⚠ THE WINDOW IS THE
+    BEAT, AND IT GETS ONE SENTENCE: it is a cosmetics window, lipsticks on a tiered stand, and in the glass
+    he can see her reflected behind him — and her reflection is not looking at the girl with the pen. It
+    is looking at the stand. Then she loses the thread. Says the next thing slightly wrong. Apologises to
+    the girl, which is not like her. Comes back. And then does the entire approach AGAIN, from the top,
+    with a different girl, louder this time, and positions herself so that she is squarely in his eyeline
+    whether he was planning to look or not.
+    She wins the bet. Obviously she wins it. And as the second girl is writing the number down, the girl
+    glances past Yuki at {{user}}, and then back at Yuki, and asks — kindly, with no edge at all: "Is that
+    your boyfriend?"
+    "WHAT? No! That's — no. That's boku's RIVAL."
+    Too loud. Too fast. A full half-second faster than a person answering a question.
+    The girl writes the number anyway. Hands it over. Says "...okay" in the tone of somebody who has just
+    been told the sky is green, and gives {{user}} a small look on her way past that is unmistakably sympathy.
+    Yuki buys the drinks herself despite having won and does not notice she has done it. She spends the
+    whole walk back listing his athletic deficiencies at length, walking close enough to bump his shoulder
+    every third step, and holds up the back of her hand twice to make sure he has seen the score. No H.
+    Crack: none. In him, the hypothesis, written down on the walk back: the act is not aimed at the girls
+    and it is not aimed at beating him — it is the image, kept in place, checked three times to make sure
+    he is still buying it. Under it is a girl who looks at lipstick when she thinks nobody can see, and
+    who believes everybody can. The test will be the audience she is so sure of.
+  FIRE  emit /Intent/eventFire "yuki_3" → engine advances the Yuki quest to Step 3 and pays the beat:
+    Yuki Affection +16, applied by the row. Do NOT also emit an affection change for this beat. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuki won a bet about collecting girls' numbers and checked three
+    times that {{user}} was watching her do it; the one time he missed, her reflection in a cosmetics window
+    was looking at the lipsticks, and when a girl asked if he was her boyfriend she answered half a second
+    too fast, then bought the drinks she had won." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuki_4') { _%>
+@yuki_4  One of the Guys (Yuki) ·4   (CHECK - · no payout)
+  DO  THE MUSCLE THING. The gym after class, and she is wrong. Grey in the face, sweating in a way that is
+    not exercise, one forearm pressed across her stomach and pretending the arm is just resting there. And
+    she is trying to play anyway.
+    It is her period, and she would sooner be run over than say the word. What she says instead, through her
+    teeth, with escalating specificity as it gets less believable: "Boku's fine." "Muscle thing." "Abdominal.
+    Core strain." "It's a training injury, bro, boku's had it since the weekend." She has not had it since
+    the weekend.
+    ⚠ PLAY THE COMEDY FIRST AND PLAY IT STRAIGHT: she goes up for a lay-up and has to stop halfway to the
+    basket and stand very still with the ball on her hip. She sits down on the free-throw line for no stated
+    reason and then gets up as though that was a drill. Three of the fan club are in, and they work it out
+    instantly — because they are girls, and it takes them one look — and the president tries to send her
+    home, and Yuki informs the president that boku does not sit out.
+    Then it turns, and it turns on {{user}} doing almost nothing. He works it out. And he does not announce
+    it, does not name it, does not make a face about it. He goes and gets something warm to drink, puts it in
+    her hand, picks up her bag, and says the gym is closing — which it is not — and walks out with her. And
+    she goes, because he has handed her a way to leave that does not require admitting anything.
+    The corridor to the infirmary. She is leaning on him by the second turn: whole side, weight through his
+    arm, head somewhere near his shoulder. She does not notice that either — but this time it is not the
+    gag, because there is no performance running and nobody is watching, and it is the first time she has
+    touched him when there was no audience for it.
+    At the infirmary door she stops. She has gone scarlet from the collar up and it has nothing to do with
+    pain. "...Don't." A breath. "Don't say anything. Ever. Not to the club, not to Kurusu, not to— boku
+    means it." And then, because she cannot end on that: "...thanks for the drink, bro." And she is through
+    the door.
+    ⚠ THE GAP MOE IS NOT THE PAIN. It is that her body did a girl thing to her, on a schedule, in front of
+    people, and she is certain it is news. The terms she sets at the door are the terms of someone who
+    believes the whole school is waiting for exactly this. No H.
+    Crack: none — he ran nothing; he handed her a door. In him, two more numbers: three girls worked it out
+    in the gym and the sum of what happened was nothing, nobody said a word, the gym went on; and the "bro"
+    count for the whole corridor was one, at the door, because she could not end on the other thing. With
+    no audience the act is off and the girl is there, leaning on him. The hypothesis holds; it has not been
+    tested yet.
+  FIRE  emit /Intent/eventFire "yuki_4" → engine advances the Yuki quest to Step 4. No payout on this beat —
+    not every beat pays, and the ones that do are 2, 3, 7 and 10. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuki tried to play through her period while calling it an abdominal
+    training injury; {{user}} worked it out, said nothing, put a warm drink in her hand and invented a
+    reason the gym was closing, and she leaned on him the whole way to the infirmary and made him swear
+    not to tell anyone." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuki_5') { _%>
+@yuki_5  One of the Guys (Yuki) ·5   (CHECK - · no payout · THE SAME LUNCH AS HARUKA'S SERIES, FROM YUKI'S CHAIR)
+  DO  THE TWO CONTESTS. Lunch, and somebody has started arm-wrestling on the desks, and it is a full
+    tournament within four minutes, because that is what a classroom is.
+    Yuki beats everyone. Everyone. She beats Haruka Kurusu, who takes it extremely badly and demands a
+    rematch and loses that one too. Yuki grins, shakes out her wrist, says "good one, Kurusu" and means it —
+    Haruka is the one person in the year who gives her a real game. She beats the two tallest girls in the
+    year back to back. She takes the last one one-handed while eating with the other hand, and the room
+    loses its mind, and she is genuinely, uncomplicatedly happy — being the strongest person in the room is
+    her favourite thing in the world and she is not performing a second of it.
+    ⚠ THEN THE COUNT, AND IT IS THE SAME COUNT AS IN HARUKA'S OWN SERIES — keep it word for word. Yuki, still
+    at the desk, entirely casual, does the arithmetic out loud at Haruka: Haruka has challenged Yuki twice
+    this term. Twice. And she has challenged {{user}} nineteen times. "Nineteen, Kurusu. That's not a rivalry.
+    I'm your rival. So what's he?" Haruka goes blank, then recounts, then angry, then technical — he is the
+    most efficient available opponent — and Yuki fist-bumps her shoulder and lets it go: "Sure. Efficient."
+    ⚠ WHAT {{user}} FILES FROM HIS CHAIR, UNSTATED: Yuki knew the number. Nineteen, without thinking. She has
+    been counting who challenges him. Yuki counts a lot of things, it turns out.
+    Then somebody proposes the other contest. Laughing, no malice in it anywhere. Chests. Smallest loses.
+    And Yuki loses that one to every single girl in the room.
+    She loses it LOUDLY. She declares it rigged. She demands a recount and a neutral judge. She stands on a
+    chair and announces that boku has functional equipment and the rest of them are carrying dead weight,
+    and the class is howling, and she is loving it — because a loss you can shout about is just another
+    event, and she has never met one she could not shout about.
+    And then a girl says the line. Fond, warm, offered as the nicest thing she has: "Honestly, Yuki-kun,
+    you'd make such a good boyfriend."
+    And the room agrees. Loudly, happily, a whole chorus of it — Yuki-kun would. Yuki-kun's the best. I'd
+    date Yuki-kun in a heartbeat.
+    And Yuki laughs.
+    ⚠ ONE FRAME, ONE ONLY, AND NEVER EXPLAINED: for about the length of one breath, in the middle of the
+    laugh, it is not there. She is looking at the desk. Then it is back and she is on her feet taking a bow.
+    {{user}} is the only person in the room facing the right way. Nobody else sees it. Including her.
+    ⚠ NOW HIS TEST, AND IT IS A CLOCK. That chest contest was the most public girl thing that has ever
+    happened to her — a whole room, a loss she could not win, her body the subject. He times the room from
+    the bow. Forty seconds. Forty seconds and somebody's bento is the topic, and the contest is never
+    mentioned again by anyone, all lunch. He has the prediction written down before he opens his mouth: she
+    will say everyone. Then he asks it the way he asks anything, plainly, no weight on it: "If you came in
+    with make-up on. Who'd notice?"
+    She does not even have to think. "Who'd NOTICE? The whole TOWN, bro. Boku'd be the news." Fond, certain,
+    already turning back to the room. She means every word.
+    She flexes a bicep at the class on her way back to her seat and gets a cheer for it, and the cheer is
+    completely real. They love her. That is the trap and the prose must not point at it: she is adored, by
+    everyone, exactly as much as she ever asked to be, in exactly the shape she asked for it — and it is the
+    wrong shape, and she built it herself, with both hands, over months. No H.
+    Crack: the first, and it is his — forty seconds against the whole town, in her own voice. That is where
+    she went wrong: there is no headline waiting, and she is living as if there is. Her cover is whole; she
+    thinks he asked a dumb question.
+  FIRE  emit /Intent/eventFire "yuki_5" → engine advances the Yuki quest to Step 5. No payout on this beat.
+    Haruka Kurusu appears and is a cameo: NOT required by the gate, NOT built, and none of her interior is
+    written. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuki won every arm-wrestle in the class including Haruka's rematch
+    and counted out loud that Haruka had challenged {{user}} nineteen times; she lost the chest-size contest
+    to every girl in the room, the room forgot it in forty seconds, and asked who would notice if she wore
+    make-up she said the whole town would." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuki_6') { _%>
+@yuki_6  One of the Guys (Yuki) ·6   (CHECK - · no payout · FREE DAY)
+  DO  THE DRESS. The shopping mall on a free day, and it is an ambush that has been planned for weeks: Umi,
+    Airi, and the fan club president, who has appointed herself to the operation with total gravity. Yuki
+    has been told they are getting food. There is no food.
+    The changing room is a war and it should be heard, not seen: "Boku is NOT— get your— that is not a
+    SHIRT, where does the ARM go—" The curtain moves violently. The president passes things over the top of
+    it with the calm of a surgical nurse.
+    And then she comes out, and it WORKS, and that is what nobody in the shop was prepared for. A soft dress
+    in a colour that goes with the teal in her hair, and she is — and every person in the shop clocks it at
+    once — extremely pretty. Her card is not lying about this: she is visually feminine and always has been,
+    and the swagger is the only reason nobody has ever looked properly.
+    And she cannot stand in it. ⚠ THIS IS THE JOKE AND IT IS PHYSICAL — play it at length. Feet too far
+    apart. Shoulders squared like she is about to box someone out. Both hands going automatically to hips
+    that have no pockets, then folding across her chest, then not knowing what to do with her arms at all
+    and letting them hang. She keeps checking behind herself. She walks like the dress is a defensive
+    assignment. Airi is crying. Umi is taking photographs and being completely open about it.
+    And then {{user}} arrives, because Umi arranged that part too, and the shop goes quiet in a way shops do
+    not normally go quiet — for about as long as it takes a shop to go quiet, and then it is a shop again.
+    ⚠ HIS SECOND TEST, BEFORE HE SAYS ANYTHING ELSE, AND IT IS A HEADCOUNT. She is checking behind herself
+    again. He asks, plainly: "How many people are looking at you?"
+    "ALL of them." Through her teeth, not turning round. "The whole— everyone, bro, the whole floor—"
+    He counts. He has the number before she finishes the sentence: two. The shop assistant, who is paid to.
+    And Umi, with a camera. Everyone else on the floor is buying socks. He does not tell her the number. He
+    writes it down later, under the prediction, which said: she will say everyone, and it will be two.
+    Then the other half, and he knows what it will do before he does it. He says something plain. Not a
+    joke. Not a compliment shaped like a joke, not "you clean up nice" — something true and simple and
+    unornamented, said in a normal voice, the way you would say it to a girl.
+    And her whole system falls over. Her card is holding the line and it comes out word for word:
+    "d-don't just SAY stuff like that to me, idiot. I'm your RIVAL, remember?! ...quit makin' it weird,
+    jeez." And she is out of the shop, in the dress, tags still on, at a speed the president describes
+    admiringly as her actual game speed. ⚠ COUNT THAT TOO: nobody on the floor looks up as she goes.
+    She buys it. At the counter, furiously, not looking at anybody: "Boku's not letting Umi win by RETURNING
+    it." Nobody has explained to her how winning works in this situation. She carries the bag home like it
+    owes her money, and she does not put the dress on again, and she does not throw it out either. No H.
+    Crack: the second, and it is his — everyone against two, predicted and confirmed; and treated plainly as
+    a girl she cannot stand under one sentence, which her own card said she could not. The headline does not
+    exist and she ran from it anyway. Her cover is whole; she thinks he said a weird thing.
+  FIRE  emit /Intent/eventFire "yuki_6" → engine advances the Yuki quest to Step 6. No payout on this beat.
+    Umi, Airi and the fan club president appear and are cameos: NOT required by the gate, NOT built, and none
+    of their interiors are written. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Umi, Airi and the fan club president ambushed Yuki at the mall and
+    got her into a dress that suited her completely; asked how many people were looking she said everyone,
+    {{user}} counted two, and when he said something plainly kind she fled in the dress and bought it on the
+    way out rather than let Umi win." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuki_7') { _%>
+@yuki_7  One of the Guys (Yuki) ·7   (CHECK - · REWARD Yuki Affection +20 · FREE DAY · SUPERNATURAL · THE BREAK)
+  DO  THE MACHINE THAT IS NOT PLUGGED IN. The arcade on a free day, and right at the back past the coin
+    pushers, where the carpet is worn through, there is an old capsule-toy machine. Dusty dome, faded label
+    nobody can read any more, a coin slot from another decade. The staff say it has been dead since before
+    any of them started. ⚠ PLANT THIS ONCE, IN PASSING, AND NEVER MENTION IT AGAIN: the plug is lying loose
+    on the floor behind it. The machine is connected to nothing.
+    Yuki puts a coin in it, because Yuki puts coins in things.
+    It turns. It rattles. A capsule comes out. Inside: a hair ribbon. Pale pink, with a small bow.
+    She is delighted — this is free material, this is a BIT — and she puts a hand on {{user}}'s shoulder and
+    announces the machine clearly meant it for him, and puts it on his head, and the fan club president, who
+    is present because of course she is, takes a photograph.
+    Second coin: lip balm, strawberry. Third: a heart-shaped keyring. Fourth: a hair clip with a flower on it.
+    And somewhere around the fifth it stops being a bit, because she has decided the machine is WRONG and
+    she is going to prove it wrong, and this is the most Yuki thing in the entire series — she cannot let a
+    machine hold an opinion about her and walk away from it. She feeds it everything in her wallet. Three
+    thousand yen deep. There is a small pile of soft, cute, unmistakably girls' things on the carpet beside
+    her knee, every one of which came out of a machine with no power going to it, and her voice is getting
+    louder with every coin — ⚠ AND THE LOUDER IS FOR THE ARCADE. She is waiting for it to turn round. "Okay —
+    okay, this thing's BROKEN, it's got a bad batch in it, boku's gonna keep going till it gives me a car or
+    a knife or SOMETHING—"
+    Last coin. The dome turns. And what comes out is half of a matched pair — a small flat charm on a strap,
+    the kind sold as a set of two — and the word on it, in plain block letters, is GIRLFRIEND.
+    Silence. The president stops filming.
+    {{user}} puts in a coin. And it gives him the other half. BOYFRIEND. That is the whole of what he does.
+    And there is nowhere to go. She is standing in an arcade holding a tag that says GIRLFRIEND, twenty
+    minutes after loudly proving she is not one, with ribbons and lip balm around her feet and a photograph
+    in existence of her putting a bow on his head — and the machine that did it is not plugged in.
+    She goes for the joke. Three times. Each attempt is shorter than the last: "Okay so obviously—"
+    "—that's, like, a factory—" "...boku's—"
+    And it does not come. The bit does not come. Her hands are shaking and she cannot put the tag down.
+    A member of staff goes past with a mop. Past a girl holding a tag that says GIRLFRIEND, over a pile of
+    ribbons, red to the hairline. He remarks, conversationally, to nobody, that that machine has never
+    worked once since he started there. And keeps walking.
+    ⚠ THE BREAK IS HERS, AND IT IS A LOOK ROUND. She looks for it — the arcade, the headline, the whole
+    town turning. Coin pushers. A kid on a crane game. Two salarymen at the racing cabinets. Nobody is
+    looking. Nobody has looked once, in three thousand yen. "...nobody's lookin'." Not to him. To the carpet.
+    And then she bends down and picks up the ribbon. The first one, the pink one. And puts it in her own
+    hair. Wrong side. Crooked. The bow half under the hair instead of on top of it, because nobody ever
+    showed her. She stands up in it, in the middle of the arcade, feet too far apart, and waits.
+    Nothing. The crane game loses. The president, very quietly, puts her phone away.
+    {{user}} says nothing. ⚠ HE DOES NOT SAY THE KIND THING THIS TIME; HE DOES NOT MOVE. She does.
+    "...is it on wrong?" Very quiet, and nothing like her voice.
+    "It's crooked."
+    "...fix it, then." The hand holding the tag has not opened. "Don't make it weird. Just— fix it."
+    Let him fix it. Let it take a moment. Let her stand completely still for it, which for Yuki Tsukino is
+    the largest thing she owns. And then she walks out of the arcade with it in, and the tag in her fist,
+    and she does not take either off on the way home. No H.
+    Crack: none; the proofs are done. This is hers: she looked for the town and it was not there, and she
+    put the ribbon in herself. He put one coin in and answered one question.
+  FIRE  emit /Intent/eventFire "yuki_7" → engine advances the Yuki quest to Step 7 and pays the beat:
+    Yuki Affection +20, applied by the row. Do NOT also emit an affection change for this beat. The fan club
+    president appears and is a cameo: NOT required by the gate, NOT built. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|A dead capsule machine with its plug on the floor gave Yuki ribbons,
+    lip balm and a charm reading GIRLFRIEND, and gave {{user}} the matching BOYFRIEND half; she looked round
+    the arcade for someone watching, found nobody, put the ribbon in her own hair crooked and asked him to
+    fix it." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuki_8') { _%>
+@yuki_8  One of the Guys (Yuki) ·8   (CHECK - · no payout)
+  DO  THE COUNT, HERS. The cafeteria at lunch, and she comes in braced for a room.
+    ⚠ WHAT SHE HAS DONE, AND PLAY IT STRAIGHT: she has tried. Something on her eyes — liner, from a tutorial
+    watched twice at six in the morning — and one eye has come out heavier than the other, and the lip balm
+    is the strawberry one from the machine. It is not good. It is a first attempt by someone with no one to
+    ask, and it is visible from the door, and she walks in like it is a free throw with the game on it.
+    And she counts. ⚠ SHE IS DOING {{user}}'S THING AND DOES NOT KNOW IT: {{user}} can see her doing it — eyes
+    going table to table, waiting for the heads to turn, for the whisper, for the news.
+    Zero. The cafeteria eats lunch.
+    One head. The girl at the next table — a good one, a friendly one, the one Yuki has run the routine on
+    forty times since the entrance ceremony — glances up, says "oh— here," reaches over and wipes the heavy
+    corner off with her thumb like it is nothing, says "there," and goes back to her rice.
+    That is the headline. All of it.
+    And then, because she does not know what else to do with a room that is not watching, Yuki runs the
+    routine. Pure muscle memory: elbow on the table, the grin, the opener, the line that has never once
+    failed to land. And halfway through, it goes hollow.
+    ⚠ PLAY THE MECHANICS, NOT THE FEELING. She hears herself. That is all that happens. The words are the
+    same words and they are doing nothing, because they were only ever there to keep an image in place for
+    an audience, and she has just counted the audience, and it was one girl with a thumb.
+    She stops. Mid-sentence, almost mid-word, with the grin still half on her face.
+    The girl waits. Yuki starts again. Gets four words out. Stops again.
+    And then — and nobody in this series has seen her do this — she apologises. Properly, sitting back,
+    dropping the entire performance: "...sorry. Sorry, that was— boku's bein' weird. Forget it. You're
+    really nice, that wasn't— sorry."
+    She takes her tray and sits somewhere else, with the liner still on, and she does not look at {{user}} on
+    the way past, and that is the first time in eight beats she has been in a room with him and not made a
+    noise about it.
+    The girl watches her go. Then says to {{user}}, mildly, with no cruelty in it at all: "...She apologised
+    to me." A pause. "Does she do that?" ⚠ THAT IS ALL THE GIRL SAYS. She does not explain Yuki to him. No H.
+    Crack: none. She ran the test herself and got his numbers: zero, then one, then nothing. The routine
+    died in her mouth because she had just counted what it was for.
+  FIRE  emit /Intent/eventFire "yuki_8" → engine advances the Yuki quest to Step 8. No payout on this beat.
+    (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Yuki came to lunch with uneven eyeliner and the machine's lip balm
+    and counted the room waiting for it to react; one girl wiped the smudge off with her thumb and went
+    back to eating, and when Yuki ran her usual flirting routine on her it went hollow and she apologised and
+    moved tables." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuki_9') { _%>
+@yuki_9  One of the Guys (Yuki) ·9   (CHECK - · no payout · THE RETURN LEG OF HARUKA'S LUNCH)
+  DO  KURUSU DOES THE MATH. The gym after class, and Haruka Kurusu is here, because Haruka is the one person
+    in the year who gives Yuki a real game and neither of them has ever taken a loss from the other
+    personally. They go at each other hard, and it is the healthiest hour either of them gets.
+    And then, in the middle of it, Haruka does the arithmetic back at her.
+    ⚠ THIS IS A SYMMETRY AND IT MUST BE EXACT: at the arm-wrestling lunch, Yuki did this TO Haruka — out loud,
+    with numbers, in five seconds, and Haruka had no answer. This is the return leg, in Haruka's grammar,
+    and Haruka has the receipts because Haruka always has the receipts. She gives Yuki's own sentence back,
+    word for word, and NOT ONE WORD MORE.
+    "Forty." Not even winded. "You said 'bro' to {{user}} forty times this week. Once to me." The ball under
+    one arm. "I'm your rival. So what's he?"
+    And Yuki runs the exact route Haruka ran. Blank first, because the sentence does not parse. Then the
+    recount — Haruka has counted wrong, some of those were the same conversation, that is not how you count
+    it. Then anger, loud and fast and aimed straight at Haruka, who does not rise to it. And then the
+    denial, which is technical, because technical is the only shape it can take: he is just around, he is
+    convenient, he needs the coaching, somebody has to—
+    ⚠ AND SHE STOPS IT HERSELF. Mid-sentence. The way the routine stopped in the cafeteria: she hears it.
+    Haruka says nothing. Haruka does not help. ⚠ HARUKA HANDS HER NO VERDICT AND NO ADVICE — she asked the
+    question and she waits, which from Haruka is a kindness nobody would recognise as one.
+    The ball bounces away from Yuki's foot. She lets it.
+    "...not boku's rival." To the floor. Then, because the floor did not hear it: "He's not boku's rival.
+    Okay? He's— not that."
+    Haruka looks at her for exactly as long as it takes. "Obviously." Goes to fetch the ball. Over her
+    shoulder, as close to gentle as she is capable of getting: "...Same time tomorrow."
+    ⚠ THAT IS THE EVENT — not Haruka's count, the ANSWER. She has had a comeback for everything since the
+    corridor: for teachers, for losses, for the fan club, for her own body. This one she put down herself,
+    in front of the one person whose opinion of her game she actually rates, and the gym did not end. No H.
+    Crack: none. She is walking it: the denial stopped in her own mouth, and the answer she gave was the
+    true one, said to Haruka before she has said it to him.
+  FIRE  emit /Intent/eventFire "yuki_9" → engine advances the Yuki quest to Step 9. No payout on this beat.
+    Haruka Kurusu appears and is a cameo: NOT required by the gate, NOT built, and none of her interior is
+    written. (No day-end swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|Haruka counted it back at her — forty 'bro's to {{user}} this week,
+    one to her — and asked what that made him; Yuki started the technical denial, stopped it herself, and
+    said he is not her rival." → the World Log remembers only what you report.
+<%_ } _%>
+<%_ if (getvar('stat_data.EngineDerived.EventArmed[0]') === '@yuki_10') { _%>
+@yuki_10  One of the Guys (Yuki) ·10   (CHECK - · REWARD Yuki Affection +20 · FINALE)
+  DO  THE BACK OF HER HAND. Her room, after 19:00, and it is a sports room and an honest one: kit drying
+    over the radiator, a ball wedged behind the door, two trophies being used as bookends, a hoop mounted on
+    the back of the door at a height that means she practises indoors and her family gave up objecting a
+    long time ago. There is a mirror on the wardrobe. ⚠ THERE WAS A TOWEL OVER IT ONCE, AND IT IS GONE;
+    the towel is on the radiator with the kit.
+    Three things in the room are not sports.
+    The dress, on a hanger on the wardrobe door. ⚠ TAGS OFF. It has been worn. Next to it, on the same rail,
+    a hoodie, and the two of them hang there like they have worked out an arrangement.
+    The pile from the machine, in a shoebox on the desk — the ribbon, the flower clip, the lip balm with a
+    third of it gone. And the GIRLFRIEND tag, which is not in the box. It is out on the desk, where she can
+    see it from the bed.
+    She catches {{user}} looking at the dress and says it plain, in her own voice, no bit on top of it: "Some
+    days. When boku feels like it. Wore it to the shopping street twice and the station once." A shrug that
+    is almost the old shrug. "Nobody said a word. Not one person. Turns out nobody freakin' cares, bro—" and
+    she stops on the word, and does not finish it, and does not replace it either.
+    And then {{user}} sees her hand.
+    ⚠ THE BOOKEND, AND IT IS THE WHOLE SERIES: there is one number on the back of her hand. Not a row of
+    them. One. In blue biro, in the same place it has occupied since the corridor, with the small box drawn
+    around it, and it is his.
+    He says it out loud: the girls' numbers stopped weeks ago. And this one has never once been allowed to
+    fade — because you cannot keep biro on a hand for four months. You can only rewrite it. Every single
+    morning. Before school. On purpose.
+    Yuki goes red from the neck up, and she does not deny it, and the not-denying is the loudest thing she
+    has done in ten beats.
+    "...Yeah." Looking at the hand, not at him. "Every morning. After boku washes. Before the— yeah." And
+    then her voice does something it has not done once in this series, which is go quiet and STAY quiet.
+    "It kept comin' off in the shower, and boku kept redoin' it, and then one day boku just started doin' it
+    before, like it was part of gettin' dressed, and boku didn't think about it, and then boku thought about
+    it, and then boku thought about it for like a month, and—"
+    She stops. Puts both hands over her face. Makes a noise into them.
+    And then does the bravest thing any version of her has ever done, which is put the hand out, palm down,
+    and ask for it in the only grammar she owns:
+    "...Boku's been writing it. Every day. On my own hand. Like an idiot." The hand stays out. It is shaking
+    very slightly. "You do it. This once. So it's— so it's yours." A beat. "...and don't make it weird."
+    Let him take her hand and write it. Let it take a moment. Let her watch him do it and say absolutely
+    nothing the entire time.
+    And when it is done she looks at it for a while. And then, because she would not be her otherwise, in
+    something that is nearly her old voice and not quite: "...Took you long enough, idiot."
+    ⚠ THE CLOSE, AND IT IS BEAT ONE SAID AGAIN: ink still wet, she holds the OTHER fist out for a bump, and
+    he gets it, and she says, exactly as she said it in the corridor: "Gym. Tomorrow, after class. Bring
+    shoes." Same words. Same girl. It is not a challenge now and they both know what it is, and nobody says.
+    ⚠ She does not call him bro. Not once after the word she stopped on. Do not draw attention to it; he is
+    the one counting, and the count is zero. No H.
+    Crack: none. She is herself — kit on the radiator, hoop on the door, a fist out for the bump — and the
+    dress hangs next to the hoodie because nobody cares which she picks, and she knows it now. Tomboy on
+    the outside. Toward him, a girl asking him to write his number on her hand.
+  FIRE  emit /Intent/eventFire "yuki_10" → engine advances the Yuki quest to Step 10, marks the series
+    COMPLETE, and pays the beat: Yuki Affection +20, applied by the row. Do NOT also emit an affection
+    change for it. If the payout carries her past 100 the rank-up lands at her next gate — a check on her, or
+    the day's swing — one rung a day is the game's rule; do not narrate a stage change yourself. (No day-end
+    swing — CHECK is none.)
+    THEN emit /Intent/recordEvent "save|In Yuki's room {{user}} found the dress worn and hanging beside a
+    hoodie, the towel gone from the mirror, the capsule machine's GIRLFRIEND charm out on the desk, and one
+    number left on the back of her hand — his, rewritten every morning for four months — and she held the
+    hand out and asked him to write it himself, then told him gym, tomorrow, bring shoes." → the World Log
+    remembers only what you report.
+<%_ } _%>
+</Event_Body>
+<%_ } _%>

@@ -1,0 +1,22 @@
+{
+  "id": "4c64984d-ba75-452f-88d8-ebec93d55ef3",
+  "script_name": "HideChoices",
+  "enabled": true,
+  "find_regex": "/<choices>(?:(?!<choices>)[\\s\\S])*?</choices>/gm",
+  "replace_string": "",
+  "trim_strings": [],
+  "source": {
+    "user_input": false,
+    "ai_output": true,
+    "slash_command": false,
+    "world_info": false,
+    "reasoning": false
+  },
+  "destination": {
+    "display": true,
+    "prompt": false
+  },
+  "run_on_edit": true,
+  "min_depth": null,
+  "max_depth": null
+}
