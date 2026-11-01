@@ -2,6 +2,14 @@
 
 ![alt text](Image/Readme/wide_logo.jpg)
 
+<p align="center">
+  <a href="Image/Readme/gui_school_gate.jpg"><img src="Image/Readme/gui_school_gate.jpg" height="240" alt="Mitsuki at the school gate on the first morning, under the cherry blossoms" /></a>
+  <a href="Image/Readme/gui_hallway.jpg"><img src="Image/Readme/gui_hallway.jpg" height="240" alt="Nanoka and Mitsuki in the school hallway" /></a>
+  <a href="Image/Readme/gui_gym_corridor.jpg"><img src="Image/Readme/gui_gym_corridor.jpg" height="240" alt="Mitsuki holding Mainchar's hand in the crowded corridor to the gym" /></a>
+  <a href="Image/Readme/gui_weekend_date.jpg"><img src="Image/Readme/gui_weekend_date.jpg" height="240" alt="A Saturday evening playing cards at home, she's in her own casual clothes" /></a>
+  <a href="Image/Readme/gui_picture_gallery.jpg"><img src="Image/Readme/gui_picture_gallery.jpg" height="240" alt="galgame's Asset management tab, with the pictures drawn during play" /></a>
+</p>
+
 ## Installation guide
 
 ArtificKoi rides on numerous extension to pull off the trick.  It needs MVU Helper, plus the 2 SillyTavern extensions MVU Helper rides on, Tavern Helper and ST-Prompt-Template. There's also one setting you must not skip, Environmental isolation. Then you import the card. It's a couple short steps, all on [Install ArtificKoi](doc/install.md).
