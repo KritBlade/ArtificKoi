@@ -60,9 +60,9 @@ If you said no, that's fine. MVU Helper > Main tab > **Install MVU** does the sa
 
 ## 8. Download and import ArtificKoi
 
-Download the card [here](../dist/). On its GitHub page, click the latest version, download button at the top right.
+Go to [ArtificKoi's releases](https://github.com/KritBlade/ArtificKoi/releases). Under the latest release's **Assets**, download the card's `.zip`. Not **Source code**: that's the repo's files, not the card. Unzip it.
 
-Then SillyTavern > Character Management > **Import Character from File**, and pick `ArtificKoi-x.x.png`.
+Then SillyTavern > Character Management > **Import Character from File**, and pick the `.png` from that zip.
 
 SillyTavern then asks whether to import the card's embedded World/Lorebook. Click **Yes**. That lorebook is the game itself, and ArtificKoi can't run without it. If it asks to allow the card's scripts or regex too, say yes to those as well.  
   
