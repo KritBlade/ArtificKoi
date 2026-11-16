@@ -1,5 +1,5 @@
 <%_
-//  v0.192
+//  v0.194
   // ============================================================================
   // Window A (pre-prompt EJS2). Runs at prompt assembly, reads live stat_data.
   // Emits: (1) COMPACT state (one line per present heroine + absent roster),
@@ -593,12 +593,21 @@
     const isDriveLive = (c) => (Number(V(c.Lewdness)) || 0) >= 40 || (Number(V(c.Arousal)) || 0) >= 20;
     // Venue DISPLAY name — the label the first /Intent/location move captured (registry fields are BARE
     // strings, not tuples). No capture yet → the raw key, which is also the narrator's cue to attach label:
-    // on its next move there. ## NOW deliberately does NOT use this: it prints the KEY, because the key is
+    // on its next move there. A SHARED venue (one key for many places: every heroine's own home, the room every
+    // indoor club meets in) has no name, because a stored label there names one home or one club: it prints its
+    // key, and the off-scene roster prints its generic name instead. The engine's SHARED_VENUES holds the same
+    // keys (a test pins the two). ## NOW deliberately does NOT use this: it prints the KEY, because the key is
     // what /Intent/location must emit and what the hours bracket resolved against.
+    const _SHARED_VENUE_NAME = { Home_ClassmateRoom: 'her home', School_ClubRoom: 'Club room' };
+    const _isSharedVenue = (key) => Object.prototype.hasOwnProperty.call(_SHARED_VENUE_NAME, key);
     const _venueLabel = (key) => {
+      if (_isSharedVenue(key)) return key;
       const rec = (WorldRecord.Locations || {})[key];
       return (rec && typeof rec.Label === 'string' && rec.Label) ? rec.Label : key;
     };
+    // Where an OFF-SCENE heroine stands: the spread puts each one at HER OWN home or at her club's room, so a
+    // shared venue reads by its generic name there.
+    const _offSceneVenue = (key) => (_isSharedVenue(key) ? _SHARED_VENUE_NAME[key] : _venueLabel(key));
     // CANONICAL trait bands — 5 bands on EVEN 20-pt buckets, one label set per trait (the table below is the canon).
     // Affection has its OWN bands (affBand, 100-gate split).
     // Hag's band is REAL, but her EXPRESSED manner may diverge (write the performance — see personality). 2-band voice
@@ -1007,9 +1016,24 @@
       }
     }
 
-    // absent roster (compact)
-    _state += '\n# Off-scene: ';
-    _state += absent.map((k) => { const c = CM[k] || {}; const a = Math.max(0, Number(V(c.Affection)) || 0); return k + ' (' + V(c.RelationshipStage) + ' Aff' + a + ' (' + affBand(a) + ') @' + _venueLabel(V(c.Location)) + ')'; }).join(' · ') || '(none)';
+    // absent roster (compact). Her @spot is where the engine's spread put her this block. "→ <block>: <venue>" is where
+    // the NEXT block's spread will put her (LogicEngine.spreadPreview): the spread lands at the start of a turn, so a
+    // reply whose prose crosses into the next block is written before it, and this is how that reply knows. A spot that
+    // is her club's meeting place after class names the club. With Next-Block ticked this reply IS written in the next
+    // block, so her next spot is printed as her spot.
+    const _LEs = (typeof globalThis !== 'undefined') && globalThis.LogicEngine;
+    let _spread = null;
+    try { if (_LEs && typeof _LEs.spreadPreview === 'function') _spread = await _LEs.spreadPreview(sd); } catch (_spe) { _spread = null; globalThis.MvuHelper.log.child('EJS').error('spread preview (LogicEngine.spreadPreview) failed:', _spe); }
+    const _nextBlockTicked = V(PendingState.BlockDone) === true;
+    const _clubTag = (club) => (club ? ' [' + club + ']' : '');
+    const _offSpot = (k, c) => {
+      const next = _spread && _spread.next[k];
+      if (_nextBlockTicked && next) return '@' + _offSceneVenue(next) + _clubTag(_spread.clubNext[k]);
+      const now = '@' + _offSceneVenue(V(c.Location)) + _clubTag(_spread && _spread.clubNow[k]);
+      return (next && next !== V(c.Location)) ? now + ' → ' + _spread.nextLabel + ': ' + _offSceneVenue(next) + _clubTag(_spread.clubNext[k]) : now;
+    };
+    _state += '\n# Off-scene' + ((_spread && _spread.nextLabel && !_nextBlockTicked) ? ' (@ = where she is now; → ' + _spread.nextLabel + ' = where she will be once your prose moves the clock into that block; [club] = why she is there)' : '') + ': ';
+    _state += absent.map((k) => { const c = CM[k] || {}; const a = Math.max(0, Number(V(c.Affection)) || 0); return k + ' (' + V(c.RelationshipStage) + ' Aff' + a + ' (' + affBand(a) + ') ' + _offSpot(k, c) + ')'; }).join(' · ') || '(none)';
     // NEGLECT RETALIATION cue (story_analysis 4c) — the day-roll sweep fired for this key; write the fallout THIS reply
     const _negK = String(V(EngineDerived.NeglectFired) || '');
     if (_negK) _state += '\n⚠ NEGLECT RETALIATION fired: ' + _negK + ' (scorned schemer — 5 classmates −20 Aff, her conflict set). WRITE the rumor fallout this reply: overheard whispers, cooled greetings, a friend warning {{user}}, classmates suddenly distant — a consequence of ghosting her. Her hand stays subtle/deniable per her Hagaruro (she never admits it); no open confrontation unless it fits.';

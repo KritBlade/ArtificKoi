@@ -88,7 +88,7 @@
   // Nothing may gate on it — an event pack gates on EVENT_PACK_FORMAT (grammar), a menu or plugin on
   // `exposes` and ENGINE_TYPE. Bump it on every change to this file; it is the ONLY place the version
   // is written, so there is no second copy to fall out of step with.
-  const ENGINE_VERSION = 'v0.206.1';
+  const ENGINE_VERSION = 'v0.207.1';
   // WHICH GAME this is — the ONE name plugins branch on.
   const ENGINE_NAME = 'School';
   // WHICH FAMILY this engine belongs to, beside WHICH GAME it is. The two are not synonyms: a menu
@@ -528,7 +528,7 @@
   // Anchored on Monday because that is where the school week starts; epoch day 0 was a Thursday, hence +3.
   // '' for an unreadable date, so a caller can tell "no week" from a real one.
   const weekOf = (s) => { const d = dayNum(s); return d == null ? '' : new Date((d - ((d + 3) % 7)) * 86400000).toISOString().slice(0, 10); };
-  // deterministic string hash (FNV-1a, 32-bit unsigned) — seeds the reproducible weather + scatter picks below.
+  // deterministic string hash (FNV-1a, 32-bit unsigned) — seeds the reproducible weather + spread picks below.
   // NOT Math.random: same date/block/key → same result, so a re-fire is idempotent and the tests stay deterministic.
   const hashStr = (s) => { let h = 2166136261; s = String(s); for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
   // murmur3's 32-bit finalizer over hashStr: every input bit moves the whole word, so seeds that differ by one
@@ -557,6 +557,14 @@
   // Why a gain that landed nothing was refused: a reported physical one (Str) had both of the pair at 100.
   const nothingToBuild = (stat) => (stat === 'Str' ? 'Str and Sta are both 100' : stat + ' is 100') + ' — nothing left to build';
 
+  // ---- SHARED VENUES -------------------------------------------------------
+  // One key that stands for many places: Home_ClassmateRoom is every heroine's own home, School_ClubRoom the room
+  // every indoor club meets in. A name the narrator gives one of them belongs to one home or one club, so they keep
+  // none: the location registry stores no label for them, the 📍 bar prints the bare key, and Window A's off-scene
+  // roster prints a generic name ("her home", "Club room"). Window A holds the same keys (a test pins the two).
+  const SHARED_VENUES = Object.freeze(['Home_ClassmateRoom', 'School_ClubRoom']);
+  const isSharedVenue = (key) => SHARED_VENUES.indexOf(String(key || '')) >= 0;
+
   // ---- ENGINE-AUTHORED DISPLAY BARS --------------------------------------
   // RES is the only writer of the clock, so RES renders its display too: the date/time/weather bar and the
   // location line, returned as `leadText`. The genre-blind host writes it at the top of the story (the block
@@ -564,7 +572,9 @@
   // the model wrote, and a later resolve of the same reply refreshes it in place; the model never writes a bar. The caption reads World.* directly — civil,
   // prose-driven, nothing to convert. `endedAtMin` overrides the TIME only, for the stale-report refusal:
   // the caption must say where the WRITTEN scene ended, not where the held cursor waits (transient, this
-  // resolve only — no stored field).
+  // resolve only — no stored field). The location line prints the venue's name and its key as two fields,
+  // "📍 Location: <name> | Key: <key>", so a reader of the chat (the player, a memory extension that files places
+  // by name) never takes the pair for one name. A venue with no name, and every SHARED venue, prints its bare key.
   const renderLeadText = (statData, endedAtMin) => {
     const W = statData.World || {};
     const c = {
@@ -574,11 +584,10 @@
     };
     const wx = String(get(W.Weather, ''));
     const lk = String(get(W.Location, ''));
-    let ls = lk;
-    const lr = (((statData.WorldRecord || {}).Locations || {})[lk]) || null;
-    if (lr && typeof lr.Label === 'string' && lr.Label && lr.Label !== lk) ls = lk + ' (' + lr.Label + ')';
+    const lr = isSharedVenue(lk) ? null : ((((statData.WorldRecord || {}).Locations || {})[lk]) || null);
+    const name = (lr && typeof lr.Label === 'string' && lr.Label && lr.Label !== lk) ? lr.Label : '';
     return '[ 🗓️ Date: ' + c.date + ' (' + c.weekday + ') | 🕰️ Time: ' + c.time + ' | Weather: ' + i18nLabel('World.Weather', wx, statData) + ' ]'
-      + '\n📍 Location: ' + ls;
+      + '\n📍 Location: ' + (name ? name + ' | Key: ' + lk : lk);
   };
 
   // ---- CALENDAR (yearschedule · Cluster 6) — the pre-laid 3-year arc on the real 2026-2029 calendar. SPARSE:
@@ -2015,88 +2024,278 @@
         : 'no CULTURE die was ever dealt on d1, so there is no booth result to record — the closing ceremony has nothing to place this class by and reads it out at the bottom'));
   }
 
-  // ---- SCATTER (update_analysis 5c / story_analysis 1c) — on a block-change / DAY ROLL, re-place every ABSENT heroine
-  // at her own plausible spot, so the off-scene roster isn't all frozen at one stale venue (Window-A prints these
-  // @locations when {{user}} goes looking for someone). PRESENT heroines are with {{user}} at World.Location → untouched.
-  // ENGINE-OWNED, deterministic — NO AI decide (PORT_MAP Cluster 8 1c collapses here): ~1/3 land at her PERSONA spot,
-  // the rest spread across the time-slot pool; the pick seeds off date+block+Key (hashStr), so it's stable within a
-  // block and reproducible in tests. Venues are <Location_List> Area_Venue tags. ----
-  const SLOT_POOL = {
-    SCHOOL_AM:    ['School_Classroom', 'School_Library', 'School_Courtyard', 'School_Hallway', 'School_Cafeteria', 'School_Rooftop'],
-    SCHOOL_LUNCH: ['School_Cafeteria', 'School_Courtyard', 'School_Rooftop', 'School_Classroom', 'School_Library', 'School_Grounds'],
-    AFTERCLASS:   ['School_ClubRoom', 'School_Library', 'School_Grounds', 'School_Gym', 'School_Courtyard', 'School_Rooftop'],
-    EVENING:      ['Home_ClassmateRoom', 'Town_Cafe', 'Town_ShoppingStreet', 'Town_FamilyRestaurant', 'Town_Park', 'Home_ClassmateRoom'],
-    OPEN:         ['Town_ShoppingMall', 'Town_Cafe', 'Town_Park', 'Town_ShoppingStreet', 'Outskirts_River', 'Town_Arcade', 'Town_Library', 'Home_ClassmateRoom'],
+  // ---- SPREAD (update_analysis 5c / story_analysis 1c) — every block, each ABSENT heroine is placed somewhere
+  // plausible for the time, so the off-scene roster is never frozen at one stale venue (Window A prints each spot,
+  // and the next block's spot beside it). PRESENT heroines are with {{user}} at World.Location and stay with him until
+  // the story separates them. ENGINE-OWNED and deterministic — no AI decides it.
+  //
+  // THE CHANCE TABLE. The time slot gives every venue a BASE weight (SPREAD_BASE); her persona multiplies the venues
+  // that suit her (PERSONA_LEANS); after class her club's venue gets CLUB_PULL on top and a go-home girl leans off
+  // campus (HEROINE_CLUBS); at night only the night-owl personas get somewhere to be besides home (NIGHT_OUT). Any
+  // venue of the slot can come up for anyone; the persona only makes some likelier. Two filters drop a venue before
+  // the roll: CLOSED at the block's midpoint (VENUE_HOURS), and OPEN TO THE SKY in Rain or Storm (RAIN_EXPOSED).
+  //
+  // ONE ROLL per heroine per block: a hash of (game date, band, key) picks a point on her weighted line, so the same
+  // block always gives the same spot. That is what lets Window A print the NEXT block's spot (spreadPreview) and the
+  // next block's first turn write exactly that spot (preAssemblyPatch).
+  //
+  // THE SLOT. A SCHOOL day runs school morning / lunch / after class; an OPEN day's daytime is FREE_DAY; every day
+  // has its evening and night. A calendar EVENT day held on campus (SPREAD_SETTING_OF_SPINE) uses the school slots, and
+  // the school trip puts everyone at the destination by day and the inn by night.
+  const SPREAD_SETTING_OF_SPINE = {
+    '@Entrance_Ceremony': 'campus', '@Sports_Festival': 'campus', '@Cultural_Festival': 'campus', '@Graduation': 'campus',
+    '@School_Trip': 'trip',
   };
-  // persona → [school-time spot, free/evening spot] — the ~1/3 personality-flavored placement (fits her <Personality_Core> cluster).
-  const PERSONA_SPOT = {
-    Tomboy: ['School_Grounds', 'Town_Park'], Competitive: ['School_Grounds', 'Town_Park'],
-    Wild_Child: ['School_Grounds', 'Outskirts_River'], Delinquent: ['School_BackYard', 'Town_Arcade'],
-    Big_Sister: ['School_Cafeteria', 'Town_FamilyRestaurant'], Bookworm: ['School_Library', 'Town_Library'],
-    Otaku: ['School_ClubRoom', 'Town_Arcade'], Highborn_Lady: ['School_JapaneseRoom', 'Town_Cafe'],
-    Traditional_Lady: ['School_JapaneseRoom', 'Town_Cafe'], Party_Girl: ['School_Courtyard', 'Town_ShoppingMall'],
-    Class_Clown: ['School_Courtyard', 'Town_Arcade'], Friendly: ['School_Cafeteria', 'Town_Cafe'],
-    Glamorous: ['School_Courtyard', 'Town_ShoppingMall'], Sexy: ['School_Courtyard', 'Town_Cafe'],
-    Bright: ['School_Courtyard', 'Town_ShoppingStreet'], Shy_Girl: ['School_Library', 'Home_ClassmateRoom'],
-    Bashful_Girl: ['School_Infirmary', 'Home_ClassmateRoom'], Mellow_Girl: ['School_Rooftop', 'Home_ClassmateRoom'],
-    Pure_Innocent: ['School_Courtyard', 'Home_ClassmateRoom'],
+  const SCHOOL_DAY_SLOTS = ['SCHOOL_AM', 'SCHOOL_LUNCH', 'AFTERCLASS'];
+  const SPREAD_SLOT_LABEL = {
+    SCHOOL_AM: 'school morning', SCHOOL_LUNCH: 'lunch', AFTERCLASS: 'after class', FREE_DAY: 'daytime',
+    EVENING: 'evening', NIGHT: 'night', TRIP_DAY: 'trip daytime', TRIP_NIGHT: 'trip night',
   };
-  const venueSlot = (mode, time) => {
-    if (mode === 'OPEN') return 'OPEN';   // uncapped day: the open-roam venue pool
-    // DERIVED block, never `time === '12:00'` exact-match: with the real clock a lunch scene sits at
-    // 12:47, and an exact match would silently fall through to SCHOOL_AM.
-    const blk = bandFromTime(time);
-    return blk === 1 ? 'SCHOOL_LUNCH' : blk === 2 ? 'AFTERCLASS' : (blk === 3 || blk === 4) ? 'EVENING' : 'SCHOOL_AM';
+  function spreadSlotOf(mode, band, spine) {
+    const setting = SPREAD_SETTING_OF_SPINE[String(spine || '')] || '';
+    if (setting === 'trip') return band >= 3 ? 'TRIP_NIGHT' : 'TRIP_DAY';
+    if (band === 4) return 'NIGHT';
+    if (band === 3) return 'EVENING';
+    return (mode === 'SCHOOL' || setting === 'campus') ? SCHOOL_DAY_SLOTS[band] : 'FREE_DAY';
+  }
+  // The civil minute each band is judged at for opening hours: the middle of the block, so a venue that opens or
+  // closes partway through counts by where most of the block falls (07:30-11:59 → 09:45 … 00:00-07:29 → 03:45).
+  const BLOCK_MIDPOINT_MIN = [585, 840, 1050, 1290, 225];
+
+  // BASE weights per slot (each row sums to 100, so a weight reads as a percent before persona and filters).
+  const SPREAD_BASE = {
+    SCHOOL_AM: {
+      School_Classroom: 40, School_Library: 10, School_Hallway: 8, School_Courtyard: 8, School_Rooftop: 5, School_Cafeteria: 5,
+      School_Gym: 5, School_Grounds: 5, School_Entrance: 4, School_Infirmary: 3, School_StaffRoom: 2, School_BackYard: 2,
+      School_ClubRoom: 2, School_JapaneseRoom: 1,
+    },
+    SCHOOL_LUNCH: {
+      School_Cafeteria: 25, School_Classroom: 20, School_Courtyard: 12, School_Rooftop: 10, School_Library: 8, School_Grounds: 5,
+      School_Hallway: 5, School_Gym: 3, School_ClubRoom: 3, School_BackYard: 3, School_JapaneseRoom: 2, School_Infirmary: 2,
+      School_StaffRoom: 2,
+    },
+    AFTERCLASS: {
+      School_ClubRoom: 12, School_Library: 8, School_Grounds: 6, School_Gym: 6, School_Classroom: 6, School_Courtyard: 5,
+      School_Rooftop: 3, School_JapaneseRoom: 2, School_BackYard: 2, School_Hallway: 2,
+      Town_ShoppingStreet: 8, Town_Cafe: 6, Town_ShoppingMall: 4, Town_FamilyRestaurant: 4, Town_Arcade: 3, Town_Library: 3,
+      Town_Park: 3, Town_CandyShop: 2, Town_Karaoke: 2, Town_Station: 2, Town_BusStop: 2,
+      Home_ClassmateRoom: 9,
+    },
+    FREE_DAY: {
+      Home_ClassmateRoom: 30, Town_ShoppingMall: 10, Town_ShoppingStreet: 9, Town_Cafe: 8, Town_Park: 8, Town_Library: 6,
+      Town_FamilyRestaurant: 5, Town_Arcade: 5, Town_Karaoke: 4, Outskirts_River: 4, Town_CandyShop: 3, Town_Station: 3,
+      Town_Bathhouse: 2, Outskirts_Waterfall: 2, Outskirts_AncientRuins: 1,
+    },
+    EVENING: {
+      Home_ClassmateRoom: 78, Town_Bathhouse: 4, Town_Karaoke: 4, Town_Park: 3, Town_Station: 3, Town_ShoppingStreet: 3,
+      Town_FamilyRestaurant: 3, Town_Cafe: 2,
+    },
+    NIGHT: { Home_ClassmateRoom: 100 },
+    TRIP_DAY: { Away_TripDest: 100 },
+    TRIP_NIGHT: { Away_TripInn: 100 },
   };
-  // WHERE each absent heroine stands, as a PURE derivation — no writes, no `log`. The venue is a
-  // function of (Date, BLOCK, Mode, Persona, Key) alone — the hash keys off the DERIVED block, not the
-  // raw clock, so it is STABLE while the clock drifts inside a block and re-rolls only on a block
-  // crossing (a raw-clock hash would teleport every absent girl on every minute of drift). Returns
-  // [{ key, venue }] for every built, absent heroine.
-  function absentPlacements(statData) {
-    const CM = statData.Classmate || {}, W = statData.World || {}, EngineDerived = statData.EngineDerived || {};
-    const iso = String(get(W.Date, '')).slice(0, 10);
-    const time = String(get(W.Time, '07:30'));
-    const slot = venueSlot(String(get(EngineDerived.Mode, 'SCHOOL')), time);
-    const schoolSlot = (slot === 'SCHOOL_AM' || slot === 'SCHOOL_LUNCH' || slot === 'AFTERCLASS');
-    const pool = SLOT_POOL[slot] || SLOT_POOL.SCHOOL_AM;
+  // Per persona: × on the base weight of the venues that suit her (or that she avoids, below 1). Every persona of
+  // PERSONA_ARCHETYPES has a row; a girl whose persona has none rolls on the base alone.
+  const PERSONA_LEANS = {
+    Bashful_Girl: { School_Library: 2, School_Infirmary: 2, School_Classroom: 1.5, School_Courtyard: 0.6, Town_ShoppingStreet: 2, Town_Karaoke: 0.3, Home_ClassmateRoom: 1.5 },
+    Big_Sister: { School_Cafeteria: 3, School_Classroom: 2, Town_ShoppingStreet: 2, Town_FamilyRestaurant: 2, Town_Park: 2 },
+    Bookworm: { School_Library: 5, Town_Library: 5, School_Rooftop: 1.5, Town_Cafe: 2, Town_Karaoke: 0.3, Home_ClassmateRoom: 1.5 },
+    Bright: { School_Courtyard: 3, School_Cafeteria: 2, Town_ShoppingStreet: 2, Town_Cafe: 2, Town_Karaoke: 2, Town_CandyShop: 2 },
+    Class_Clown: { School_Courtyard: 3, School_Hallway: 2, School_Classroom: 1.5, Town_Arcade: 3, Town_FamilyRestaurant: 2, Town_ShoppingMall: 2, Town_Karaoke: 2 },
+    Competitive: { School_Grounds: 4, School_Gym: 3, Town_Park: 2, Town_Arcade: 2 },
+    Delinquent: { School_BackYard: 5, School_Rooftop: 4, School_Classroom: 0.3, School_Library: 0.3, Town_Arcade: 3, Town_Karaoke: 3, Town_Park: 2, Town_Station: 2, Town_BusStop: 2, Home_ClassmateRoom: 0.8 },
+    Friendly: { School_Cafeteria: 3, School_Courtyard: 2, School_Classroom: 1.5, Town_Cafe: 3, Town_FamilyRestaurant: 2, Town_ShoppingStreet: 2 },
+    Glamorous: { School_Courtyard: 3, School_Hallway: 2, Town_ShoppingMall: 3, Town_Cafe: 3, Town_ShoppingStreet: 2 },
+    Highborn_Lady: { School_JapaneseRoom: 4, School_Library: 3, School_Classroom: 1.5, Town_Cafe: 3, Town_Library: 2, Town_Arcade: 0.5, Home_ClassmateRoom: 1.5 },
+    Mellow_Girl: { School_Rooftop: 3, School_Courtyard: 3, School_Infirmary: 2, Town_Park: 3, Home_ClassmateRoom: 1.5 },
+    Otaku: { School_ClubRoom: 3, School_Library: 1.5, Town_Arcade: 3, Town_ShoppingMall: 2, Home_ClassmateRoom: 1.5 },
+    Party_Girl: { School_Courtyard: 3, Town_Karaoke: 4, Town_ShoppingMall: 3, Town_ShoppingStreet: 2, Town_FamilyRestaurant: 2, Town_Cafe: 2, Town_Station: 2, Home_ClassmateRoom: 0.8 },
+    Pure_Innocent: { School_Courtyard: 3, School_Classroom: 1.5, School_Infirmary: 1.5, Town_CandyShop: 3, Town_Park: 2 },
+    Sadistic_Tease: { School_Hallway: 3, School_Entrance: 3, School_Courtyard: 2, School_Classroom: 1.5, Town_Arcade: 2, Town_ShoppingMall: 2, Town_BusStop: 2 },
+    Sexy: { School_Hallway: 3, School_Courtyard: 2, Town_Cafe: 3, Town_ShoppingMall: 3, Town_Karaoke: 2 },
+    Shy_Girl: { School_Library: 4, School_Classroom: 1.5, School_Courtyard: 1.5, School_Cafeteria: 0.5, Town_Library: 4, Town_Karaoke: 0.3, Home_ClassmateRoom: 1.5 },
+    Tomboy: { School_Gym: 4, School_Grounds: 3, Town_ShoppingMall: 2, Town_Park: 2, Town_Arcade: 2 },
+    Traditional_Lady: { School_JapaneseRoom: 3, School_Cafeteria: 2, School_Classroom: 1.5, Town_ShoppingStreet: 2, Home_ClassmateRoom: 1.5 },
+    Wild_Child: { School_Grounds: 3, School_Rooftop: 3, School_Courtyard: 2, School_Gym: 2, School_BackYard: 2, School_Classroom: 0.5, Town_Park: 3, Town_Station: 1.5, Outskirts_River: 3 },
+    Yandere: { School_Classroom: 3, School_Library: 2, School_Hallway: 2, Town_Cafe: 2, Home_ClassmateRoom: 1.5 },
+  };
+  // Night is home for everyone but the night owls, who get somewhere to be beside it (weights ADDED to the slot).
+  const NIGHT_OUT = {
+    Delinquent: { Town_Karaoke: 10, Town_Park: 6, Town_Station: 4, Town_BusStop: 2 },
+    Party_Girl: { Town_Karaoke: 12, Town_Station: 5, Town_BusStop: 2 },
+  };
+  // Each heroine's club and where it meets after class. A go-home girl leans off campus after class. Iori has no
+  // club and no entry: she crashes everyone else's practice, which her persona already covers. The narrator reads the
+  // club in her profile (Lore) and beside her off-scene spot in Window A.
+  const HEROINE_CLUBS = {
+    Mitsuki: { club: 'Gardening Club', venue: 'School_Courtyard' },
+    Nanoka: { club: 'Gardening Club', venue: 'School_Courtyard' },
+    Natsuhi: { club: 'Student Council', venue: 'School_ClubRoom' },
+    Airi: { club: 'Occult Research Club', venue: 'School_ClubRoom' },
+    Urara: { club: 'Occult Research Club', venue: 'School_ClubRoom' },
+    Yuzuki: { club: 'Tea Ceremony Club', venue: 'School_JapaneseRoom' },
+    Nemu: { club: 'Mechanics Club', venue: 'School_ClubRoom' },
+    Haruka: { club: 'Track & Field Club', venue: 'School_Grounds' },
+    Yuki: { club: 'Basketball Club', venue: 'School_Gym' },
+    Nene: { club: 'Library Committee', venue: 'School_Library' },
+    Suzu: { club: 'Literature Club', venue: 'School_ClubRoom' },
+    Mio: { club: 'Volunteer Club', venue: 'School_Courtyard' },
+    Mei: { club: 'Animal Care Club', venue: 'School_Courtyard' },
+    Umi: { club: 'Drama Club', venue: 'School_Gym' },
+    Kasumi: { club: 'Handicraft Club', venue: 'School_ClubRoom' },
+    Sui: { club: 'Cooking Club', venue: 'School_ClubRoom' },
+    Kozuzu: { club: 'Fashion Club', venue: 'School_ClubRoom' },
+    Mana: { club: 'Dance Club', venue: 'School_Gym' },
+    Shiko: { club: '', venue: '', goesHome: true },
+    Ume: { club: '', venue: '', goesHome: true },
+  };
+  const CLUB_PULL = 60;               // added to her club venue's weight after class (35-45% of her after-class rolls)
+  const GO_HOME_CAMPUS_SHARE = 0.4;   // × on every School_ venue after class for a go-home girl
+
+  // OPENING HOURS as [opens, closes) in civil minutes — the same numbers Window A's hours panel prints for the
+  // narrator (current_variable_data venueStatus; a drift test in Tools/test_resolver.cjs holds the two together).
+  // School closes when the gates lock; Home, Away, the station, the bus stop, karaoke and the outdoors never close.
+  const SHOP_VENUES = ['Town_ShoppingStreet', 'Town_ShoppingMall', 'Town_Cafe', 'Town_FamilyRestaurant', 'Town_CandyShop', 'Town_Arcade'];
+  const VENUE_HOURS = { School: [0, 1140], shops: [600, 1200], Town_Library: [540, 1080], Town_Bathhouse: [0, 1380] };
+  function hoursOf(venue) {
+    if (SHOP_VENUES.indexOf(venue) >= 0) return VENUE_HOURS.shops;
+    if (String(venue).indexOf('School_') === 0) return VENUE_HOURS.School;
+    return VENUE_HOURS[venue] || null;
+  }
+  const isVenueOpenAt = (venue, minute) => { const h = hoursOf(venue); return !h || (minute >= h[0] && minute < h[1]); };
+  // Venues open to the sky: nobody waits out Rain or a Storm there.
+  const RAIN_EXPOSED = ['School_Courtyard', 'School_Grounds', 'School_Rooftop', 'School_Pool', 'School_BackYard', 'Town_Park',
+    'Outskirts_River', 'Outskirts_Waterfall', 'Outskirts_AncientRuins'];
+  const WET_WEATHER = { Rain: true, Storm: true };
+
+  // Her weighted line for one block: [[venue, weight], …] in the slot's own order, closed and rained-out venues gone.
+  function spreadWeights(c, key, slot, minute, weather) {
+    const base = SPREAD_BASE[slot] || {};
+    const persona = String(get(c.Persona, ''));
+    const lean = PERSONA_LEANS[persona] || {};
+    const nightOut = (slot === 'NIGHT' && NIGHT_OUT[persona]) || {};
+    const club = (slot === 'AFTERCLASS' && HEROINE_CLUBS[key]) || null;
+    const venues = Object.keys(base).concat(Object.keys(nightOut).filter((v) => !(v in base)));
     const out = [];
+    for (const venue of venues) {
+      if (!isVenueOpenAt(venue, minute)) continue;
+      if (WET_WEATHER[weather] === true && RAIN_EXPOSED.indexOf(venue) >= 0) continue;
+      let w = (base[venue] || 0) * (lean[venue] || 1) + (nightOut[venue] || 0);
+      if (club && club.venue === venue) w += CLUB_PULL;
+      if (club && club.goesHome && venue.indexOf('School_') === 0) w *= GO_HOME_CAMPUS_SHARE;
+      if (w > 0) out.push([venue, w]);
+    }
+    return out;
+  }
+  // The point a 32-bit hash lands on along a weighted line.
+  function pickWeighted(line, hash) {
+    let total = 0;
+    for (const e of line) total += e[1];
+    if (!(total > 0)) return '';
+    let point = (hash / 4294967296) * total;
+    for (const e of line) { if (point < e[1]) return e[0]; point -= e[1]; }
+    return line[line.length - 1][0];
+  }
+  // The block a spread is rolled for: its game date and band, its slot, and its sky (weatherAt, the function
+  // syncWeather writes World.Weather from, so the roll and the stored sky never disagree).
+  function spreadBlockOf(civilDate, time, mode, spine) {
+    const g = civilToGame(String(civilDate || '').slice(0, 10), String(time || ''));
+    if (!g) return null;
+    return { gameDate: g.gameDate, band: g.band, slot: spreadSlotOf(mode, g.band, spine), weather: weatherAt(g.gameDate, g.band) };
+  }
+  // The block the clock stands in now.
+  function currentSpreadBlockOf(statData) {
+    const W = statData.World || {}, ED = statData.EngineDerived || {};
+    return spreadBlockOf(get(W.Date, ''), get(W.Time, SCHOOL_BLOCKS[0]), String(get(ED.Mode, 'SCHOOL')), String(get(ED.DaySpine, '')));
+  }
+  // The block after this one, as the story would reach it: the Next-Block landing (previewNextBlock) — except on an
+  // OPEN day the narrator moves the clock freely, so unless the player ticked Next-Block (which on an OPEN day goes to
+  // the next day) the next block is the next band of the same day.
+  function nextSpreadBlockOf(statData) {
+    const W = statData.World || {}, ED = statData.EngineDerived || {}, PS = statData.PendingState || {};
+    const mode = String(get(ED.Mode, 'SCHOOL'));
+    const g = civilToGame(String(get(W.Date, '')).slice(0, 10), String(get(W.Time, SCHOOL_BLOCKS[0])));
+    if (!g) return null;
+    if (mode === 'OPEN' && get(PS.BlockDone, false) !== true && g.band < 3) {
+      return spreadBlockOf(g.gameDate, SCHOOL_BLOCKS[g.band + 1], mode, String(get(ED.DaySpine, '')));
+    }
+    const pv = previewNextBlock(statData);
+    if (!pv) return null;
+    const landed = civilToGame(String(pv.date).slice(0, 10), String(pv.time));
+    const landedRow = landed ? lookupDay(landed.gameDate) : null;
+    const spine = pv.dayRoll ? String((landedRow && landedRow.spine) || '') : String(get(ED.DaySpine, ''));
+    return spreadBlockOf(pv.date, pv.time, pv.mode, spine);
+  }
+  // WHERE each absent heroine stands in a block, as a PURE derivation — no writes, no `log`. [{ key, venue, slot }]
+  // for every built, absent heroine.
+  function absentPlacements(statData, block) {
+    const CM = statData.Classmate || {};
+    const out = [];
+    if (!block) return out;
+    const minute = BLOCK_MIDPOINT_MIN[block.band];
     for (const key of Object.keys(CM)) {
       const c = CM[key];
       if (!c || typeof c !== 'object') continue;
-      if (get(c.Is_present, false) === true) continue;                 // present = at the scene with {{user}} → don't scatter
+      if (get(c.Is_present, false) === true) continue;                 // present = at the scene with {{user}} → stays
       if (!String(get(c.Name, '')).trim()) continue;                   // skip empty shells (never built)
-      const h = hashStr(iso + '|B' + bandFromTime(time) + '|' + key);
-      const spot = PERSONA_SPOT[String(get(c.Persona, ''))];
-      out.push({ key, venue: (spot && h % 3 === 0) ? spot[schoolSlot ? 0 : 1] : pool[h % pool.length], slot });
+      const venue = pickWeighted(spreadWeights(c, key, block.slot, minute, block.weather), hashStr(block.gameDate + '|B' + block.band + '|' + key));
+      if (venue) out.push({ key, venue, slot: block.slot });
     }
     return out;
+  }
+  // The club a heroine is at, when the block is after class and she stands at her club's venue; '' otherwise.
+  function clubAt(key, venue, slot) {
+    const club = HEROINE_CLUBS[key];
+    return (slot === 'AFTERCLASS' && club && club.club && club.venue === venue) ? club.club : '';
+  }
+
+  // ---- SPREAD PREVIEW — what Window A prints beside each off-scene girl: where the NEXT block's first turn will put
+  // her (the same roll preAssemblyPatch makes then), and the club behind a spot. Pure read. The narrator needs it
+  // because a reply whose prose crosses into the next block is written before that block's spread lands: the spread
+  // runs at the start of a turn, on the clock that turn starts with.
+  // Returns { nextSlot, nextLabel, next: {key: venue}, clubNow: {key: club}, clubNext: {key: club} } (null on junk).
+  function spreadPreview(statData) {
+    if (!statData || typeof statData !== 'object') return null;
+    const CM = statData.Classmate || {};
+    const nowBlock = currentSpreadBlockOf(statData);
+    const nextBlock = nextSpreadBlockOf(statData);
+    const next = {}, clubNow = {}, clubNext = {};
+    for (const p of absentPlacements(statData, nextBlock)) {
+      next[p.key] = p.venue;
+      const club = clubAt(p.key, p.venue, p.slot);
+      if (club) clubNext[p.key] = club;
+    }
+    if (nowBlock) {
+      for (const key of Object.keys(CM)) {
+        const c = CM[key];
+        if (!c || typeof c !== 'object' || get(c.Is_present, false) === true) continue;
+        const club = clubAt(key, String(get(c.Location, '')), nowBlock.slot);
+        if (club) clubNow[key] = club;
+      }
+    }
+    const nextSlot = nextBlock ? nextBlock.slot : '';
+    return { nextSlot, nextLabel: SPREAD_SLOT_LABEL[nextSlot] || '', next, clubNow, clubNext };
   }
 
   // ---- PRE-ASSEMBLY PATCH (PRE_Call_Revisit P1) -----------------------------------
   // The engine's OWN patch, applied by mvu-helper on the PRE rail BEFORE any model runs this turn.
   // Genre-neutral name on purpose: the platform calls `preAssemblyPatch` without knowing what a
-  // School turn puts in it (L1) — today, only the absent-heroine scatter.
+  // School turn puts in it (L1) — today, only the absent-heroine spread.
   //
-  // WHY IT LEFT RES (I4). `scatterAbsent` was RES's only ABSOLUTE + UNINFORMED Classmate write: it
-  // overwrote Location without reading what was there, which was correct while RES was the sole
-  // writer and became a hazard the moment PRE could write state too — a sim's Location "never stuck"
-  // because end-of-turn RES stamped over it. Running the same derivation FIRST inverts that: every
-  // model write this turn lands after it and survives the turn. This is the ownership migration I4
-  // predicted — the RES half retires rather than learning to defer.
+  // RUNNING FIRST. The spread writes Location without reading what a model meant by it, so it runs before any model
+  // this turn: every model write lands after it and survives the turn.
   //
   // ONLY THE DIFFERENCES. An op is emitted solely where the stored Location disagrees with the
   // derivation, so a mid-block re-run (every reply — this runs unconditionally) is an EMPTY patch and
-  // the write happens on exactly the replies where the clock moved. That is what replaces RES's
-  // "call it inside the advance branch" gating, with no new state field to track.
+  // the write happens on exactly the replies where the clock moved into a new block.
   //
-  // Visibility is unchanged by the move: RES used to scatter at the END of turn N (post-advance), so
-  // narrate first saw it in turn N+1. It now runs at turn N+1's assembly instead — the same reply,
-  // one stage earlier. Nothing waits a turn (CLAUDE.md same-reply protection).
+  // WHEN IT LANDS. It reads the clock the turn STARTS with. A reply whose prose crosses into the next block is written
+  // before that block's spread exists, and the spread lands at the start of the following turn; Window A prints each
+  // off-scene girl's next-block spot (spreadPreview) so that reply already knows where everyone will be.
   function preAssemblyPatch(statData) {
     if (!statData || typeof statData !== 'object') return [];
     const ops = [];
-    for (const p of absentPlacements(statData)) {
+    for (const p of absentPlacements(statData, currentSpreadBlockOf(statData))) {
       const c = statData.Classmate[p.key];
       if (String(get(c.Location, '')) === p.venue) continue;           // already there → no op
       ops.push({ op: 'replace', path: '/Classmate/' + p.key + '/Location/0', value: p.venue });
@@ -3982,13 +4181,13 @@
     // than the clock cross into the next civil date (stage 3a). It moves nothing by itself.
     const isPastMidnightReported = get(I.pastMidnight, false) === true;
     const wantsAdvanceIntent = get(I.sceneAdvance, false) === true;
-    // MANUAL "Next-Block" — the GUI checkbox writes PendingState.BlockDone=true (a player-set advance REQUEST). It's the
-    // player's counterpart to the AI's /Intent/sceneAdvance (esp. on a FREE/EVENT day, which has no block cap). IMMEDIATE
-    // model: the checkbox click itself calls __resolveTurn (see wire_resolver's patchImmediateNextBlock), so the clock
-    // advances AT CLICK TIME — the NEXT reply's Window A + narration already sit on the new block/day (no story↔menu
-    // desync). Because that click-time fire targets the ALREADY-RESOLVED latest message, blockDoneReq must BYPASS the
-    // alreadyResolved guard below (a manual advance is a fresh player action, not an Intent re-fire). Then reset the
-    // one-shot to false. If the click-time fire is ever missed, the reply's own end-RES still consumes it (fallback).
+    // MANUAL "Next-Block" — the GUI checkbox writes PendingState.BlockDone=true (a player-set advance REQUEST), the
+    // player's counterpart to the AI's /Intent/sceneAdvance (esp. on a FREE/EVENT day, which has no block cap). Ticking
+    // it advances nothing: the flag sits on the newest reply's state and is copied forward to the player's next message.
+    // Window A previews where the advance lands (previewNextBlock) so narrate writes the NEXT reply there, and that
+    // reply's resolve commits it and resets the one-shot. A re-fire on the reply the player ticked it on is no turn and
+    // stays a no-op like any other (the alreadyResolved guard below): consuming the flag there would clear only that
+    // reply's copy, and the next reply would advance again on the copy the player's message still carries.
     const blockDoneReq = get(PendingState.BlockDone, false) === true;
     const nc = I.newClassmate;
     let hasNewCM = nc && typeof nc === 'object' && !Array.isArray(nc) && Object.keys(nc).length > 0;
@@ -4086,7 +4285,7 @@
     // would carry resolveTurn PAST this guard and re-run the whole per-turn math (a second block advance,
     // a second day-roll) for channels it then refuses to apply anyway. They are read above ONLY to warn.
     // recordStr stays listed for narrate's records; a MainChar skill record was blanked above, so it never counts here.
-    if ((alreadyResolved && !blockDoneReq) || (!checkStr && !mundStr && !fwbStr && !puppyStr && !dayChkStr && !trainStr && !locStr && !arriveStr && !swingStr && !fireStr && !recEvtStr && !recNpcStr && !moneyStr && !friendsStr && !recordStr && !questStr && !intimacyStr && !hactStr && !hasSceneClock && !isPastMidnightReported && !stepDoneStr && !wantsAdvanceIntent && !blockDoneReq && !hasNewCM)) {
+    if (alreadyResolved || (!checkStr && !mundStr && !fwbStr && !puppyStr && !dayChkStr && !trainStr && !locStr && !arriveStr && !swingStr && !fireStr && !recEvtStr && !recNpcStr && !moneyStr && !friendsStr && !recordStr && !questStr && !intimacyStr && !hactStr && !hasSceneClock && !isPastMidnightReported && !stepDoneStr && !wantsAdvanceIntent && !blockDoneReq && !hasNewCM)) {
       // Even an idle reply (no decision-Intent) re-scans event triggers — a prior reply's day-roll or scene move may
       // have made one eligible — UNLESS this is a pure idempotent re-fire (alreadyResolved), which must stay a no-op.
       // The DAY SIGNPOST seeds here too (quest-revisit B1): a genuinely idle reply must still grow the
@@ -4587,7 +4786,7 @@
 
     // (2e1) PRESENCE ENTRY (update_analysis 5b) — /Intent/arrive = "<Key>,<Key>": heroines who JOINED the scene this
     // reply (she came to him, he went to her, they met as planned). Flip Is_present=true and place her at the scene, so
-    // the (2f) group-move carries her, (2g) can verify an event that needs her there, SCATTER (3) stops re-placing her,
+    // the (2f) group-move carries her, (2g) can verify an event that needs her there, the SPREAD (preAssemblyPatch) stops re-placing her,
     // and the H scene below counts her. Who LEFT is not reported here: POST names who is with him when the reply ends,
     // and the relay takes everyone else out of the scene (settlePresence), so a girl who dropped by and left joins here
     // and leaves there.
@@ -4608,7 +4807,7 @@
     // (2f) SCENE MOVE (location.txt) — /Intent/location. Writes World.Location AND moves every PRESENT heroine
     // with the scene, so the Window-A roster's @locations stay truthful. Runs AFTER (2e1) so a girl who arrived
     // this reply is present and moves with everyone else. A girl who left before the move rides along too; the relay
-    // takes her out of the scene where the move put her, and the next block's SCATTER re-places her.
+    // takes her out of the scene where the move put her, and the next block's SPREAD re-places her.
     //
     // ⚠ World.Location IS A CANONICAL KEY (Area.Venue), not a display name. Three separate consumers EXACT-MATCH
     // it — the ## STATE-GATES-era hours panel, the H-act privacy tier (PRIVATE −2 / SEMI +2 / PUBLIC +5) and
@@ -4656,9 +4855,12 @@
         // Registration rides along ONLY when the narrator declared something — a listed venue needs no entry, and
         // auto-registering every visited key would fill the player's discovered-venues list with the base map.
         // registerWorldRecord is already idempotent, so a re-declared venue is a no-op rather than a clobber.
-        if (locFields.label || locFields.privacy || locFields.hours) {
+        // A SHARED venue's label names one home or one club, so it is dropped here and never stored.
+        const label = isSharedVenue(venue) ? '' : String(locFields.label || '');
+        if (locFields.label && !label) log.push('label "' + locFields.label + '" not stored: ' + venue + ' is a shared venue and keeps no name');
+        if (label || locFields.privacy || locFields.hours) {
           registerWorldRecord(statData, 'Locations', venue, {
-            Label: locFields.label || '',
+            Label: label,
             Note: locFields.note || '',
             Privacy: String(locFields.privacy || '').trim().toUpperCase(),
             Hours: String(locFields.hours || '').trim().toLowerCase(),
@@ -4950,6 +5152,16 @@
       && gAfterDrift.band > gBefore.band && gAfterDrift.band !== 4;
     const isSceneAdvanceDropped = wantsAdvanceIntent && isLastReplyOfBlock && isClockIntoLaterBand;
     const isSceneAdvanceTaken = wantsAdvanceIntent && !isSceneAdvanceDropped;
+    // (3b1a) THE NEXT-BLOCK THE PROSE ALREADY PLAYED. Window A shows narrate where a ticked Next-Block lands
+    // (previewNextBlock: one band on from the clock this reply began at) and orders the reply written there, so a reply
+    // that obeys it ends in a later band by its own sceneClock. That crossing IS the step the player asked for: stepping
+    // again from where the prose ended moves the clock onto a block nobody played. The request is consumed either way
+    // (BlockDone resets below); only a reply that stayed in the old block still takes the step. A day-rolling Next-Block
+    // is not this case: a reply whose prose crossed the day settles it through the daysOwed catch-up, which spends the
+    // request there.
+    const isNextBlockPlayed = blockDoneReq && isClockIntoLaterBand;
+    const isNextBlockStepTaken = blockDoneReq && !isNextBlockPlayed;
+    if (isNextBlockPlayed) log.push('Next-Block already played — this reply\'s own clock crossed band ' + gBefore.band + ' -> ' + gAfterDrift.band + ' (' + get(W.Time, '') + '), so no second step');
     if (isSceneAdvanceDropped) {
       warnRes('SCENE ADVANCE DROPPED — the last reply of band ' + gBefore.band + ' reported /Intent/sceneClock "' + sceneClockRaw
         + '", which already moved it into band ' + gAfterDrift.band + '; the sceneAdvance sent with it would skip that band unplayed.'
@@ -5120,19 +5332,20 @@
     if (daysClosed) sess = 0;
     const advanceSpent = daysClosed > 0 && (isSceneAdvanceTaken || blockDoneReq);
     // BlockDone (manual Next-Block) forces an advance just like sceneAdvance — a SCHOOL day steps a band
-    // (or day-rolls from the evening), an OPEN day rolls the day. It obeys the same clock.
+    // (or day-rolls from the evening), an OPEN day rolls the day — unless this reply's own clock already
+    // made that step (3b1a). It obeys the same clock.
     const capAdvance = !freeClock && sess >= blockCap && !hLatched;
     if (!freeClock && sess >= blockCap && hLatched && !isSceneAdvanceTaken && !blockDoneReq) log.push('block-cap HELD (IntimacyActive — the H scene runs; cap resumes on exit)');
-    const wantsAdvance = !advanceSpent && (isSceneAdvanceTaken || blockDoneReq || capAdvance);
+    const wantsAdvance = !advanceSpent && (isSceneAdvanceTaken || isNextBlockStepTaken || capAdvance);
     if (wantsAdvance) {
-      if (blockDoneReq) log.push('Next-Block (manual GUI toggle) → consuming BlockDone');
+      if (isNextBlockStepTaken) log.push('Next-Block (manual GUI toggle) → consuming BlockDone');
       // (3c) EXPLICIT ADVANCE — the band is DERIVED from the live clock. Bands 0-2 step to the next
       // block start (always ahead of the clock, so this never rewinds); band 3/4 or any OPEN day ends
       // the game-day via settleDay (the ONE roll path: swing, calendar, jump/TIME-LEAP, payday, sweep).
       const gAdv = civilToGame(String(get(W.Date, '')).slice(0, 10), String(get(W.Time, SCHOOL_BLOCKS[0]))) || gAfterDrift;
       if (!freeClock && gAdv.band < 3) {
         setVal(W, 'Time', SCHOOL_BLOCKS[gAdv.band + 1]);
-        log.push('block advance -> ' + SCHOOL_BLOCKS[gAdv.band + 1] + ' (' + (blockDoneReq ? 'Next-Block' : isSceneAdvanceTaken ? 'sceneAdvance' : 'block cap ' + sess + '/' + blockCap) + ')');
+        log.push('block advance -> ' + SCHOOL_BLOCKS[gAdv.band + 1] + ' (' + (isNextBlockStepTaken ? 'Next-Block' : isSceneAdvanceTaken ? 'sceneAdvance' : 'block cap ' + sess + '/' + blockCap) + ')');
       } else {
         // ⚠ THE CAP CAN END A DAY NARRATE DID NOT MEAN TO END, and on a SCHOOL day carrying a swing tier
         // that silently costs the player the day's whole payout. The other two roll paths cannot do this:
@@ -5230,7 +5443,7 @@
   }
 
   // SHE LEFT — the one path out of the scene, whoever reports it: POST's end-of-reply report (settlePresence) or a
-  // walk-off (applyRelationshipItems). Is_present goes false where she stands, and the next block's SCATTER re-places
+  // walk-off (applyRelationshipItems). Is_present goes false where she stands, and the next block's SPREAD re-places
   // her. In a running H scene each girl who left takes her scene-break (the act that landed on her this reply included
   // — applyHact never asks where she is), and when nobody stays the scene is over: it ends while they still count as
   // present, so the end's count names them. `cause` names the reporter in the log. Returns the Keys that left; a girl
@@ -5380,7 +5593,7 @@
     // module to know where to write pack rows and what a pack may touch, and MvuStatMenuBuilder reads the
     // same object by running this bundle offline. There is no generated restatement of it anywhere — that
     // is the point: a copy is what could disagree. Runtime callers use the wrappers above, not this.
-    module.exports = { ENGINE_VERSION, ENGINE_NAME, ENGINE_TYPE, EVENT_PACK_FORMAT: (EVENTPACK_API && EVENTPACK_API.FORMAT) || null, resolveTurn, resolvePostRelay, i18nLabel, sweepCandidateLines, readyEvent, pickSameRoundEvent, preVerdictPatch, hactPanel, initiativeGate, initiativeMenu, previewNextBlock, spineStatus, preAssemblyPatch, renderLeadText, clockStatus, EVENT_PACK_ADAPTER, __hdc: { HDC, squirtRule, mBand, statMod, positionTier, isAnalPosition, positionTarget, hactGateDc, hactGateOwed, isFirstTimeAct, buildHactSnapshot, submissionBand, femaleLedWillingness, FEMALE_LED_LEWD, SCENE_M_STEP, isFemaleLedPosition, FEMALE_LED_POSITIONS, overrulesPush, OVERRULE_AROUSAL, OVERRULE_AROUSAL_COST, sceneSubmissionShift }, __dayCheck: { DAY_CHECK }, __crossing: { isCrossingRollOwed, owedCrossingOutcomes }, __puppy: { PUPPY_DEMAND, PUPPY_REFUSAL_LEWDNESS_COST, isPuppyEligible }, __sameRound: { sameRoundVerdict }, __fest: { FEST_RECORD, BOOTH_WORD, festivalRecordMissing, recordBoothShowing }, __trip: { TRIP_QUEST_KEY, ensureTripQuest, stashTripDestination, retireTripQuest, clearTripDestination }, __valentine: { rankValentineGifts, VAL_HONMEI, VAL_TOMO, VAL_GIRI, VAL_HONMEI_MAX }, __dateOut: { DATEOUT_CRIT_DC, DATEOUT_MIN_REPLIES, dateOutRoll, shareByRoom, parseDayCompanions },__quest: { writeQuestRecord, daySpineKey, spineRecordKey, markSpineDone, QUEST_STEPS, QUEST_TERMINAL, refreshSeriesQuestCards, nextUnlockText }, __spine: { SPINE_STEPS, spineStepCounts, spineBandsDone, spineUnfinished, signpostStepOf, signpostStepAfter }, __weather: { weatherAt, WEATHER_BY_MONTH, WEATHER_HOLD_PCT }, __training: { pickPhysicalStat, physicalPair, gainsWithinCap, PHYSICAL_STATS }, __classmate: { PERSONA_ARCHETYPES } };   // Node / test (resolvePostRelay = P7 POST-relay record apply · sweepCandidateLines = P8 §6.6 · readyEvent = v4 same-reply zero-away offer · pickSameRoundEvent = mvu-helper's PRE-seam hook, the same-reply pick · preVerdictPatch = the PRE-rail hook after the calls, opens the H latch on [PRE]'s hcue when the crossing PhysicalRequest is won · initiativeMenu = initiative-by-PRE · previewNextBlock = v4 Next-Block flag preview · preAssemblyPatch = P1 PRE-rail scatter · renderLeadText = the engine-authored bars, every reply's leadText · clockStatus = game-coordinate snapshot: daysOwed + band + order stamp, read by Window A / block_transition / tests · EVENT_PACK_ADAPTER = build + drift guard)
+    module.exports = { ENGINE_VERSION, ENGINE_NAME, ENGINE_TYPE, EVENT_PACK_FORMAT: (EVENTPACK_API && EVENTPACK_API.FORMAT) || null, resolveTurn, resolvePostRelay, i18nLabel, sweepCandidateLines, readyEvent, pickSameRoundEvent, preVerdictPatch, hactPanel, initiativeGate, initiativeMenu, previewNextBlock, spineStatus, preAssemblyPatch, spreadPreview, renderLeadText, clockStatus, EVENT_PACK_ADAPTER, __hdc: { HDC, squirtRule, mBand, statMod, positionTier, isAnalPosition, positionTarget, hactGateDc, hactGateOwed, isFirstTimeAct, buildHactSnapshot, submissionBand, femaleLedWillingness, FEMALE_LED_LEWD, SCENE_M_STEP, isFemaleLedPosition, FEMALE_LED_POSITIONS, overrulesPush, OVERRULE_AROUSAL, OVERRULE_AROUSAL_COST, sceneSubmissionShift }, __dayCheck: { DAY_CHECK }, __crossing: { isCrossingRollOwed, owedCrossingOutcomes }, __puppy: { PUPPY_DEMAND, PUPPY_REFUSAL_LEWDNESS_COST, isPuppyEligible }, __sameRound: { sameRoundVerdict }, __fest: { FEST_RECORD, BOOTH_WORD, festivalRecordMissing, recordBoothShowing }, __trip: { TRIP_QUEST_KEY, ensureTripQuest, stashTripDestination, retireTripQuest, clearTripDestination }, __valentine: { rankValentineGifts, VAL_HONMEI, VAL_TOMO, VAL_GIRI, VAL_HONMEI_MAX }, __dateOut: { DATEOUT_CRIT_DC, DATEOUT_MIN_REPLIES, dateOutRoll, shareByRoom, parseDayCompanions },__quest: { writeQuestRecord, daySpineKey, spineRecordKey, markSpineDone, QUEST_STEPS, QUEST_TERMINAL, refreshSeriesQuestCards, nextUnlockText }, __spine: { SPINE_STEPS, spineStepCounts, spineBandsDone, spineUnfinished, signpostStepOf, signpostStepAfter }, __weather: { weatherAt, WEATHER_BY_MONTH, WEATHER_HOLD_PCT }, __training: { pickPhysicalStat, physicalPair, gainsWithinCap, PHYSICAL_STATS }, __classmate: { PERSONA_ARCHETYPES }, __spread: { SPREAD_BASE, PERSONA_LEANS, NIGHT_OUT, HEROINE_CLUBS, VENUE_HOURS, SHOP_VENUES, RAIN_EXPOSED, BLOCK_MIDPOINT_MIN, SPREAD_SLOT_LABEL, spreadSlotOf, spreadWeights, isVenueOpenAt, absentPlacements, currentSpreadBlockOf, nextSpreadBlockOf }, __venue: { SHARED_VENUES, isSharedVenue } };   // Node / test (resolvePostRelay = P7 POST-relay record apply · sweepCandidateLines = P8 §6.6 · readyEvent = v4 same-reply zero-away offer · pickSameRoundEvent = mvu-helper's PRE-seam hook, the same-reply pick · preVerdictPatch = the PRE-rail hook after the calls, opens the H latch on [PRE]'s hcue when the crossing PhysicalRequest is won · initiativeMenu = initiative-by-PRE · previewNextBlock = v4 Next-Block flag preview · preAssemblyPatch = P1 PRE-rail spread · spreadPreview = the next block's spread, for Window A · renderLeadText = the engine-authored bars, every reply's leadText · clockStatus = game-coordinate snapshot: daysOwed + band + order stamp, read by Window A / block_transition / tests · EVENT_PACK_ADAPTER = build + drift guard)
   }
   // Browser: register the genre hook the builder's VARIABLE_UPDATE_ENDED handler calls.
   // (Generic builder change: `await window.__resolveTurn?.(statData)` before re-render.)

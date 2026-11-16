@@ -1,16 +1,17 @@
 {
-  "format": "1.0",
+  "format": "1.1",
   "packType": "gamelogic",
   "id": "school-v4",
   "name": "ArtificKoi — School v4",
   "description": "Koikatu-style school dating sim: LogicEngine, schema, worldview and PRE/POST entries. The heroine profiles ship on the card itself.",
-  "version": "5.157.1",
+  "version": "5.159.3",
   "builtWith": "Tools/build_workspace.cjs",
   "engineOrder": [
     "i18n.cjs",
     "eventpack.cjs",
     "globalLogic.cjs"
   ],
+  "requiresUpdateVariable": true,
   "exposes": {
     "cast@1": "Classmate",
     "player@1": "Mainchar",

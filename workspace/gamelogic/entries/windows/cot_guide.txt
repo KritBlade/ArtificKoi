@@ -1,5 +1,5 @@
 <COT_Guide>
-#  v0.127
+#  v0.128
 <%_ let _iaGate = false; try { _iaGate = getvar('stat_data.PendingState.IntimacyActive[0]') === true; } catch (_e) { _iaGate = false; } _%>
 
 [CORE]
@@ -132,6 +132,9 @@
                          labeled move to a venue names it FOREVER (the GUI and the 📍 bar display that label
                          from then on; until then they show the raw key). First capture wins — a later
                          different label does NOT rename it, so name it the way your prose already does.
+                         Two keys are SHARED and never take a name: Home_ClassmateRoom (every heroine's own home)
+                         and School_ClubRoom (the room every indoor club meets in). Their label is dropped and the
+                         📍 bar shows the bare key, so WHOSE home or WHICH club is said in your prose.
                          ⚠ <Location_List> rows are `key|JP|EN|...` — the JP column sits next to the key, but
                          the label follows YOUR REPLY'S language, so an English reply takes the EN column
                          (School_Rooftop|屋上|Rooftop → label:Rooftop). Read the column, not the neighbour:
@@ -304,11 +307,9 @@ bridging briefly ("the evening blurs past…"), until the day rolls — never pa
 When you end an OPEN day that carries an event check (## TODAY names it), ALSO emit /Intent/daySwing for the girl he
 spent it with (see its path above) — that is the day's ONE big affection payoff. A plain weekend or break day pays
 itself: send sceneAdvance alone. Don't sceneAdvance an OPEN day until its beats (and the @spine, if any) are played.
-The PLAYER can also jump time by ticking "Next-Block" (PendingState.BlockDone) in the GUI. This advances the clock
-IMMEDIATELY (before your reply), so you normally just find yourself on the new block/day — the ## NOW facts already
-show it. Open with a brief BRIDGE from the previous scene ("The next morning…" / "Later that afternoon…") and play on.
-(FALLBACK: if the auto-advance ever misses and ## NOW still shows "⏭ NEXT-BLOCK REQUESTED", do the transition yourself:
-wrap the current scene up and time-skip into the next block/day within this reply.) You never write BlockDone/Date/Time.
+The PLAYER can also move time on by ticking "Next-Block" in the GUI. ## NOW then shows "⏭ NEXT-BLOCK REQUESTED" with
+where it lands: THIS reply makes that transition, as that line says, and reports the clock it ends at with sceneClock
+alone — that clock IS the step, so send no sceneAdvance for it. You never write BlockDone/Date/Time.
 EVENT TRIGGERS are engine-armed too: the resolver scans the trigger table (WHEN/PREREQ vs stat_data) each reply and
 arms the fire-one winner — you NEVER evaluate predicates or scan a table. When ## EVENTS names an armed @KEY, PLAY that
 @KEY body from <Event_Body> this reply and emit /Intent/eventFire (see its path above); the engine then records the

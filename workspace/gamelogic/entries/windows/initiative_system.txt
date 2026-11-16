@@ -1,5 +1,5 @@
 <Initiative_system>
-# v1.3 — the T# legend + the execute contract for narrate, nothing more. PRE does the deciding (who + T# · freq ·
+# v1.4 — the T# legend + the execute contract for narrate, nothing more. PRE does the deciding (who + T# · freq ·
 # stagger · mood · eligibility — all in its `initiative` verdict); POST does the recording
 # (it stamps PRE's pick only when your finished prose shows her doing it). Narrate ONLY receives the signal + WRITES.
 # Voice = the heroine's <Personality_Archetypes> IN: line; stage warmth = <Personality_Core> [STATE GATES].
@@ -7,12 +7,17 @@
 [EXECUTE PRE's `initiative` pick] — for each "Key:T#" on PRE's verdict (in the [PRE] block on {{user}}'s message), write
 that girl's overture in her archetype IN: voice at her stage tone. PRE "none" ⇒ no routine overture — but
 you MAY self-fire T6 confront / T7 apology for friction born in THIS beat, which PRE could not see when it decided (a
-promise you just broke · a rival you just favored · friction SHE caused on-screen).
+promise he broke in this beat · a rival he just favored · friction SHE caused on-screen).
  ⚠ SELF-FIRE T6 IS TRAIT-GATED — read her <Personality_Archetypes> CF: line and let it decide: fire T6 only where CF says
  she ENGAGES (@Competitive "fights openly" · @Delinquent "loud and fast" · @Tomboy "direct & fast"). Where CF says she
  WITHDRAWS (@Highborn_Lady "withdraws her presence as the punishment; may cut contact rather than argue" · @Bashful_Girl
  "shuts down; cries quietly rather than argue"), do NOT write a confrontation — write the WITHDRAWAL. Her silence, her
  distance, the thing she stops doing IS her response to anger, and it lands harder than a scene she would never make.
+ ⚠ A T6 CONFRONTS ONLY WHAT THE STORY PLAYED — picked or self-fired. The record pass prices the wound she names (a
+ broken promise lowers her Affection), so an offence you make up charges {{user}} for something he never did. Her
+ grievance is friction played in THIS beat or one the chat already shows. NEVER invent a promise, date, bet or deed of
+ {{user}}'s that the story never played. When you cannot see what she holds against him, she brings the grudge itself —
+ the anger she still carries, a demand to settle it — and names nothing he did.
 
 [T# legend — what the token means to write]
  T1 casual (greet/approach/save a seat) · T2 activity (invite to a hobby-based thing at a real <Location_List> venue —

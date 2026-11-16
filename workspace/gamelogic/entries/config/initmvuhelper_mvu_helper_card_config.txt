@@ -22,9 +22,11 @@
 # required, not optional: the extension is a generic platform and ships these blank on purpose (it does
 # not know any card's schema), so a card that omits them gets H guidance on every turn and no man in frame.
 # The latch path is a stat_data path into THIS card's own tree, and the main-character key names this card's
-# own registry entry — a different genre names its own. "charimgVia" is where a new player starts for Harvest
-# via: "narrate" has the main reply describe each newcomer's look, with no extra call. It is the player's own
-# preference, so re-importing this config keeps whatever a player has picked.
+# own registry entry — a different genre names its own. "maincharNoun" is "boy": a picture with him calls
+# everyone by noun when its count tag says who is who, "the girl" and "the boy" with one heroine, girl1, girl2,
+# boy1 with more, which keeps each one's skirt, stockings and hair on their own body. "charimgVia" is where a new
+# player starts for Harvest via: "narrate" has the main reply describe each newcomer's look, with no extra
+# call. It is the player's own preference, so re-importing this config keeps whatever a player has picked.
 #
 # The "statBox" block declares the per-reply "Scene Stats" box mvu-helper writes at the end of the story
 # text: one line per record whose declared fields moved this reply, e.g. "Mitsuki Tachibana: Affection 13
@@ -40,12 +42,13 @@
 # <styled> card it finds after that close to the end of the story, so the box still lands inside it.
 # How to write this block: mvu-helper/devdoc/statbox-guide.md.
 #
-# The "leadText" block names the story block, so mvu-helper knows where the engine's date and location bars go
-# (globalLogic.cjs renderLeadText returns them as leadText): at the top of the story, inside <gametxt>, or inside
-# <maintext> once galgame-companion renames it. mvu-helper skips every tag block the model writes above the story
-# (a preset's thinking, the <tucao> line) and puts the bars in front of the story's first line, so a preset's
-# thinking box, which folds everything above its closing tag, never takes them. Without this block no bar is
-# written. How it works: mvu-helper/devdoc/gamelogic-pack-format.md §4.2.
+# The "leadText" block names the tags that hold the story, so mvu-helper knows where the engine's date and location
+# bars go (globalLogic.cjs renderLeadText returns them as leadText): at the top of the story, inside <gametxt>, inside
+# <maintext> once galgame-companion renames it, and inside <content> when a preset wraps the story in that tag.
+# mvu-helper skips every other tag block the model writes above the story, whole (a preset's thinking, its <time> line,
+# the <tucao> line), and puts the bars in front of the story's first line, so a preset's thinking box, which folds
+# everything above its closing tag, never takes them. Without this block no bar is written. How it works:
+# mvu-helper/devdoc/gamelogic-pack-format.md §4.2.
 <initmvuhelper>
 {
   "version": 1,
@@ -80,6 +83,7 @@
   "imagegen": {
     "intimacyLatchPath": "PendingState.IntimacyActive",
     "maincharRegistryKey": "Mainchar",
+    "maincharNoun": "boy",
     "charimgVia": "narrate"
   },
   "statBox": {
@@ -122,7 +126,7 @@
     ]
   },
   "leadText": {
-    "storyEnvelope": ["<gametxt>", "<maintext>"]
+    "storyEnvelope": ["<gametxt>", "<maintext>", "<content>"]
   }
 }
 </initmvuhelper>
